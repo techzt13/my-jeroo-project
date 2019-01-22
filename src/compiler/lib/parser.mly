@@ -22,12 +22,14 @@ fxn:
 | METHOD ID LPAREN RPAREN block {}
 
 block:
-| LBRACKET stmt* RBRACKET {}
+| LBRACKET decl* stmt* RBRACKET {}
+
+decl:
+| ID ID EQ NEW ID LPAREN arguments RPAREN SEMICOLON {}
 
 stmt:
 | if_stmt {}
 | while_stmt {}
-| decl_stmt {}
 | expr_stmt {}
 
 if_stmt:
@@ -37,8 +39,6 @@ if_stmt:
 while_stmt:
 | WHILE LPAREN expr RPAREN block {}
 
-decl_stmt:
-| ID ID EQ NEW ID LPAREN arguments RPAREN SEMICOLON {}
 
 arguments:
 | separated_list(COMMA, expr) {}
