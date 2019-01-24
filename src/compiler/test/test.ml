@@ -30,6 +30,13 @@ let parse_if_else_stmt _test_ctxt =
       `IfElseStmt(`TrueExpr, `BlockStmt([], []), `BlockStmt([], []))
     ]))]
 
+let parse_dangling_if _test_ctxt =
+  let code = "method main() { if (true) if (false) {} else { }}" in
+  let ast = parse_string code in
+  assert_equal ast [("main", ([], [
+      `IfStmt(`TrueExpr, `IfElseStmt(`FalseExpr, `BlockStmt([], []), `BlockStmt([], [])))
+    ]))]
+
 let parse_while_stmt _test_ctxt =
   let code = "method main() { while(true) { }}" in
   let ast = parse_string code in
@@ -88,6 +95,7 @@ let suite =
     "Parse Decl">:: parse_decl;
     "Parse If Stmt">:: parse_if_stmt;
     "Parse If Else Stmt">:: parse_if_else_stmt;
+    "Parse Dangling Else">:: parse_dangling_if;
     "Parse While Stmt">:: parse_while_stmt;
     "Parse And">:: parse_and;
     "Parse Or">:: parse_or;
