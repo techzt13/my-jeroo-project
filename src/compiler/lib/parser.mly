@@ -34,20 +34,23 @@ block:
 decl:
 | JEROO id = ID EQ NEW JEROO LPAREN args = arguments RPAREN SEMICOLON { ("Jeroo", id, `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), args))) }
 
+
 stmt:
-| b = block { `BlockStmt(b) }
-| s = expr_stmt { s }
-| s = if_stmt { s }
-| s = while_stmt { s }
+| s = open_stmt { s }
+| s = closed_stmt { s }
 
-if_stmt:
+open_stmt:
 | IF LPAREN e = expr RPAREN s = stmt { `IfStmt(e, s) }
-| IF LPAREN e = expr RPAREN s1 = stmt ELSE s2 = stmt { `IfElseStmt(e, s1, s2) }
+| IF LPAREN e = expr RPAREN s1 = closed_stmt ELSE s2 = open_stmt { `IfElseStmt(e, s1, s2) }
+| WHILE LPAREN e = expr RPAREN s = open_stmt { `WhileStmt(e, s) }
 
-while_stmt:
-| WHILE LPAREN e = expr RPAREN s = stmt { `WhileStmt(e, s) }
+closed_stmt:
+| s = simple_stmt { s }
+| IF LPAREN e = expr RPAREN s1 = closed_stmt ELSE s2 = closed_stmt { `IfElseStmt(e, s1, s2) }
+| WHILE LPAREN e = expr RPAREN s = closed_stmt { `WhileStmt(e, s) }
 
-expr_stmt:
+simple_stmt:
+| b = block { `BlockStmt(b) }
 | e = expr SEMICOLON { `ExprStmt(e) }
 
 arguments:
