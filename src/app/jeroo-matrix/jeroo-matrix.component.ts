@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JerooMatrixComponent implements OnInit {
 
+  jerooBoard = [['W', 'W', 'W', 'W', 'W'],
+                ['W', 'G', 'G', 'G', 'W'],
+                ['W', 'G', 'G', 'G', 'W'],
+                ['W', 'G', 'G', 'G', 'W'],
+                ['W', 'W', 'W', 'W', 'W']];
+
   constructor() { }
 
   ngOnInit() {
