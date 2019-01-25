@@ -12,7 +12,7 @@ import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
