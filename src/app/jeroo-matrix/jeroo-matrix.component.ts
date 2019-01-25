@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSlider } from '@angular/material/slider';
 
 @Component({
   selector: 'app-jeroo-matrix',
@@ -15,14 +14,16 @@ export class JerooMatrixComponent implements OnInit {
 
   constructor() { }
 
-  generateBoard(number) {
+  // create a board with a given size, and set it to the default values
+  // (water on top/sides, grass everywhere else)
+  generateBoard(size) {
       const arr = [];
 
-      for (let row = 0; row < number; row++) {
+      for (let row = 0; row < size; row++) {
         arr[row] = [];
-        for (let column = 0; column < number; column++) {
+        for (let column = 0; column < size; column++) {
           // if row == 0 or max use water OR if column == 0 or max
-          if (row === 0 || row === (number - 1) || column === 0 || column === (number - 1)) {
+          if (row === 0 || row === (size - 1) || column === 0 || column === (size - 1)) {
             arr[row][column] = 'W';
           } else {
             arr[row][column] = 'G';
@@ -32,6 +33,14 @@ export class JerooMatrixComponent implements OnInit {
       }
 
       return arr;
+  }
+
+  // when the mat slider has changed, will pull the value from it and assign that
+  // value to the board size and re-render the matrix
+  onInputChange(event: any) {
+    this.boardSize = event.value;
+    console.log(this.boardSize);
+    this.ngOnInit();
   }
 
   ngOnInit() {

@@ -1,3 +1,6 @@
+<mat-slider min="25" max="50" step="5" tickInterval="1" 
+ thumbLabel (input)="onInputChange($event)"></mat-slider>
+
 <p>
   <li *ngFor="let rowBoard of jerooBoard">
     <span *ngFor="let boardValue of rowBoard">

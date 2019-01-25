@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
 
+import { MatSliderModule } from '@angular/material/slider';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -13,6 +15,7 @@ import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
