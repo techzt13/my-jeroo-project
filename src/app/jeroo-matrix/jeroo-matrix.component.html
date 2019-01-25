@@ -1,5 +1,12 @@
 <p>
-  <li *ngFor="let row of jerooBoard">
-    <h1>{{row}}</h1>
+  <li *ngFor="let rowBoard of jerooBoard">
+    <span *ngFor="let boardValue of rowBoard">
+      <span *ngIf="boardValue=='W'">
+          <img src="assets\images\water.jpg" alt="W" />
+      </span>
+      <span *ngIf="boardValue=='G'">
+          <img src="assets\images\grass.jpg" alt="G" />
+      </span>
+    </span>
   </li>
 </p>
