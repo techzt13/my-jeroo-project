@@ -10,3 +10,6 @@ mat-slider {
     border: 1px solid black;
     border-radius: 8px;
 }
+.noDragging {
+    pointer-events: none;
+}

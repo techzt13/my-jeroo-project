@@ -9,10 +9,10 @@
   <li *ngFor="let rowBoard of jerooBoard; let row = index">
     <span *ngFor="let boardValue of rowBoard; let column = index">
       <span *ngIf="boardValue == 'W'">
-          <img src="assets\images\water.jpg" alt="W" (click)="changeValue(row, column)" />
+          <img src="assets\images\water.jpg" alt="W" (mousedown)="onClick($event, row, column)" (contextmenu)="onRightClick($event, row, column)" />
       </span>
       <span *ngIf="boardValue == 'G'">
-          <img src="assets\images\grass.jpg" alt="G" />
+          <img src="assets\images\grass.jpg" alt="G" (mousedown)="onClick($event, row, column)" (contextmenu)="onRightClick($event, row, column)" />
       </span>
     </span>
   </li>

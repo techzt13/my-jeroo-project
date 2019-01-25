@@ -2,6 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
@@ -11,7 +12,8 @@ describe('AppComponent', () => {
             ],
             declarations: [
                 AppComponent,
-                JerooMatrixComponent
+                JerooMatrixComponent,
+                MatSliderModule
             ],
         }).compileComponents();
     }));

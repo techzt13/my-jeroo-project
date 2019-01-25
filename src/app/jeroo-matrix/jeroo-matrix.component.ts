@@ -10,6 +10,7 @@ export class JerooMatrixComponent implements OnInit {
   boardSize = 25;
   i = 0;
   currentValue = 'W';
+  mouseDown = false;
 
   jerooBoard = [[]];
 
@@ -43,8 +44,23 @@ export class JerooMatrixComponent implements OnInit {
     this.ngOnInit();
   }
 
-  changeValue(row: number, column: number) {
-    this.jerooBoard[row][column] = 'G';
+  // how to handle clicks from user
+  onClick(event: any, row: number, column: number) {
+      if (event.button === 2) {
+        this.jerooBoard[row][column] = 'W';
+      } else if (event.button === 0) {
+        this.jerooBoard[row][column] = 'G';
+      }
+      return false;
+  }
+
+  // right click needs to get rid of right click menu (return false)
+  onRightClick(event: any, row: number, column: number) {
+    if (this.mouseDown === true) {
+      this.jerooBoard[row][column] = 'G';
+      this.onClick(event, row, column);
+    }
+    return false;
   }
 
   ngOnInit() {
