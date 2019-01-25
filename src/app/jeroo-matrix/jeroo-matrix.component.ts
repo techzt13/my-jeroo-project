@@ -9,6 +9,7 @@ export class JerooMatrixComponent implements OnInit {
 
   boardSize = 25;
   i = 0;
+  currentValue = 'W';
 
   jerooBoard = [[]];
 
@@ -39,8 +40,11 @@ export class JerooMatrixComponent implements OnInit {
   // value to the board size and re-render the matrix
   onInputChange(event: any) {
     this.boardSize = event.value;
-    console.log(this.boardSize);
     this.ngOnInit();
+  }
+
+  changeValue(row: number, column: number) {
+    this.jerooBoard[row][column] = 'G';
   }
 
   ngOnInit() {

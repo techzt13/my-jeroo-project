@@ -2,5 +2,11 @@ li {
     list-style-type: none;
 }
 mat-slider {
+    width: 200px;
+}
+.bordered {
     width: 1000px;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 8px;
 }
