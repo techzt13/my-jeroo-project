@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JerooMatrixComponent implements OnInit {
 
-  boardSize = 25;
+  // variables for component
+  boardSize = 26;
   i = 0;
   currentValue = 'W';
+  currentXLocation = 0;
+  currentYLocation = 0;
+  maxXSize = this.boardSize - 1;
+  maxYSize = this.boardSize - 1;
   mouseDown = false;
 
   jerooBoard = [[]];
@@ -41,26 +46,32 @@ export class JerooMatrixComponent implements OnInit {
   // value to the board size and re-render the matrix
   onInputChange(event: any) {
     this.boardSize = event.value;
+    this.maxXSize = this.boardSize - 1;
+    this.maxYSize = this.boardSize - 1;
     this.ngOnInit();
   }
 
   // how to handle clicks from user
   onClick(event: any, row: number, column: number) {
-      if (event.button === 2) {
-        this.jerooBoard[row][column] = 'W';
-      } else if (event.button === 0) {
-        this.jerooBoard[row][column] = 'G';
-      }
-      return false;
+      this.mouseDown = true;
+
+      this.jerooBoard[row][column] = 'W';
   }
 
-  // right click needs to get rid of right click menu (return false)
-  onRightClick(event: any, row: number, column: number) {
+  // when the mouse is released
+  mouseUp() {
+    this.mouseDown = false;
+  }
+
+  // each time a new matrix element is hovered over, check if the mouse is down
+  // and report the current coordinates
+  onMouseOver(event: any, row: number, column: number) {
+    this.currentXLocation = column - 1;
+    this.currentYLocation = row - 1;
+
     if (this.mouseDown === true) {
-      this.jerooBoard[row][column] = 'G';
       this.onClick(event, row, column);
     }
-    return false;
   }
 
   ngOnInit() {
