@@ -9,7 +9,6 @@
 %token COMMA DOT SEMICOLON
 %token LEFT RIGHT AHEAD HERE
 %token NORTH EAST SOUTH WEST
-%token JEROO
 %token EOF
 
 %right EQ
@@ -30,10 +29,7 @@ fxn:
 | METHOD id = ID LPAREN RPAREN b = block { (id, b) }
 
 block:
-| LBRACKET decls = decl* stmts = stmt* RBRACKET { (decls, stmts) }
-
-decl:
-| JEROO id = ID EQ NEW JEROO LPAREN args = arguments RPAREN SEMICOLON { ("Jeroo", id, `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), args))) }
+| LBRACKET stmts = stmt* RBRACKET { stmts }
 
 stmt:
 | s = open_stmt { s }
@@ -51,6 +47,7 @@ closed_stmt:
 
 simple_stmt:
 | b = block { `BlockStmt(b) }
+| ty = ID id = ID EQ e = expr SEMICOLON { `DeclStmt(ty, id, e) }
 | e = expr SEMICOLON { `ExprStmt(e) }
 
 arguments:
@@ -59,7 +56,6 @@ arguments:
 expr:
 | e = arith_expr { e }
 | e = arith_expr LPAREN args = arguments RPAREN { `FxnAppExpr(e, args) }
-| e1 = arith_expr EQ e2 = arith_expr { `BinOpExpr(e1, `Eq, e2) }
 
 arith_expr:
 | e = primary_expr { e }

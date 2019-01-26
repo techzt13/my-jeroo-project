@@ -4,7 +4,7 @@ exception Error of string
 }
 
 let digit = ['0'-'9']
-let letter = ['a'-'z''A'-'Z''_']
+let letter = ['a'-'z' 'A'-'Z' '_']
 
 let id = letter (letter | digit)*
 let int_constant = digit+
@@ -53,8 +53,6 @@ rule token = parse
   { NEW }
 | "method"
   { METHOD }
-| "Jeroo"
-  { JEROO }
 | id as i
   { ID i }
 | "&&"
