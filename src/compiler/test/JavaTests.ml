@@ -3,7 +3,7 @@ open Lib
 
 let parse_string s =
   let lexbuf = Lexing.from_string s in
-  Lib.Parser.translation_unit Lexer.token lexbuf
+  JavaParser.translation_unit JavaLexer.token lexbuf
 
 let parse_method _test_ctxt =
   let code = "method main() { }" in
@@ -112,6 +112,3 @@ let suite =
     "Parse ml-comment">:: parse_ml_comment;
     "Parse obj call">:: parse_obj_call;
   ]
-
-let () =
-  run_test_tt_main suite

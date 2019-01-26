@@ -4,7 +4,7 @@
 %token AND OR NOT EQ NEW DOT
 %token LEFT RIGHT AHEAD HERE
 %token NORTH SOUTH EAST WEST
-%token LPAREN RPAREN COMMA THEN DIM AS JEROO
+%token LPAREN RPAREN COMMA THEN DIM AS
 %token EOF
 
 %start <AST.fxn list> translation_unit
@@ -17,10 +17,7 @@ fxn:
 | SUB id = ID LPAREN RPAREN b = block END SUB { (id, b) }
 
 block:
-| decls = decl+ stmts = stmt* { (decls, stmts) }
-
-decl:
-| DIM id = ID AS ty = ID EQ e = expr { (ty, id, e) }
+| stmts = stmt* { stmts }
 
 stmt:
 | IF LPAREN e = expr RPAREN THEN b = block END IF { `IfStmt(e, `BlockStmt(b)) }
@@ -29,6 +26,7 @@ stmt:
 | IF e = expr THEN b1 = block ELSE b2 = block END IF { `IfElseStmt(e, `BlockStmt(b1), `BlockStmt(b2)) }
 | WHILE LPAREN e = expr RPAREN b = block END WHILE { `WhileStmt(e, `BlockStmt(b)) }
 | WHILE e = expr b = block END WHILE { `WhileStmt(e, `BlockStmt(b)) }
+| DIM id = ID AS ty = ID EQ e = expr { `DeclStmt(ty, id, e) }
 | e = expr { `ExprStmt(e) }
 
 expr:
@@ -55,7 +53,6 @@ primary_expr:
 | SOUTH { `SouthExpr }
 | EAST { `EastExpr }
 | WEST { `WestExpr }
-| LPAREN e = expr RPAREN { e }
 
 arguments:
 | args = separated_list(COMMA, expr) { args }
