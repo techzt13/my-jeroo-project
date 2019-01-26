@@ -1,3 +1,4 @@
+import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -5,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
 
-import { MatSliderModule } from '@angular/material/slider';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { MatSliderModule } from '@angular/material/slider';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatSliderModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

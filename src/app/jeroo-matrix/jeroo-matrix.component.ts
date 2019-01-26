@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSlider } from '@angular/material';
 
 @Component({
   selector: 'app-jeroo-matrix',
