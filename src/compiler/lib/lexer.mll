@@ -3,7 +3,7 @@ open Parser
 exception Error of string
 }
 
-let digit = '-'? ['0'-'9']+
+let digit = ['0'-'9']
 let letter = ['a'-'z''A'-'Z''_']
 
 let id = letter (letter | digit)*
