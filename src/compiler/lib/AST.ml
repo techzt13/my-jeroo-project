@@ -38,7 +38,7 @@ type stmt = [
   | `IfElseStmt of expr * stmt * stmt
   (* loop condition, loop body *)
   | `WhileStmt of expr * stmt
-(* type, identifier, constructor, arguments list *)
+  (* type, identifier, initialization expression *)
   | `DeclStmt of string * string * expr
   | `ExprStmt of expr
 ]
