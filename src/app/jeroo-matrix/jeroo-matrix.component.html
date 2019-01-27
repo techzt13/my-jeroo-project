@@ -1,6 +1,11 @@
 <div class=bordered>
   <mat-slider min="26" max="50" step="4" tickInterval="1" value="26"
    thumbLabel (input)="onInputChange($event)"></mat-slider>
+  <img src="assets\images\grass.jpg" alt='G' (mousedown)="selectTile('G')">
+  <img src="assets\images\water.jpg" alt='W' (mousedown)="selectTile('W')">
+  <img src="assets\images\flower.jpg" alt='F' (mousedown)="selectTile('F')">
+  <img src="assets\images\net.jpg" alt='N' (mousedown)="selectTile('N')">
+  <img src="assets\images\clear.jpg" alt='C' (mousedown)="selectTile('C')">
 </div>
 
 <br>
@@ -14,6 +19,12 @@
       </span>
       <span *ngIf="boardValue == 'G'">
           <img src="assets\images\grass.jpg" alt="G" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
+      </span>
+      <span *ngIf="boardValue == 'F'">
+        <img src="assets\images\flower.jpg" alt="F" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
+      </span>
+      <span *ngIf="boardValue == 'N'">
+        <img src="assets\images\net.jpg" alt="N" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
       </span>
     </span>
   </li>

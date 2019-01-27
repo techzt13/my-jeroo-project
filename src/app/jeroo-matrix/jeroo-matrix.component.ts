@@ -56,7 +56,13 @@ export class JerooMatrixComponent implements OnInit {
   onClick(event: any, row: number, column: number) {
       this.mouseDown = true;
 
-      this.jerooBoard[row][column] = 'W';
+      // make sure the user is not "off the island"
+      if (this.currentXLocation !== this.maxXSize - 1 && this.currentYLocation !== this.maxYSize - 1
+          && this.currentXLocation !== -1 && this.currentYLocation !== -1) {
+            if (this.jerooBoard[row][column] !== this.currentValue) {
+              this.jerooBoard[row][column] = this.currentValue;
+            }
+      }
   }
 
   // when the mouse is released
@@ -72,6 +78,33 @@ export class JerooMatrixComponent implements OnInit {
 
     if (this.mouseDown === true) {
       this.onClick(event, row, column);
+    }
+  }
+
+  // used when a user clicks one of the block selection images on the page to tell
+  // what type of block they would like to place, or clear the screen
+  selectTile(type: string) {
+    switch (type) {
+      case 'W': {
+        this.currentValue = 'W';
+        break;
+      }
+      case 'G': {
+        this.currentValue = 'G';
+        break;
+      }
+      case 'N': {
+        this.currentValue = 'N';
+        break;
+      }
+      case 'F': {
+        this.currentValue = 'F';
+        break;
+      }
+      case 'C': {
+        this.jerooBoard = this.generateBoard(this.boardSize);
+        break;
+      }
     }
   }
 
