@@ -2,11 +2,17 @@ li {
     list-style-type: none;
 }
 mat-slider {
-    width: 200px;
+    width: 50%;
 }
 .bordered {
-    width: 1000px;
-    padding: 20px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 5%;
     border: 1px solid black;
     border-radius: 8px;
+}
+img {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility:    hidden;
+    -ms-backface-visibility:     hidden;
 }

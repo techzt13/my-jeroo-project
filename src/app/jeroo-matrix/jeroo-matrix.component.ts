@@ -108,6 +108,11 @@ export class JerooMatrixComponent implements OnInit {
     }
   }
 
+  getPixel() {
+    const percentValue = (90 / this.boardSize);
+    return (percentValue + '%');
+  }
+
   ngOnInit() {
     this.jerooBoard = this.generateBoard(this.boardSize);
   }

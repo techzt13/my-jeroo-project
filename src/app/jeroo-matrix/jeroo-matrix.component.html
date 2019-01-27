@@ -10,28 +10,26 @@
 
 <br>
 
-<div style="font-size:0;">
+<div style="font-size:0;" align=center>
 <p>
   <li *ngFor="let rowBoard of jerooBoard; let row = index">
     <span *ngFor="let boardValue of rowBoard; let column = index">
       <span *ngIf="boardValue == 'W'">
-          <img src="assets\images\water.jpg" alt="W" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
+          <img src="assets\images\water.jpg" [ngStyle]="{'max-width': getPixel()}" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
       </span>
       <span *ngIf="boardValue == 'G'">
-          <img src="assets\images\grass.jpg" alt="G" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
+          <img src="assets\images\grass.jpg" [ngStyle]="{'max-width': getPixel()}" alt="G" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
       </span>
       <span *ngIf="boardValue == 'F'">
-        <img src="assets\images\flower.jpg" alt="F" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
+        <img src="assets\images\flower.jpg" [ngStyle]="{'max-width': getPixel()}" alt="F" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
       </span>
       <span *ngIf="boardValue == 'N'">
-        <img src="assets\images\net.jpg" alt="N" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
+        <img src="assets\images\net.jpg" [ngStyle]="{'max-width': getPixel()}" alt="N" (mousedown)="onClick($event, row, column)" (mouseover)="onMouseOver($event, row, column)" (mouseup)="mouseUp()" />
       </span>
     </span>
   </li>
 </p>
 </div>
-
-<br>
 
 <div class=bordered>
   <h2 *ngIf="currentXLocation==(maxXSize - 1) || currentXLocation==-1 || currentYLocation==(maxYSize - 1) || currentYLocation==-1; else display_coor">
