@@ -62,8 +62,8 @@ rule token = parse
   { IF }
 | t h e n
   { THEN }
-(* | e l s e i f
- *   { ELSEIF } *)
+| e l s e i f
+  { ELSEIF }
 | e l s e
   { ELSE }
 | e n d
