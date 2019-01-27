@@ -3,8 +3,9 @@
   exception Error of string
 }
 
-let whitespace = ['\n''\r'' ' '\t']+
-let comment = "'" [^'\'']* '\n'
+let whitespace = [' ' '\t' '\r']+
+let newline = '\n'
+let comment = "'" [^'\n']* newline
 
 let digit = ['0'-'9']
 let letter = ['a'-'z' 'A'-'Z' '_']
@@ -83,6 +84,10 @@ rule token = parse
   { SOUTH }
 | w e s t
   { WEST }
+| t r u e
+  { TRUE }
+| f a l s e
+  { FALSE }
 | a n d
   { AND }
 | o r
@@ -97,5 +102,11 @@ rule token = parse
   { LPAREN }
 | ')'
   { RPAREN }
+| ','
+  { COMMA }
+| '.'
+  { DOT }
+| newline
+  { NEWLINE }
 | eof
   { EOF }

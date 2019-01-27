@@ -21,7 +21,8 @@ let parse_if_stmt _test_ctxt =
   let code = "method main() { if (true) { } }" in
   let ast = parse_string code in
   assert_equal ast [("main", [
-      `IfStmt(`TrueExpr, `BlockStmt[])])]
+      `IfStmt(`TrueExpr, `BlockStmt [])
+    ])]
 
 let parse_if_else_stmt _test_ctxt =
   let code = "method main() { if (true) { } else { }}" in
@@ -78,6 +79,7 @@ let parse_paren_precedence _test_ctxt =
   assert_equal ast [("main"), [
       `IfStmt(`BinOpExpr(`TrueExpr, `And, `BinOpExpr(`FalseExpr, `And, `FalseExpr)), `BlockStmt([]))
     ]]
+
 let parse_comment _test_ctxt =
   let code = "// this is a comment\n method main() { }" in
   let ast = parse_string code in
