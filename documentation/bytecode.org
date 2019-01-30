@@ -1,0 +1,38 @@
+* Jeroo Bytecode
+** CSR n
+   - Description:
+     Set the current Jeroo register to /n/
+** JUMP n
+   - Description:
+     Set the PC to /n/
+** BZ n
+   - Description:
+     If the cmp register is 0, branch to /n/
+** NEW id, x, y, numFlowers, direction
+   - Description:
+     Create a Jeroo with /id/ located at /x/, /y/, holding /numFlowers/ flowers and facing direction /direction/
+** TURN direction
+   - Description:
+     Turn the current Jeroo /direction/. /Direction/ can be either 1 (left), 0 (don't turn), 3 (right)
+** HOP n
+   - Description:
+     Hop the current Jeroo /n/ steps. /n/ must be greater than 0
+** TOSS
+   - Description:
+     Toss a flower onto a net AHEAD of the Jeroo. If a net exists,
+     it will be destroyed. A flower is lost regardless of whether a net 
+     exists or not. If the Jeroo has no flowers, this operation is ignored
+** PLANT
+   - Description:
+     Have the current Jeroo place one flower at it's current location.
+     If the Jeroo has no flower, this operation is ignored.
+** GIVE direction
+   - Description:
+     Give a flower to the Jeroo /direction/ of the current Jeroo.
+     Direction can be either AHEAD (0), LEFT (3), RIGHT (1), or HERE (-1)
+** TRUE
+   - Description:
+     Set the cmp register to 1
+** FALSE
+   - Description:
+     Set the cmp register to 0
