@@ -28,6 +28,9 @@ import { HelpBooleanComponent } from './help/general/help-boolean/help-boolean.c
 import { HelpCompassComponent } from './help/general/help-compass/help-compass.component';
 import { HelpDirectionsComponent } from './help/general/help-directions/help-directions.component';
 import { HelpRelativeComponent } from './help/general/help-relative/help-relative.component';
+import { HelpTutorialJavaComponent } from './help/tutorial/help-tutorial-java/help-tutorial-java.component';
+import { HelpTutorialPythonComponent } from './help/tutorial/help-tutorial-python/help-tutorial-python.component';
+import { HelpTutorialVbComponent } from './help/tutorial/help-tutorial-vb/help-tutorial-vb.component';
 
 @NgModule({
     declarations: [
@@ -54,7 +57,10 @@ import { HelpRelativeComponent } from './help/general/help-relative/help-relativ
         HelpBooleanComponent,
         HelpCompassComponent,
         HelpDirectionsComponent,
-        HelpRelativeComponent
+        HelpRelativeComponent,
+        HelpTutorialJavaComponent,
+        HelpTutorialPythonComponent,
+        HelpTutorialVbComponent
     ],
     imports: [
         BrowserModule,
