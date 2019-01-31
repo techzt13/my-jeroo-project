@@ -1,3 +1,82 @@
-<p>
-  help works!
-</p>
+<h3>
+    
+    <mat-form-field>
+        <mat-select [(value)]="selected">
+            <mat-option value="Java">Java/C++/C#</mat-option>
+            <mat-option value="Python">Python</mat-option>
+            <mat-option value="VB">Visual Basic</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    <br>You selected: {{selected}}
+</h3>
+
+<mat-tab-group>
+        <mat-tab label="Action Methods"> 
+            <app-help-action></app-help-action>
+        </mat-tab>
+        <mat-tab label="Boolean Methods"> 
+            <app-help-boolean></app-help-boolean>
+        </mat-tab>
+        <mat-tab label="Relative Directions"> 
+            <app-help-relative></app-help-relative>
+        </mat-tab>
+        <mat-tab label="Compass Directions"> 
+            <app-help-compass></app-help-compass>
+        </mat-tab>
+        <mat-tab label="Control Stuctures"> 
+            <div *ngIf='selected==="Java"'>
+                <app-help-control-struct-java >></app-help-control-struct-java>
+            </div>
+            <div *ngIf='selected==="Python"'>
+                <app-help-control-struct-python >></app-help-control-struct-python>
+            </div>
+            <div *ngIf='selected==="VB"'>
+                <app-help-control-struct-vb >></app-help-control-struct-vb>
+            </div>
+        </mat-tab>
+        <mat-tab label="Conditions"> 
+            <div *ngIf='selected==="Java"'>
+                <app-help-condition-java >></app-help-condition-java>
+            </div>
+            <div *ngIf='selected==="Python"'>
+                <app-help-condition-python >></app-help-condition-python>
+            </div>
+            <div *ngIf='selected==="VB"'>
+                <app-help-condition-vb >></app-help-condition-vb>
+            </div>
+        </mat-tab>
+        <mat-tab label="General"> 
+                <div *ngIf='selected==="Java"'>
+                        <app-help-general-java >></app-help-general-java>
+                    </div>
+                    <div *ngIf='selected==="Python"'>
+                        <app-help-general-python >></app-help-general-python>
+                    </div>
+                    <div *ngIf='selected==="VB"'>
+                        <app-help-general-vb >></app-help-general-vb>
+                    </div>
+        </mat-tab>
+        <mat-tab label="Methods"> 
+                <div *ngIf='selected==="Java"'>
+                        <app-help-method-java >></app-help-method-java>
+                    </div>
+                    <div *ngIf='selected==="Python"'>
+                        <app-help-method-python >></app-help-method-python>
+                    </div>
+                    <div *ngIf='selected==="VB"'>
+                        <app-help-method-vb >></app-help-method-vb>
+                    </div>
+        </mat-tab>
+        <mat-tab label="Instantiation"> 
+                <div *ngIf='selected==="Java"'>
+                        <app-help-tutorial-java >></app-help-tutorial-java>
+                    </div>
+                    <div *ngIf='selected==="Python"'>
+                        <app-help-tutorial-python >></app-help-tutorial-python>
+                    </div>
+                    <div *ngIf='selected==="VB"'>
+                        <app-help-tutorial-vb >></app-help-tutorial-vb>
+                    </div>
+        </mat-tab>
+</mat-tab-group>
