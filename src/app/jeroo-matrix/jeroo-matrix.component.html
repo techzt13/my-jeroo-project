@@ -1,6 +1,5 @@
 <div class=bordered>
-  <mat-slider min="26" max="50" step="4" tickInterval="1" value="26"
-   thumbLabel (input)="onInputChange($event)"></mat-slider>
+  <button mat-button (click)="openDialog()">Change Size</button>
   <img src="assets\images\grass.jpg" alt='G' (mousedown)="selectTile('G')">
   <img src="assets\images\water.jpg" alt='W' (mousedown)="selectTile('W')">
   <img src="assets\images\flower.jpg" alt='F' (mousedown)="selectTile('F')">

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSlider } from '@angular/material';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
+import { Form } from '@angular/forms';
 
 @Component({
   selector: 'app-jeroo-matrix',
@@ -11,7 +13,6 @@ export class JerooMatrixComponent implements OnInit {
   // variables for component
   widthSize = 26;
   heightSize = 26;
-  i = 0;
   currentValue = 'W';
   currentXLocation = 0;
   currentYLocation = 0;
@@ -21,7 +22,7 @@ export class JerooMatrixComponent implements OnInit {
 
   jerooBoard = [[]];
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   // create a board with a given size, and set it to the default values
   // (water on top/sides, grass everywhere else)
@@ -37,19 +38,11 @@ export class JerooMatrixComponent implements OnInit {
           } else {
             arr[row][column] = 'G';
           }
-
         }
       }
 
       return arr;
-  }
 
-  // when the mat slider has changed, will pull the value from it and assign that
-  // value to the board size and re-render the matrix
-  onInputChange(event: any) {
-    this.maxXSize = this.widthSize - 1;
-    this.maxYSize = this.heightSize - 1;
-    this.ngOnInit();
   }
 
   // how to handle clicks from user
@@ -111,6 +104,26 @@ export class JerooMatrixComponent implements OnInit {
   getPixel() {
     const percentValue = (90 / this.widthSize);
     return (percentValue + '%');
+  }
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+      id: 1,
+      xValue: this.widthSize,
+      yValue: this.heightSize
+    };
+
+    const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      data => { this.widthSize = data.xValue, this.heightSize = data.yValue; this.ngOnInit();
+                this.maxXSize = this.widthSize - 1; this.maxYSize = this.heightSize - 1; },
+    );
+
   }
 
   ngOnInit() {
