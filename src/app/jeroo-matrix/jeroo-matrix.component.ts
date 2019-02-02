@@ -9,13 +9,14 @@ import { MatSlider } from '@angular/material';
 export class JerooMatrixComponent implements OnInit {
 
   // variables for component
-  boardSize = 26;
+  widthSize = 26;
+  heightSize = 26;
   i = 0;
   currentValue = 'W';
   currentXLocation = 0;
   currentYLocation = 0;
-  maxXSize = this.boardSize - 1;
-  maxYSize = this.boardSize - 1;
+  maxXSize = this.widthSize - 1;
+  maxYSize = this.heightSize - 1;
   mouseDown = false;
 
   jerooBoard = [[]];
@@ -24,14 +25,14 @@ export class JerooMatrixComponent implements OnInit {
 
   // create a board with a given size, and set it to the default values
   // (water on top/sides, grass everywhere else)
-  generateBoard(size) {
+  generateBoard(xSize, ySize) {
       const arr = [];
 
-      for (let row = 0; row < size; row++) {
+      for (let row = 0; row < ySize; row++) {
         arr[row] = [];
-        for (let column = 0; column < size; column++) {
+        for (let column = 0; column < xSize; column++) {
           // if row == 0 or max use water OR if column == 0 or max
-          if (row === 0 || row === (size - 1) || column === 0 || column === (size - 1)) {
+          if (row === 0 || row === (ySize - 1) || column === 0 || column === (xSize - 1)) {
             arr[row][column] = 'W';
           } else {
             arr[row][column] = 'G';
@@ -46,9 +47,8 @@ export class JerooMatrixComponent implements OnInit {
   // when the mat slider has changed, will pull the value from it and assign that
   // value to the board size and re-render the matrix
   onInputChange(event: any) {
-    this.boardSize = event.value;
-    this.maxXSize = this.boardSize - 1;
-    this.maxYSize = this.boardSize - 1;
+    this.maxXSize = this.widthSize - 1;
+    this.maxYSize = this.heightSize - 1;
     this.ngOnInit();
   }
 
@@ -102,19 +102,19 @@ export class JerooMatrixComponent implements OnInit {
         break;
       }
       case 'C': {
-        this.jerooBoard = this.generateBoard(this.boardSize);
+        this.jerooBoard = this.generateBoard(this.widthSize, this.heightSize);
         break;
       }
     }
   }
 
   getPixel() {
-    const percentValue = (90 / this.boardSize);
+    const percentValue = (90 / this.widthSize);
     return (percentValue + '%');
   }
 
   ngOnInit() {
-    this.jerooBoard = this.generateBoard(this.boardSize);
+    this.jerooBoard = this.generateBoard(this.widthSize, this.heightSize);
   }
 
 }
