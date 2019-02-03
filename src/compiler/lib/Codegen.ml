@@ -26,6 +26,16 @@ let codegen fxns =
     | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
   in
 
+  let gen_code_decl id args =
+    let id_loc = Hashtbl.find jeroo_tbl id in
+    match args with
+    | [] -> [Bytecode.NEW (id_loc, 1, 1, 0, Bytecode.North)]
+    | [`IntExpr(x); `IntExpr(y)] -> [Bytecode.NEW (id_loc, x, y, 0, Bytecode.North)]
+    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers)] -> [Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North)]
+    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> [Bytecode.NEW (id_loc, x, y, num_flowers, (direction_of_expr direction))]
+    | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
+  in
+
   let rec gen_code_stmt code stmt =
     match stmt with
     | `BlockStmt stmts ->
@@ -45,16 +55,10 @@ let codegen fxns =
                 if not (String.equal ctor "Jeroo") then
                   raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
                 else
-                  let id_loc = Hashtbl.find jeroo_tbl id in
-                  begin match args with
-                    | [] -> [Bytecode.NEW (id_loc, 1, 1, 0, Bytecode.North)]
-                    | [`IntExpr(x); `IntExpr(y)] -> [Bytecode.NEW (id_loc, x, y, 0, Bytecode.North)]
-                    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers)] -> [Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North)]
-                    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> [Bytecode.NEW (id_loc, x, y, num_flowers, (direction_of_expr direction))]
-                    | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
-                  end
+                  gen_code_decl id args
               | _ -> raise (SemanticException ("Invalid right hand side of declaration, must be a Jeroo constructor"))
             end
+          | _ -> failwith "TODO"
         end
       end
     | _ -> code
@@ -62,7 +66,7 @@ let codegen fxns =
 
   let gen_code code fxn =
     let (id, stmts) = fxn in
-    fxn_tbl |> Hashtbl.add id (List.length code);
+    Hashtbl.add fxn_tbl id (List.length code);
     stmts
     |> List.fold_left (fun code stmt -> gen_code_stmt code stmt) code
   in
