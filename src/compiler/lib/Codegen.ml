@@ -49,16 +49,12 @@ let codegen fxns =
       else begin
         Hashtbl.add jeroo_tbl id (Hashtbl.length jeroo_tbl);
         begin match expr with
-          | `UnOpExpr (`New, e) ->
-            begin match e with
-              | `FxnAppExpr (`IdExpr(ctor), args) ->
-                if not (String.equal ctor "Jeroo") then
-                  raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
-                else
-                  gen_code_decl id args
-              | _ -> raise (SemanticException ("Invalid right hand side of declaration, must be a Jeroo constructor"))
-            end
-          | _ -> failwith "TODO"
+          | `UnOpExpr (`New, `FxnAppExpr (`IdExpr(ctor), args)) ->
+            if not (String.equal ctor "Jeroo") then
+              raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
+            else
+              gen_code_decl id args
+          | _ -> raise (SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor")
         end
       end
     | _ -> code
