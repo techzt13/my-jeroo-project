@@ -14,6 +14,15 @@ let codegen fxns =
     | _ -> raise (SemanticException "type error: expression must be LEFT, RIGHT, AHEAD, or HERE")
   in
 
+  let compass_dir_of_expr expr =
+    match expr with
+    | `NorthExpr -> Bytecode.North
+    | `SouthExpr -> Bytecode.South
+    | `EastExpr -> Bytecode.East
+    | `WestExpr -> Bytecode.West
+    | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
+  in
+
   let rec gen_code_expr expr =
     match expr with
     | `TrueExpr ->
@@ -63,18 +72,33 @@ let codegen fxns =
             | e :: [] -> Queue.add (Bytecode.TURN (relative_dir_of_expr e)) code_queue
             | _ -> raise (SemanticException "Invalid arguments, turn requires one relative direction argument")
           end
+        | "hasFlower" -> begin match args with
+            | [] -> Queue.add Bytecode.HASFLWR code_queue
+            | _ -> raise (SemanticException "Invalid arguments, hasFlower requires no arguments")
+          end
+        | "isJeroo" -> begin match args with
+            | e :: [] -> Queue.add (Bytecode.ISJEROO (relative_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, isJeroo requires a relative direction")
+          end
+        | "isFacing" -> begin match args with
+            | e :: [] -> Queue.add (Bytecode.FACING (compass_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, isFacing requires a compass direction")
+          end
+        | "isFlower" -> begin match args with
+            | e :: [] -> Queue.add (Bytecode.ISFLWR (relative_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, isFlower requires a relative direction")
+          end
+        | "isNet" -> begin match args with
+            | e :: [] -> Queue.add (Bytecode.ISNET (relative_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, isNet requires a relative direction")
+          end
+        | "isWater" -> begin match args with
+            | e :: [] -> Queue.add (Bytecode.ISWATER (relative_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, isWater requires a relative direction")
+          end
         | _ -> failwith "TODO"
       end
     | _ -> failwith "TODO"
-  in
-
-  let direction_of_expr expr =
-    match expr with
-    | `NorthExpr -> Bytecode.North
-    | `SouthExpr -> Bytecode.South
-    | `EastExpr -> Bytecode.East
-    | `WestExpr -> Bytecode.West
-    | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
   in
 
   let gen_code_decl id args =
@@ -83,7 +107,7 @@ let codegen fxns =
     | [] -> Bytecode.NEW (id_loc, 1, 1, 0, Bytecode.North)
     | [`IntExpr(x); `IntExpr(y)] -> Bytecode.NEW (id_loc, x, y, 0, Bytecode.North)
     | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers)] -> Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North)
-    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> Bytecode.NEW (id_loc, x, y, num_flowers, (direction_of_expr direction))
+    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> Bytecode.NEW (id_loc, x, y, num_flowers, (compass_dir_of_expr direction))
     | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
   in
 

@@ -27,6 +27,8 @@ type bytecode =
   | ISNET of relative_direction
   | ISWATER of relative_direction
   | ISJEROO of relative_direction
+  | ISFLWR of relative_direction
+  | FACING of compass_direction
   | NOT
   | AND
   | OR

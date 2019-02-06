@@ -181,6 +181,78 @@ let codegen_turn _test_ctxt =
     Bytecode.TURN Bytecode.Right;
   ]
 
+let codegen_has_flower _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hasFlower"), [])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.HASFLWR;
+  ]
+
+let codegen_is_jeroo _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isJeroo"), [`AheadExpr])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.ISJEROO Bytecode.Ahead;
+  ]
+
+let codegen_is_facing _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isFacing"), [`SouthExpr])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.FACING Bytecode.South;
+  ]
+
+let codegen_is_flower _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isFlower"), [`AheadExpr])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.ISFLWR Bytecode.Ahead;
+  ]
+
+let codegen_is_net _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isNet"), [`LeftExpr])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.ISNET Bytecode.Left;
+  ]
+
+let codegen_is_water _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isWater"), [`RightExpr])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.ISWATER Bytecode.Right;
+  ]
+
 let suite =
   "Codegen">::: [
     "Generate jeroo decl with default args">:: codegen_jeroo_decl_no_args;
@@ -199,4 +271,10 @@ let suite =
     "Generate give default args">:: codegen_give_default_args;
     "Generate give in a direction">:: codegen_give_in_direction;
     "Generate turn instruction">:: codegen_turn;
+    "Generate hasFlower">:: codegen_has_flower;
+    "Generate isJeroo">:: codegen_is_jeroo;
+    "Generate isFacing">:: codegen_is_facing;
+    "Generate isFlower">:: codegen_is_flower;
+    "Generate isNet">:: codegen_is_net;
+    "Generate isWater">:: codegen_is_water;
   ]
