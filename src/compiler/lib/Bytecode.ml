@@ -17,6 +17,7 @@ type bytecode =
   | NEW of int * int * int * int * compass_direction
   | TURN of relative_direction
   | HOP of int
+  | PICK
   | TOSS
   | PLANT
   | GIVE of relative_direction

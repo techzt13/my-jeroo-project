@@ -5,6 +5,15 @@ let codegen fxns =
   let jeroo_tbl = Hashtbl.create 30 in
   let code_queue = Queue.create() in
 
+  let relative_dir_of_expr e =
+    match e with
+    | `LeftExpr -> Bytecode.Left
+    | `RightExpr -> Bytecode.Right
+    | `HereExpr -> Bytecode.Here
+    | `AheadExpr -> Bytecode.Ahead
+    | _ -> raise (SemanticException "type error: expression must be LEFT, RIGHT, AHEAD, or HERE")
+  in
+
   let rec gen_code_expr expr =
     match expr with
     | `TrueExpr ->
@@ -32,6 +41,27 @@ let codegen fxns =
             | [] ->  Queue.add (Bytecode.HOP 1) code_queue
             | `IntExpr(n) :: [] -> Queue.add (Bytecode.HOP n) code_queue
             | _ -> raise (SemanticException "Invalid arguments, hop requires an integer as it's only parameter")
+          end
+        | "pick" -> begin match args with
+            | [] -> Queue.add (Bytecode.PICK) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, pick requires no arguments")
+          end
+        | "plant" -> begin match args with
+            | [] -> Queue.add (Bytecode.PLANT) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, plant requires no arguments")
+          end
+        | "toss" -> begin match args with
+            | [] -> Queue.add (Bytecode.TOSS) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, toss requires no arguments")
+          end
+        | "give" -> begin match args with
+            | [] -> Queue.add (Bytecode.GIVE Bytecode.Ahead) code_queue
+            | e :: [] -> Queue.add (Bytecode.GIVE (relative_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, toss requires either a relative direction or no arguments")
+          end
+        | "turn" -> begin match args with
+            | e :: [] -> Queue.add (Bytecode.TURN (relative_dir_of_expr e)) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, turn requires one relative direction argument")
           end
         | _ -> failwith "TODO"
       end
