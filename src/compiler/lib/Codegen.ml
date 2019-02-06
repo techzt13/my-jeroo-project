@@ -3,18 +3,39 @@ exception SemanticException of string
 let codegen fxns =
   let fxn_tbl = Hashtbl.create 30 in
   let jeroo_tbl = Hashtbl.create 30 in
+  let code_queue = Queue.create() in
 
   let rec gen_code_expr expr =
     match expr with
-    | `TrueExpr -> [Bytecode.TRUE]
-    | `FalseExpr -> [Bytecode.FALSE]
+    | `TrueExpr ->
+      Queue.add Bytecode.TRUE code_queue
+    | `FalseExpr ->
+      Queue.add Bytecode.FALSE code_queue
     | `BinOpExpr (e1, `And, e2) ->
-      Bytecode.AND :: (gen_code_expr e1) @ (gen_code_expr e2)
+      gen_code_expr e1;
+      gen_code_expr e2;
+      Queue.add Bytecode.AND code_queue
     | `BinOpExpr (e1, `Or, e2) ->
-      Bytecode.OR :: (gen_code_expr e1) @ (gen_code_expr e2)
+      gen_code_expr e1;
+      gen_code_expr e2;
+      Queue.add Bytecode.OR code_queue
     | `UnOpExpr (`Not, e) ->
-      Bytecode.NOT :: (gen_code_expr e)
-    | _ -> []
+      gen_code_expr e;
+      Queue.add Bytecode.NOT code_queue
+    | `BinOpExpr (`IdExpr(id), `Dot, e) ->
+      let id_loc = Hashtbl.find jeroo_tbl id in
+      Queue.add (Bytecode.CSR id_loc) code_queue;
+      gen_code_expr e
+    | `FxnAppExpr (`IdExpr(id), args) ->
+      begin match id with
+        | "hop" -> begin match args with
+            | [] ->  Queue.add (Bytecode.HOP 1) code_queue
+            | `IntExpr(n) :: [] -> Queue.add (Bytecode.HOP n) code_queue
+            | _ -> raise (SemanticException "Invalid arguments, hop requires an integer as it's only parameter")
+          end
+        | _ -> failwith "TODO"
+      end
+    | _ -> failwith "TODO"
   in
 
   let direction_of_expr expr =
@@ -29,18 +50,18 @@ let codegen fxns =
   let gen_code_decl id args =
     let id_loc = Hashtbl.find jeroo_tbl id in
     match args with
-    | [] -> [Bytecode.NEW (id_loc, 1, 1, 0, Bytecode.North)]
-    | [`IntExpr(x); `IntExpr(y)] -> [Bytecode.NEW (id_loc, x, y, 0, Bytecode.North)]
-    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers)] -> [Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North)]
-    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> [Bytecode.NEW (id_loc, x, y, num_flowers, (direction_of_expr direction))]
+    | [] -> Bytecode.NEW (id_loc, 1, 1, 0, Bytecode.North)
+    | [`IntExpr(x); `IntExpr(y)] -> Bytecode.NEW (id_loc, x, y, 0, Bytecode.North)
+    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers)] -> Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North)
+    | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> Bytecode.NEW (id_loc, x, y, num_flowers, (direction_of_expr direction))
     | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
   in
 
-  let rec gen_code_stmt code stmt =
+  let rec gen_code_stmt stmt =
     match stmt with
     | `BlockStmt stmts ->
       stmts
-      |> List.fold_left (fun code stmt -> gen_code_stmt code stmt) code
+      |> List.iter (fun stmt -> gen_code_stmt stmt)
     | `ExprStmt expr ->
       gen_code_expr expr
     | `DeclStmt (ty, id, expr) ->
@@ -53,20 +74,20 @@ let codegen fxns =
             if not (String.equal ctor "Jeroo") then
               raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
             else
-              gen_code_decl id args
+              Queue.add (gen_code_decl id args) code_queue
           | _ -> raise (SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor")
         end
       end
-    | _ -> code
+    | _ -> failwith "TODO"
   in
 
-  let gen_code code fxn =
+  let gen_code fxn =
     let (id, stmts) = fxn in
-    Hashtbl.add fxn_tbl id (List.length code);
+    Hashtbl.add fxn_tbl id (Queue.length code_queue);
     stmts
-    |> List.fold_left (fun code stmt -> gen_code_stmt code stmt) code
+    |> List.iter (fun stmt -> gen_code_stmt stmt)
   in
 
   fxns
-  |> List.fold_left (fun code fxn -> gen_code code fxn) []
-  |> List.rev
+  |> List.iter (fun fxn -> gen_code fxn);
+  Queue.to_seq code_queue

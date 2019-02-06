@@ -5,7 +5,7 @@ let codegen_jeroo_decl_no_args _test_ctxt =
   let ast = [("main", [
       `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])))
     ])] in
-  let bytecode = Codegen.codegen ast in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.NEW (0, 1, 1, 0, Bytecode.North)
   ]
@@ -14,7 +14,7 @@ let codegen_jeroo_decl_set_x_y _test_ctxt =
   let ast = [("main", [
       `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [`IntExpr(2); `IntExpr(2)])))
     ])] in
-  let bytecode = Codegen.codegen ast in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.NEW (0, 2, 2, 0, Bytecode.North)
   ]
@@ -23,7 +23,7 @@ let codegen_jeroo_decl_set_x_y_flowers _test_ctxt =
   let ast = [("main", [
       `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [`IntExpr(2); `IntExpr(2); `IntExpr(5)])))
     ])] in
-  let bytecode = Codegen.codegen ast in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.NEW (0, 2, 2, 5, Bytecode.North)
   ]
@@ -32,7 +32,7 @@ let codegen_jeroo_decl_set_x_y_flowers_direction _test_ctxt =
   let ast = [("main", [
       `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [`IntExpr(2); `IntExpr(2); `IntExpr(5); `EastExpr])))
     ])] in
-  let bytecode = Codegen.codegen ast in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.NEW (0, 2, 2, 5, Bytecode.East)
   ]
@@ -61,6 +61,19 @@ let codegen_unknown_ctor _test_ctxt =
     ]] in
   assert_raises (Codegen.SemanticException "Invalid constructor: jer, Jeroo is the only valid constructor") (fun () -> Codegen.codegen ast)
 
+let codegen_jeroo_hop _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hop"), [`IntExpr(2)])))
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.CSR 0;
+    Bytecode.HOP 2;
+  ]
+
+
 let suite =
   "Codegen">::: [
     "Generate jeroo decl with default args">:: codegen_jeroo_decl_no_args;
@@ -71,4 +84,5 @@ let suite =
     "Generate jeroo decl no new expr">:: codegen_jeroo_decl_no_new;
     "Generate unknown type throws exception">:: codegen_unknown_decl_type;
     "Generate unknown constructor throws exception">:: codegen_unknown_ctor;
+    "Generate Jeroo hop">:: codegen_jeroo_hop;
   ]
