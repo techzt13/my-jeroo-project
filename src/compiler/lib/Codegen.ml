@@ -96,9 +96,16 @@ let codegen fxns =
             | e :: [] -> Queue.add (Bytecode.ISWATER (relative_dir_of_expr e)) code_queue
             | _ -> raise (SemanticException "Invalid arguments, isWater requires a relative direction")
           end
-        | _ -> failwith "TODO"
+        | _ ->
+          if Hashtbl.mem fxn_tbl id then
+            let loc = Hashtbl.find fxn_tbl id in
+            Queue.add Bytecode.CALLBK code_queue;
+            Queue.add (Bytecode.JUMP loc) code_queue
+          else
+            raise (SemanticException ("Unknown function: " ^ id))
       end
-    | _ -> failwith "TODO"
+    | _ ->
+      raise (SemanticException "Unknown expression")
   in
 
   let gen_code_decl id args =
@@ -132,14 +139,41 @@ let codegen fxns =
           | _ -> raise (SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor")
         end
       end
-    | _ -> failwith "TODO"
+    | `IfStmt(e, stmt) ->
+      gen_code_expr e;
+      let jmp_lbl = "if_lbl_" ^ (string_of_int (Queue.length code_queue)) in
+      let jmp = (Bytecode.BZ jmp_lbl) in
+      Queue.add jmp code_queue;
+      gen_code_stmt stmt;
+      Queue.add (Bytecode.LABEL jmp_lbl) code_queue;
+    | `IfElseStmt(e, s1, s2) ->
+      (* generate code for the condition *)
+      gen_code_expr e;
+      (* if the condition is false, jump to the else block, else execute the true block *)
+      let else_lbl = "else_lbl_" ^ (string_of_int (Queue.length code_queue)) in
+      let else_jmp = (Bytecode.BZ else_lbl) in
+      Queue.add else_jmp code_queue;
+      (* generate the code for the if-block *)
+      gen_code_stmt s1;
+      (* at the end of the true block, jump to the end of the if-else block *)
+      let done_lbl = "done_lbl_" ^ (string_of_int (Queue.length code_queue)) in
+      let done_jmp = (Bytecode.JUMP done_lbl) in
+      Queue.add done_jmp code_queue;
+      Queue.add (Bytecode.LABEL else_lbl) code_queue;
+      (* generate the code for the else-block *)
+      gen_code_stmt s2;
+      Queue.add (Bytecode.LABEL done_lbl) code_queue;
+    | _ -> failwith "TODO stmt"
   in
 
   let gen_code fxn =
     let (id, stmts) = fxn in
-    Hashtbl.add fxn_tbl id (Queue.length code_queue);
+    let fxn_lbl = id ^ "_" ^ (string_of_int (Queue.length code_queue)) in
+    Hashtbl.add fxn_tbl id fxn_lbl;
+    Queue.add (Bytecode.LABEL fxn_lbl) code_queue;
     stmts
-    |> List.iter (fun stmt -> gen_code_stmt stmt)
+    |> List.iter (fun stmt -> gen_code_stmt stmt);
+    Queue.add Bytecode.RETR code_queue
   in
 
   fxns

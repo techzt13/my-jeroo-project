@@ -12,8 +12,10 @@ type relative_direction =
 
 type bytecode =
   | CSR of int
-  | JUMP of int
-  | BZ of int
+  (* the actual Jeroo bytecode doesn't have labels, so we convert labels to memory locations in a separate step *)
+  | JUMP of string
+  | BZ of string
+  | LABEL of string
   | NEW of int * int * int * int * compass_direction
   | TURN of relative_direction
   | HOP of int
