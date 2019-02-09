@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatrixDialogComponent } from './matrix-dialog.component';
+import { MaterialModule } from '../material.module';
 
 describe('MatrixDialogComponent', () => {
   let component: MatrixDialogComponent;

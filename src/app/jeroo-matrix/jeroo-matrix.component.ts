@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
-import { Form } from '@angular/forms';
 
 @Component({
   selector: 'app-jeroo-matrix',
@@ -20,13 +19,19 @@ export class JerooMatrixComponent implements OnInit {
   maxYSize = this.heightSize - 1;
   mouseDown = false;
 
+  waterType = 'W';
+  grassType = 'G';
+  flowerType = 'F';
+  netType = 'N';
+  clearType = 'C';
+
   jerooBoard = [[]];
 
   constructor(private dialog: MatDialog) { }
 
   // create a board with a given size, and set it to the default values
   // (water on top/sides, grass everywhere else)
-  generateBoard(xSize, ySize) {
+  generateBoard(xSize: number, ySize: number) {
       const arr = [];
 
       for (let row = 0; row < ySize; row++) {
@@ -76,25 +81,25 @@ export class JerooMatrixComponent implements OnInit {
 
   // used when a user clicks one of the block selection images on the page to tell
   // what type of block they would like to place, or clear the screen
-  selectTile(type: string) {
-    switch (type) {
-      case 'W': {
-        this.currentValue = 'W';
+  selectTile(tileType: string) {
+    switch (tileType) {
+      case this.waterType: {
+        this.currentValue = this.waterType;
         break;
       }
-      case 'G': {
-        this.currentValue = 'G';
+      case this.grassType: {
+        this.currentValue = this.grassType;
         break;
       }
-      case 'N': {
-        this.currentValue = 'N';
+      case this.netType: {
+        this.currentValue = this.netType;
         break;
       }
-      case 'F': {
-        this.currentValue = 'F';
+      case this.flowerType: {
+        this.currentValue = this.flowerType;
         break;
       }
-      case 'C': {
+      case this.clearType: {
         this.jerooBoard = this.generateBoard(this.widthSize, this.heightSize);
         break;
       }
