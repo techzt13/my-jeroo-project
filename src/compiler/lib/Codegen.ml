@@ -16,6 +16,32 @@ let compass_dir_of_expr expr =
   | `WestExpr -> Bytecode.West
   | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
 
+(* convert labels to memory locations*)
+let remove_labels bytecode =
+  (* create table from labels to memory locations *)
+  let label_tbl = Hashtbl.create 30 in
+  (* counter to keep track of the memory location *)
+  let mem_loc = ref 0 in
+  bytecode
+  |> Seq.iter (fun intruction ->
+      begin match intruction with
+        | Bytecode.LABEL s -> Hashtbl.add label_tbl s (!mem_loc)
+        | _ ->
+          (* only increment the counter on non-labels *)
+          (* since they get removed in the instruction set *)
+          mem_loc := !mem_loc + 1
+      end;
+    );
+
+  (* swap out the jump to labels to jump to memory locations *)
+  bytecode
+  |> Seq.filter_map (fun instruction -> match instruction with
+      | Bytecode.JUMP_LBL lbl -> Some (Bytecode.JUMP (Hashtbl.find label_tbl lbl))
+      | Bytecode.BZ_LBL lbl -> Some (Bytecode.BZ (Hashtbl.find label_tbl lbl))
+      | Bytecode.LABEL _ -> None
+      | _ -> Some (instruction)
+    )
+
 let codegen fxns =
   let fxn_tbl = Hashtbl.create 30 in
   let jeroo_tbl = Hashtbl.create 30 in
@@ -98,7 +124,7 @@ let codegen fxns =
           if Hashtbl.mem fxn_tbl id then
             let loc = Hashtbl.find fxn_tbl id in
             Queue.add Bytecode.CALLBK code_queue;
-            Queue.add (Bytecode.JUMP loc) code_queue
+            Queue.add (Bytecode.JUMP_LBL loc) code_queue
           else
             raise (SemanticException ("Unknown function: " ^ id))
       end
@@ -140,7 +166,7 @@ let codegen fxns =
     | `IfStmt(e, stmt) ->
       gen_code_expr e;
       let jmp_lbl = "if_lbl_" ^ (string_of_int (Queue.length code_queue)) in
-      let jmp = (Bytecode.BZ jmp_lbl) in
+      let jmp = (Bytecode.BZ_LBL jmp_lbl) in
       Queue.add jmp code_queue;
       gen_code_stmt stmt;
       Queue.add (Bytecode.LABEL jmp_lbl) code_queue;
@@ -149,13 +175,13 @@ let codegen fxns =
       gen_code_expr e;
       (* if the condition is false, jump to the else block, else execute the true block *)
       let else_lbl = "else_lbl_" ^ (string_of_int (Queue.length code_queue)) in
-      let else_jmp = (Bytecode.BZ else_lbl) in
+      let else_jmp = (Bytecode.BZ_LBL else_lbl) in
       Queue.add else_jmp code_queue;
       (* generate the code for the if-block *)
       gen_code_stmt s1;
       (* at the end of the true block, jump to the end of the if-else block *)
       let done_lbl = "done_lbl_" ^ (string_of_int (Queue.length code_queue)) in
-      let done_jmp = (Bytecode.JUMP done_lbl) in
+      let done_jmp = (Bytecode.JUMP_LBL done_lbl) in
       Queue.add done_jmp code_queue;
       Queue.add (Bytecode.LABEL else_lbl) code_queue;
       (* generate the code for the else-block *)
@@ -166,9 +192,9 @@ let codegen fxns =
       Queue.add (Bytecode.LABEL loop_lbl) code_queue;
       gen_code_expr e;
       let done_lbl = "done_lbl_" ^ (string_of_int (Queue.length code_queue)) in
-      Queue.add (Bytecode.BZ done_lbl) code_queue;
+      Queue.add (Bytecode.BZ_LBL done_lbl) code_queue;
       gen_code_stmt s;
-      Queue.add (Bytecode.JUMP loop_lbl) code_queue;
+      Queue.add (Bytecode.JUMP_LBL loop_lbl) code_queue;
       Queue.add (Bytecode.LABEL done_lbl) code_queue;
   in
 
@@ -184,4 +210,5 @@ let codegen fxns =
 
   fxns
   |> List.iter (fun fxn -> gen_code fxn);
-  Queue.to_seq code_queue
+  let code_with_labels = Queue.to_seq code_queue in
+  remove_labels code_with_labels
