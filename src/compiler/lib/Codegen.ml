@@ -1,27 +1,25 @@
 exception SemanticException of string
 
+let relative_dir_of_expr e =
+  match e with
+  | `LeftExpr -> Bytecode.Left
+  | `RightExpr -> Bytecode.Right
+  | `HereExpr -> Bytecode.Here
+  | `AheadExpr -> Bytecode.Ahead
+  | _ -> raise (SemanticException "type error: expression must be LEFT, RIGHT, AHEAD, or HERE")
+
+let compass_dir_of_expr expr =
+  match expr with
+  | `NorthExpr -> Bytecode.North
+  | `SouthExpr -> Bytecode.South
+  | `EastExpr -> Bytecode.East
+  | `WestExpr -> Bytecode.West
+  | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
+
 let codegen fxns =
   let fxn_tbl = Hashtbl.create 30 in
   let jeroo_tbl = Hashtbl.create 30 in
   let code_queue = Queue.create() in
-
-  let relative_dir_of_expr e =
-    match e with
-    | `LeftExpr -> Bytecode.Left
-    | `RightExpr -> Bytecode.Right
-    | `HereExpr -> Bytecode.Here
-    | `AheadExpr -> Bytecode.Ahead
-    | _ -> raise (SemanticException "type error: expression must be LEFT, RIGHT, AHEAD, or HERE")
-  in
-
-  let compass_dir_of_expr expr =
-    match expr with
-    | `NorthExpr -> Bytecode.North
-    | `SouthExpr -> Bytecode.South
-    | `EastExpr -> Bytecode.East
-    | `WestExpr -> Bytecode.West
-    | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
-  in
 
   let rec gen_code_expr expr =
     match expr with
