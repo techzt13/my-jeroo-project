@@ -1,4 +1,5 @@
 (test
   (name main)
   (libraries Lib oUnit)
+  (flags (-w A))
 )

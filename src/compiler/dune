@@ -2,4 +2,5 @@
   (name jeroo_compiler)
   (libraries js_of_ocaml Lib)
   (preprocess (pps js_of_ocaml-ppx))
+  (flags (-w A))
 )
