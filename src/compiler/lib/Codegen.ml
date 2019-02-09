@@ -163,7 +163,15 @@ let codegen fxns =
       (* generate the code for the else-block *)
       gen_code_stmt s2;
       Queue.add (Bytecode.LABEL done_lbl) code_queue;
-    | _ -> failwith "TODO stmt"
+    | `WhileStmt(e, s) ->
+      let loop_lbl = "loop_lbl_" ^ (string_of_int (Queue.length code_queue)) in
+      Queue.add (Bytecode.LABEL loop_lbl) code_queue;
+      gen_code_expr e;
+      let done_lbl = "done_lbl_" ^ (string_of_int (Queue.length code_queue)) in
+      Queue.add (Bytecode.BZ done_lbl) code_queue;
+      gen_code_stmt s;
+      Queue.add (Bytecode.JUMP loop_lbl) code_queue;
+      Queue.add (Bytecode.LABEL done_lbl) code_queue;
   in
 
   let gen_code fxn =

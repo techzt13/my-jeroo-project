@@ -83,32 +83,6 @@ let codegen_jeroo_hop _test_ctxt =
     Bytecode.RETR
   ]
 
-let str_of_dir dir =
-  match dir with
-  | Bytecode.North -> "north"
-  | Bytecode.South -> "south"
-  | Bytecode.East -> "east"
-  | Bytecode.West -> "west"
-
-let dbg_bytecode codes =
-  codes
-  |> List.iter (fun bytecode ->
-      let str = match bytecode with
-        | Bytecode.CSR n -> "CSR " ^ string_of_int n
-        | Bytecode.NEW (id, x, y, num_flowers, dir) -> Printf.sprintf "NEW %d %d %d %d %s" id x y num_flowers (str_of_dir dir)
-        | Bytecode.HOP n -> "HOP " ^ string_of_int n
-        | Bytecode.TURN _ -> "TURN"
-        | Bytecode.TRUE -> "TRUE"
-        | Bytecode.CALLBK -> "CALLBK"
-        | Bytecode.JUMP lbl -> "JUMP " ^ lbl
-        | Bytecode.BZ lbl -> "BZ " ^ lbl
-        | Bytecode.LABEL lbl -> "LBL " ^ lbl
-        | Bytecode.RETR -> "RETR"
-        | _ -> ""
-      in
-      print_endline str
-    )
-
 let codegen_multiple_jeroos_csr _test_ctxt =
   let ast = [("main", [
       `DeclStmt("Jeroo", "j1", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
@@ -372,6 +346,30 @@ let codegen_if_else _test_ctxt =
     Bytecode.RETR;
   ]
 
+let codegen_while _test_ctxt =
+  let ast = [("main", [
+      `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
+      `WhileStmt(`TrueExpr,
+                  `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hop"), [])))
+                );
+      `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("turn"), [`RightExpr])));
+    ])] in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.LABEL "main_0";
+    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.LABEL "loop_lbl_2";
+    Bytecode.TRUE;
+    Bytecode.BZ "done_lbl_4";
+    Bytecode.CSR 0;
+    Bytecode.HOP 1;
+    Bytecode.JUMP "loop_lbl_2";
+    Bytecode.LABEL "done_lbl_4";
+    Bytecode.CSR 0;
+    Bytecode.TURN Bytecode.Right;
+    Bytecode.RETR;
+  ]
+
 let suite =
   "Codegen">::: [
     "Generate jeroo decl with default args">:: codegen_jeroo_decl_no_args;
@@ -400,4 +398,5 @@ let suite =
     "Calling missing function generates error">:: codegen_call_missing_fxn;
     "Generate if statement">:: codegen_if_stmt;
     "Generate if-else statement">:: codegen_if_else;
+    "Generate while statement">:: codegen_while;
   ]
