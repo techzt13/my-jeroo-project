@@ -118,14 +118,14 @@ export class JerooMatrixComponent implements OnInit {
 
     dialogConfig.data = {
       id: 1,
-      xValue: this.widthSize,
-      yValue: this.heightSize
+      xValue: this.widthSize - 2,
+      yValue: this.heightSize - 2
     };
 
     const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      data => { this.widthSize = data.xValue, this.heightSize = data.yValue; this.ngOnInit();
+      data => { this.widthSize = +data.xValue + +2, this.heightSize = +data.yValue + +2; this.ngOnInit();
                 this.maxXSize = this.widthSize - 1; this.maxYSize = this.heightSize - 1; },
     );
 

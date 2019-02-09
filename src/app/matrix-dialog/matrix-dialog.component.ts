@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-matrix-dialog',
@@ -30,8 +30,8 @@ export class MatrixDialogComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      xValue: [this.widthValue, []],
-      yValue: [this.heightValue, []]
+      xValue: [this.widthValue, [Validators.min(1), Validators.max(50), Validators.pattern('[0-9]*'), Validators.required]],
+      yValue: [this.heightValue, [Validators.min(1), Validators.max(50), Validators.pattern('[0-9]*'), Validators.required]]
     });
   }
 
