@@ -20,7 +20,7 @@ let parse_decl _test_ctxt =
   let expected : AST.translation_unit = {
     extension_fxns = [];
     main_fxn = ("main", [
-        `DeclStmt("jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("jeroo"), [`IntExpr(1); `IntExpr(2)])))
+        `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [`IntExpr(1); `IntExpr(2)])))
       ]);
   } in
   assert_equal ast expected

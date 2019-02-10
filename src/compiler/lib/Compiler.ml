@@ -3,7 +3,7 @@ exception HeaderException of string
 let compile code =
   let lexbuf = Lexing.from_string code in
 
-  let regex = Str.regexp "\\(Java\\)" in
+  let regex = Str.regexp "^@\\(Java\\|VB\\)$" in
   let _ =
     try Str.search_forward regex code 0
     with Not_found -> raise (HeaderException "Malformed Header")
@@ -14,7 +14,7 @@ let compile code =
   in
   let ast = match language_id with
     | "Java" -> JavaParser.translation_unit JavaLexer.token lexbuf
-    | "VB" -> JavaParser.translation_unit JavaLexer.token lexbuf
+    | "VB" -> VBParser.translation_unit VBLexer.token lexbuf
     | _ -> raise (HeaderException "Unknown Language")
   in
 

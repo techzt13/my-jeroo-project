@@ -98,6 +98,22 @@ rule token = parse
   { OR }
 | n o t
   { NOT }
+| j e r o o
+  { ID "Jeroo" }
+| h a s f l o w e r
+  { ID "hasFlower" }
+| i s f a c i n g
+  { ID "isFacing" }
+| i s f l o w e r
+  { ID "isFlower" }
+| i s j e r o o
+  { ID "isJeroo" }
+| i s n e t
+  { ID "isNet" }
+| i s w a t e r
+  {ID "isWater" }
+| i s c l e a r
+  {ID "isClear" }
 | identifier as id
   { ID (String.lowercase_ascii id) }
 | '='
