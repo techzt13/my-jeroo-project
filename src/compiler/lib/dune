@@ -1,6 +1,5 @@
 (library
   (name Lib)
-  (libraries str)
 )
 (ocamllex JavaLexer VBLexer)
 (menhir (modules JavaParser VBParser)
