@@ -15,7 +15,7 @@ export class JerooMatrixComponent implements OnInit {
   currentYLocation = 0;
   mouseDown = false;
 
-  constructor(private dialog: MatDialog, private matrixService: MatrixService) { }
+  constructor(private dialog: MatDialog, public matrixService: MatrixService) { }
 
   // how to handle clicks from user
   onClick(event: any, row: number, column: number) {
