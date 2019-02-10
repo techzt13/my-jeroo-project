@@ -1,5 +1,4 @@
 open Js_of_ocaml
-open Lib
 
 let ocaml_str_of_js_str (s : Js.js_string Js.t) =
   let length = s##.length in
@@ -10,14 +9,3 @@ let ocaml_str_of_js_str (s : Js.js_string Js.t) =
     Bytes.set ocaml_str i char;
   done;
   Bytes.to_string ocaml_str
-
-let compile code =
-  let code = ocaml_str_of_js_str code in
-  let lexbuf = Lexing.from_string code in
-  JavaParser.translation_unit JavaLexer.token lexbuf
-
-let _ =
-  Js.export "compiler"
-    (object%js
-      method compile (code : Js.js_string Js.t) = compile code
-    end)

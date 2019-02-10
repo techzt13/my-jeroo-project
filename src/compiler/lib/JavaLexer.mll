@@ -21,6 +21,10 @@ rule token = parse
   { token lexbuf }
 | ml_comment
   { token lexbuf }
+| "@Java\n"
+  { HEADER }
+| "@@\n"
+  { MAIN_METH_SEP }
 | int_constant as i
   { INT (int_of_string i) }
 | "true"

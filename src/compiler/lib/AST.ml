@@ -45,3 +45,8 @@ type stmt = [
 
 (* function name, function body *)
 type fxn = string * stmt list
+
+type translation_unit = {
+  extension_fxns: fxn list;
+  main_fxn: fxn;
+}

@@ -42,7 +42,7 @@ let remove_labels bytecode =
       | _ -> Some (instruction)
     )
 
-let codegen fxns =
+let codegen (translation_unit : AST.translation_unit) =
   let fxn_tbl = Hashtbl.create 30 in
   let jeroo_tbl = Hashtbl.create 30 in
   let code_queue = Queue.create() in
@@ -200,15 +200,31 @@ let codegen fxns =
 
   let gen_code fxn =
     let (id, stmts) = fxn in
-    let fxn_lbl = id ^ "_" ^ (string_of_int (Queue.length code_queue)) in
-    Hashtbl.add fxn_tbl id fxn_lbl;
-    Queue.add (Bytecode.LABEL fxn_lbl) code_queue;
+    Hashtbl.add fxn_tbl id id;
+    Queue.add (Bytecode.LABEL id) code_queue;
     stmts
     |> List.iter (fun stmt -> gen_code_stmt stmt);
     Queue.add Bytecode.RETR code_queue
   in
 
-  fxns
+  let gen_code_main_fxn fxn =
+    let (id, _) = fxn in
+    if not (String.equal id "main") then
+      raise (SemanticException "main function must be called main")
+    else begin
+      let (id, stmts) = fxn in
+      Hashtbl.add fxn_tbl id id;
+      stmts
+      |> List.iter (fun stmt -> gen_code_stmt stmt);
+      Queue.add Bytecode.RETR code_queue
+    end
+  in
+
+  Queue.add (Bytecode.JUMP_LBL "main") code_queue;
+  translation_unit.extension_fxns
   |> List.iter (fun fxn -> gen_code fxn);
+  Queue.add (Bytecode.LABEL "main") code_queue;
+  gen_code_main_fxn translation_unit.main_fxn;
+
   let code_with_labels = Queue.to_seq code_queue in
   remove_labels code_with_labels

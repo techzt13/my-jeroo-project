@@ -1,3 +1,3 @@
 exception SemanticException of string
 
-val codegen : AST.fxn list -> Bytecode.bytecode Seq.t
+val codegen : AST.translation_unit -> Bytecode.bytecode Seq.t
