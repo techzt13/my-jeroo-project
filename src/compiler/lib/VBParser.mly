@@ -5,6 +5,7 @@
 %token LEFT RIGHT AHEAD HERE TRUE FALSE
 %token NORTH SOUTH EAST WEST
 %token LPAREN RPAREN COMMA THEN DIM AS NEWLINE
+%token HEADER MAIN_METH_SEP
 %token EOF
 
 %right EQ
@@ -18,7 +19,7 @@
 %%
 
 translation_unit:
-  | fs = fxns EOF { fs }
+  | HEADER fs = fxns NEWLINE? MAIN_METH_SEP NEWLINE? f = fxn NEWLINE? EOF { f :: fs }
 
 fxns:
   | NEWLINE? { [] }

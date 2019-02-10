@@ -4,7 +4,7 @@
 }
 
 let whitespace = [' ' '\t' '\r']+
-let newline = '\n'+
+let newline = (whitespace? '\n' whitespace?)+
 let comment = "'" [^'\n']* newline
 
 let digit = '-'? ['0'-'9']
@@ -46,6 +46,10 @@ rule token = parse
   { token lexbuf }
 | comment
   { token lexbuf }
+| "@VB" newline
+  { HEADER }
+| "@@\n"
+  { MAIN_METH_SEP }
 | int_constant as i
   { INT (int_of_string i) }
 | d i m
