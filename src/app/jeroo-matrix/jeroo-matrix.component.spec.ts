@@ -4,6 +4,7 @@ import { JerooMatrixComponent } from './jeroo-matrix.component';
 
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Browser } from 'selenium-webdriver';
 
 describe('JerooMatrixComponent', () => {
   let component: JerooMatrixComponent;
@@ -29,4 +30,8 @@ describe('JerooMatrixComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+});
+
+describe('JerooMatrix', function() {
+
 });
