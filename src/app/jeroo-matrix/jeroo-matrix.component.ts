@@ -76,7 +76,7 @@ export class JerooMatrixComponent implements OnInit {
     dialogConfig.data = {
       id: 1,
       xValue: this.matrixService.getWidthSize() - 2,
-      yValue: this.matrixService.getWidthSize() - 2
+      yValue: this.matrixService.getHeightSize() - 2
     };
 
     const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
