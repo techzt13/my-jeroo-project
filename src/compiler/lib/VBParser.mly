@@ -15,11 +15,11 @@
 %right NOT
 %left DOT
 
-%start <AST.fxn list> translation_unit
+%start <AST.translation_unit> translation_unit
 %%
 
 translation_unit:
-  | HEADER fs = fxns NEWLINE? MAIN_METH_SEP NEWLINE? f = fxn NEWLINE? EOF { f :: fs }
+  | HEADER fs = fxns NEWLINE? MAIN_METH_SEP NEWLINE? f = fxn NEWLINE? EOF { { extension_fxns = fs; main_fxn = f;} }
 
 fxns:
   | NEWLINE? { [] }
