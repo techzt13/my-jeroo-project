@@ -9,6 +9,9 @@ describe('MatrixDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        MaterialModule
+      ],
       declarations: [ MatrixDialogComponent ]
     })
     .compileComponents();
