@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JerooMatrixComponent } from './jeroo-matrix.component';
 
 import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('JerooMatrixComponent', () => {
   let component: JerooMatrixComponent;
@@ -11,7 +12,8 @@ describe('JerooMatrixComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MaterialModule
+        MaterialModule,
+        ReactiveFormsModule
       ],
       declarations: [ JerooMatrixComponent ]
     })

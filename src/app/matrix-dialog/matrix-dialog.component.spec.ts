@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatrixDialogComponent } from './matrix-dialog.component';
 import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('MatrixDialogComponent', () => {
   let component: MatrixDialogComponent;
@@ -10,7 +11,8 @@ describe('MatrixDialogComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MaterialModule
+        MaterialModule,
+        ReactiveFormsModule
       ],
       declarations: [ MatrixDialogComponent ]
     })
