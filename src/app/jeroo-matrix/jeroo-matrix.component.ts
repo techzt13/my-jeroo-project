@@ -15,8 +15,6 @@ export class JerooMatrixComponent implements OnInit {
   currentYLocation = 0;
   mouseDown = false;
 
-  jerooBoard = [[]];
-
   constructor(private dialog: MatDialog, private matrixService: MatrixService) { }
 
   // how to handle clicks from user
@@ -55,7 +53,6 @@ export class JerooMatrixComponent implements OnInit {
   selectTile(tileType: string) {
     if (tileType === this.matrixService.getClearType()) {
       this.matrixService.drawBoard();
-      this.jerooBoard = this.matrixService.getMatrix();
     } else {
       this.matrixService.setCurrentValue(tileType);
     }
@@ -93,8 +90,6 @@ export class JerooMatrixComponent implements OnInit {
 
   ngOnInit() {
     this.matrixService.drawBoard();
-    this.jerooBoard = this.matrixService.getMatrix();
-    console.log(this.jerooBoard);
   }
 
 }
