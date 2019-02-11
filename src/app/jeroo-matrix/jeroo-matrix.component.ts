@@ -28,7 +28,8 @@ export class JerooMatrixComponent implements OnInit {
               this.matrixService.setBoardValueAt(row, column);
             }
       }
-
+      // return false here will stop action of clicking and holding to drag an image around. Since we are dealing
+      // with an array of images this will stop the browser from allowing the user to do that
       return false;
   }
 
@@ -56,6 +57,8 @@ export class JerooMatrixComponent implements OnInit {
     } else {
       this.matrixService.setCurrentValue(tileType);
     }
+    // returning false will prevent the user from clicking and holding a tile, while
+    // being able to drag it around the screen
     return false;
   }
 
