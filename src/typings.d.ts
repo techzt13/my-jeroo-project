@@ -8,8 +8,8 @@ declare interface Instruction {
     f: number;
 }
 
-declare interface JerooCompiler_t {
+declare interface JerooCompilerModule {
     compile: (code: string) => Instruction[];
 }
 
-declare var JerooCompiler: JerooCompiler_t;
+declare var JerooCompiler: JerooCompilerModule;
