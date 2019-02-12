@@ -2,7 +2,10 @@ open Js_of_ocaml
 open Lib
 
 let _ =
-  Js.export "compiler"
+  Js.export "JerooCompiler"
     (object%js
-      method compile (code : Js.js_string Js.t) = Compiler.compile (JerooCompilerUtils.ocaml_str_of_js_str code)
+      method compile (code : Js.js_string Js.t) =
+        Js.to_bytestring code
+        |> Compiler.compile
+        |> JerooCompilerUtils.json_of_bytecode
     end)
