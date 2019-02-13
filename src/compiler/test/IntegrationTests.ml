@@ -8,7 +8,7 @@ let compile_java _test_ctxt =
     Bytecode.JUMP 3;
     Bytecode.HOP 3;
     Bytecode.RETR;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.CALLBK;
     Bytecode.JUMP 1;
@@ -22,7 +22,7 @@ let compile_VB _test_ctxt =
     Bytecode.JUMP 3;
     Bytecode.HOP 3;
     Bytecode.RETR;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.CALLBK;
     Bytecode.JUMP 1;

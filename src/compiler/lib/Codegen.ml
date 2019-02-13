@@ -135,7 +135,7 @@ let codegen (translation_unit : AST.translation_unit) =
   let gen_code_decl id args =
     let id_loc = Hashtbl.find jeroo_tbl id in
     match args with
-    | [] -> Bytecode.NEW (id_loc, 1, 1, 0, Bytecode.North)
+    | [] -> Bytecode.NEW (id_loc, 0, 0, 0, Bytecode.North)
     | [`IntExpr(x); `IntExpr(y)] -> Bytecode.NEW (id_loc, x, y, 0, Bytecode.North)
     | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers)] -> Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North)
     | [`IntExpr(x); `IntExpr(y); `IntExpr(num_flowers); direction] -> Bytecode.NEW (id_loc, x, y, num_flowers, (compass_dir_of_expr direction))

@@ -11,7 +11,7 @@ let codegen_jeroo_decl_no_args _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.RETR
   ]
 
@@ -104,7 +104,7 @@ let codegen_jeroo_hop _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.HOP 2;
     Bytecode.RETR
@@ -123,7 +123,7 @@ let codegen_multiple_jeroos_csr _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.NEW (1, 2, 2, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.HOP 1;
@@ -143,7 +143,7 @@ let codegen_pick_flower _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.PICK;
     Bytecode.RETR
@@ -160,7 +160,7 @@ let codegen_plant_flower _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.PLANT;
     Bytecode.RETR
@@ -177,7 +177,7 @@ let codegen_toss_flower _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.TOSS;
     Bytecode.RETR
@@ -194,7 +194,7 @@ let codegen_give_default_args _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.GIVE Bytecode.Ahead;
     Bytecode.RETR
@@ -211,7 +211,7 @@ let codegen_give_in_direction _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.GIVE Bytecode.Left;
     Bytecode.RETR
@@ -228,7 +228,7 @@ let codegen_turn _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.TURN Bytecode.Right;
     Bytecode.RETR
@@ -245,7 +245,7 @@ let codegen_has_flower _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.HASFLWR;
     Bytecode.RETR
@@ -262,7 +262,7 @@ let codegen_is_jeroo _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.ISJEROO Bytecode.Ahead;
     Bytecode.RETR
@@ -279,7 +279,7 @@ let codegen_is_facing _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.FACING Bytecode.South;
     Bytecode.RETR
@@ -296,7 +296,7 @@ let codegen_is_flower _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.ISFLWR Bytecode.Ahead;
     Bytecode.RETR
@@ -313,7 +313,7 @@ let codegen_is_net _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.ISNET Bytecode.Left;
     Bytecode.RETR
@@ -330,7 +330,7 @@ let codegen_is_water _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.ISWATER Bytecode.Right;
     Bytecode.RETR
@@ -353,7 +353,7 @@ let codegen_call_custom_fxn _test_ctxt =
     Bytecode.JUMP 3;
     Bytecode.HOP 1;
     Bytecode.RETR;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.CSR 0;
     Bytecode.CALLBK;
     Bytecode.JUMP 1;
@@ -382,7 +382,7 @@ let codegen_if_stmt _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.TRUE;
     Bytecode.BZ 6;
     Bytecode.CSR 0;
@@ -406,7 +406,7 @@ let codegen_if_else _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.TRUE;
     Bytecode.BZ 7;
     Bytecode.CSR 0;
@@ -433,7 +433,7 @@ let codegen_while _test_ctxt =
   let bytecode = List.of_seq (Codegen.codegen ast) in
   assert_equal bytecode [
     Bytecode.JUMP 1;
-    Bytecode.NEW (0, 1, 1, 0, Bytecode.North);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
     Bytecode.TRUE;
     Bytecode.BZ 7;
     Bytecode.CSR 0;
