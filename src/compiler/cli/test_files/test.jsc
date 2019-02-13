@@ -1,0 +1,7 @@
+@Java
+
+@@
+method main() {
+Jeroo j = new Jeroo();
+j.hop(3);
+}
