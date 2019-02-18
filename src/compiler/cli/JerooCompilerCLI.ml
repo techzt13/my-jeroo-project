@@ -26,39 +26,39 @@ let _ =
 
   bytecode
   |> Seq.map (fun code -> match code with
-      | Bytecode.JUMP n -> str_of_instr "JUMP" n 0 0 0 0 0
-      | Bytecode.JUMP_LBL _ -> str_of_instr "JUMP" (-1) 0 0 0 0 0
-      | Bytecode.BZ n -> str_of_instr "BZ" n 0 0 0 0 0
-      | Bytecode.BZ_LBL _ -> str_of_instr "BZ" (-1) 0 0 0 0 0
-      | Bytecode.LABEL _ -> str_of_instr "JUMP" (-1) 0 0 0 0 0
-      | Bytecode.CALLBK -> str_of_instr "CALLBK" 0 0 0 0 0 0
-      | Bytecode.RETR -> str_of_instr "RETR" 0 0 0 0 0 0
-      | Bytecode.CSR n -> str_of_instr "CSR" n 0 0 0 0 0
-      | Bytecode.NEW (id, x, y, num_flowers, direction) ->
-        str_of_instr "NEW" id x y num_flowers (int_of_compass_direction direction) 0
-      | Bytecode.TURN direction ->
-        str_of_instr "TURN" (int_of_relative_direction direction) 0 0 0 0 0
-      | Bytecode.HOP n -> str_of_instr "HOP" n 0 0 0 0 0
-      | Bytecode.TOSS -> str_of_instr "TOSS" 0 0 0 0 0 0
-      | Bytecode.PLANT -> str_of_instr "PLANT" 0 0 0 0 0 0
-      | Bytecode.GIVE direction ->
-        str_of_instr "GIVE" (int_of_relative_direction direction) 0 0 0 0 0
-      | Bytecode.PICK -> str_of_instr "PICK" 0 0 0 0 0 0
-      | Bytecode.TRUE -> str_of_instr "TRUE" 0 0 0 0 0 0
-      | Bytecode.FALSE -> str_of_instr "FALSE" 0 0 0 0 0 0
-      | Bytecode.HASFLWR -> str_of_instr "HASFLWR" 0 0 0 0 0 0
-      | Bytecode.ISNET direction ->
-        str_of_instr "ISNET" (int_of_relative_direction direction) 0 0 0 0 0
-      | Bytecode.ISWATER direction ->
-        str_of_instr "ISWATER" (int_of_relative_direction direction) 0 0 0 0 0
-      | Bytecode.ISJEROO direction ->
-        str_of_instr "ISJEROO" (int_of_relative_direction direction) 0 0 0 0 0
-      | Bytecode.ISFLWR direction ->
-        str_of_instr "ISFLWR" (int_of_relative_direction direction) 0 0 0 0 0
-      | Bytecode.FACING direction ->
-        str_of_instr "FACING" (int_of_compass_direction direction) 0 0 0 0 0
-      | Bytecode.AND -> str_of_instr "AND" 0 0 0 0 0 0
-      | Bytecode.OR -> str_of_instr "OR" 0 0 0 0 0 0
-      | Bytecode.NOT -> str_of_instr "NOT" 0 0 0 0 0 0
+      | Bytecode.JUMP (n, line_num) -> str_of_instr "JUMP" n 0 0 0 0 line_num
+      | Bytecode.JUMP_LBL (_, line_num) -> str_of_instr "JUMP" (-1) 0 0 0 0 line_num
+      | Bytecode.BZ (n, line_num) -> str_of_instr "BZ" n 0 0 0 0 line_num
+      | Bytecode.BZ_LBL (_, line_num) -> str_of_instr "BZ" (-1) 0 0 0 0 line_num
+      | Bytecode.LABEL (_, line_num) -> str_of_instr "JUMP" (-1) 0 0 0 0 line_num
+      | Bytecode.CALLBK line_num -> str_of_instr "CALLBK" 0 0 0 0 0 line_num
+      | Bytecode.RETR line_num -> str_of_instr "RETR" 0 0 0 0 0 line_num
+      | Bytecode.CSR (n, line_num) -> str_of_instr "CSR" n 0 0 0 0 line_num
+      | Bytecode.NEW (id, x, y, num_flowers, direction, line_num) ->
+        str_of_instr "NEW" id x y num_flowers (int_of_compass_direction direction) line_num
+      | Bytecode.TURN (direction, line_num) ->
+        str_of_instr "TURN" (int_of_relative_direction direction) 0 0 0 0 line_num
+      | Bytecode.HOP (n, line_num) -> str_of_instr "HOP" n 0 0 0 0 line_num
+      | Bytecode.TOSS line_num -> str_of_instr "TOSS" 0 0 0 0 0 line_num
+      | Bytecode.PLANT line_num -> str_of_instr "PLANT" 0 0 0 0 0 line_num
+      | Bytecode.GIVE (direction, line_num) ->
+        str_of_instr "GIVE" (int_of_relative_direction direction) 0 0 0 0 line_num
+      | Bytecode.PICK line_num -> str_of_instr "PICK" 0 0 0 0 0 line_num
+      | Bytecode.TRUE line_num -> str_of_instr "TRUE" 0 0 0 0 0 line_num
+      | Bytecode.FALSE line_num -> str_of_instr "FALSE" 0 0 0 0 0 line_num
+      | Bytecode.HASFLWR line_num -> str_of_instr "HASFLWR" 0 0 0 0 0 line_num
+      | Bytecode.ISNET (direction, line_num) ->
+        str_of_instr "ISNET" (int_of_relative_direction direction) 0 0 0 0 line_num
+      | Bytecode.ISWATER (direction, line_num) ->
+        str_of_instr "ISWATER" (int_of_relative_direction direction) 0 0 0 0 line_num
+      | Bytecode.ISJEROO (direction, line_num) ->
+        str_of_instr "ISJEROO" (int_of_relative_direction direction) 0 0 0 0 line_num
+      | Bytecode.ISFLWR (direction, line_num) ->
+        str_of_instr "ISFLWR" (int_of_relative_direction direction) 0 0 0 0 line_num
+      | Bytecode.FACING (direction, line_num) ->
+        str_of_instr "FACING" (int_of_compass_direction direction) 0 0 0 0 line_num
+      | Bytecode.AND line_num -> str_of_instr "AND" 0 0 0 0 0 line_num
+      | Bytecode.OR line_num -> str_of_instr "OR" 0 0 0 0 0 line_num
+      | Bytecode.NOT line_num -> str_of_instr "NOT" 0 0 0 0 0 line_num
     )
   |> Seq.iter (fun code_str -> print_endline code_str)

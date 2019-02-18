@@ -1,0 +1,10 @@
+@VB
+
+@@
+' here is a comment
+sub main()
+dim j as Jeroo = new Jeroo(1, 2)
+dim i as Jeroo = new Jeroo(2, 2)
+j.hop(3)
+i.turn(LEFT)
+end sub

@@ -1,11 +1,31 @@
 {
-  open VBParser
-  exception Error of string
+open VBParser
+open Lexing
+
+exception Error of string
+
+let get_lnum lexbuf =
+  let pos = lexbuf.lex_curr_p in
+  pos.pos_lnum
+
+let next_line lexbuf =
+  let pos = lexbuf.lex_curr_p in
+  lexbuf.lex_curr_p <-
+    { pos with pos_bol = lexbuf.lex_curr_pos;
+               pos_lnum = pos.pos_lnum + 1
+    }
+
+let reset_lnum lexbuf =
+  let pos = lexbuf.lex_curr_p in
+  lexbuf.lex_curr_p <-
+    { pos with pos_bol = lexbuf.lex_curr_pos;
+               pos_lnum = 0
+    }
 }
 
 let whitespace = [' ' '\t' '\r']+
-let newline = (whitespace? '\n' whitespace?)+
-let comment = "'" [^'\n']* newline
+let newline = '\n'
+let comment = "'" [^'\n']* '\n'
 
 let digit = '-'? ['0'-'9']
 let letter = ['a'-'z' 'A'-'Z' '_']
@@ -45,88 +65,88 @@ rule token = parse
 | whitespace
   { token lexbuf }
 | comment
-  { token lexbuf }
-| "@VB" newline
+  { next_line lexbuf; token lexbuf }
+| "@VB\n"
   { HEADER }
 | "@@\n"
-  { MAIN_METH_SEP }
+  { reset_lnum lexbuf; MAIN_METH_SEP }
 | int_constant as i
-  { INT (int_of_string i) }
+  { INT ((int_of_string i), (get_lnum lexbuf)) }
 | d i m
-  { DIM }
+  { DIM (get_lnum lexbuf) }
 | a s
-  { AS }
+  { AS (get_lnum lexbuf) }
 | n e w
-  { NEW }
+  { NEW (get_lnum lexbuf) }
 | s u b
-  { SUB }
+  { SUB (get_lnum lexbuf) }
 | w h i l e
-  { WHILE }
+  { WHILE (get_lnum lexbuf) }
 | i f
-  { IF }
+  { IF (get_lnum lexbuf) }
 | t h e n
-  { THEN }
+  { THEN (get_lnum lexbuf) }
 | e l s e i f
-  { ELSEIF }
+  { ELSEIF (get_lnum lexbuf) }
 | e l s e
-  { ELSE }
+  { ELSE (get_lnum lexbuf) }
 | e n d
-  { END }
+  { END (get_lnum lexbuf) }
 | l e f t
-  { LEFT }
+  { LEFT (get_lnum lexbuf) }
 | r i g h t
-  { RIGHT }
+  { RIGHT (get_lnum lexbuf) }
 | a h e a d
-  { AHEAD }
+  { AHEAD (get_lnum lexbuf) }
 | h e r e
-  { HERE }
+  { HERE (get_lnum lexbuf) }
 | n o r t h
-  { NORTH }
+  { NORTH (get_lnum lexbuf) }
 | e a s t
-  { EAST }
+  { EAST (get_lnum lexbuf) }
 | s o u t h
-  { SOUTH }
+  { SOUTH (get_lnum lexbuf) }
 | w e s t
-  { WEST }
+  { WEST (get_lnum lexbuf) }
 | t r u e
-  { TRUE }
+  { TRUE (get_lnum lexbuf) }
 | f a l s e
-  { FALSE }
+  { FALSE (get_lnum lexbuf) }
 | a n d
-  { AND }
+  { AND (get_lnum lexbuf) }
 | o r
-  { OR }
+  { OR (get_lnum lexbuf) }
 | n o t
-  { NOT }
+  { NOT (get_lnum lexbuf) }
 | j e r o o
-  { ID "Jeroo" }
+  { ID ("Jeroo", (get_lnum lexbuf)) }
 | h a s f l o w e r
-  { ID "hasFlower" }
+  { ID ("hasFlower", (get_lnum lexbuf)) }
 | i s f a c i n g
-  { ID "isFacing" }
+  { ID ("isFacing", (get_lnum lexbuf)) }
 | i s f l o w e r
-  { ID "isFlower" }
+  { ID ("isFlower", (get_lnum lexbuf)) }
 | i s j e r o o
-  { ID "isJeroo" }
+  { ID ("isJeroo", (get_lnum lexbuf)) }
 | i s n e t
-  { ID "isNet" }
+  { ID ("isNet", (get_lnum lexbuf)) }
 | i s w a t e r
-  {ID "isWater" }
+  {ID ("isWater", (get_lnum lexbuf)) }
 | i s c l e a r
-  {ID "isClear" }
+  {ID ("isClear", (get_lnum lexbuf)) }
 | identifier as id
-  { ID (String.lowercase_ascii id) }
+  { ID ((String.lowercase_ascii id), (get_lnum lexbuf)) }
 | '='
-  { EQ }
+  { EQ (get_lnum lexbuf)}
 | '('
-  { LPAREN }
+  { LPAREN (get_lnum lexbuf)}
 | ')'
-  { RPAREN }
+  { RPAREN (get_lnum lexbuf)}
 | ','
-  { COMMA }
+  { COMMA (get_lnum lexbuf)}
 | '.'
-  { DOT }
+  { DOT (get_lnum lexbuf) }
 | newline
-  { NEWLINE }
+  { next_line lexbuf; NEWLINE }
 | eof
   { EOF }

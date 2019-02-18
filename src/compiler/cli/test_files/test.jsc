@@ -1,7 +1,16 @@
 @Java
 
 @@
+/*
+here
+are
+some
+lines
+*/
 method main() {
 Jeroo j = new Jeroo();
+Jeroo i = new Jeroo(1,2);
 j.hop(3);
+
+i.turn(LEFT);
 }
