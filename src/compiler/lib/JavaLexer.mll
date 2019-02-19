@@ -50,7 +50,11 @@ rule token = parse
 | comment
   { next_line lexbuf; token lexbuf }
 | ml_comment as text
-  { let num_lines = (String.split_on_char '\n' text) |> List.length in next_n_lines num_lines lexbuf; token lexbuf }
+  { let num_lines =
+      text
+      |> String.to_seq
+      |> Seq.fold_left (fun accum ele -> if ele = '\n' then 1 + accum else accum) 0
+    in next_n_lines num_lines lexbuf; token lexbuf }
 | "@Java\n"
   { HEADER }
 | "@@\n"
