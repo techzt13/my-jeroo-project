@@ -206,10 +206,10 @@ let codegen (translation_unit : AST.translation_unit) =
 
   let gen_code fxn =
     Hashtbl.add fxn_tbl fxn.id fxn.id;
-    Queue.add (Bytecode.LABEL (fxn.id, 1)) code_queue;
+    Queue.add (Bytecode.LABEL (fxn.id, fxn.start_lnum)) code_queue;
     fxn.stmts
     |> List.iter (fun stmt -> gen_code_stmt stmt);
-    Queue.add (Bytecode.RETR 1) code_queue
+    Queue.add (Bytecode.RETR fxn.end_lnum) code_queue
   in
 
   let gen_code_main_fxn fxn =
@@ -219,14 +219,14 @@ let codegen (translation_unit : AST.translation_unit) =
       Hashtbl.add fxn_tbl fxn.id fxn.id;
       fxn.stmts
       |> List.iter (fun stmt -> gen_code_stmt stmt);
-      Queue.add (Bytecode.RETR 1) code_queue
+      Queue.add (Bytecode.RETR fxn.end_lnum) code_queue
     end
   in
 
-  Queue.add (Bytecode.JUMP_LBL ("main", 1)) code_queue;
+  Queue.add (Bytecode.JUMP_LBL ("main", translation_unit.main_fxn.start_lnum)) code_queue;
   translation_unit.extension_fxns
   |> List.iter (fun fxn -> gen_code fxn);
-  Queue.add (Bytecode.LABEL ("main", 1)) code_queue;
+  Queue.add (Bytecode.LABEL ("main", translation_unit.main_fxn.start_lnum)) code_queue;
   gen_code_main_fxn translation_unit.main_fxn;
 
   let code_with_labels = Queue.to_seq code_queue in
