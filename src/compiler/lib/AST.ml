@@ -28,8 +28,11 @@ type expr = [
   | `EastExpr
   | `SouthExpr
   | `WestExpr
+  (* left side expression, operator, right side expression *)
   | `BinOpExpr of expr meta * bin_op * expr meta
+  (* operator, expression *)
   | `UnOpExpr of un_op * expr meta
+  (* expression, arguments *)
   | `FxnAppExpr of expr meta * expr meta list
   (* object, method, arguments list *)
   | `ObjFxnAppExpr of string * string * expr meta list
@@ -48,7 +51,6 @@ type stmt = [
   | `ExprStmt of expr meta
 ]
 
-(* function name, function body *)
 type fxn = {
   id : string;
   stmts : stmt list;

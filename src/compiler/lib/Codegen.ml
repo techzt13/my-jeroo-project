@@ -44,12 +44,12 @@ let remove_labels bytecode =
       | _ -> Some (instruction)
     )
 
-let codegen (translation_unit : AST.translation_unit) =
+let codegen translation_unit =
   let fxn_tbl = Hashtbl.create 30 in
   let jeroo_tbl = Hashtbl.create 30 in
   let code_queue = Queue.create() in
 
-  let rec gen_code_expr (meta_expr : AST.expr AST.meta) =
+  let rec gen_code_expr meta_expr =
     let expr = meta_expr.a in
     let line_num = meta_expr.lnum in
     match expr with
@@ -146,17 +146,20 @@ let codegen (translation_unit : AST.translation_unit) =
     | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
   in
 
-  (* generates bytecode for a statement *)
+  (* generates code for a statement *)
   (* takes a statement and returns the line number of the last instruction added *)
   let rec gen_code_stmt (stmt : AST.stmt) =
     match stmt with
     | `BlockStmt stmts ->
+      (* generate code for a block statement *)
       stmts
       |> List.fold_left (fun _ stmt -> gen_code_stmt stmt) 0
     | `ExprStmt expr ->
+      (* generate code for an expression statement *)
       gen_code_expr expr;
       expr.lnum
     | `DeclStmt (ty, id, meta_expr) ->
+      (* generate code for a Jeroo declaration *)
       if not (String.equal ty "Jeroo") then
         raise (SemanticException "Invalid type, Jeroo is the only valid type")
       else begin
@@ -175,6 +178,7 @@ let codegen (translation_unit : AST.translation_unit) =
         end
       end
     | `IfStmt(e, stmt, line_num) ->
+      (* generate code for an if statement *)
       gen_code_expr e;
       let jmp_lbl = "if_lbl_" ^ (string_of_int (Queue.length code_queue)) in
       let jmp = (Bytecode.BZ_LBL (jmp_lbl, line_num)) in
@@ -183,6 +187,7 @@ let codegen (translation_unit : AST.translation_unit) =
       Queue.add (Bytecode.LABEL (jmp_lbl, end_lnum)) code_queue;
       end_lnum
     | `IfElseStmt(e, s1, s2, line_num) ->
+      (* generate code for an if-else statement *)
       (* generate code for the condition *)
       gen_code_expr e;
       (* if the condition is false, jump to the else block, else execute the true block *)
@@ -201,6 +206,7 @@ let codegen (translation_unit : AST.translation_unit) =
       Queue.add (Bytecode.LABEL (done_lbl, false_end_lnum)) code_queue;
       false_end_lnum
     | `WhileStmt(e, s, line_num) ->
+      (* generate code for a while statement *)
       let loop_lbl = "loop_lbl_" ^ (string_of_int (Queue.length code_queue)) in
       Queue.add (Bytecode.LABEL (loop_lbl, line_num)) code_queue;
       gen_code_expr e;
@@ -231,6 +237,7 @@ let codegen (translation_unit : AST.translation_unit) =
     end
   in
 
+  (* at the start of execution, jump to main *)
   Queue.add (Bytecode.JUMP_LBL ("main", translation_unit.main_fxn.start_lnum)) code_queue;
   translation_unit.extension_fxns
   |> List.iter (fun fxn -> gen_code fxn);

@@ -3,7 +3,6 @@ open Lib
 let str_of_instr op arg1 arg2 arg3 arg4 arg5 arg6 =
   Printf.sprintf "%s %d %d %d %d %d %d" op arg1 arg2 arg3 arg4 arg5 arg6
 
-
 (* simple utility program to compile jeroo code and print the bytecode to stdout *)
 let _ =
   let args = Sys.argv in
