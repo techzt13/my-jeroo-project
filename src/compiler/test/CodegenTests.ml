@@ -493,249 +493,727 @@ let codegen_toss_flower _test_ctxt =
     Bytecode.RETR 4;
   ]
 
-(* let codegen_give_in_direction _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("give"), [`LeftExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.GIVE Bytecode.Left;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_turn _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("turn"), [`RightExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.TURN Bytecode.Right;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_has_flower _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hasFlower"), [])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.HASFLWR;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_is_jeroo _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isJeroo"), [`AheadExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.ISJEROO Bytecode.Ahead;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_is_facing _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isFacing"), [`SouthExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.FACING Bytecode.South;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_is_flower _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isFlower"), [`AheadExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.ISFLWR Bytecode.Ahead;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_is_net _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isNet"), [`LeftExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.ISNET Bytecode.Left;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_is_water _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("isWater"), [`RightExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.ISWATER Bytecode.Right;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_call_custom_fxn _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [
- *       ("foo", [
- *           `ExprStmt(`FxnAppExpr(`IdExpr("hop"), []))
- *         ]);
- *     ];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("foo"), [])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 3;
- *     Bytecode.HOP 1;
- *     Bytecode.RETR;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.CSR 0;
- *     Bytecode.CALLBK;
- *     Bytecode.JUMP 1;
- *     Bytecode.RETR
- *   ]
- *
- * let codegen_call_missing_fxn _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("foo"), [])))
- *       ]);
- *   } in
- *   assert_raises (Codegen.SemanticException "Unknown function: foo") (fun () -> Codegen.codegen ast)
- *
- * let codegen_if_stmt _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `IfStmt(`TrueExpr, `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hop"), []))));
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("turn"), [`RightExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.TRUE;
- *     Bytecode.BZ 6;
- *     Bytecode.CSR 0;
- *     Bytecode.HOP 1;
- *     Bytecode.CSR 0;
- *     Bytecode.TURN Bytecode.Right;
- *     Bytecode.RETR;]
- *
- * let codegen_if_else _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `IfElseStmt(`TrueExpr,
- *                     `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hop"), []))),
- *                     `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("turn"), [`LeftExpr])))
- *                    );
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("turn"), [`RightExpr])))
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.TRUE;
- *     Bytecode.BZ 7;
- *     Bytecode.CSR 0;
- *     Bytecode.HOP 1;
- *     Bytecode.JUMP 9;
- *     Bytecode.CSR 0;
- *     Bytecode.TURN Bytecode.Left;
- *     Bytecode.CSR 0;
- *     Bytecode.TURN Bytecode.Right;
- *     Bytecode.RETR;
- *   ]
- *
- * let codegen_while _test_ctxt =
- *   let ast : AST.translation_unit = {
- *     extension_fxns = [];
- *     main_fxn = ("main", [
- *         `DeclStmt("Jeroo", "j", `UnOpExpr(`New, `FxnAppExpr(`IdExpr("Jeroo"), [])));
- *         `WhileStmt(`TrueExpr,
- *                    `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("hop"), [])))
- *                   );
- *         `ExprStmt(`BinOpExpr(`IdExpr("j"), `Dot, `FxnAppExpr(`IdExpr("turn"), [`RightExpr])));
- *       ]);
- *   } in
- *   let bytecode = List.of_seq (Codegen.codegen ast) in
- *   assert_equal bytecode [
- *     Bytecode.JUMP 1;
- *     Bytecode.NEW (0, 0, 0, 0, Bytecode.North);
- *     Bytecode.TRUE;
- *     Bytecode.BZ 7;
- *     Bytecode.CSR 0;
- *     Bytecode.HOP 1;
- *     Bytecode.JUMP 2;
- *     Bytecode.CSR 0;
- *     Bytecode.TURN Bytecode.Right;
- *     Bytecode.RETR;
- *   ] *)
+let codegen_give_default_args _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("give");
+                      lnum = 3;
+                    }, []);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.GIVE (Bytecode.Ahead, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_give_in_direction _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("give");
+                      lnum = 3;
+                    }, [{
+                      a = `LeftExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.GIVE (Bytecode.Left, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_turn _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("turn");
+                      lnum = 3;
+                    }, [{
+                      a = `RightExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.TURN (Bytecode.Right, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_has_flower _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("hasFlower");
+                      lnum = 3;
+                    }, []);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.HASFLWR 3;
+    Bytecode.RETR 4;
+  ]
+
+let codegen_is_jeroo _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("isJeroo");
+                      lnum = 3;
+                    }, [{
+                      a = `AheadExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.ISJEROO (Bytecode.Ahead, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_is_facing _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("isFacing");
+                      lnum = 3;
+                    }, [{
+                      a = `SouthExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.FACING (Bytecode.South, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_is_flower _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("isFlower");
+                      lnum = 3;
+                    }, [{
+                      a = `AheadExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.ISFLWR (Bytecode.Ahead, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_is_net _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("isNet");
+                      lnum = 3;
+                    }, [{
+                      a = `LeftExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.ISNET (Bytecode.Left, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_is_water _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("isWater");
+                      lnum = 3;
+                    }, [{
+                      a = `RightExpr;
+                      lnum = 3;
+                    }]);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.ISWATER (Bytecode.Right, 3);
+    Bytecode.RETR 4;
+  ]
+
+let codegen_call_custom_fxn _test_ctxt =
+  let ast = {
+    extension_fxns = [
+      {
+        id = "foo";
+        stmts = [
+          `ExprStmt({
+              a = `FxnAppExpr({
+                  a = `IdExpr("hop");
+                  lnum = 2;
+                }, []);
+              lnum = 2;
+            })
+        ];
+        start_lnum = 1;
+        end_lnum = 3;
+      }
+    ];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("foo");
+                      lnum = 3;
+                    }, []);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (3, 1);
+    Bytecode.HOP (1, 2);
+    Bytecode.RETR 3;
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.CSR (0, 3);
+    Bytecode.CALLBK 3;
+    Bytecode.JUMP (1, 3);
+    Bytecode.RETR 4
+  ]
+
+let codegen_call_missing_fxn _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 3;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("foo");
+                      lnum = 3;
+                    }, []);
+                  lnum = 3;
+                });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  assert_raises (Codegen.SemanticException "Unknown function: foo") (fun () -> Codegen.codegen ast)
+
+let codegen_if_stmt _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `IfStmt({
+            a = `TrueExpr;
+            lnum = 3;
+          }, `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 4;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("hop");
+                      lnum = 4;
+                    }, []);
+                  lnum = 4;
+                });
+            lnum = 4;
+          }), 3);
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 5;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("turn");
+                      lnum = 5;
+                    }, [{
+                      a = `RightExpr;
+                      lnum = 5;
+                    }]);
+                  lnum = 5;
+                });
+            lnum = 5;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 6;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.TRUE 3;
+    Bytecode.BZ (6, 3);
+    Bytecode.CSR (0, 4);
+    Bytecode.HOP (1, 4);
+    Bytecode.CSR (0, 5);
+    Bytecode.TURN (Bytecode.Right, 5);
+    Bytecode.RETR 6;
+  ]
+
+let codegen_if_else _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `IfElseStmt({
+            a = `TrueExpr;
+            lnum = 3;
+          }, `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 4;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("hop");
+                      lnum = 4;
+                    }, []);
+                  lnum = 4;
+                });
+            lnum = 4;
+          }), `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 6;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("turn");
+                      lnum = 6;
+                    }, [{
+                      a = `LeftExpr;
+                      lnum = 6;
+                    }]);
+                  lnum = 6;
+                });
+            lnum = 6;
+          }), 3);
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 7;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("turn");
+                      lnum = 7;
+                    }, [{
+                      a = `RightExpr;
+                      lnum = 7;
+                    }]);
+                  lnum = 7;
+                });
+            lnum = 7;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 8;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.TRUE 3;
+    Bytecode.BZ (7, 3);
+    Bytecode.CSR (0, 4);
+    Bytecode.HOP (1, 4);
+    Bytecode.JUMP (9, 4);
+    Bytecode.CSR (0, 6);
+    Bytecode.TURN (Bytecode.Left, 6);
+    Bytecode.CSR (0, 7);
+    Bytecode.TURN (Bytecode.Right, 7);
+    Bytecode.RETR 8;
+  ]
+
+let codegen_while _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        `DeclStmt("Jeroo", "j", {
+            a = `UnOpExpr(`New, {
+                a = `FxnAppExpr({
+                    a = `IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        `WhileStmt({
+            a = `TrueExpr;
+            lnum = 3;
+          }, `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 4;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("hop");
+                      lnum = 4;
+                    }, []);
+                  lnum = 4;
+                });
+            lnum = 4;
+          }), 3);
+        `ExprStmt({
+            a = `BinOpExpr({
+                a = `IdExpr("j");
+                lnum = 5;
+              }, `Dot, {
+                  a = `FxnAppExpr({
+                      a = `IdExpr("turn");
+                      lnum = 5;
+                    }, [{
+                      a = `LeftExpr;
+                      lnum = 5;
+                    }]);
+                  lnum = 5;
+                });
+            lnum = 5;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 6;
+    }
+  } in
+  let bytecode = List.of_seq (Codegen.codegen ast) in
+  assert_equal bytecode [
+    Bytecode.JUMP (1, 1);
+    Bytecode.NEW (0, 0, 0, 0, Bytecode.North, 2);
+    Bytecode.TRUE 3;
+    Bytecode.BZ (7, 3);
+    Bytecode.CSR (0, 4);
+    Bytecode.HOP (1, 4);
+    Bytecode.JUMP (2, 4);
+    Bytecode.CSR (0, 5);
+    Bytecode.TURN (Bytecode.Left, 5);
+    Bytecode.RETR 6;
+  ]
 
 let suite =
   "Codegen">::: [
@@ -752,18 +1230,18 @@ let suite =
     "Generate pick instruction">:: codegen_pick_flower;
     "Generate plant instruction">:: codegen_plant_flower;
     "Generate toss instruction">:: codegen_toss_flower;
-    (* "Generate give default args">:: codegen_give_default_args;
-     * "Generate give in a direction">:: codegen_give_in_direction;
-     * "Generate turn instruction">:: codegen_turn;
-     * "Generate hasFlower">:: codegen_has_flower;
-     * "Generate isJeroo">:: codegen_is_jeroo;
-     * "Generate isFacing">:: codegen_is_facing;
-     * "Generate isFlower">:: codegen_is_flower;
-     * "Generate isNet">:: codegen_is_net;
-     * "Generate isWater">:: codegen_is_water;
-     * "Generate calling custom methods">:: codegen_call_custom_fxn;
-     * "Calling missing function generates error">:: codegen_call_missing_fxn;
-     * "Generate if statement">:: codegen_if_stmt;
-     * "Generate if-else statement">:: codegen_if_else;
-     * "Generate while statement">:: codegen_while; *)
+    "Generate give default args">:: codegen_give_default_args;
+    "Generate give in a direction">:: codegen_give_in_direction;
+    "Generate turn instruction">:: codegen_turn;
+    "Generate hasFlower">:: codegen_has_flower;
+    "Generate isJeroo">:: codegen_is_jeroo;
+    "Generate isFacing">:: codegen_is_facing;
+    "Generate isFlower">:: codegen_is_flower;
+    "Generate isNet">:: codegen_is_net;
+    "Generate isWater">:: codegen_is_water;
+    "Generate calling custom methods">:: codegen_call_custom_fxn;
+    "Calling missing function generates error">:: codegen_call_missing_fxn;
+    "Generate if statement">:: codegen_if_stmt;
+    "Generate if-else statement">:: codegen_if_else;
+    "Generate while statement">:: codegen_while;
   ]

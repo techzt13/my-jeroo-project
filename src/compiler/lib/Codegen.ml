@@ -146,13 +146,16 @@ let codegen (translation_unit : AST.translation_unit) =
     | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
   in
 
+  (* generates bytecode for a statement *)
+  (* takes a statement and returns the line number of the last instruction added *)
   let rec gen_code_stmt (stmt : AST.stmt) =
     match stmt with
     | `BlockStmt stmts ->
       stmts
-      |> List.iter (fun stmt -> gen_code_stmt stmt)
+      |> List.fold_left (fun _ stmt -> gen_code_stmt stmt) 0
     | `ExprStmt expr ->
-      gen_code_expr expr
+      gen_code_expr expr;
+      expr.lnum
     | `DeclStmt (ty, id, meta_expr) ->
       if not (String.equal ty "Jeroo") then
         raise (SemanticException "Invalid type, Jeroo is the only valid type")
@@ -164,8 +167,10 @@ let codegen (translation_unit : AST.translation_unit) =
           | `UnOpExpr (`New, { a = `FxnAppExpr ({ a = `IdExpr(ctor); _ }, args); _ }) ->
             if not (String.equal ctor "Jeroo") then
               raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
-            else
-              Queue.add (gen_code_decl id args line_num) code_queue
+            else begin
+              Queue.add (gen_code_decl id args line_num) code_queue;
+              line_num
+            end
           | _ -> raise (SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor")
         end
       end
@@ -174,8 +179,9 @@ let codegen (translation_unit : AST.translation_unit) =
       let jmp_lbl = "if_lbl_" ^ (string_of_int (Queue.length code_queue)) in
       let jmp = (Bytecode.BZ_LBL (jmp_lbl, line_num)) in
       Queue.add jmp code_queue;
-      gen_code_stmt stmt;
-      Queue.add (Bytecode.LABEL (jmp_lbl, line_num)) code_queue;
+      let end_lnum = gen_code_stmt stmt in
+      Queue.add (Bytecode.LABEL (jmp_lbl, end_lnum)) code_queue;
+      end_lnum
     | `IfElseStmt(e, s1, s2, line_num) ->
       (* generate code for the condition *)
       gen_code_expr e;
@@ -184,31 +190,33 @@ let codegen (translation_unit : AST.translation_unit) =
       let else_jmp = (Bytecode.BZ_LBL (else_lbl, line_num)) in
       Queue.add else_jmp code_queue;
       (* generate the code for the if-block *)
-      gen_code_stmt s1;
+      let true_end_lnum = gen_code_stmt s1 in
       (* at the end of the true block, jump to the end of the if-else block *)
       let done_lbl = "done_lbl_" ^ (string_of_int (Queue.length code_queue)) in
-      let done_jmp = (Bytecode.JUMP_LBL (done_lbl, line_num)) in
+      let done_jmp = (Bytecode.JUMP_LBL (done_lbl, true_end_lnum)) in
       Queue.add done_jmp code_queue;
-      Queue.add (Bytecode.LABEL (else_lbl, line_num)) code_queue;
+      Queue.add (Bytecode.LABEL (else_lbl, true_end_lnum)) code_queue;
       (* generate the code for the else-block *)
-      gen_code_stmt s2;
-      Queue.add (Bytecode.LABEL (done_lbl, line_num)) code_queue;
+      let false_end_lnum = gen_code_stmt s2 in
+      Queue.add (Bytecode.LABEL (done_lbl, false_end_lnum)) code_queue;
+      false_end_lnum
     | `WhileStmt(e, s, line_num) ->
       let loop_lbl = "loop_lbl_" ^ (string_of_int (Queue.length code_queue)) in
       Queue.add (Bytecode.LABEL (loop_lbl, line_num)) code_queue;
       gen_code_expr e;
       let done_lbl = "done_lbl_" ^ (string_of_int (Queue.length code_queue)) in
-      Queue.add (Bytecode.BZ_LBL (done_lbl, line_num)) code_queue;
-      gen_code_stmt s;
-      Queue.add (Bytecode.JUMP_LBL (loop_lbl, line_num)) code_queue;
-      Queue.add (Bytecode.LABEL (done_lbl, line_num)) code_queue;
+      Queue.add (Bytecode.BZ_LBL (done_lbl, e.lnum)) code_queue;
+      let end_while_lnum = gen_code_stmt s in
+      Queue.add (Bytecode.JUMP_LBL (loop_lbl, end_while_lnum)) code_queue;
+      Queue.add (Bytecode.LABEL (done_lbl, end_while_lnum)) code_queue;
+      end_while_lnum
   in
 
   let gen_code fxn =
     Hashtbl.add fxn_tbl fxn.id fxn.id;
     Queue.add (Bytecode.LABEL (fxn.id, fxn.start_lnum)) code_queue;
     fxn.stmts
-    |> List.iter (fun stmt -> gen_code_stmt stmt);
+    |> List.iter (fun stmt -> let _ = gen_code_stmt stmt in ());
     Queue.add (Bytecode.RETR fxn.end_lnum) code_queue
   in
 
@@ -218,7 +226,7 @@ let codegen (translation_unit : AST.translation_unit) =
     else begin
       Hashtbl.add fxn_tbl fxn.id fxn.id;
       fxn.stmts
-      |> List.iter (fun stmt -> gen_code_stmt stmt);
+      |> List.iter (fun stmt -> let _ = gen_code_stmt stmt in ());
       Queue.add (Bytecode.RETR fxn.end_lnum) code_queue
     end
   in

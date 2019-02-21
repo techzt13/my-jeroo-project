@@ -1,16 +1,11 @@
 @Java
 
 @@
-/*
-here
-are
-some
-lines
-*/
 method main() {
 Jeroo j = new Jeroo();
-Jeroo i = new Jeroo(1,2);
-j.hop(3);
+while (true) {
+j.hop();
+}
 
-i.turn(LEFT);
+j.turn(LEFT);
 }
