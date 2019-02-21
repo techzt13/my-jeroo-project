@@ -12,18 +12,6 @@ let new_instruction op_init arg1 arg2 arg3 arg4 arg5 arg6 =
     val f = arg6
   end)
 
-let int_of_relative_direction direction = match direction with
-  | Bytecode.Ahead -> 0
-  | Bytecode.Here-> -1
-  | Bytecode.Right -> 1
-  | Bytecode.Left -> 3
-
-let int_of_compass_direction direction = match direction with
-  | Bytecode.North -> 0
-  | Bytecode.East -> 1
-  | Bytecode.South -> 2
-  | Bytecode.West -> 3
-
 let json_of_bytecode bytecode =
   bytecode
   |> Seq.map (fun code -> match code with
@@ -36,28 +24,28 @@ let json_of_bytecode bytecode =
       | Bytecode.RETR lnum -> new_instruction "RETR" 0 0 0 0 0 lnum
       | Bytecode.CSR (n, lnum) -> new_instruction "CSR" n 0 0 0 0 lnum
       | Bytecode.NEW (id, x, y, num_flowers, direction, lnum) ->
-        new_instruction "NEW" id x y num_flowers (int_of_compass_direction direction) lnum
+        new_instruction "NEW" id x y num_flowers (Bytecode.int_of_compass_direction direction) lnum
       | Bytecode.TURN (direction, lnum) ->
-        new_instruction "TURN" (int_of_relative_direction direction) 0 0 0 0 lnum
+        new_instruction "TURN" (Bytecode.int_of_relative_direction direction) 0 0 0 0 lnum
       | Bytecode.HOP (n, lnum) -> new_instruction "HOP" n 0 0 0 0 lnum
       | Bytecode.TOSS lnum -> new_instruction "TOSS" 0 0 0 0 0 lnum
       | Bytecode.PLANT lnum -> new_instruction "PLANT" 0 0 0 0 0 lnum
       | Bytecode.GIVE (direction, lnum) ->
-        new_instruction "GIVE" (int_of_relative_direction direction) 0 0 0 0 lnum
+        new_instruction "GIVE" (Bytecode.int_of_relative_direction direction) 0 0 0 0 lnum
       | Bytecode.PICK lnum -> new_instruction "PICK" 0 0 0 0 0 lnum
       | Bytecode.TRUE lnum -> new_instruction "TRUE" 0 0 0 0 0 lnum
       | Bytecode.FALSE lnum -> new_instruction "FALSE" 0 0 0 0 0 lnum
       | Bytecode.HASFLWR lnum -> new_instruction "HASFLWR" 0 0 0 0 0 lnum
       | Bytecode.ISNET (direction, lnum) ->
-        new_instruction "ISNET" (int_of_relative_direction direction) 0 0 0 0 lnum
+        new_instruction "ISNET" (Bytecode.int_of_relative_direction direction) 0 0 0 0 lnum
       | Bytecode.ISWATER (direction, lnum) ->
-        new_instruction "ISWATER" (int_of_relative_direction direction) 0 0 0 0 lnum
+        new_instruction "ISWATER" (Bytecode.int_of_relative_direction direction) 0 0 0 0 lnum
       | Bytecode.ISJEROO (direction, lnum) ->
-        new_instruction "ISJEROO" (int_of_relative_direction direction) 0 0 0 0 lnum
+        new_instruction "ISJEROO" (Bytecode.int_of_relative_direction direction) 0 0 0 0 lnum
       | Bytecode.ISFLWR (direction, lnum) ->
-        new_instruction "ISFLWR" (int_of_relative_direction direction) 0 0 0 0 lnum
+        new_instruction "ISFLWR" (Bytecode.int_of_relative_direction direction) 0 0 0 0 lnum
       | Bytecode.FACING (direction, lnum) ->
-        new_instruction "FACING" (int_of_compass_direction direction) 0 0 0 0 lnum
+        new_instruction "FACING" (Bytecode.int_of_compass_direction direction) 0 0 0 0 lnum
       | Bytecode.AND lnum -> new_instruction "AND" 0 0 0 0 0 lnum
       | Bytecode.OR lnum -> new_instruction "OR" 0 0 0 0 0 lnum
       | Bytecode.NOT lnum -> new_instruction "NOT" 0 0 0 0 0 lnum

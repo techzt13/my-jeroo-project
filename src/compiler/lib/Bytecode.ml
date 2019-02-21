@@ -38,3 +38,15 @@ type bytecode =
   | OR of int
   | RETR of int
   | CALLBK of int
+
+let int_of_relative_direction direction = match direction with
+  | Ahead -> 0
+  | Here-> -1
+  | Right -> 1
+  | Left -> 3
+
+let int_of_compass_direction direction = match direction with
+  | North -> 0
+  | East -> 1
+  | South -> 2
+  | West -> 3

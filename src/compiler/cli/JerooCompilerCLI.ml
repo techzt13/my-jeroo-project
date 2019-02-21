@@ -3,17 +3,6 @@ open Lib
 let str_of_instr op arg1 arg2 arg3 arg4 arg5 arg6 =
   Printf.sprintf "%s %d %d %d %d %d %d" op arg1 arg2 arg3 arg4 arg5 arg6
 
-let int_of_relative_direction direction = match direction with
-  | Bytecode.Ahead -> 0
-  | Bytecode.Here-> -1
-  | Bytecode.Right -> 1
-  | Bytecode.Left -> 3
-
-let int_of_compass_direction direction = match direction with
-  | Bytecode.North -> 0
-  | Bytecode.East -> 1
-  | Bytecode.South -> 2
-  | Bytecode.West -> 3
 
 (* simple utility program to compile jeroo code and print the bytecode to stdout *)
 let _ =
@@ -35,28 +24,28 @@ let _ =
       | Bytecode.RETR line_num -> str_of_instr "RETR" 0 0 0 0 0 line_num
       | Bytecode.CSR (n, line_num) -> str_of_instr "CSR" n 0 0 0 0 line_num
       | Bytecode.NEW (id, x, y, num_flowers, direction, line_num) ->
-        str_of_instr "NEW" id x y num_flowers (int_of_compass_direction direction) line_num
+        str_of_instr "NEW" id x y num_flowers (Bytecode.int_of_compass_direction direction) line_num
       | Bytecode.TURN (direction, line_num) ->
-        str_of_instr "TURN" (int_of_relative_direction direction) 0 0 0 0 line_num
+        str_of_instr "TURN" (Bytecode.int_of_relative_direction direction) 0 0 0 0 line_num
       | Bytecode.HOP (n, line_num) -> str_of_instr "HOP" n 0 0 0 0 line_num
       | Bytecode.TOSS line_num -> str_of_instr "TOSS" 0 0 0 0 0 line_num
       | Bytecode.PLANT line_num -> str_of_instr "PLANT" 0 0 0 0 0 line_num
       | Bytecode.GIVE (direction, line_num) ->
-        str_of_instr "GIVE" (int_of_relative_direction direction) 0 0 0 0 line_num
+        str_of_instr "GIVE" (Bytecode.int_of_relative_direction direction) 0 0 0 0 line_num
       | Bytecode.PICK line_num -> str_of_instr "PICK" 0 0 0 0 0 line_num
       | Bytecode.TRUE line_num -> str_of_instr "TRUE" 0 0 0 0 0 line_num
       | Bytecode.FALSE line_num -> str_of_instr "FALSE" 0 0 0 0 0 line_num
       | Bytecode.HASFLWR line_num -> str_of_instr "HASFLWR" 0 0 0 0 0 line_num
       | Bytecode.ISNET (direction, line_num) ->
-        str_of_instr "ISNET" (int_of_relative_direction direction) 0 0 0 0 line_num
+        str_of_instr "ISNET" (Bytecode.int_of_relative_direction direction) 0 0 0 0 line_num
       | Bytecode.ISWATER (direction, line_num) ->
-        str_of_instr "ISWATER" (int_of_relative_direction direction) 0 0 0 0 line_num
+        str_of_instr "ISWATER" (Bytecode.int_of_relative_direction direction) 0 0 0 0 line_num
       | Bytecode.ISJEROO (direction, line_num) ->
-        str_of_instr "ISJEROO" (int_of_relative_direction direction) 0 0 0 0 line_num
+        str_of_instr "ISJEROO" (Bytecode.int_of_relative_direction direction) 0 0 0 0 line_num
       | Bytecode.ISFLWR (direction, line_num) ->
-        str_of_instr "ISFLWR" (int_of_relative_direction direction) 0 0 0 0 line_num
+        str_of_instr "ISFLWR" (Bytecode.int_of_relative_direction direction) 0 0 0 0 line_num
       | Bytecode.FACING (direction, line_num) ->
-        str_of_instr "FACING" (int_of_compass_direction direction) 0 0 0 0 line_num
+        str_of_instr "FACING" (Bytecode.int_of_compass_direction direction) 0 0 0 0 line_num
       | Bytecode.AND line_num -> str_of_instr "AND" 0 0 0 0 0 line_num
       | Bytecode.OR line_num -> str_of_instr "OR" 0 0 0 0 0 line_num
       | Bytecode.NOT line_num -> str_of_instr "NOT" 0 0 0 0 0 line_num
