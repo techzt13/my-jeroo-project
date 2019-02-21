@@ -1,11 +1,5 @@
 @Java
 
+method foo() { hop(3); }
 @@
-method main() {
-Jeroo j = new Jeroo();
-while (true) {
-j.hop();
-}
-
-j.turn(LEFT);
-}
+method main() { Jeroo j = new Jeroo(); j.foo(); }
