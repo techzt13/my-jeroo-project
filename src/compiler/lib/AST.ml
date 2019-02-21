@@ -15,8 +15,6 @@ type 'a meta = {
   lnum: int;
 }
 
-(* expressions all have an integer attached to them *)
-(* this integer is for the line number *)
 type expr = [
   | `IdExpr of string
   | `IntExpr of int
