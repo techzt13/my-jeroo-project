@@ -28,18 +28,18 @@ let parse_decl _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 1;
                   }, [
                       {
-                        a = `IntExpr(1);
+                        a = AST.IntExpr(1);
                         lnum = 1;
                       };
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 1;
                       };
                     ]);
@@ -62,10 +62,10 @@ let parse_if_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -81,10 +81,10 @@ let parse_if_stmt_no_paren _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -100,13 +100,13 @@ let parse_elseif_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfElseStmt({
-            a = `TrueExpr;
+        AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], `IfStmt({
-            a = `FalseExpr;
+          }, AST.BlockStmt [], AST.IfStmt({
+            a = AST.FalseExpr;
             lnum = 2;
-          }, `BlockStmt [], 2), 1)
+          }, AST.BlockStmt [], 2), 1)
       ];
       start_lnum = 0;
       end_lnum = 4;
@@ -122,13 +122,13 @@ let parse_elseif_no_paren_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfElseStmt({
-            a = `TrueExpr;
+        AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], `IfStmt({
-            a = `FalseExpr;
+          }, AST.BlockStmt [], AST.IfStmt({
+            a = AST.FalseExpr;
             lnum = 2;
-          }, `BlockStmt [], 2), 1)
+          }, AST.BlockStmt [], 2), 1)
       ];
       start_lnum = 0;
       end_lnum = 4;
@@ -144,16 +144,16 @@ let parse_elseif_list_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfElseStmt({
-            a = `TrueExpr;
+        AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], `IfElseStmt({
-            a = `FalseExpr;
+          }, AST.BlockStmt [], AST.IfElseStmt({
+            a = AST.FalseExpr;
             lnum = 2;
-          }, `BlockStmt [], `IfElseStmt({
-            a = `TrueExpr;
+          }, AST.BlockStmt [], AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 3;
-          }, `BlockStmt [], `BlockStmt [], 3), 2), 1)
+          }, AST.BlockStmt [], AST.BlockStmt [], 3), 2), 1)
       ];
       start_lnum = 0;
       end_lnum = 6;
@@ -169,16 +169,16 @@ let parse_elseif_list_no_paren_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfElseStmt({
-            a = `TrueExpr;
+        AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], `IfElseStmt({
-            a = `FalseExpr;
+          }, AST.BlockStmt [], AST.IfElseStmt({
+            a = AST.FalseExpr;
             lnum = 2;
-          }, `BlockStmt [], `IfElseStmt({
-            a = `TrueExpr;
+          }, AST.BlockStmt [], AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 3;
-          }, `BlockStmt [], `BlockStmt [], 3), 2), 1)
+          }, AST.BlockStmt [], AST.BlockStmt [], 3), 2), 1)
       ];
       start_lnum = 0;
       end_lnum = 6;
@@ -194,10 +194,10 @@ let parse_while_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `WhileStmt({
-            a = `TrueExpr;
+        AST.WhileStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -213,10 +213,10 @@ let parse_while_no_paren _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `WhileStmt({
-            a = `TrueExpr;
+        AST.WhileStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -232,16 +232,16 @@ let parse_and _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `BinOpExpr({
-                a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = AST.TrueExpr;
                 lnum = 1;
-              }, `And, {
-                  a = `TrueExpr;
+              }, AST.And, {
+                  a = AST.TrueExpr;
                   lnum = 1;
                 });
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -257,16 +257,16 @@ let parse_or _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `BinOpExpr({
-                a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = AST.TrueExpr;
                 lnum = 1;
-              }, `Or, {
-                  a = `TrueExpr;
+              }, AST.Or, {
+                  a = AST.TrueExpr;
                   lnum = 1;
                 });
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -282,13 +282,13 @@ let parse_not _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `UnOpExpr(`Not, {
-                a = `FalseExpr;
+        AST.IfStmt({
+            a = AST.UnOpExpr(AST.Not, {
+                a = AST.FalseExpr;
                 lnum = 1;
               });
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -318,21 +318,21 @@ let parse_fxn_call _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `ExprStmt({
-            a = `FxnAppExpr({
-                a = `IdExpr("foobar");
+        AST.ExprStmt({
+            a = AST.FxnAppExpr({
+                a = AST.IdExpr("foobar");
                 lnum = 1;
               }, [
                   {
-                    a = `IntExpr(20);
+                    a = AST.IntExpr(20);
                     lnum = 1;
                   };
                   {
-                    a = `IdExpr("five");
+                    a = AST.IdExpr("five");
                     lnum = 1;
                   };
                   {
-                    a = `NorthExpr;
+                    a = AST.NorthExpr;
                     lnum = 1;
                   }
                 ]);
@@ -353,16 +353,16 @@ let parse_obj_fxn_call _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("foo");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("foo");
                 lnum = 1;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("bar");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("bar");
                       lnum = 1;
                     }, [{
-                      a = `AheadExpr;
+                      a = AST.AheadExpr;
                       lnum = 1;
                     }]);
                   lnum = 1
@@ -384,19 +384,19 @@ let parse_not_precedence _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `BinOpExpr({
-                a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = AST.TrueExpr;
                 lnum = 1;
-              }, `And, {
-                  a = `UnOpExpr(`Not, {
-                      a = `FalseExpr;
+              }, AST.And, {
+                  a = AST.UnOpExpr(AST.Not, {
+                      a = AST.FalseExpr;
                       lnum = 1;
                     });
                   lnum = 1;
                 });
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -412,19 +412,19 @@ let parse_paren_precedence _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `UnOpExpr(`Not, {
-                a = `BinOpExpr({
-                    a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.UnOpExpr(AST.Not, {
+                a = AST.BinOpExpr({
+                    a = AST.TrueExpr;
                     lnum = 1;
-                  }, `And, {
-                      a = `FalseExpr;
+                  }, AST.And, {
+                      a = AST.FalseExpr;
                       lnum = 1;
                     });
                 lnum = 1;
               });
             lnum = 1
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -440,22 +440,22 @@ let parse_and_or_precedence _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `BinOpExpr({
-                a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = AST.TrueExpr;
                 lnum = 1;
-              }, `Or, {
-                  a = `BinOpExpr({
-                      a = `FalseExpr;
+              }, AST.Or, {
+                  a = AST.BinOpExpr({
+                      a = AST.FalseExpr;
                       lnum = 1;
-                    }, `And, {
-                        a = `TrueExpr;
+                    }, AST.And, {
+                        a = AST.TrueExpr;
                         lnum = 1;
                       });
                   lnum = 1;
                 });
             lnum = 1;
-          }, `BlockStmt [], 1)
+          }, AST.BlockStmt [], 1)
       ];
       start_lnum = 0;
       end_lnum = 3;
@@ -506,14 +506,14 @@ let parse_stmt_list _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `IfStmt({
-            a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.TrueExpr;
             lnum = 1;
-          }, `BlockStmt [], 1);
-        `WhileStmt({
-            a = `TrueExpr;
+          }, AST.BlockStmt [], 1);
+        AST.WhileStmt({
+            a = AST.TrueExpr;
             lnum = 3;
-          }, `BlockStmt [], 3);
+          }, AST.BlockStmt [], 3);
       ];
       start_lnum = 0;
       end_lnum = 5;
@@ -529,12 +529,12 @@ let parse_negative_int _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `ExprStmt({
-            a = `FxnAppExpr({
-                a = `IdExpr("foo");
+        AST.ExprStmt({
+            a = AST.FxnAppExpr({
+                a = AST.IdExpr("foo");
                 lnum = 1;
               }, [{
-                a = `IntExpr(-1);
+                a = AST.IntExpr(-1);
                 lnum = 1;
               }]);
             lnum = 1;

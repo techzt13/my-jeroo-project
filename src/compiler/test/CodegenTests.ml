@@ -8,10 +8,10 @@ let codegen_jeroo_decl_no_args _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
@@ -36,18 +36,18 @@ let codegen_jeroo_decl_set_x_y _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, [
                       {
-                        a = `IntExpr(1);
+                        a = AST.IntExpr(1);
                         lnum = 2;
                       };
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 2;
                       }
                     ]);
@@ -73,22 +73,22 @@ let codegen_jeroo_decl_set_x_y_flowers _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, [
                       {
-                        a = `IntExpr(1);
+                        a = AST.IntExpr(1);
                         lnum = 2;
                       };
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 2;
                       };
                       {
-                        a = `IntExpr(5);
+                        a = AST.IntExpr(5);
                         lnum = 2;
                       }
                     ]);
@@ -114,26 +114,26 @@ let codegen_jeroo_decl_set_x_y_flowers_direction _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, [
                       {
-                        a = `IntExpr(1);
+                        a = AST.IntExpr(1);
                         lnum = 2;
                       };
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 2;
                       };
                       {
-                        a = `IntExpr(5);
+                        a = AST.IntExpr(5);
                         lnum = 2;
                       };
                       {
-                        a = `SouthExpr;
+                        a = AST.SouthExpr;
                         lnum = 2;
                       }
                     ]);
@@ -159,14 +159,14 @@ let codegen_jeroo_decl_invalid_args _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, [
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 2;
                       }
                     ]);
@@ -187,8 +187,8 @@ let codegen_jeroo_decl_no_new _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `IntExpr(1);
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.IntExpr(1);
             lnum = 2;
           })
       ];
@@ -204,8 +204,8 @@ let codegen_unknown_decl_type _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("jer", "j", {
-            a = `IntExpr(1);
+        AST.DeclStmt("jer", "j", {
+            a = AST.IntExpr(1);
             lnum = 2;
           })
       ];
@@ -221,10 +221,10 @@ let codegen_unknown_ctor _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("jer");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("jer");
                     lnum = 2;
                   }, []);
                 lnum = 2;
@@ -244,27 +244,27 @@ let codegen_jeroo_hop _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hop");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hop");
                       lnum = 3;
                     }, [
                         {
-                          a = `IntExpr(2);
+                          a = AST.IntExpr(2);
                           lnum = 3;
                         }
                       ]);
@@ -292,28 +292,28 @@ let codegen_multiple_jeroos_csr _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j1", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j1", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `DeclStmt("Jeroo", "j2", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j2", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 3;
                   }, [
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 3;
                       };
                       {
-                        a = `IntExpr(2);
+                        a = AST.IntExpr(2);
                         lnum = 3;
                       }
                     ]);
@@ -321,26 +321,26 @@ let codegen_multiple_jeroos_csr _test_ctxt =
               });
             lnum = 3;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j1");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j1");
                 lnum = 4;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hop");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hop");
                       lnum = 4;
                     }, []);
                   lnum = 4;
                 });
             lnum = 4;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j2");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j2");
                 lnum = 5;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hop");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hop");
                       lnum = 5;
                     }, []);
                   lnum = 5;
@@ -370,23 +370,23 @@ let codegen_pick_flower _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("pick");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("pick");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -413,23 +413,23 @@ let codegen_plant_flower _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("plant");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("plant");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -456,23 +456,23 @@ let codegen_toss_flower _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("toss");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("toss");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -499,23 +499,23 @@ let codegen_give_default_args _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("give");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("give");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -542,26 +542,26 @@ let codegen_give_in_direction _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("give");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("give");
                       lnum = 3;
                     }, [{
-                      a = `LeftExpr;
+                      a = AST.LeftExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -588,26 +588,26 @@ let codegen_turn _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("turn");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("turn");
                       lnum = 3;
                     }, [{
-                      a = `RightExpr;
+                      a = AST.RightExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -634,23 +634,23 @@ let codegen_has_flower _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hasFlower");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hasFlower");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -677,26 +677,26 @@ let codegen_is_jeroo _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("isJeroo");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("isJeroo");
                       lnum = 3;
                     }, [{
-                      a = `AheadExpr;
+                      a = AST.AheadExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -723,26 +723,26 @@ let codegen_is_facing _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("isFacing");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("isFacing");
                       lnum = 3;
                     }, [{
-                      a = `SouthExpr;
+                      a = AST.SouthExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -769,26 +769,26 @@ let codegen_is_flower _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("isFlower");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("isFlower");
                       lnum = 3;
                     }, [{
-                      a = `AheadExpr;
+                      a = AST.AheadExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -815,26 +815,26 @@ let codegen_is_net _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("isNet");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("isNet");
                       lnum = 3;
                     }, [{
-                      a = `LeftExpr;
+                      a = AST.LeftExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -861,26 +861,26 @@ let codegen_is_water _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("isWater");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("isWater");
                       lnum = 3;
                     }, [{
-                      a = `RightExpr;
+                      a = AST.RightExpr;
                       lnum = 3;
                     }]);
                   lnum = 3;
@@ -907,9 +907,9 @@ let codegen_call_custom_fxn _test_ctxt =
       {
         id = "foo";
         stmts = [
-          `ExprStmt({
-              a = `FxnAppExpr({
-                  a = `IdExpr("hop");
+          AST.ExprStmt({
+              a = AST.FxnAppExpr({
+                  a = AST.IdExpr("hop");
                   lnum = 2;
                 }, []);
               lnum = 2;
@@ -922,23 +922,23 @@ let codegen_call_custom_fxn _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("foo");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("foo");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -968,23 +968,23 @@ let codegen_call_missing_fxn _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 3;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("foo");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("foo");
                       lnum = 3;
                     }, []);
                   lnum = 3;
@@ -1004,42 +1004,42 @@ let codegen_if_stmt _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `IfStmt({
-            a = `TrueExpr;
+        AST.IfStmt({
+            a = AST.TrueExpr;
             lnum = 3;
-          }, `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+          }, AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 4;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hop");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hop");
                       lnum = 4;
                     }, []);
                   lnum = 4;
                 });
             lnum = 4;
           }), 3);
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 5;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("turn");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("turn");
                       lnum = 5;
                     }, [{
-                      a = `RightExpr;
+                      a = AST.RightExpr;
                       lnum = 5;
                     }]);
                   lnum = 5;
@@ -1070,57 +1070,57 @@ let codegen_if_else _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `IfElseStmt({
-            a = `TrueExpr;
+        AST.IfElseStmt({
+            a = AST.TrueExpr;
             lnum = 3;
-          }, `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+          }, AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 4;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hop");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hop");
                       lnum = 4;
                     }, []);
                   lnum = 4;
                 });
             lnum = 4;
-          }), `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+          }), AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 6;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("turn");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("turn");
                       lnum = 6;
                     }, [{
-                      a = `LeftExpr;
+                      a = AST.LeftExpr;
                       lnum = 6;
                     }]);
                   lnum = 6;
                 });
             lnum = 6;
           }), 3);
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 7;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("turn");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("turn");
                       lnum = 7;
                     }, [{
-                      a = `RightExpr;
+                      a = AST.RightExpr;
                       lnum = 7;
                     }]);
                   lnum = 7;
@@ -1154,42 +1154,42 @@ let codegen_while _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [
-        `DeclStmt("Jeroo", "j", {
-            a = `UnOpExpr(`New, {
-                a = `FxnAppExpr({
-                    a = `IdExpr("Jeroo");
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
                     lnum = 2;
                   }, []);
                 lnum = 2;
               });
             lnum = 2;
           });
-        `WhileStmt({
-            a = `TrueExpr;
+        AST.WhileStmt({
+            a = AST.TrueExpr;
             lnum = 3;
-          }, `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+          }, AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 4;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("hop");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("hop");
                       lnum = 4;
                     }, []);
                   lnum = 4;
                 });
             lnum = 4;
           }), 3);
-        `ExprStmt({
-            a = `BinOpExpr({
-                a = `IdExpr("j");
+        AST.ExprStmt({
+            a = AST.BinOpExpr({
+                a = AST.IdExpr("j");
                 lnum = 5;
-              }, `Dot, {
-                  a = `FxnAppExpr({
-                      a = `IdExpr("turn");
+              }, AST.Dot, {
+                  a = AST.FxnAppExpr({
+                      a = AST.IdExpr("turn");
                       lnum = 5;
                     }, [{
-                      a = `LeftExpr;
+                      a = AST.LeftExpr;
                       lnum = 5;
                     }]);
                   lnum = 5;

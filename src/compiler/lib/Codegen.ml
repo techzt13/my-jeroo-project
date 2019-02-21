@@ -4,18 +4,18 @@ exception SemanticException of string
 
 let relative_dir_of_expr e =
   match e with
-  | `LeftExpr -> Bytecode.Left
-  | `RightExpr -> Bytecode.Right
-  | `HereExpr -> Bytecode.Here
-  | `AheadExpr -> Bytecode.Ahead
+  | AST.LeftExpr -> Bytecode.Left
+  | AST.RightExpr -> Bytecode.Right
+  | AST.HereExpr -> Bytecode.Here
+  | AST.AheadExpr -> Bytecode.Ahead
   | _ -> raise (SemanticException "type error: expression must be LEFT, RIGHT, AHEAD, or HERE")
 
 let compass_dir_of_expr expr =
   match expr with
-  | `NorthExpr -> Bytecode.North
-  | `SouthExpr -> Bytecode.South
-  | `EastExpr -> Bytecode.East
-  | `WestExpr -> Bytecode.West
+  | AST.NorthExpr -> Bytecode.North
+  | AST.SouthExpr -> Bytecode.South
+  | AST.EastExpr -> Bytecode.East
+  | AST.WestExpr -> Bytecode.West
   | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
 
 (* convert labels to memory locations *)
@@ -53,30 +53,30 @@ let codegen translation_unit =
     let expr = meta_expr.a in
     let line_num = meta_expr.lnum in
     match expr with
-    | `TrueExpr ->
+    | AST.TrueExpr ->
       Queue.add (Bytecode.TRUE line_num) code_queue
-    | `FalseExpr ->
+    | AST.FalseExpr ->
       Queue.add (Bytecode.FALSE line_num) code_queue
-    | `BinOpExpr (e1, `And, e2) ->
+    | AST.BinOpExpr (e1, AST.And, e2) ->
       gen_code_expr e1;
       gen_code_expr e2;
       Queue.add (Bytecode.AND line_num) code_queue
-    | `BinOpExpr (e1, `Or, e2) ->
+    | AST.BinOpExpr (e1, AST.Or, e2) ->
       gen_code_expr e1;
       gen_code_expr e2;
       Queue.add (Bytecode.OR line_num) code_queue
-    | `UnOpExpr (`Not, e) ->
+    | AST.UnOpExpr (AST.Not, e) ->
       gen_code_expr e;
       Queue.add (Bytecode.NOT line_num) code_queue
-    | `BinOpExpr ({ a = `IdExpr(id); _ }, `Dot, e) ->
+    | AST.BinOpExpr ({ a = AST.IdExpr(id); _ }, AST.Dot, e) ->
       let id_loc = Hashtbl.find jeroo_tbl id in
       Queue.add (Bytecode.CSR (id_loc, line_num)) code_queue;
       gen_code_expr e
-    | `FxnAppExpr ({ a = `IdExpr(id); _ }, args) ->
+    | AST.FxnAppExpr ({ a = AST.IdExpr(id); _ }, args) ->
       begin match id with
         | "hop" -> begin match args with
             | [] ->  Queue.add (Bytecode.HOP (1, line_num)) code_queue
-            | { a = `IntExpr(n); _ } :: [] -> Queue.add (Bytecode.HOP (n, line_num)) code_queue
+            | { a = AST.IntExpr(n); _ } :: [] -> Queue.add (Bytecode.HOP (n, line_num)) code_queue
             | _ -> raise (SemanticException "Invalid arguments, hop requires an integer as it's only parameter")
           end
         | "pick" -> begin match args with
@@ -140,9 +140,9 @@ let codegen translation_unit =
     let id_loc = Hashtbl.find jeroo_tbl id in
     match args with
     | [] -> Bytecode.NEW (id_loc, 0, 0, 0, Bytecode.North, line_num)
-    | { a = `IntExpr(x); _ } :: { a = `IntExpr(y); _ } :: [] -> Bytecode.NEW (id_loc, x, y, 0, Bytecode.North, line_num)
-    | { a = `IntExpr(x); _ } :: { a = `IntExpr(y); _ } :: { a = `IntExpr(num_flowers); _ } :: [] -> Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North, line_num)
-    | { a = `IntExpr(x); _ } :: { a = `IntExpr(y); _ } :: { a = `IntExpr(num_flowers); _ } :: { a = direction; _ } :: [] -> Bytecode.NEW (id_loc, x, y, num_flowers, (compass_dir_of_expr direction), line_num)
+    | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: [] -> Bytecode.NEW (id_loc, x, y, 0, Bytecode.North, line_num)
+    | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: { a = AST.IntExpr(num_flowers); _ } :: [] -> Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North, line_num)
+    | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: { a = AST.IntExpr(num_flowers); _ } :: { a = direction; _ } :: [] -> Bytecode.NEW (id_loc, x, y, num_flowers, (compass_dir_of_expr direction), line_num)
     | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
   in
 
@@ -150,15 +150,15 @@ let codegen translation_unit =
   (* takes a statement and returns the line number of the last instruction added *)
   let rec gen_code_stmt (stmt : AST.stmt) =
     match stmt with
-    | `BlockStmt stmts ->
+    | AST.BlockStmt stmts ->
       (* generate code for a block statement *)
       stmts
       |> List.fold_left (fun _ stmt -> gen_code_stmt stmt) 0
-    | `ExprStmt expr ->
+    | AST.ExprStmt expr ->
       (* generate code for an expression statement *)
       gen_code_expr expr;
       expr.lnum
-    | `DeclStmt (ty, id, meta_expr) ->
+    | AST.DeclStmt (ty, id, meta_expr) ->
       (* generate code for a Jeroo declaration *)
       if not (String.equal ty "Jeroo") then
         raise (SemanticException "Invalid type, Jeroo is the only valid type")
@@ -167,7 +167,7 @@ let codegen translation_unit =
         let expr = meta_expr.a in
         let line_num = meta_expr.lnum in
         begin match expr with
-          | `UnOpExpr (`New, { a = `FxnAppExpr ({ a = `IdExpr(ctor); _ }, args); _ }) ->
+          | AST.UnOpExpr (AST.New, { a = AST.FxnAppExpr ({ a = AST.IdExpr(ctor); _ }, args); _ }) ->
             if not (String.equal ctor "Jeroo") then
               raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
             else begin
@@ -177,7 +177,7 @@ let codegen translation_unit =
           | _ -> raise (SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor")
         end
       end
-    | `IfStmt(e, stmt, line_num) ->
+    | AST.IfStmt(e, stmt, line_num) ->
       (* generate code for an if statement *)
       gen_code_expr e;
       let jmp_lbl = "if_lbl_" ^ (string_of_int (Queue.length code_queue)) in
@@ -186,7 +186,7 @@ let codegen translation_unit =
       let end_lnum = gen_code_stmt stmt in
       Queue.add (Bytecode.LABEL (jmp_lbl, end_lnum)) code_queue;
       end_lnum
-    | `IfElseStmt(e, s1, s2, line_num) ->
+    | AST.IfElseStmt(e, s1, s2, line_num) ->
       (* generate code for an if-else statement *)
       (* generate code for the condition *)
       gen_code_expr e;
@@ -205,7 +205,7 @@ let codegen translation_unit =
       let false_end_lnum = gen_code_stmt s2 in
       Queue.add (Bytecode.LABEL (done_lbl, false_end_lnum)) code_queue;
       false_end_lnum
-    | `WhileStmt(e, s, line_num) ->
+    | AST.WhileStmt(e, s, line_num) ->
       (* generate code for a while statement *)
       let loop_lbl = "loop_lbl_" ^ (string_of_int (Queue.length code_queue)) in
       Queue.add (Bytecode.LABEL (loop_lbl, line_num)) code_queue;
