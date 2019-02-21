@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
     title = 'jeroo';
-    thing = JerooCompiler.compile('@Java\n@@\nmethod main() { Jeroo j = new Jeroo(); }');
 }
