@@ -14,8 +14,8 @@ let parse_method _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [];
-      start_lnum = 0;
-      end_lnum = 1;
+      start_lnum = 1;
+      end_lnum = 2;
     }
   } in
   assert_equal ast expected
@@ -32,24 +32,24 @@ let parse_decl _test_ctxt =
             a = AST.UnOpExpr(AST.New, {
                 a = AST.FxnAppExpr({
                     a = AST.IdExpr("Jeroo");
-                    lnum = 1;
+                    lnum = 2;
                   }, [
                       {
                         a = AST.IntExpr(1);
-                        lnum = 1;
+                        lnum = 2;
                       };
                       {
                         a = AST.IntExpr(2);
-                        lnum = 1;
+                        lnum = 2;
                       };
                     ]);
-                lnum = 1;
+                lnum = 2;
               });
-            lnum = 1;
+            lnum = 2;
           })
       ];
-      start_lnum = 0;
-      end_lnum = 2;
+      start_lnum = 1;
+      end_lnum = 3;
     }
   } in
   assert_equal ast expected
@@ -64,11 +64,11 @@ let parse_if_stmt _test_ctxt =
       stmts = [
         AST.IfStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -83,11 +83,11 @@ let parse_if_stmt_no_paren _test_ctxt =
       stmts = [
         AST.IfStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -102,14 +102,14 @@ let parse_elseif_stmt _test_ctxt =
       stmts = [
         AST.IfElseStmt({
             a = AST.TrueExpr;
-            lnum = 1;
+            lnum = 2;
           }, AST.BlockStmt [], AST.IfStmt({
             a = AST.FalseExpr;
-            lnum = 2;
-          }, AST.BlockStmt [], 2), 1)
+            lnum = 3;
+          }, AST.BlockStmt [], 3), 2)
       ];
-      start_lnum = 0;
-      end_lnum = 4;
+      start_lnum = 1;
+      end_lnum = 5;
     }
   } in
   assert_equal ast expected
@@ -124,14 +124,14 @@ let parse_elseif_no_paren_stmt _test_ctxt =
       stmts = [
         AST.IfElseStmt({
             a = AST.TrueExpr;
-            lnum = 1;
+            lnum = 2;
           }, AST.BlockStmt [], AST.IfStmt({
             a = AST.FalseExpr;
-            lnum = 2;
-          }, AST.BlockStmt [], 2), 1)
+            lnum = 3;
+          }, AST.BlockStmt [], 3), 2)
       ];
-      start_lnum = 0;
-      end_lnum = 4;
+      start_lnum = 1;
+      end_lnum = 5;
     }
   } in
   assert_equal ast expected
@@ -146,17 +146,17 @@ let parse_elseif_list_stmt _test_ctxt =
       stmts = [
         AST.IfElseStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], AST.IfElseStmt({
-            a = AST.FalseExpr;
             lnum = 2;
           }, AST.BlockStmt [], AST.IfElseStmt({
-            a = AST.TrueExpr;
+            a = AST.FalseExpr;
             lnum = 3;
-          }, AST.BlockStmt [], AST.BlockStmt [], 3), 2), 1)
+          }, AST.BlockStmt [], AST.IfElseStmt({
+            a = AST.TrueExpr;
+            lnum = 4;
+          }, AST.BlockStmt [], AST.BlockStmt [], 4), 3), 2)
       ];
-      start_lnum = 0;
-      end_lnum = 6;
+      start_lnum = 1;
+      end_lnum = 7;
     }
   } in
   assert_equal ast expected
@@ -171,17 +171,17 @@ let parse_elseif_list_no_paren_stmt _test_ctxt =
       stmts = [
         AST.IfElseStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], AST.IfElseStmt({
-            a = AST.FalseExpr;
             lnum = 2;
           }, AST.BlockStmt [], AST.IfElseStmt({
-            a = AST.TrueExpr;
+            a = AST.FalseExpr;
             lnum = 3;
-          }, AST.BlockStmt [], AST.BlockStmt [], 3), 2), 1)
+          }, AST.BlockStmt [], AST.IfElseStmt({
+            a = AST.TrueExpr;
+            lnum = 4;
+          }, AST.BlockStmt [], AST.BlockStmt [], 4), 3), 2)
       ];
-      start_lnum = 0;
-      end_lnum = 6;
+      start_lnum = 1;
+      end_lnum = 7;
     }
   } in
   assert_equal ast expected
@@ -196,11 +196,11 @@ let parse_while_stmt _test_ctxt =
       stmts = [
         AST.WhileStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -215,11 +215,11 @@ let parse_while_no_paren _test_ctxt =
       stmts = [
         AST.WhileStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -235,16 +235,16 @@ let parse_and _test_ctxt =
         AST.IfStmt({
             a = AST.BinOpExpr({
                 a = AST.TrueExpr;
-                lnum = 1;
+                lnum = 2;
               }, AST.And, {
                   a = AST.TrueExpr;
-                  lnum = 1;
+                  lnum = 2;
                 });
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -260,16 +260,16 @@ let parse_or _test_ctxt =
         AST.IfStmt({
             a = AST.BinOpExpr({
                 a = AST.TrueExpr;
-                lnum = 1;
+                lnum = 2;
               }, AST.Or, {
                   a = AST.TrueExpr;
-                  lnum = 1;
+                  lnum = 2;
                 });
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -285,13 +285,13 @@ let parse_not _test_ctxt =
         AST.IfStmt({
             a = AST.UnOpExpr(AST.Not, {
                 a = AST.FalseExpr;
-                lnum = 1;
+                lnum = 2;
               });
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -304,8 +304,8 @@ let parse_comment _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [];
-      start_lnum = 1;
-      end_lnum = 2;
+      start_lnum = 2;
+      end_lnum = 3;
     }
   } in
   assert_equal ast expected
@@ -321,26 +321,26 @@ let parse_fxn_call _test_ctxt =
         AST.ExprStmt({
             a = AST.FxnAppExpr({
                 a = AST.IdExpr("foobar");
-                lnum = 1;
+                lnum = 2;
               }, [
                   {
                     a = AST.IntExpr(20);
-                    lnum = 1;
+                    lnum = 2;
                   };
                   {
                     a = AST.IdExpr("five");
-                    lnum = 1;
+                    lnum = 2;
                   };
                   {
                     a = AST.NorthExpr;
-                    lnum = 1;
+                    lnum = 2;
                   }
                 ]);
-            lnum = 1;
+            lnum = 2;
           })
       ];
-      start_lnum = 0;
-      end_lnum = 2;
+      start_lnum = 1;
+      end_lnum = 3;
     }
   } in
   assert_equal ast expected
@@ -356,22 +356,22 @@ let parse_obj_fxn_call _test_ctxt =
         AST.ExprStmt({
             a = AST.BinOpExpr({
                 a = AST.IdExpr("foo");
-                lnum = 1;
+                lnum = 2;
               }, AST.Dot, {
                   a = AST.FxnAppExpr({
                       a = AST.IdExpr("bar");
-                      lnum = 1;
+                      lnum = 2;
                     }, [{
                       a = AST.AheadExpr;
-                      lnum = 1;
+                      lnum = 2;
                     }]);
-                  lnum = 1
+                  lnum = 2
                 });
-            lnum = 1;
+            lnum = 2;
           })
       ];
-      start_lnum = 0;
-      end_lnum = 2;
+      start_lnum = 1;
+      end_lnum = 3;
     }
   } in
   assert_equal ast expected
@@ -387,19 +387,19 @@ let parse_not_precedence _test_ctxt =
         AST.IfStmt({
             a = AST.BinOpExpr({
                 a = AST.TrueExpr;
-                lnum = 1;
+                lnum = 2;
               }, AST.And, {
                   a = AST.UnOpExpr(AST.Not, {
                       a = AST.FalseExpr;
-                      lnum = 1;
+                      lnum = 2;
                     });
-                  lnum = 1;
+                  lnum = 2;
                 });
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -416,18 +416,18 @@ let parse_paren_precedence _test_ctxt =
             a = AST.UnOpExpr(AST.Not, {
                 a = AST.BinOpExpr({
                     a = AST.TrueExpr;
-                    lnum = 1;
+                    lnum = 2;
                   }, AST.And, {
                       a = AST.FalseExpr;
-                      lnum = 1;
+                      lnum = 2;
                     });
-                lnum = 1;
+                lnum = 2;
               });
-            lnum = 1
-          }, AST.BlockStmt [], 1)
+            lnum = 2
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -443,22 +443,22 @@ let parse_and_or_precedence _test_ctxt =
         AST.IfStmt({
             a = AST.BinOpExpr({
                 a = AST.TrueExpr;
-                lnum = 1;
+                lnum = 2;
               }, AST.Or, {
                   a = AST.BinOpExpr({
                       a = AST.FalseExpr;
-                      lnum = 1;
+                      lnum = 2;
                     }, AST.And, {
                         a = AST.TrueExpr;
-                        lnum = 1;
+                        lnum = 2;
                       });
-                  lnum = 1;
+                  lnum = 2;
                 });
-            lnum = 1;
-          }, AST.BlockStmt [], 1)
+            lnum = 2;
+          }, AST.BlockStmt [], 2)
       ];
-      start_lnum = 0;
-      end_lnum = 3;
+      start_lnum = 1;
+      end_lnum = 4;
     }
   } in
   assert_equal ast expected
@@ -471,8 +471,8 @@ let parse_arbitrary_newlines _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [];
-      start_lnum = 2;
-      end_lnum = 6;
+      start_lnum = 3;
+      end_lnum = 7;
     }
   } in
   assert_equal ast expected
@@ -492,8 +492,8 @@ let parse_fxn_list _test_ctxt =
     main_fxn = {
       id = "main";
       stmts = [];
-      start_lnum = 0;
-      end_lnum = 1;
+      start_lnum = 1;
+      end_lnum = 2;
     }
   } in
   assert_equal ast expected
@@ -508,15 +508,15 @@ let parse_stmt_list _test_ctxt =
       stmts = [
         AST.IfStmt({
             a = AST.TrueExpr;
-            lnum = 1;
-          }, AST.BlockStmt [], 1);
+            lnum = 2;
+          }, AST.BlockStmt [], 2);
         AST.WhileStmt({
             a = AST.TrueExpr;
-            lnum = 3;
-          }, AST.BlockStmt [], 3);
+            lnum = 4;
+          }, AST.BlockStmt [], 4);
       ];
-      start_lnum = 0;
-      end_lnum = 5;
+      start_lnum = 1;
+      end_lnum = 6;
     }
   } in
   assert_equal ast expected
@@ -532,16 +532,16 @@ let parse_negative_int _test_ctxt =
         AST.ExprStmt({
             a = AST.FxnAppExpr({
                 a = AST.IdExpr("foo");
-                lnum = 1;
+                lnum = 2;
               }, [{
                 a = AST.IntExpr(-1);
-                lnum = 1;
+                lnum = 2;
               }]);
-            lnum = 1;
+            lnum = 2;
           })
       ];
-      start_lnum = 0;
-      end_lnum = 2;
+      start_lnum = 1;
+      end_lnum = 3;
     }
   } in
   assert_equal ast expected

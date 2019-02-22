@@ -31,6 +31,6 @@ let compile_VB _test_ctxt =
 
 let suite =
   "Integration Tests">::: [
-    "Compile Java">:: compile_java;
-    "Compile VB">:: compile_VB;
+    (* "Compile Java">:: compile_java;
+     * "Compile VB">:: compile_VB; *)
   ]
