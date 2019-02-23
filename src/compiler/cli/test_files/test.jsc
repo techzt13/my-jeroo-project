@@ -1,5 +1,9 @@
 @Java
-
-method foo() { hop(3); }
+method foo() {
+hop();
+}
 @@
-method main() { Jeroo j = new Jeroo(); j.foo(); }
+method main() {
+hop();
+
+}

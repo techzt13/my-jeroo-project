@@ -409,6 +409,41 @@ let parse_stmt_list _test_ctxt =
   } in
   assert_equal ast expected
 
+let parse_extension_method _test_ctxt =
+  let code = "@Java\n method foo() {\n hop(); \n}\n @@\n method main() {\n hop();\n \n}" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [{
+        id = "foo";
+        stmts = [
+          AST.ExprStmt({
+              a = AST.FxnAppExpr({
+                  a = AST.IdExpr("hop");
+                  lnum = 2;
+                }, []);
+              lnum = 2;
+            })
+        ];
+        start_lnum = 1;
+        end_lnum = 3;
+      }];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.ExprStmt {
+          a = AST.FxnAppExpr({
+              a = AST.IdExpr("hop");
+              lnum = 2;
+            }, []);
+          lnum = 2;
+        }
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  assert_equal ast expected
+
 let suite =
   "Java Parsing">::: [
     "Parse Method">:: parse_method;
@@ -428,4 +463,5 @@ let suite =
     "Parse obj call">:: parse_obj_call;
     "Parse Negative Int">:: parse_negative_int;
     "Parse Stmt List">:: parse_stmt_list;
+    "Parse Extension Method">:: parse_extension_method;
   ]
