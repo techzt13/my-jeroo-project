@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatrixService } from './matrix.service';
 import { saveAs } from 'file-saver';
 import { text } from '@angular/core/src/render3';
+import { callbackify } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -53,13 +54,51 @@ export class FilesystemService {
   }
 
   loadBoard(matrixFile: any) {
+    let tempFileHolder: String | ArrayBuffer;
     const fileReader = new FileReader();
-    let aaaaa: String | ArrayBuffer;
     fileReader.onload = (e) => {
-      aaaaa = fileReader.result;
-      console.log(aaaaa);
+      tempFileHolder = fileReader.result;
     };
-    console.log(fileReader.readAsText(matrixFile));
-    console.log(aaaaa);
+    fileReader.onloadend = (e) => {
+      this.boardManipulation(tempFileHolder);
+    };
+    fileReader.readAsText(matrixFile);
   }
+
+  boardManipulation(loadedBoard: String | ArrayBuffer) {
+    const x = loadedBoard.toString();
+    let tempRow: Array<String> = ['W'];
+    const waterRow: Array<String> = [];
+    const tempMatrix: Array<Array<String>> = [];
+    let counter = 0;
+    while (counter < x.length) {
+      if (x[counter] === '\n') {
+        if (waterRow.length === 0) {
+          let waterCounter = 0;
+          while (waterCounter < tempRow.length + 1) {
+            waterRow.push('W');
+            waterCounter++;
+          }
+          if (tempMatrix.length === 0) {
+            tempMatrix.push(waterRow);
+          }
+        }
+        tempRow.push('W');
+        tempMatrix.push(tempRow);
+        tempRow = [];
+        tempRow.push('W');
+        counter++;
+      } else {
+        if (x[counter] === '.') {
+          tempRow.push('G');
+        } else {
+          tempRow.push(x[counter]);
+        }
+        counter++;
+      }
+    }
+    tempMatrix.push(waterRow);
+    this.matrixService.writeBoard(tempMatrix);
+  }
+
 }

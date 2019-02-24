@@ -52,10 +52,10 @@ export class MatrixService {
       return this.matrixHolder[lineNumber];
   }
 
-  // used by filesystem service in order to write lines from file one by one into
+  // used by filesystem service in order to write board from file one by one into
   // the matrix
-  writeLines() {
-    return 1;
+  writeBoard(newBoard: Array<Array<String>>) {
+    this.matrixHolder = newBoard;
   }
 
   // getters and setters for variables
