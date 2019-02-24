@@ -8,8 +8,14 @@ declare interface Instruction {
     f: number;
 }
 
+declare interface CompilationResult {
+    successful: boolean;
+    bytecode?: Instruction[];
+    error_message?: string;
+}
+
 declare interface JerooCompilerModule {
-    compile: (code: string) => Instruction[];
+    compile: (code: string) => CompilationResult;
 }
 
 declare var JerooCompiler: JerooCompilerModule;
