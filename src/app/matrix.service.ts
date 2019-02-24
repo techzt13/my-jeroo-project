@@ -55,7 +55,15 @@ export class MatrixService {
   // used by filesystem service in order to write board from file one by one into
   // the matrix
   writeBoard(newBoard: Array<Array<String>>) {
+    // set the board in the matrix service to the board that was loaded within the
+    // file system service
     this.matrixHolder = newBoard;
+    // after manually setting the board we need to set the width and height sizes, along
+    // with the max x and y sizes
+    this.widthSize = newBoard[0].length;
+    this.heightSize = newBoard.length;
+    this.maxXSize = this.widthSize - 1;
+    this.maxYSize = this.heightSize - 1;
   }
 
   // getters and setters for variables
