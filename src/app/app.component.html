@@ -1,1 +1,8 @@
 <router-outlet></router-outlet>
+
+<div>
+    <button mat-button (click)="saveBoard()">Save</button>
+    <input type='file' (change)="loadedBoard($event)">
+</div>
+
+<app-jeroo-matrix></app-jeroo-matrix>

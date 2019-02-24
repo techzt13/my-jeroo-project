@@ -47,6 +47,17 @@ export class MatrixService {
     this.generateBoard(this.widthSize, this.heightSize);
   }
 
+  // returns lines one by one into the filesystem service to allow for saving
+  returnLines(lineNumber: number) {
+      return this.matrixHolder[lineNumber];
+  }
+
+  // used by filesystem service in order to write lines from file one by one into
+  // the matrix
+  writeLines() {
+    return 1;
+  }
+
   // getters and setters for variables
   getMatrix() {
     return this.matrixHolder;

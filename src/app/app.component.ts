@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FilesystemService } from './filesystem.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'jeroo';
+  constructor(public fileSystemService: FilesystemService) { }
+
+  saveBoard() {
+    this.fileSystemService.saveBoard();
+  }
+
+  loadedBoard(boardFile: any) {
+    this.fileSystemService.fileSelected(boardFile);
+  }
+
 }
