@@ -13,6 +13,7 @@ build-ocaml:
       - src/compiler/_build/
   script:
     - apk add m4
+    - opam update
     - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
     - cd src/compiler
     - dune runtest
