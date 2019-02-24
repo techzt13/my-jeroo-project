@@ -5,7 +5,7 @@ stages:
   - build-angular
 
 build-ocaml:
-  image: opam2:alpine-3.9-ocaml-4.07
+  image: ocaml/opam2:alpine-3.9-ocaml-4.07
   stage: build-ocaml
   artifacts:
     paths:
