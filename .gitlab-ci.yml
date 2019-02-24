@@ -29,10 +29,12 @@ build-angular:
       - node_modules/
   script:
     - yarn install
+    - yarn lint
     - yarn build --prod
 
 test-angular:
-  image: zenika/alpine-chrome:with-node
+  image: timbru31/node-chrome:alpine
   stage: test-angular
   script:
     - yarn test
+    - yarn e2e
