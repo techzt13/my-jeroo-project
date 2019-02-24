@@ -179,7 +179,10 @@ let codegen_jeroo_decl_invalid_args _test_ctxt =
       end_lnum = 3;
     }
   } in
-  assert_raises (Codegen.SemanticException "Invalid Jeroo arguments") (fun () -> Codegen.codegen ast)
+  assert_raises (Codegen.SemanticException {
+      lnum = 2;
+      message = "Invalid Jeroo arguments"
+    }) (fun () -> Codegen.codegen ast)
 
 let codegen_jeroo_decl_no_new _test_ctxt =
   let ast = {
@@ -196,7 +199,10 @@ let codegen_jeroo_decl_no_new _test_ctxt =
       end_lnum = 3;
     }
   } in
-  assert_raises (Codegen.SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor") (fun () -> Codegen.codegen ast)
+  assert_raises (Codegen.SemanticException {
+      lnum = 2;
+      message = "Invalid right hand side of declaration, must be a Jeroo constructor"
+    }) (fun () -> Codegen.codegen ast)
 
 let codegen_unknown_decl_type _test_ctxt =
   let ast = {
@@ -213,7 +219,10 @@ let codegen_unknown_decl_type _test_ctxt =
       end_lnum = 3;
     }
   } in
-  assert_raises (Codegen.SemanticException "Invalid type, Jeroo is the only valid type") (fun () -> Codegen.codegen ast)
+  assert_raises (Codegen.SemanticException {
+      lnum = 2;
+      message = "Invalid type, Jeroo is the only valid type"
+    }) (fun () -> Codegen.codegen ast)
 
 let codegen_unknown_ctor _test_ctxt =
   let ast = {
@@ -236,7 +245,10 @@ let codegen_unknown_ctor _test_ctxt =
       end_lnum = 3;
     }
   } in
-  assert_raises (Codegen.SemanticException "Invalid constructor: jer, Jeroo is the only valid constructor") (fun () -> Codegen.codegen ast)
+  assert_raises (Codegen.SemanticException {
+      lnum = 2;
+      message = "Invalid constructor: jer, Jeroo is the only valid constructor"
+    }) (fun () -> Codegen.codegen ast)
 
 let codegen_jeroo_hop _test_ctxt =
   let ast = {
@@ -996,7 +1008,10 @@ let codegen_call_missing_fxn _test_ctxt =
       end_lnum = 4;
     }
   } in
-  assert_raises (Codegen.SemanticException "Unknown function: foo") (fun () -> Codegen.codegen ast)
+  assert_raises (Codegen.SemanticException {
+      lnum = 3;
+      message = "Unknown function: foo"
+    }) (fun () -> Codegen.codegen ast)
 
 let codegen_if_stmt _test_ctxt =
   let ast = {

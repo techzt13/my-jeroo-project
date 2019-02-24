@@ -1,22 +1,31 @@
 open AST
 
-exception SemanticException of string
+exception SemanticException of {
+    lnum : int;
+    message : string;
+  }
 
-let relative_dir_of_expr e =
-  match e with
+let relative_dir_of_expr meta_expr =
+  match meta_expr.a with
   | AST.LeftExpr -> Bytecode.Left
   | AST.RightExpr -> Bytecode.Right
   | AST.HereExpr -> Bytecode.Here
   | AST.AheadExpr -> Bytecode.Ahead
-  | _ -> raise (SemanticException "type error: expression must be LEFT, RIGHT, AHEAD, or HERE")
+  | _ -> raise (SemanticException {
+      lnum = meta_expr.lnum;
+      message = "type error: expression must be LEFT, RIGHT, AHEAD, or HERE";
+    })
 
-let compass_dir_of_expr expr =
-  match expr with
+let compass_dir_of_expr meta_expr =
+  match meta_expr.a with
   | AST.NorthExpr -> Bytecode.North
   | AST.SouthExpr -> Bytecode.South
   | AST.EastExpr -> Bytecode.East
   | AST.WestExpr -> Bytecode.West
-  | _ -> raise (SemanticException "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST")
+  | _ -> raise (SemanticException {
+      lnum = meta_expr.lnum;
+      message = "Invalid type, expression must be NORTH, SOUTH, EAST, or WEST";
+    })
 
 (* convert labels to memory locations *)
 let remove_labels bytecode =
@@ -38,8 +47,10 @@ let remove_labels bytecode =
   (* swap out the jump to labels to jump to memory locations *)
   bytecode
   |> Seq.filter_map (fun instruction -> match instruction with
-      | Bytecode.JUMP_LBL (lbl, pane_num, line_num) -> Some (Bytecode.JUMP ((Hashtbl.find label_tbl lbl), pane_num, line_num))
-      | Bytecode.BZ_LBL (lbl, pane_num, line_num) -> Some (Bytecode.BZ ((Hashtbl.find label_tbl lbl), pane_num, line_num))
+      | Bytecode.JUMP_LBL (lbl, pane_num, line_num) ->
+        Some (Bytecode.JUMP ((Hashtbl.find label_tbl lbl), pane_num, line_num))
+      | Bytecode.BZ_LBL (lbl, pane_num, line_num) ->
+        Some (Bytecode.BZ ((Hashtbl.find label_tbl lbl), pane_num, line_num))
       | Bytecode.LABEL _ -> None
       | _ -> Some (instruction)
     )
@@ -75,65 +86,138 @@ let codegen translation_unit =
     | AST.FxnAppExpr ({ a = AST.IdExpr(id); _ }, args) ->
       begin match id with
         | "hop" -> begin match args with
-            | [] ->  Queue.add (Bytecode.HOP (1, pane_num, line_num)) code_queue
-            | { a = AST.IntExpr(n); _ } :: [] -> Queue.add (Bytecode.HOP (n, pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, hop requires an integer as it's only parameter")
+            | [] ->
+              let instr = Bytecode.HOP (1, pane_num, line_num) in
+              Queue.add instr code_queue
+            | { a = AST.IntExpr(n); _ } :: [] ->
+              let instr = Bytecode.HOP (n, pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, hop requires an integer as it's only parameter"
+              })
           end
         | "pick" -> begin match args with
-            | [] -> Queue.add (Bytecode.PICK (pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, pick requires no arguments")
+            | [] ->
+              let instr = Bytecode.PICK (pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, pick requires no arguments"
+              })
           end
         | "plant" -> begin match args with
-            | [] -> Queue.add (Bytecode.PLANT (pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, plant requires no arguments")
+            | [] ->
+              let instr = Bytecode.PLANT (pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, plant requires no arguments"
+              })
           end
         | "toss" -> begin match args with
-            | [] -> Queue.add (Bytecode.TOSS (pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, toss requires no arguments")
+            | [] ->
+              let instr = Bytecode.TOSS (pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, toss requires no arguments"
+              })
           end
         | "give" -> begin match args with
-            | [] -> Queue.add (Bytecode.GIVE (Bytecode.Ahead, pane_num, line_num)) code_queue
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.GIVE ((relative_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, toss requires either a relative direction or no arguments")
+            | [] ->
+              let instr = Bytecode.GIVE (Bytecode.Ahead, pane_num, line_num) in
+              Queue.add instr code_queue
+            | meta_e :: [] ->
+              let instr = Bytecode.GIVE ((relative_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add  instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, toss requires either a relative direction or no arguments"
+              })
           end
         | "turn" -> begin match args with
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.TURN ((relative_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, turn requires one relative direction argument")
+            | meta_e :: [] ->
+              let instr = Bytecode.TURN ((relative_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, turn requires one relative direction argument"
+              })
           end
         | "hasFlower" -> begin match args with
-            | [] -> Queue.add (Bytecode.HASFLWR (pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, hasFlower requires no arguments")
+            | [] ->
+              let instr = Bytecode.HASFLWR (pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, hasFlower requires no arguments"
+              })
           end
         | "isJeroo" -> begin match args with
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.ISJEROO ((relative_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, isJeroo requires a relative direction")
+            | meta_e :: [] ->
+              let instr = Bytecode.ISJEROO ((relative_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, isJeroo requires a relative direction"
+              })
           end
         | "isFacing" -> begin match args with
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.FACING ((compass_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, isFacing requires a compass direction")
+            | meta_e :: [] ->
+              let instr = Bytecode.FACING ((compass_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, isFacing requires a compass direction"
+              })
           end
         | "isFlower" -> begin match args with
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.ISFLWR ((relative_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, isFlower requires a relative direction")
+            | meta_e :: [] ->
+              let instr = Bytecode.ISFLWR ((relative_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, isFlower requires a relative direction"
+              })
           end
         | "isNet" -> begin match args with
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.ISNET ((relative_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, isNet requires a relative direction")
+            | meta_e :: [] ->
+              let instr = Bytecode.ISNET ((relative_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, isNet requires a relative direction"
+              })
           end
         | "isWater" -> begin match args with
-            | { a = e; _ } :: [] -> Queue.add (Bytecode.ISWATER ((relative_dir_of_expr e), pane_num, line_num)) code_queue
-            | _ -> raise (SemanticException "Invalid arguments, isWater requires a relative direction")
+            | meta_e :: [] ->
+              let instr = Bytecode.ISWATER ((relative_dir_of_expr meta_e), pane_num, line_num) in
+              Queue.add instr code_queue
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, isWater requires a relative direction"
+              })
           end
         | _ ->
+          (* calling a user-defined function *)
           if Hashtbl.mem fxn_tbl id then
+            (* function found in table, call the function *)
             let loc = Hashtbl.find fxn_tbl id in
             Queue.add (Bytecode.CALLBK (pane_num, line_num)) code_queue;
             Queue.add (Bytecode.JUMP_LBL (loc, pane_num, line_num)) code_queue
           else
-            raise (SemanticException ("Unknown function: " ^ id))
+            (* function not found *)
+            raise (SemanticException {
+                lnum = line_num;
+                message = ("Unknown function: " ^ id)
+              })
       end
     | _ ->
-      raise (SemanticException "Unknown expression")
+      raise (SemanticException {
+          lnum = line_num;
+          message = "Unknown expression"
+        })
   in
 
   let gen_code_decl id args line_num =
@@ -145,9 +229,12 @@ let codegen translation_unit =
       Bytecode.NEW (id_loc, x, y, 0, Bytecode.North, line_num)
     | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: { a = AST.IntExpr(num_flowers); _ } :: [] ->
       Bytecode.NEW (id_loc, x, y, num_flowers, Bytecode.North, line_num)
-    | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: { a = AST.IntExpr(num_flowers); _ } :: { a = direction; _ } :: [] ->
+    | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: { a = AST.IntExpr(num_flowers); _ } :: direction :: [] ->
       Bytecode.NEW (id_loc, x, y, num_flowers, (compass_dir_of_expr direction), line_num)
-    | _ -> raise (SemanticException ("Invalid Jeroo arguments"))
+    | _ -> raise (SemanticException {
+        lnum = line_num;
+        message = "Invalid Jeroo arguments"
+      })
   in
 
   (* generates code for a statement *)
@@ -165,21 +252,30 @@ let codegen translation_unit =
       expr.lnum
     | AST.DeclStmt (ty, id, meta_expr) ->
       (* generate code for a Jeroo declaration *)
+      let line_num = meta_expr.lnum in
       if not (String.equal ty "Jeroo") then
-        raise (SemanticException "Invalid type, Jeroo is the only valid type")
+        raise (SemanticException {
+            lnum = line_num;
+            message = "Invalid type, Jeroo is the only valid type"
+          })
       else begin
         Hashtbl.add jeroo_tbl id (Hashtbl.length jeroo_tbl);
         let expr = meta_expr.a in
-        let line_num = meta_expr.lnum in
         begin match expr with
           | AST.UnOpExpr (AST.New, { a = AST.FxnAppExpr ({ a = AST.IdExpr(ctor); _ }, args); _ }) ->
             if not (String.equal ctor "Jeroo") then
-              raise (SemanticException ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor"))
+              raise (SemanticException {
+                  lnum = line_num;
+                  message = ("Invalid constructor: " ^ ctor ^ ", Jeroo is the only valid constructor")
+                })
             else begin
               Queue.add (gen_code_decl id args line_num) code_queue;
               line_num
             end
-          | _ -> raise (SemanticException "Invalid right hand side of declaration, must be a Jeroo constructor")
+          | _ -> raise (SemanticException {
+              lnum = line_num;
+              message = "Invalid right hand side of declaration, must be a Jeroo constructor"
+            })
         end
       end
     | AST.IfStmt(e, stmt, line_num) ->
@@ -233,7 +329,10 @@ let codegen translation_unit =
 
   let gen_code_main_fxn fxn =
     if not (String.equal fxn.id "main") then
-      raise (SemanticException "main function must be called main")
+      raise (SemanticException {
+          lnum = fxn.end_lnum;
+          message = "main function must be called main"
+        })
     else begin
       gen_code_fxn fxn 0
     end
