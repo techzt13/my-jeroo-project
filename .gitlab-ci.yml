@@ -3,6 +3,7 @@ image: docker:latest
 stages:
   - build-ocaml
   - build-angular
+  - test-angular
 
 build-ocaml:
   image: ocaml/opam2:alpine-3.9-ocaml-4.07
@@ -11,6 +12,7 @@ build-ocaml:
     paths:
       - src/compiler/_build/
   script:
+    - apk add m4
     - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
     - cd src/compiler
     - dune runtest
@@ -22,6 +24,13 @@ build-angular:
   artifacts:
     paths:
       - dist/
+      - node_modules/
   script:
     - yarn install
     - yarn build --prod
+
+test-angular:
+  image: zenika/alpine-chrome:with-node
+  stage: test-angular
+  script:
+    - yarn test
