@@ -26,14 +26,13 @@ build-angular:
   artifacts:
     paths:
       - dist/
-      - node_modules/
   script:
     - yarn install
     - yarn lint
     - yarn build --prod
 
 test-angular:
-  image: timbru31/node-chrome:alpine
+  image: timbru31/node-chrome:slim
   stage: test-angular
   script:
     - google-chrome-stable --version
