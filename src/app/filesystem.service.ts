@@ -81,7 +81,7 @@ export class FilesystemService {
       // if we come across a newline we have hit the end of a row and need to add it onto
       // the matrix and clear the tempRow holder
       if (x[counter] === '\n') {
-        // if the waterRow is empty then we need to figure out how long the rows are in 
+        // if the waterRow is empty then we need to figure out how long the rows are in
         // order to know how many elements to add to our water row
         if (waterRow.length === 0) {
           let waterCounter = 0;
