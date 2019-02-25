@@ -36,6 +36,8 @@ test-angular:
   image: timbru31/node-chrome:alpine
   stage: test-angular
   script:
+    - google-chrome-stable --version
+    - export CHROME_BIN=google-chrome-stable
     - yarn install
     - yarn test
     - yarn e2e
