@@ -36,5 +36,6 @@ test-angular:
   image: timbru31/node-chrome:alpine
   stage: test-angular
   script:
+    - yarn install
     - yarn test
     - yarn e2e
