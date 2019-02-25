@@ -38,5 +38,5 @@ test-angular:
     - google-chrome-stable --version
     - export CHROME_BIN=google-chrome-stable
     - yarn install
-    - yarn test
-    - yarn e2e
+    - yarn test --no-watch --no-progress --browsers=ChromeHeadlessCI
+    - yarn e2e --protractor-config=e2e/protractor-ci.conf.js
