@@ -140,7 +140,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/compiler-cli@^7.2.6":
+"@angular/compiler-cli@~7.2.0":
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-7.2.6.tgz#50c4d2fed21292b40b7e14d20a2133312a09d2cd"
   integrity sha512-sB0Bc5hE1zoXKwK4E9pC/UblCEHi3CwLBT/1nmVMYBdGzSSUxO4FaioJi+SCeGJJ+kk85Vny2up08gnupmLKqA==
