@@ -1,141 +1,109 @@
 import { Injectable } from '@angular/core';
+import { TileType } from './matrixConstants';
+import { fromEvent } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MatrixService {
 
-  matrixHolder = [[]];
+    private rows = 26;
+    private cols = 26;
+    private tsize = 28;
+    private tiles: TileType[] = [];
 
-  currentValue = 'W';
+    constructor() {
+        this.resetMap();
+    }
 
-  widthSize = 26;
-  heightSize = 26;
-  maxXSize = this.widthSize - 1;
-  maxYSize = this.heightSize - 1;
-
-  waterType = 'W';
-  grassType = 'G';
-  flowerType = 'F';
-  netType = 'N';
-  clearType = 'C';
-
-  constructor() { }
-
-  // create a board with a given size, and set it to the default values
-  // (water on top/sides, grass everywhere else)
-  generateBoard(xSize: number, ySize: number) {
-    const arr = [];
-
-    for (let row = 0; row < ySize; row++) {
-      arr[row] = [];
-      for (let column = 0; column < xSize; column++) {
-        // if row == 0 or max use water OR if column == 0 or max
-        if (row === 0 || row === (ySize - 1) || column === 0 || column === (xSize - 1)) {
-          arr[row][column] = this.waterType;
-        } else {
-          arr[row][column] = this.grassType;
+    /**
+     * Resets the tile map to all grass
+     */
+    resetMap() {
+        for (let row = 0; row < this.rows; row++) {
+            for (let col = 0; col < this.cols; col++) {
+                this.tiles.push(TileType.Grass);
+            }
         }
-      }
     }
 
-    this.matrixHolder = arr;
-
-  }
-
-  drawBoard() {
-    this.generateBoard(this.widthSize, this.heightSize);
-  }
-
-  // getters and setters for variables
-  getMatrix() {
-    return this.matrixHolder;
-  }
-
-  setWidthSize(wSize: number) {
-    this.widthSize = wSize;
-  }
-
-  getWidthSize() {
-    return this.widthSize;
-  }
-
-  setHeightSize(hSize: number) {
-    this.heightSize = hSize;
-  }
-
-  getHeightSize() {
-    return this.heightSize;
-  }
-
-  setMaxXSize() {
-    this.maxXSize = this.widthSize - 1;
-  }
-
-  getMaxXSize() {
-    return this.maxXSize;
-  }
-
-  setMaxYSize() {
-    this.maxYSize = this.heightSize - 1;
-  }
-
-  getMaxYSize() {
-    return this.maxYSize;
-  }
-
-  setCurrentValue(newValue: string) {
-    switch (newValue) {
-      case this.waterType: {
-        this.currentValue = this.waterType;
-        break;
-      }
-      case this.grassType: {
-        this.currentValue = this.grassType;
-        break;
-      }
-      case this.netType: {
-        this.currentValue = this.netType;
-        break;
-      }
-      case this.flowerType: {
-        this.currentValue = this.flowerType;
-        break;
-      }
+    getRows() {
+        return this.rows;
     }
-  }
 
-  getCurrentValue() {
-    return this.currentValue;
-  }
+    getCols() {
+        return this.cols;
+    }
 
-  getWaterType() {
-    return this.waterType;
-  }
+    getTile(col: number, row: number) {
+        return this.tiles[row * this.cols + col];
+    }
 
-  getGrassType() {
-    return this.grassType;
-  }
+    setTile(col: number, row: number, tile: TileType) {
+        this.tiles[row * this.cols + col] = tile;
+    }
 
-  getFlowerType() {
-    return this.flowerType;
-  }
+    getTsize() {
+        return this.tsize;
+    }
 
-  getNetType() {
-    return this.netType;
-  }
+    render(context: CanvasRenderingContext2D) {
+        this.getTileAtlasObs().subscribe(imageAtlas => {
+            // fill the top row with water
+            for (let col = 0; col < this.cols + 2; col++) {
+                this.renderTile(context, imageAtlas, TileType.Water, col, 0);
+            }
+            for (let row = 0; row < this.rows; row++) {
+                // fill in the left water tile
+                this.renderTile(context, imageAtlas, TileType.Water, 0, row + 1);
+                for (let col = 0; col < this.cols; col++) {
+                    const tile = this.getTile(col, row);
+                    this.renderTile(context, imageAtlas, tile, col + 1, row + 1);
+                }
+                // fill in the right water tile
+                this.renderTile(context, imageAtlas, TileType.Water, this.cols + 1, row + 1);
+            }
+            // fill the bottom row with water
+            for (let col = 0; col < this.cols + 2; col++) {
+                this.renderTile(context, imageAtlas, TileType.Water, col, this.rows + 1);
+            }
+        });
+    }
 
-  getClearType() {
-    return this.clearType;
-  }
+    private renderTile(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, tileType: TileType, col: number, row: number) {
+        const offset = this.tileTypeToNumber(tileType);
+        context.drawImage(
+            imageAtlas,
+            offset * this.tsize,
+            0,
+            this.tsize,
+            this.tsize,
+            col * this.tsize,
+            row * this.tsize,
+            this.tsize,
+            this.tsize
+        );
+    }
 
-  getBoardValueAt(row: number, column: number) {
-    return this.matrixHolder[row][column];
-  }
+    private tileTypeToNumber(tileType: TileType) {
+        if (tileType === TileType.Grass) {
+            return 0;
+        } else if (tileType === TileType.Water) {
+            return 1;
+        } else if (tileType === TileType.Flower) {
+            return 2;
+        } else if (tileType === TileType.Net) {
+            return 3;
+        } else {
+            throw new Error('Unknown TileType');
+        }
+    }
 
-  setBoardValueAt(row: number, column: number) {
-    this.matrixHolder[row][column] = this.currentValue;
-  }
-  // getters and setters for variables
-
+    private getTileAtlasObs() {
+        const image = new Image();
+        const imageObservable = fromEvent(image, 'load');
+        image.src = 'assets/images/JerooTilesSpritesheet.png';
+        return imageObservable.pipe(map(() => image));
+    }
 }
