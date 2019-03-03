@@ -21,6 +21,7 @@ export class MatrixService {
      * Resets the tile map to all grass
      */
     resetMap() {
+        this.tiles = [];
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
                 this.tiles.push(TileType.Grass);
@@ -32,8 +33,16 @@ export class MatrixService {
         return this.rows;
     }
 
+    setRows(rows: number) {
+        this.rows = rows;
+    }
+
     getCols() {
         return this.cols;
+    }
+
+    setCols(cols: number) {
+        this.cols = cols;
     }
 
     getTile(col: number, row: number) {

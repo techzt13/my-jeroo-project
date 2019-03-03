@@ -1,6 +1,8 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
 
 @Component({
     selector: 'app-jeroo-matrix',
@@ -15,7 +17,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     mouseRow: number = null;
     mouseColumn: number = null;
 
-    constructor(private matrixService: MatrixService) { }
+    constructor(private matrixService: MatrixService, private dialog: MatDialog) { }
 
     ngAfterViewInit() {
         (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).width =
@@ -24,6 +26,31 @@ export class JerooMatrixComponent implements AfterViewInit {
             this.matrixService.getTsize() * (this.matrixService.getRows() + 2);
         this.context = (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
         this.matrixService.render(this.context);
+    }
+
+    openDialog() {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = {
+            xValue: this.matrixService.getCols(),
+            yValue: this.matrixService.getRows()
+        };
+
+        const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(data => {
+            this.matrixService.setCols(+data.xValue);
+            this.matrixService.setRows(+data.yValue);
+            this.matrixService.resetMap();
+            this.context.clearRect(0, 0,
+                (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).width,
+                (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).height
+            );
+            (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).width =
+                this.matrixService.getTsize() * (this.matrixService.getCols() + 2);
+            (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).height =
+                this.matrixService.getTsize() * (this.matrixService.getRows() + 2);
+            this.matrixService.render(this.context);
+        });
     }
 
     selectedTileTypeChange(tileType: string) {
