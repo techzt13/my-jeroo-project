@@ -15,5 +15,5 @@ describe('MatrixService', () => {
     it('get and set correctly find entities', () => {
         const service: MatrixService = TestBed.get(MatrixService);
         service.setTile(1, 1, TileType.Water);
-    })
+    });
 });
