@@ -124,11 +124,12 @@
                     </mat-menu>
                     <button class="menu-button" mat-raised-button [matMenuTriggerFor]="islandedit">Island Edit</button>
                     <mat-menu #islandedit="matMenu">
-                        <button mat-menu-item>Plant Flowers</button>
-                        <button mat-menu-item>Set Nets</button>
-                        <button mat-menu-item>Add Water</button>
+                        <button mat-menu-item (click)=plantFlowers()>Plant Flowers</button>
+                        <button mat-menu-item (click)=setNets()>Set Nets</button>
+                        <button mat-menu-item (click)=addWater()>Add Water</button>
+                        <button mat-menu-item (click)=addGrass()>Add Grass</button>
                         <mat-divider></mat-divider>
-                        <button mat-menu-item>Clear Island</button>
+                        <button mat-menu-item (click)=clearIsland()>Clear Island</button>
                     </mat-menu>
                     <button class="menu-button" mat-raised-button [matMenuTriggerFor]="help">Help</button>
                     <mat-menu #help="matMenu">

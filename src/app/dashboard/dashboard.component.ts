@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatrixService } from '../matrix.service';
 
 enum SelectedLanguage {
     Java,
@@ -37,7 +38,7 @@ export class DashboardComponent implements OnInit {
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
-    constructor() { }
+    constructor(private matrixService: MatrixService) { }
 
     ngOnInit() {
     }
@@ -53,4 +54,25 @@ export class DashboardComponent implements OnInit {
     getTutorialUrl() {
         return `/help/${selectedLanguageToString(this.selectedLanguage)}/tutorial`;
     }
+
+    plantFlowers() {
+        this.matrixService.setCurrentValue(this.matrixService.getFlowerType());
+    }
+
+    setNets() {
+        this.matrixService.setCurrentValue(this.matrixService.getNetType());
+    }
+
+    addWater() {
+        this.matrixService.setCurrentValue(this.matrixService.getWaterType());
+    }
+
+    addGrass() {
+        this.matrixService.setCurrentValue(this.matrixService.getGrassType());
+    }
+
+    clearIsland() {
+        this.matrixService.drawBoard();
+    }
+
 }
