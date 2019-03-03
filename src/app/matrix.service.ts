@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TileType } from './matrixConstants';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observer } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class MatrixService {
     private cols = 26;
     private tsize = 28;
     private tiles: TileType[] = [];
+    private imageAtlas: HTMLImageElement;
 
     constructor() {
         this.resetMap();
@@ -58,26 +59,35 @@ export class MatrixService {
     }
 
     render(context: CanvasRenderingContext2D) {
-        this.getTileAtlasObs().subscribe(imageAtlas => {
-            // fill the top row with water
-            for (let col = 0; col < this.cols + 2; col++) {
-                this.renderTile(context, imageAtlas, TileType.Water, col, 0);
+        if (this.imageAtlas == null) {
+            this.getTileAtlasObs().subscribe(imageAtlas => {
+                this.renderTiles(context, imageAtlas);
+                this.imageAtlas = imageAtlas;
+            });
+        } else {
+            this.renderTiles(context, this.imageAtlas);
+        }
+    }
+
+    private renderTiles(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement) {
+        // fill the top row with water
+        for (let col = 0; col < this.cols + 2; col++) {
+            this.renderTile(context, imageAtlas, TileType.Water, col, 0);
+        }
+        for (let row = 0; row < this.rows; row++) {
+            // fill in the left water tile
+            this.renderTile(context, imageAtlas, TileType.Water, 0, row + 1);
+            for (let col = 0; col < this.cols; col++) {
+                const tile = this.getTile(col, row);
+                this.renderTile(context, imageAtlas, tile, col + 1, row + 1);
             }
-            for (let row = 0; row < this.rows; row++) {
-                // fill in the left water tile
-                this.renderTile(context, imageAtlas, TileType.Water, 0, row + 1);
-                for (let col = 0; col < this.cols; col++) {
-                    const tile = this.getTile(col, row);
-                    this.renderTile(context, imageAtlas, tile, col + 1, row + 1);
-                }
-                // fill in the right water tile
-                this.renderTile(context, imageAtlas, TileType.Water, this.cols + 1, row + 1);
-            }
-            // fill the bottom row with water
-            for (let col = 0; col < this.cols + 2; col++) {
-                this.renderTile(context, imageAtlas, TileType.Water, col, this.rows + 1);
-            }
-        });
+            // fill in the right water tile
+            this.renderTile(context, imageAtlas, TileType.Water, this.cols + 1, row + 1);
+        }
+        // fill the bottom row with water
+        for (let col = 0; col < this.cols + 2; col++) {
+            this.renderTile(context, imageAtlas, TileType.Water, col, this.rows + 1);
+        }
     }
 
     private renderTile(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, tileType: TileType, col: number, row: number) {

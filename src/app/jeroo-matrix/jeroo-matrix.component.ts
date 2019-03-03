@@ -53,6 +53,11 @@ export class JerooMatrixComponent implements AfterViewInit {
         });
     }
 
+    clearMap() {
+        this.matrixService.resetMap();
+        this.matrixService.render(this.context);
+    }
+
     selectedTileTypeChange(tileType: string) {
         this.selectedTileType = this.tileTypeToString(tileType);
     }
@@ -118,6 +123,7 @@ export class JerooMatrixComponent implements AfterViewInit {
             // off the map
             this.mouseColumn = null;
             this.mouseRow = null;
+            this.mouseDown = false;
         }
     }
 }
