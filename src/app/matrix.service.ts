@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TileType } from './matrixConstants';
-import { fromEvent, Observer } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
