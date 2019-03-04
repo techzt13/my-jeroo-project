@@ -15,5 +15,13 @@ describe('MatrixService', () => {
     it('get and set correctly find entities', () => {
         const service: MatrixService = TestBed.get(MatrixService);
         service.setTile(1, 1, TileType.Water);
+        expect(service.getTile(1, 1)).toBe(TileType.Water);
+    });
+
+    it('reset map resets map', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        service.setTile(1, 1, TileType.Water);
+        service.resetMap();
+        expect(service.getTile(1, 1)).toBe(TileType.Grass);
     });
 });
