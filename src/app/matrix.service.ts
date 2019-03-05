@@ -84,7 +84,8 @@ export class MatrixService {
     }
 
     /**
-      * renders the tilemap to a 2D rendering context.
+      * Renders the tilemap to a 2D rendering context.
+      * @param context 2D rendering context.
       */
     render(context: CanvasRenderingContext2D) {
         if (this.imageAtlas == null) {
