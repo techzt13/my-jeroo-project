@@ -75,106 +75,120 @@
             </mat-toolbar>
             <!-- Menu Properties -->
             <mat-menu #file="matMenu">
-                <button mat-menu-item>
-                    <fa-icon icon="file"></fa-icon><span class="col-1">New</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="folder"></fa-icon><span class="col-1">Open</span>
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>
-                    <fa-icon icon="save"></fa-icon><span class="col-1">Save</span>
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>
-                    <fa-icon icon="folder-open"></fa-icon><span class="col-1">Print</span>
-                </button>
+                <ng-template matMenuContent>
+                    <button mat-menu-item>
+                        <fa-icon icon="file"></fa-icon><span class="col-1">New</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="folder"></fa-icon><span class="col-1">Open</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>
+                        <fa-icon icon="save"></fa-icon><span class="col-1">Save</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>
+                        <fa-icon icon="folder-open"></fa-icon><span class="col-1">Print</span>
+                    </button>
+                </ng-template>
             </mat-menu>
             <mat-menu #edit="matMenu">
-                <button mat-menu-item>
-                    <fa-icon icon="cut"></fa-icon><span class="col-1">Cut</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="copy"></fa-icon><span class="col-1">Copy</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="paste"></fa-icon><span class="col-1">Paste</span>
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>
-                    <fa-icon icon="undo"></fa-icon><span class="col-1">Undo Last Edit</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="redo"></fa-icon><span class="col-1">Redo Last Undo</span>
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Comment Lines</button>
-                <button mat-menu-item>Uncomment Lines</button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Indent Lines</button>
-                <button mat-menu-item>UnIndent Lines</button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Set Prefrences</button>
-                <button mat-menu-item>Select Font</button>
+                <ng-template matMenuContent>
+                    <button mat-menu-item>
+                        <fa-icon icon="cut"></fa-icon><span class="col-1">Cut</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="copy"></fa-icon><span class="col-1">Copy</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="paste"></fa-icon><span class="col-1">Paste</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>
+                        <fa-icon icon="undo"></fa-icon><span class="col-1">Undo Last Edit</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="redo"></fa-icon><span class="col-1">Redo Last Undo</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>Comment Lines</button>
+                    <button mat-menu-item>Uncomment Lines</button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>Indent Lines</button>
+                    <button mat-menu-item>UnIndent Lines</button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>Set Prefrences</button>
+                    <button mat-menu-item>Select Font</button>
+                </ng-template>
             </mat-menu>
             <mat-menu #run="matMenu">
-                <button mat-menu-item>
-                    <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="pause"></fa-icon><span class="col-1">Pause</span>
-                </button>
-                <button mat-menu-item>
-                    <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run</span>
-                </button>
+                <ng-template matMenuContent>
+                    <button mat-menu-item>
+                        <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="pause"></fa-icon><span class="col-1">Pause</span>
+                    </button>
+                    <button mat-menu-item>
+                        <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run</span>
+                    </button>
+                </ng-template>
             </mat-menu>
             <mat-menu #speed="matMenu">
-                <mat-radio-group>
-                    <div mat-menu-item>
-                        <mat-radio-button value="1">1 - slow</mat-radio-button>
-                    </div>
-                    <div mat-menu-item>
-                        <mat-radio-button value="2">2</mat-radio-button>
-                    </div>
-                    <div mat-menu-item>
-                        <mat-radio-button value="3">3 - medium</mat-radio-button>
-                    </div>
-                    <div mat-menu-item>
-                        <mat-radio-button value="4">4</mat-radio-button>
-                    </div>
-                    <div mat-menu-item>
-                        <mat-radio-button value="5">5 - fast</mat-radio-button>
-                    </div>
-                    <div mat-menu-item>
-                        <mat-radio-button value="6">6 - max</mat-radio-button>
-                    </div>
-                </mat-radio-group>
+                <ng-template matMenuContent>
+                    <mat-radio-group>
+                        <div mat-menu-item>
+                            <mat-radio-button value="1">1 - slow</mat-radio-button>
+                        </div>
+                        <div mat-menu-item>
+                            <mat-radio-button value="2">2</mat-radio-button>
+                        </div>
+                        <div mat-menu-item>
+                            <mat-radio-button value="3">3 - medium</mat-radio-button>
+                        </div>
+                        <div mat-menu-item>
+                            <mat-radio-button value="4">4</mat-radio-button>
+                        </div>
+                        <div mat-menu-item>
+                            <mat-radio-button value="5">5 - fast</mat-radio-button>
+                        </div>
+                        <div mat-menu-item>
+                            <mat-radio-button value="6">6 - max</mat-radio-button>
+                        </div>
+                    </mat-radio-group>
+                </ng-template>
             </mat-menu>
             <mat-menu #islandfile="matMenu">
-                <button mat-menu-item>New</button>
-                <button mat-menu-item>Open</button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Save</button>
-                <button mat-menu-item>Save As</button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Print</button>
+                <ng-template matMenuContent>
+                    <button mat-menu-item>New</button>
+                    <button mat-menu-item>Open</button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>Save</button>
+                    <button mat-menu-item>Save As</button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>Print</button>
+                </ng-template>
             </mat-menu>
             <mat-menu #islandedit="matMenu">
-                <button mat-menu-item>Plant Flowers</button>
-                <button mat-menu-item>Set Nets</button>
-                <button mat-menu-item>Add Water</button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Clear Island</button>
+                <ng-template matMenuContent>
+                    <button mat-menu-item>Plant Flowers</button>
+                    <button mat-menu-item>Set Nets</button>
+                    <button mat-menu-item>Add Water</button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item>Clear Island</button>
+                </ng-template>
             </mat-menu>
             <mat-menu #help="matMenu">
-                <a mat-menu-item href={{getHelpUrl()}} target="_blank">Help</a>
-                <a mat-menu-item href={{getTutorialUrl()}} target="_blank">Tutorial</a>
+                <ng-template matMenuContent>
+                    <a mat-menu-item routerLink="{{getHelpUrl()}}" target="_blank">Help</a>
+                    <a mat-menu-item routerLink="{{getTutorialUrl()}}" target="_blank">Tutorial</a>
+                </ng-template>
             </mat-menu>
             <!--Text tabs Area-->
             <div class="row">

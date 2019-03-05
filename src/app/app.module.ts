@@ -27,7 +27,6 @@ import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
 import { MatrixDialogComponent } from './matrix-dialog/matrix-dialog.component';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HelpModule } from './help/help.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 library.add(
@@ -60,10 +59,8 @@ library.add(
         AppRoutingModule,
         MaterialModule,
         BrowserAnimationsModule,
-        HelpModule,
         FormsModule,
         ReactiveFormsModule,
-        HelpModule,
         FontAwesomeModule
     ],
     providers: [],
