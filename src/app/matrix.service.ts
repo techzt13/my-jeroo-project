@@ -30,34 +30,62 @@ export class MatrixService {
         }
     }
 
+    /**
+     * @returns The number of rows in the matrix.
+     */
     getRows() {
         return this.rows;
     }
 
+    /**
+     * @param rows The new number of rows in the matrix.
+     */
     setRows(rows: number) {
         this.rows = rows;
     }
 
+    /**
+      * @returns The number of columns in the matrix.
+      */
     getCols() {
         return this.cols;
     }
 
+    /**
+      * @param cols The number of columns in the matrix.
+      */
     setCols(cols: number) {
         this.cols = cols;
     }
 
+    /**
+      * @param col The column of the tile.
+      * @param row The row of the tile.
+      * @returns the tile at the specified column and row.
+      */
     getTile(col: number, row: number) {
         return this.tiles[row * this.cols + col];
     }
 
+    /**
+      * @param col The column of the tile.
+      * @param row The row of the tile.
+      * @param tile The tile type of the tile.
+      */
     setTile(col: number, row: number, tile: TileType) {
         this.tiles[row * this.cols + col] = tile;
     }
 
+    /**
+      * @returns the size of a tile sprite in pixels.
+      */
     getTsize() {
         return this.tsize;
     }
 
+    /**
+      * renders the tilemap to a 2D rendering context.
+      */
     render(context: CanvasRenderingContext2D) {
         if (this.imageAtlas == null) {
             this.getTileAtlasObs().subscribe(imageAtlas => {
