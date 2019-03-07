@@ -80,14 +80,23 @@ export class DashboardComponent implements OnInit {
 
     // Island file functions
     saveBoard() {
-        // save vs saveAs?
-        // pass filename from somewhere on ui?
         this.fileService.saveBoard('test');
     }
 
     loadedBoard(boardFile: any) {
         // prompt user to save if board has been changed
-        this.fileService.fileSelected(boardFile);
+
+        // grab the file name from the file that was input
+        const uploadedFile = boardFile.target.files[0];
+        const fileName = uploadedFile.name;
+
+        // pass the value into checkName to see if the extension is the correct one (.jev)
+        // and pass 1 to distinguish between source file (0) and board file (1)
+        if (this.fileService.checkName(fileName, 1) === true) {
+            // if the file extension is correct we can load the board, otherwise we don't
+            // do anything
+            this.fileService.fileSelected(boardFile);
+        }
     }
 
     newBoard() {

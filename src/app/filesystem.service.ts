@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatrixService } from './matrix.service';
-import { saveAs } from 'file-saver';
-import { text } from '@angular/core/src/render3';
-import { callbackify } from 'util';
-import { Observable } from 'rxjs';
+import { fromEvent } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -56,21 +54,26 @@ export class FilesystemService {
     this.loadBoard(this.loadBoardFile);
   }
 
+  // "the loadBoard method waits for the onLoad event and when the file is loaded,
+  // calls the boardManipulation method with the contentBuffer" - @Ben Konz
   loadBoard(matrixFile: any) {
-    let tempFileHolder: String | ArrayBuffer;
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      tempFileHolder = fileReader.result;
-    };
-    fileReader.onloadend = (e) => {
-      this.boardManipulation(tempFileHolder);
-    };
-    fileReader.readAsText(matrixFile);
+    const file = matrixFile;
+    this.readFileAsync(file).subscribe(contentBuffer => this.boardManipulation(contentBuffer));
+  }
+
+  // "we create an observable (async event listener) from the reader's onLoad event,
+  // then say that whenever we load the file, return the result" - @Ben Konz
+  readFileAsync(matrixFile: any) {
+    const reader = new FileReader();
+    const obs = fromEvent(reader, 'load');
+    reader.readAsText(matrixFile);
+    return obs.pipe(map(() => reader.result));
   }
 
   // boardManipulation gets the board ready to be sent to the matrix service to replace
   // the board that is already there
-  boardManipulation(loadedBoard: String | ArrayBuffer) {
+  // boardManipulation(loadedBoard: String | ArrayBuffer) {
+  boardManipulation(loadedBoard: any) {
     const x = loadedBoard.toString();
     let tempRow: Array<String> = ['W'];
     const waterRow: Array<String> = [];
@@ -120,6 +123,26 @@ export class FilesystemService {
     // and then call the matrixService writeBoard function
     tempMatrix.push(waterRow);
     this.matrixService.writeBoard(tempMatrix);
+  }
+
+  // check if the correct file was passed. Since all of the program is client side, we can't do
+  // much to protect against purposful wrong files being passed. But this will prevent against the
+  // accidental case and if accept='.jev' doesn't work due to browser version
+  checkName(fileName: string, inputValue: number) {
+    // grab the extension from the full file name passed
+    const extensionName = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
+    // if we are loading a board (inputvalue = 1) and the extension is correct (jev), then return
+    // true
+    // if we are loading a source file (input value = 0) and the extension is correct (jsc) then
+    // return true
+    // return false otherwise
+    if (extensionName === 'jsc' && inputValue === 0) {
+      return true;
+    } else if (extensionName === 'jev' && inputValue === 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
