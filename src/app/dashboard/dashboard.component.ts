@@ -33,13 +33,15 @@ interface Language {
 export class DashboardComponent implements OnInit {
 
     selectedLanguage = SelectedLanguage.Java;
+    boardSaved = true;
+    savedBoard: Array<Array<String>>;
     languages: Language[] = [
         { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
         { viewValue: 'VB.NET', value: SelectedLanguage.Vb },
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
-    constructor(private matrixService: MatrixService, private fileService: FilesystemService) { }
+    constructor(public matrixService: MatrixService, private fileService: FilesystemService) { }
 
     ngOnInit() {
     }
@@ -57,20 +59,25 @@ export class DashboardComponent implements OnInit {
     }
 
     // Island edit functions
-    plantFlowers() {
-        this.matrixService.setCurrentValue(this.matrixService.getFlowerType());
-    }
-
-    setNets() {
-        this.matrixService.setCurrentValue(this.matrixService.getNetType());
-    }
-
-    addWater() {
-        this.matrixService.setCurrentValue(this.matrixService.getWaterType());
-    }
-
-    addGrass() {
-        this.matrixService.setCurrentValue(this.matrixService.getGrassType());
+    changeCurrentSelection(newSelection: String) {
+        switch (newSelection) {
+            case 'F': {
+                this.matrixService.setCurrentValue(this.matrixService.getFlowerType());
+                break;
+            }
+            case 'N': {
+                this.matrixService.setCurrentValue(this.matrixService.getNetType());
+                break;
+            }
+            case 'W': {
+                this.matrixService.setCurrentValue(this.matrixService.getWaterType());
+                break;
+            }
+            case 'G': {
+                this.matrixService.setCurrentValue(this.matrixService.getGrassType());
+                break;
+            }
+        }
     }
 
     clearIsland() {

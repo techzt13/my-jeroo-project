@@ -66,6 +66,16 @@ export class MatrixService {
     this.maxYSize = this.heightSize - 1;
   }
 
+  // check if the board passed to the function is the same as the state that the board
+  // is currently in. Mostly used to see if the board has changed since the file has been saved
+  compareTo(compareBoard: Array<Array<String>>) {
+    if (this.getMatrix() === compareBoard) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // getters and setters for variables
   getMatrix() {
     return this.matrixHolder;

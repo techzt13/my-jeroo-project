@@ -125,10 +125,10 @@
                     </mat-menu>
                     <button class="menu-button" mat-raised-button [matMenuTriggerFor]="islandedit">Island Edit</button>
                     <mat-menu #islandedit="matMenu">
-                        <button mat-menu-item (click)=plantFlowers()>Plant Flowers</button>
-                        <button mat-menu-item (click)=setNets()>Set Nets</button>
-                        <button mat-menu-item (click)=addWater()>Add Water</button>
-                        <button mat-menu-item (click)=addGrass()>Add Grass</button>
+                        <button mat-menu-item (click)=changeCurrentSelection(this.matrixService.getFlowerType())>Plant Flowers</button>
+                        <button mat-menu-item (click)=changeCurrentSelection(this.matrixService.getNetType())>Set Nets</button>
+                        <button mat-menu-item (click)=changeCurrentSelection(this.matrixService.getWaterType())>Add Water</button>
+                        <button mat-menu-item (click)=changeCurrentSelection(this.matrixService.getGrassType())>Add Grass</button>
                         <mat-divider></mat-divider>
                         <button mat-menu-item (click)=clearIsland()>Clear Island</button>
                     </mat-menu>
