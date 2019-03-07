@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatrixService } from '../matrix.service';
+import { FilesystemService } from '../filesystem.service';
 
 enum SelectedLanguage {
     Java,
@@ -38,7 +39,7 @@ export class DashboardComponent implements OnInit {
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
-    constructor(private matrixService: MatrixService) { }
+    constructor(private matrixService: MatrixService, private fileService: FilesystemService) { }
 
     ngOnInit() {
     }
@@ -55,6 +56,7 @@ export class DashboardComponent implements OnInit {
         return `/help/${selectedLanguageToString(this.selectedLanguage)}/tutorial`;
     }
 
+    // Island edit functions
     plantFlowers() {
         this.matrixService.setCurrentValue(this.matrixService.getFlowerType());
     }
@@ -74,5 +76,24 @@ export class DashboardComponent implements OnInit {
     clearIsland() {
         this.matrixService.drawBoard();
     }
+    // Island edit functions
+
+    // Island file functions
+    saveBoard() {
+        // save vs saveAs?
+        // pass filename from somewhere on ui?
+        this.fileService.saveBoard('test');
+    }
+
+    loadedBoard(boardFile: any) {
+        // prompt user to save if board has been changed
+        this.fileService.fileSelected(boardFile);
+    }
+
+    newBoard() {
+        // prompt user to save if board has been changed
+        this.matrixService.drawBoard();
+    }
+    // Island file functions
 
 }

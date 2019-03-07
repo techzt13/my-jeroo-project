@@ -3,6 +3,7 @@ import { MatrixService } from './matrix.service';
 import { saveAs } from 'file-saver';
 import { text } from '@angular/core/src/render3';
 import { callbackify } from 'util';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class FilesystemService {
 
   // allows the users to save the board to their local system, and maintains the same
   // style as the old version of Jeroo when saving for legacy use if needed
-  saveBoard() {
+  saveBoard(fileName: String) {
     const FileSaver = require('file-saver');
     let myBlob = new Blob([]);
     let blobHolder = new Blob([]);
@@ -45,7 +46,7 @@ export class FilesystemService {
       }
     }
     // finally prompt the user to save the board
-    FileSaver.saveAs(myBlob, 'jerooboard.jev');
+    FileSaver.saveAs(myBlob, fileName + '.jev');
   }
 
   // when a file has been selected by the user this function will be ran and will

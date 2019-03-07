@@ -114,13 +114,14 @@
                     </mat-menu>
                     <button class="menu-button" mat-raised-button [matMenuTriggerFor]="islandfile">Island File</button>
                     <mat-menu #islandfile="matMenu">
-                        <button mat-menu-item>New</button>
-                        <button mat-menu-item>Open</button>
+                        <button mat-menu-item (click)=newBoard()>New</button>
+                        <input hidden id="input-file-id" multiple type="file" (change)=loadedBoard($event) />
+                        <label for="input-file-id" class="mat-menu-item">Open</label>
                         <mat-divider></mat-divider>
-                        <button mat-menu-item>Save</button>
+                        <button mat-menu-item (click)=saveBoard()>Save</button>
                         <button mat-menu-item>Save As</button>
                         <mat-divider></mat-divider>
-                        <button mat-menu-item>Print</button>
+                        <button mat-menu-item printSectionId="print-section" ngxPrint>Print</button>
                     </mat-menu>
                     <button class="menu-button" mat-raised-button [matMenuTriggerFor]="islandedit">Island Edit</button>
                     <mat-menu #islandedit="matMenu">
@@ -161,7 +162,7 @@
                     </div>
                 </div>
                 <!--Matrix Area-->
-                <div class=" col-lg-5">
+                <div class=" col-lg-5" id="print-section">
                     <app-jeroo-matrix></app-jeroo-matrix>
                 </div>
             </div>
