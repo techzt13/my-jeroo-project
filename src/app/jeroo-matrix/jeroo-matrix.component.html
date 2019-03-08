@@ -1,34 +1,9 @@
 <div class=bordered>
   <button mat-button (click)="openDialog()">Change Size</button>
-  <!-- Grass -->
-  <span *ngIf="matrixService.getCurrentValue() === matrixService.getGrassType(); else notGrass">
-    <img src="assets/images/grass.jpg" alt='G' class="imgframe" (mousedown)="selectTile(matrixService.getGrassType())">
-  </span>
-  <ng-template #notGrass>
-      <img src="assets/images/grass.jpg" alt='G' (mousedown)="selectTile(matrixService.getGrassType())">
-  </ng-template>
-  <!-- Water -->
-  <span *ngIf="matrixService.getCurrentValue() === matrixService.getWaterType(); else notWater">
-      <img src="assets/images/water.jpg" alt='W' class="imgframe" (mousedown)="selectTile(matrixService.getWaterType())">
-  </span>
-  <ng-template #notWater>
-      <img src="assets/images/water.jpg" alt='W' (mousedown)="selectTile(matrixService.getWaterType())">
-  </ng-template>
-  <!-- Flower -->
-  <span *ngIf="matrixService.getCurrentValue() === matrixService.getFlowerType(); else notFlower">
-      <img src="assets/images/flower.jpg" alt='F' class="imgframe" (mousedown)="selectTile(matrixService.getFlowerType())">
-  </span>
-  <ng-template #notFlower>
-      <img src="assets/images/flower.jpg" alt='F' (mousedown)="selectTile(matrixService.getFlowerType())">
-  </ng-template>
-  <!-- Net -->
-  <span *ngIf="matrixService.getCurrentValue() === matrixService.getNetType(); else notNet">
-      <img src="assets/images/net.jpg" alt='N' class="imgframe" (mousedown)="selectTile(matrixService.getNetType())">
-  </span>
-  <ng-template #notNet>
-      <img src="assets/images/net.jpg" alt='N' (mousedown)="selectTile(matrixService.getNetType())">
-  </ng-template>
-  <!-- Clear -->
+  <img src="assets/images/grass.jpg" alt='G' (mousedown)="selectTile(matrixService.getGrassType())">
+  <img src="assets/images/water.jpg" alt='W' (mousedown)="selectTile(matrixService.getWaterType())">
+  <img src="assets/images/flower.jpg" alt='F' (mousedown)="selectTile(matrixService.getFlowerType())">
+  <img src="assets/images/net.jpg" alt='N' (mousedown)="selectTile(matrixService.getNetType())">
   <img src="assets/images/clear.jpg" alt='C' (mousedown)="selectTile(matrixService.getClearType())">
 </div>
 
