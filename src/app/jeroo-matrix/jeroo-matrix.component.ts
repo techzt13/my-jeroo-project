@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
+import { ChangeDialogComponent } from '../change-dialog/change-dialog.component';
 import { MatrixService } from '../matrix.service';
+import { FilesystemService } from '../filesystem.service';
 
 @Component({
   selector: 'app-jeroo-matrix',
@@ -14,8 +16,10 @@ export class JerooMatrixComponent implements OnInit {
   currentXLocation = 0;
   currentYLocation = 0;
   mouseDown = false;
+  changeSizePass = 'CS';
 
-  constructor(private dialog: MatDialog, public matrixService: MatrixService) { }
+  constructor(private dialog: MatDialog, public matrixService: MatrixService,
+              private changeDialog: MatDialog, private fileService: FilesystemService) { }
 
   // how to handle clicks from user
   onClick(event: any, row: number, column: number) {
@@ -72,24 +76,57 @@ export class JerooMatrixComponent implements OnInit {
   // responsible for opening the dialogue and saving the information once it has been
   // closed
   openDialog() {
-    const dialogConfig = new MatDialogConfig();
+    if (this.matrixService.boardSaved === false) {
+      this.openChangeDialog(this.changeSizePass);
+    } else {
+      const dialogConfig = new MatDialogConfig();
 
+      dialogConfig.autoFocus = true;
+
+      dialogConfig.data = {
+        id: 1,
+        xValue: this.matrixService.getWidthSize() - 2,
+        yValue: this.matrixService.getHeightSize() - 2
+      };
+
+      const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(
+        data => { this.matrixService.setWidthSize(+data.xValue + +2), this.matrixService.setHeightSize(+data.yValue + +2); this.ngOnInit();
+                  this.matrixService.setMaxXSize(); this.matrixService.setMaxYSize(); },
+      );
+    }
+  }
+
+  openChangeDialog(passedArgument: string) {
+    const dialogConfig = new MatDialogConfig();
+    let finalComingFrom: string;
+    let finalReturnArgument: boolean;
+    dialogConfig.data = {
+        id: 1,
+        comingFrom: passedArgument,
+        returnArgument: false
+      };
     dialogConfig.autoFocus = true;
 
-    dialogConfig.data = {
-      id: 1,
-      xValue: this.matrixService.getWidthSize() - 2,
-      yValue: this.matrixService.getHeightSize() - 2
-    };
-
-    const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(ChangeDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      data => { this.matrixService.setWidthSize(+data.xValue + +2), this.matrixService.setHeightSize(+data.yValue + +2); this.ngOnInit();
-                this.matrixService.setMaxXSize(); this.matrixService.setMaxYSize(); },
-    );
+        data => { finalComingFrom = data.comingFrom, finalReturnArgument = data.returnArgument;
+                  this.checkData(finalComingFrom, finalReturnArgument); },
+      );
 
   }
+
+  checkData(checkString: string, checkBoolean: boolean) {
+    if ((checkString === this.changeSizePass + '-s') && (checkBoolean === true)) {
+        this.fileService.saveBoard('test');
+        this.openDialog();
+    } else if (checkString === this.changeSizePass && checkBoolean === true) {
+        this.matrixService.boardSaved = true;
+        this.openDialog();
+    }
+}
 
   ngOnInit() {
     this.matrixService.drawBoard();

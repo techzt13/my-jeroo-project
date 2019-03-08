@@ -1,7 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FilesystemService } from '../filesystem.service';
-import { MatrixService } from '../matrix.service';
 
 @Component({
   selector: 'app-change-dialog',
