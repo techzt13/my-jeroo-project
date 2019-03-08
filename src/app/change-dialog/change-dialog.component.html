@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Warning:</h2>
+
+<mat-dialog-content>
+    <div>
+      Board has been changed since last save. What would you like to do?
+      <br>
+      <br>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button mat-primary" (click)="saveBoard()">Save</button>
+    <button class="mat-raised-button" (click)="close()">Cancel</button>
+    <button class="mat-raised-button" (click)="continueOperation()">Continue</button>
+</mat-dialog-actions>

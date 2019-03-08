@@ -24,6 +24,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
 import { MatrixDialogComponent } from './matrix-dialog/matrix-dialog.component';
+import { ChangeDialogComponent } from './change-dialog/change-dialog.component';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HelpModule } from './help/help.module';
@@ -53,6 +54,7 @@ library.add(
         DashboardComponent,
         JerooMatrixComponent,
         MatrixDialogComponent,
+        ChangeDialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -68,6 +70,9 @@ library.add(
     ],
     providers: [],
     bootstrap: [AppComponent],
-    entryComponents: [MatrixDialogComponent]
+    entryComponents: [
+        MatrixDialogComponent,
+        ChangeDialogComponent
+    ]
 })
 export class AppModule { }

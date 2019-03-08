@@ -20,6 +20,8 @@ export class MatrixService {
   netType = 'N';
   clearType = 'C';
 
+  boardSaved = true;
+
   constructor() { }
 
   // create a board with a given size, and set it to the default values
@@ -163,6 +165,9 @@ export class MatrixService {
   }
 
   setBoardValueAt(row: number, column: number) {
+    if (this.boardSaved === true) {
+      this.boardSaved = false;
+    }
     this.matrixHolder[row][column] = this.currentValue;
   }
   // getters and setters for variables

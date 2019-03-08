@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { FilesystemService } from '../filesystem.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { ChangeDialogComponent } from '../change-dialog/change-dialog.component';
 
 enum SelectedLanguage {
     Java,
@@ -33,15 +35,19 @@ interface Language {
 export class DashboardComponent implements OnInit {
 
     selectedLanguage = SelectedLanguage.Java;
-    boardSaved = true;
-    savedBoard: Array<Array<String>>;
+
+    // checking board compared to recently saved functions
+    newBoardPass = 'NB';
+    loadBoardPass = 'LB';
+
     languages: Language[] = [
         { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
         { viewValue: 'VB.NET', value: SelectedLanguage.Vb },
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
-    constructor(public matrixService: MatrixService, private fileService: FilesystemService) { }
+    constructor(public matrixService: MatrixService, private fileService: FilesystemService,
+                private dialog: MatDialog) { }
 
     ngOnInit() {
     }
@@ -88,6 +94,7 @@ export class DashboardComponent implements OnInit {
     // Island file functions
     saveBoard() {
         this.fileService.saveBoard('test');
+        this.matrixService.boardSaved = true;
     }
 
     loadedBoard(boardFile: any) {
@@ -103,12 +110,52 @@ export class DashboardComponent implements OnInit {
             // if the file extension is correct we can load the board, otherwise we don't
             // do anything
             this.fileService.fileSelected(boardFile);
+            this.matrixService.boardSaved = true;
         }
     }
 
     newBoard() {
-        // prompt user to save if board has been changed
-        this.matrixService.drawBoard();
+        if (this.matrixService.boardSaved === false) {
+            this.openDialog(this.newBoardPass);
+        } else {
+            this.matrixService.drawBoard();
+            this.matrixService.boardSaved = true;
+        }
+    }
+
+    openDialog(passedArgument: string) {
+        const dialogConfig = new MatDialogConfig();
+        let finalComingFrom: string;
+        let finalReturnArgument: boolean;
+        dialogConfig.data = {
+            id: 1,
+            comingFrom: passedArgument,
+            returnArgument: false
+          };
+        dialogConfig.autoFocus = true;
+
+        const dialogRef = this.dialog.open(ChangeDialogComponent, dialogConfig);
+
+        dialogRef.afterClosed().subscribe(
+            data => { finalComingFrom = data.comingFrom, finalReturnArgument = data.returnArgument;
+                      this.checkData(finalComingFrom, finalReturnArgument); },
+          );
+
+      }
+
+    checkData(checkString: string, checkBoolean: boolean) {
+        if (checkString === 'NB-S' && checkBoolean === true) {
+            this.saveBoard();
+            this.newBoard();
+        } else if (checkString === 'NB' && checkBoolean === true) {
+            this.matrixService.boardSaved = true;
+            this.newBoard();
+        } else if (checkString === 'LB-S' && checkBoolean === true) {
+            this.saveBoard();
+            this.loadedBoard();
+        } else if (checkString === 'LB' && checkBoolean === true) {
+            this.loadedBoard();
+        }
     }
     // Island file functions
 
