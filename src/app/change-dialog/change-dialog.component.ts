@@ -27,27 +27,18 @@ export class ChangeDialogComponent implements OnInit {
 
   // saves the board, and then continues with what was going on
   saveBoard() {
-    this.data.comingFrom = 'NB-S';
+    if (this.comingFrom === 'NB') {
+      this.data.comingFrom = 'NB-S';
+    } else if (this.comingFrom === 'LB') {
+      this.data.comingFrom = 'LB-S';
+    }
     this.continueOperation();
   }
 
   // will continue with what was happening without saving the board
   continueOperation() {
-    switch (this.comingFrom) {
-      case 'NB': {
-        this.data.returnArgument = true;
-        this.dialogRef.close(this.data);
-        break;
-      }
-      case 'LB': {
-        this.close();
-        break;
-      }
-      case 'CS': {
-        this.close();
-        break;
-      }
-    }
+    this.data.returnArgument = true;
+    this.dialogRef.close(this.data);
   }
 
   ngOnInit() {

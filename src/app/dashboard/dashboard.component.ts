@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
     // checking board compared to recently saved functions
     newBoardPass = 'NB';
     loadBoardPass = 'LB';
+    fileHolder: any;
 
     languages: Language[] = [
         { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
@@ -98,19 +99,22 @@ export class DashboardComponent implements OnInit {
     }
 
     loadedBoard(boardFile: any) {
-        // prompt user to save if board has been changed
+        if (this.matrixService.boardSaved === false) {
+            this.fileHolder = boardFile;
+            this.openDialog(this.loadBoardPass);
+        } else {
+            // grab the file name from the file that was input
+            const uploadedFile = boardFile.target.files[0];
+            const fileName = uploadedFile.name;
 
-        // grab the file name from the file that was input
-        const uploadedFile = boardFile.target.files[0];
-        const fileName = uploadedFile.name;
-
-        // pass the value into checkName to see if the extension is the correct one (.jev)
-        // and pass 1 to distinguish between source file (0) and board file (1)
-        if (this.fileService.checkName(fileName, 1) === true) {
+            // pass the value into checkName to see if the extension is the correct one (.jev)
+            // and pass 1 to distinguish between source file (0) and board file (1)
+            if (this.fileService.checkName(fileName, 1) === true) {
             // if the file extension is correct we can load the board, otherwise we don't
             // do anything
             this.fileService.fileSelected(boardFile);
             this.matrixService.boardSaved = true;
+            }
         }
     }
 
@@ -152,9 +156,10 @@ export class DashboardComponent implements OnInit {
             this.newBoard();
         } else if (checkString === 'LB-S' && checkBoolean === true) {
             this.saveBoard();
-            this.loadedBoard();
+            this.loadedBoard(this.fileHolder);
         } else if (checkString === 'LB' && checkBoolean === true) {
-            this.loadedBoard();
+            this.matrixService.boardSaved = true;
+            this.loadedBoard(this.fileHolder);
         }
     }
     // Island file functions
