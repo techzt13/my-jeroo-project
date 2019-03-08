@@ -66,7 +66,7 @@ library.add(
         ReactiveFormsModule,
         HelpModule,
         FontAwesomeModule,
-        NgxPrintModule
+        NgxPrintModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
