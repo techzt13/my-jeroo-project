@@ -104,21 +104,6 @@ describe('MatrixService', () => {
                                          [ 'W', 'W', 'W' ]]);
   });
 
-  // compareTo()
-  it('compareTo should be return true if board is the same and false otherwise', () => {
-    const service: MatrixService = TestBed.get(MatrixService);
-    service.setWidthSize(5);
-    service.setHeightSize(5);
-    service.drawBoard();
-    service.setCurrentValue(service.getNetType());
-    service.setBoardValueAt(1, 1);
-    expect(service.getMatrix()).toEqual([[ 'W', 'W', 'W', 'W', 'W' ],
-                                         [ 'W', 'N', 'G', 'G', 'W' ],
-                                         [ 'W', 'G', 'G', 'G', 'W' ],
-                                         [ 'W', 'G', 'G', 'G', 'W' ],
-                                         [ 'W', 'W', 'W', 'W', 'W' ]]);
-  });
-
   // getWidthSize()
   it('widthSize should be returned with getWidthSize', () => {
     const service: MatrixService = TestBed.get(MatrixService);

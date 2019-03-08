@@ -76,6 +76,9 @@ export class JerooMatrixComponent implements OnInit {
   // responsible for opening the dialogue and saving the information once it has been
   // closed
   openDialog() {
+    // if the board has been changed, then changeDialog will be opened asking the user
+    // how they would like to handle their changes before continuing. Otherwise, change
+    // the size like normal
     if (this.matrixService.boardSaved === false) {
       this.openChangeDialog(this.changeSizePass);
     } else {
@@ -98,35 +101,42 @@ export class JerooMatrixComponent implements OnInit {
     }
   }
 
+  // openChangeDialog will only be provoked if the user decides to change the size, but
+  // hasn't saved the board before hand. User will be presented with save, continue, or cancel
   openChangeDialog(passedArgument: string) {
     const dialogConfig = new MatDialogConfig();
     let finalComingFrom: string;
-    let finalReturnArgument: boolean;
     dialogConfig.data = {
         id: 1,
         comingFrom: passedArgument,
-        returnArgument: false
       };
     dialogConfig.autoFocus = true;
 
     const dialogRef = this.dialog.open(ChangeDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-        data => { finalComingFrom = data.comingFrom, finalReturnArgument = data.returnArgument;
-                  this.checkData(finalComingFrom, finalReturnArgument); },
+        data => { finalComingFrom = data.comingFrom;
+                  this.checkData(finalComingFrom); },
       );
 
   }
 
-  checkData(checkString: string, checkBoolean: boolean) {
-    if ((checkString === this.changeSizePass + '-s') && (checkBoolean === true)) {
+  // check data will take in the arguments returned from the changeDialog and see what
+  // operations need to be ran next from what the user wanted
+  checkData(checkString: string) {
+    if (checkString === this.changeSizePass + '-S') {
+        // if the user wants to save the board before changing the size, we need to save
+        // the board and then change boardSaved to true. Finally open the changeSize dialog
         this.fileService.saveBoard('test');
+        this.matrixService.boardSaved = true;
         this.openDialog();
-    } else if (checkString === this.changeSizePass && checkBoolean === true) {
+    } else if (checkString === this.changeSizePass) {
+        // if the user doesn't want to save the board, we mark boardSaved as true and
+        // open the changeSize dialog
         this.matrixService.boardSaved = true;
         this.openDialog();
     }
-}
+  }
 
   ngOnInit() {
     this.matrixService.drawBoard();

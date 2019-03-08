@@ -12,6 +12,9 @@ export class ChangeDialogComponent implements OnInit {
   // what to do after the board has either been saved, or the user chose to continue without
   // saving
   comingFrom: string;
+  changeSizePassed = 'CS';
+  newBoardPassed = 'NB';
+  loadBoardPassed = 'LB';
 
   constructor(private dialogRef: MatDialogRef<ChangeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data) {
@@ -23,19 +26,24 @@ export class ChangeDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  // saves the board, and then continues with what was going on
+  // if the user chooses to save the board within the dialog this function will run. It will
+  // change the data.comingFrom value to append a '-S' to the end to mark that it needs to be
+  // saved once it's returned to the correct component. It will then run the continueOperation()
+  // function to send the data back to the component
   saveBoard() {
-    if (this.comingFrom === 'NB') {
-      this.data.comingFrom = 'NB-S';
-    } else if (this.comingFrom === 'LB') {
-      this.data.comingFrom = 'LB-S';
+    if (this.comingFrom === this.newBoardPassed) {
+      this.data.comingFrom = this.newBoardPassed + '-S';
+    } else if (this.comingFrom === this.loadBoardPassed) {
+      this.data.comingFrom = this.loadBoardPassed + '-S';
+    } else if (this.comingFrom === this.changeSizePassed) {
+      this.data.comingFrom = this.changeSizePassed + '-S';
     }
     this.continueOperation();
   }
 
-  // will continue with what was happening without saving the board
+  // If the user selects continue or save this function will run and will just send the data
+  // back the the component for looking at and verifying
   continueOperation() {
-    this.data.returnArgument = true;
     this.dialogRef.close(this.data);
   }
 

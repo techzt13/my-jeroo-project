@@ -95,10 +95,13 @@ export class DashboardComponent implements OnInit {
     // Island file functions
     saveBoard() {
         this.fileService.saveBoard('test');
+        // if user saves board, then we can change boardSaved to true
         this.matrixService.boardSaved = true;
     }
 
     loadedBoard(boardFile: any) {
+        // if the boardSaved is false then we need to run the dialog to ask the user what
+        // they would like to do. Otherwise continue with loading of the board
         if (this.matrixService.boardSaved === false) {
             this.fileHolder = boardFile;
             this.openDialog(this.loadBoardPass);
@@ -119,6 +122,8 @@ export class DashboardComponent implements OnInit {
     }
 
     newBoard() {
+        // if the board is not saved, ask the user what they would like to do. If it has
+        // been saved, then draw a new board
         if (this.matrixService.boardSaved === false) {
             this.openDialog(this.newBoardPass);
         } else {
@@ -127,37 +132,45 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    // openDialog will be provoked if the user tries to do something that might clear the
+    // board, but they haven't saved since they have updated the board. This dialog will
+    // ask the user if they would like to save, cancel, or continue
     openDialog(passedArgument: string) {
         const dialogConfig = new MatDialogConfig();
         let finalComingFrom: string;
-        let finalReturnArgument: boolean;
         dialogConfig.data = {
             id: 1,
             comingFrom: passedArgument,
-            returnArgument: false
-          };
+        };
         dialogConfig.autoFocus = true;
 
         const dialogRef = this.dialog.open(ChangeDialogComponent, dialogConfig);
 
+        // pull the data from the dialog and run checkData on it to see what was returned
         dialogRef.afterClosed().subscribe(
-            data => { finalComingFrom = data.comingFrom, finalReturnArgument = data.returnArgument;
-                      this.checkData(finalComingFrom, finalReturnArgument); },
-          );
+            data => { finalComingFrom = data.comingFrom;
+                      this.checkData(finalComingFrom); },
+        );
 
-      }
+    }
 
-    checkData(checkString: string, checkBoolean: boolean) {
-        if (checkString === 'NB-S' && checkBoolean === true) {
+    // checkData will take in the retured string from the dialog and see what operations need
+    // to be ran next
+    checkData(checkString: string) {
+        if (checkString === this.newBoardPass + '-S') {
+            // if the user chose to save the board on a newBoard call
             this.saveBoard();
             this.newBoard();
-        } else if (checkString === 'NB' && checkBoolean === true) {
+        } else if (checkString === this.newBoardPass) {
+            // if the user chose to continue anyway on a newBoard call
             this.matrixService.boardSaved = true;
             this.newBoard();
-        } else if (checkString === 'LB-S' && checkBoolean === true) {
+        } else if (checkString === this.loadBoardPass + '-S') {
+            // if the user chose to save the board on a loadBoard call
             this.saveBoard();
             this.loadedBoard(this.fileHolder);
-        } else if (checkString === 'LB' && checkBoolean === true) {
+        } else if (checkString === this.loadBoardPass) {
+            // if the user chose to continue anyway on a loadBoard call
             this.matrixService.boardSaved = true;
             this.loadedBoard(this.fileHolder);
         }
