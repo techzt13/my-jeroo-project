@@ -81,7 +81,7 @@
                     <button mat-icon-button matTooltip="Save the island to a file" (click)="saveMapFile()">
                         <fa-icon icon="save"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Print the island layout">
+                    <button mat-icon-button matTooltip="Print the island layout" (click)="printMap()">
                         <fa-icon icon="print"></fa-icon>
                     </button>
                 </mat-toolbar-row>
@@ -184,7 +184,7 @@
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="saveMapFile()">Save</button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item>Print</button>
+                    <button mat-menu-item (click)="printMap()">Print</button>
                 </ng-template>
             </mat-menu>
             <mat-menu #islandedit="matMenu">

@@ -61,6 +61,25 @@ export class DashboardComponent {
         saveBlob(blob, 'map.jev');
     }
 
+    printMap() {
+        const dataUrl = this.jerooMatrix.getCanvas().toDataURL();
+        const windowContent = `
+<!DOCTYPE html>
+<html>
+<head><title>Jeroo Map</title></head>
+<body>
+<img src="${dataUrl}">
+</body>
+</html>
+`;
+        const printWindow = window.open('', '', 'width=340,height=260');
+        printWindow.document.open();
+        printWindow.document.write(windowContent);
+        printWindow.document.close();
+        printWindow.print();
+        printWindow.close();
+    }
+
     setSelectedLanguage(selectedLanguage: SelectedLanguage) {
         this.selectedLanguage = selectedLanguage;
     }
