@@ -119,4 +119,12 @@ describe('MatrixService', () => {
             '..\n';
         expect(() => service.genMapFromString(map)).toThrow(new Error('Jagged maps are not allowed'));
     });
+
+    it('genMapFromString empty string creates empty map', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        const map = '';
+        service.genMapFromString(map);
+        expect(service.getCols()).toBe(0);
+        expect(service.getRows()).toBe(0);
+    });
 });

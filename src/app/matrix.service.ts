@@ -195,8 +195,8 @@ export class MatrixService {
       * @param s String of the map contents.
       */
     genMapFromString(s: string) {
-        const lines = s.trim().split('\n');
-        if (lines.length > 0) {
+        if (s !== '') {
+            const lines = s.trim().split('\n');
             const rows = lines.length;
             const cols = lines[0].length;
             this.setRows(rows);
@@ -216,6 +216,7 @@ export class MatrixService {
             this.setCols(0);
         }
     }
+
 
     /**
       * Convert a character to a TileType.
