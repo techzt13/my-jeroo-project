@@ -60,6 +60,10 @@ export class JerooMatrixComponent implements AfterViewInit {
         this.matrixService.render(this.context);
     }
 
+    getCanvas() {
+        return this.canvas;
+    }
+
     selectedTileTypeChange(tileType: string) {
         this.selectedTileType = this.tileTypeToString(tileType);
     }
@@ -84,14 +88,14 @@ export class JerooMatrixComponent implements AfterViewInit {
 
     canvasMouseDown(event: MouseEvent) {
         this.mouseDown = true;
-        const rect = this.canvas.getBoundingClientRect();
-        // bitwise or is the same as casting a float to a number
-        const pixelX = (event.clientX - rect.left) | 0;
-        const pixelY = (event.clientY - rect.top) | 0;
-        this.updateScreen(pixelX, pixelY);
+        this.updateScreenFromMouseEvent(event);
     }
 
     canvasMouseMove(event: MouseEvent) {
+        this.updateScreenFromMouseEvent(event);
+    }
+
+    private updateScreenFromMouseEvent(event: MouseEvent) {
         const rect = this.canvas.getBoundingClientRect();
         // bitwise or is the same as casting a float to a number
         const pixelX = (event.clientX - rect.left) | 0;
