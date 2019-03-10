@@ -9,7 +9,7 @@ export class DisplayErrorMessageComponent implements OnInit {
   message: string;
   constructor() { }
   ngOnInit() {
-    this.message = '';
+    this.message = 'TESTING Error message';
   }
   reportMessage(errorStr: string){
     this.message = errorStr;
