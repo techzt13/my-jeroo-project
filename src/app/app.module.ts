@@ -28,6 +28,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HelpModule } from './help/help.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
 
 library.add(
     faFile,
@@ -52,6 +53,7 @@ library.add(
         DashboardComponent,
         JerooMatrixComponent,
         MatrixDialogComponent,
+        DisplayErrorMessageComponent,
     ],
     imports: [
         BrowserModule,
