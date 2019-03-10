@@ -18,7 +18,9 @@ import {
     faPlay,
     faPause,
     faStop,
-    faBars
+    faBars,
+    faEraser,
+    faPrint
 } from '@fortawesome/free-solid-svg-icons';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,7 +46,9 @@ library.add(
     faPlay,
     faPause,
     faStop,
-    faBars
+    faBars,
+    faEraser,
+    faPrint
 );
 
 @NgModule({

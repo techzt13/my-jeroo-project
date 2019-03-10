@@ -11,6 +11,7 @@ import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component'
 export class JerooMatrixComponent implements AfterViewInit {
     @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
 
+    private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private mouseDown = false;
     private selectedTileType: TileType = null;
@@ -20,11 +21,10 @@ export class JerooMatrixComponent implements AfterViewInit {
     constructor(private matrixService: MatrixService, private dialog: MatDialog) { }
 
     ngAfterViewInit() {
-        (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).width =
-            this.matrixService.getTsize() * (this.matrixService.getCols() + 2);
-        (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).height =
-            this.matrixService.getTsize() * (this.matrixService.getRows() + 2);
-        this.context = (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+        this.canvas = this.jerooGameCanvas.nativeElement as HTMLCanvasElement;
+        this.context = this.canvas.getContext('2d');
+        this.canvas.width = this.matrixService.getTsize() * (this.matrixService.getCols() + 2);
+        this.canvas.height = this.matrixService.getTsize() * (this.matrixService.getRows() + 2);
         this.matrixService.render(this.context);
     }
 
@@ -41,16 +41,18 @@ export class JerooMatrixComponent implements AfterViewInit {
             this.matrixService.setCols(+data.xValue);
             this.matrixService.setRows(+data.yValue);
             this.matrixService.resetMap();
-            this.context.clearRect(0, 0,
-                (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).width,
-                (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).height
-            );
-            (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).width =
-                this.matrixService.getTsize() * (this.matrixService.getCols() + 2);
-            (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).height =
-                this.matrixService.getTsize() * (this.matrixService.getRows() + 2);
-            this.matrixService.render(this.context);
+            this.redraw();
         });
+    }
+
+    redraw() {
+        this.context.clearRect(0, 0,
+            this.canvas.width,
+            this.canvas.height
+        );
+        this.canvas.width = this.matrixService.getTsize() * (this.matrixService.getCols() + 2);
+        this.canvas.height = this.matrixService.getTsize() * (this.matrixService.getRows() + 2);
+        this.matrixService.render(this.context);
     }
 
     clearMap() {
@@ -82,7 +84,7 @@ export class JerooMatrixComponent implements AfterViewInit {
 
     canvasMouseDown(event: MouseEvent) {
         this.mouseDown = true;
-        const rect = (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).getBoundingClientRect();
+        const rect = this.canvas.getBoundingClientRect();
         // bitwise or is the same as casting a float to a number
         const pixelX = (event.clientX - rect.left) | 0;
         const pixelY = (event.clientY - rect.top) | 0;
@@ -90,7 +92,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     canvasMouseMove(event: MouseEvent) {
-        const rect = (this.jerooGameCanvas.nativeElement as HTMLCanvasElement).getBoundingClientRect();
+        const rect = this.canvas.getBoundingClientRect();
         // bitwise or is the same as casting a float to a number
         const pixelX = (event.clientX - rect.left) | 0;
         const pixelY = (event.clientY - rect.top) | 0;

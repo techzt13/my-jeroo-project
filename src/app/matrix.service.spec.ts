@@ -7,11 +7,6 @@ describe('MatrixService', () => {
 
     beforeEach(() => TestBed.configureTestingModule({}));
 
-    it('should be created', () => {
-        const service: MatrixService = TestBed.get(MatrixService);
-        expect(service).toBeTruthy();
-    });
-
     it('get and set correctly find entities', () => {
         const service: MatrixService = TestBed.get(MatrixService);
         service.setTile(1, 1, TileType.Water);
@@ -23,5 +18,105 @@ describe('MatrixService', () => {
         service.setTile(1, 1, TileType.Water);
         service.resetMap();
         expect(service.getTile(1, 1)).toBe(TileType.Grass);
+    });
+
+    it('toString correctly converts map to a string', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        service.setTile(5, 5, TileType.Water);
+        service.setTile(1, 2, TileType.Flower);
+        service.setTile(23, 23, TileType.Net);
+
+        const actual = service.toString();
+        const expected =
+            '........................\n' +
+            '........................\n' +
+            '.F......................\n' +
+            '........................\n' +
+            '........................\n' +
+            '.....W..................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '.......................N\n';
+        expect(actual).toBe(expected);
+    });
+
+    it('genMapFromString correctly loads a map from a string', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        const map =
+            'W......................W\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........NNN.............\n' +
+            '........FFF.............\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            '........................\n' +
+            'W......................W\n';
+        service.genMapFromString(map);
+        const lines = map.trim().split('\n');
+        for (let row = 0; row < lines.length; row++) {
+            for (let col = 0; col < lines[0].length; col++) {
+                const actual = service.getTile(col, row);
+                const expected = service.stringToTileType(lines[row].charAt(col));
+                expect(actual).toBe(expected);
+            }
+        }
+    });
+
+    it('genMapFromString correctly adjusts size of map', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        const map =
+            '.....\n' +
+            '.....\n' +
+            '.....\n';
+        service.genMapFromString(map);
+        expect(service.getCols()).toBe(5);
+        expect(service.getRows()).toBe(3);
+    });
+
+    it('genMapFromString throws error on unknown TileType', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        const map =
+            '.XYZW\n' +
+            '...GG\n';
+        expect(() => service.genMapFromString(map)).toThrow(new Error('Invalid TileType in map'));
+    });
+
+    it('genMapFromString throws error on jagged map', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        const map =
+            '.....\n' +
+            '..\n';
+        expect(() => service.genMapFromString(map)).toThrow(new Error('Jagged maps are not allowed'));
     });
 });

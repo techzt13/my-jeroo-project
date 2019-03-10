@@ -71,6 +71,19 @@
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
                     <mat-slider class="menu-button" thumbLabel min="1" max="5" value="1" tickInterval="1"></mat-slider>
+                    <mat-divider [vertical]="true"></mat-divider>
+                    <button mat-icon-button matTooltip="Create new island layout">
+                        <fa-icon icon="eraser"></fa-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Open an island file" (click)="openMapFile()">
+                        <fa-icon icon="folder"></fa-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Save the island to a file" (click)="saveMapFile()">
+                        <fa-icon icon="save"></fa-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Print the island layout">
+                        <fa-icon icon="print"></fa-icon>
+                    </button>
                 </mat-toolbar-row>
             </mat-toolbar>
             <!-- Menu Properties -->
@@ -167,10 +180,9 @@
             <mat-menu #islandfile="matMenu">
                 <ng-template matMenuContent>
                     <button mat-menu-item>New</button>
-                    <button mat-menu-item>Open</button>
+                    <button mat-menu-item (click)="openMapFile()">Open</button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item>Save</button>
-                    <button mat-menu-item>Save As</button>
+                    <button mat-menu-item (click)="saveMapFile()">Save</button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item>Print</button>
                 </ng-template>
@@ -214,9 +226,13 @@
                 </div>
                 <!--Matrix Area-->
                 <div class="col-lg-5">
-                    <app-jeroo-matrix></app-jeroo-matrix>
+                    <app-jeroo-matrix #jerooMatrix></app-jeroo-matrix>
                 </div>
             </div>
         </main>
     </mat-sidenav-content>
 </mat-sidenav-container>
+<!-- map file input -->
+<input #mapFileInput class="invisible" type="file" (change)="mapFileSelected($event.target.files[0])" />
+<!-- file saver input -->
+<a #mapSaver class="invisible"></a>

@@ -8,8 +8,8 @@ import { map } from 'rxjs/operators';
 })
 export class MatrixService {
 
-    private rows = 26;
-    private cols = 26;
+    private rows = 24;
+    private cols = 24;
     private tsize = 28;
     private tiles: TileType[] = [];
     private imageAtlas: HTMLImageElement;
@@ -153,5 +153,86 @@ export class MatrixService {
         const imageObservable = fromEvent(image, 'load');
         image.src = 'assets/images/JerooTilesSpritesheet.png';
         return imageObservable.pipe(map(() => image));
+    }
+
+    /**
+      * Converts the current jeroo map into a string.
+      * @returns The map in string form.
+      */
+    toString() {
+        let mapContents = '';
+        for (let row = 0; row < this.rows; row++) {
+            for (let col = 0; col < this.cols; col++) {
+                const tile = this.tileTypeToString(this.getTile(col, row));
+                mapContents += tile;
+            }
+            mapContents += '\n';
+        }
+        return mapContents;
+    }
+
+    /**
+      * Converts a TileType to a string
+      * @param tileType tileType to convert
+      * @returns string representation of a TileType
+      */
+    tileTypeToString(tileType: TileType) {
+        if (tileType === TileType.Grass) {
+            return '.';
+        } else if (tileType === TileType.Water) {
+            return 'W';
+        } else if (tileType === TileType.Flower) {
+            return 'F';
+        } else if (tileType === TileType.Net) {
+            return 'N';
+        } else {
+            throw new Error('Invalid TileType');
+        }
+    }
+
+    /**
+      * Set the current map to a map string.
+      * @param s String of the map contents.
+      */
+    genMapFromString(s: string) {
+        const lines = s.trim().split('\n');
+        if (lines.length > 0) {
+            const rows = lines.length;
+            const cols = lines[0].length;
+            this.setRows(rows);
+            this.setCols(cols);
+
+            for (let row = 0; row < rows; row++) {
+                if (lines[row].length !== cols) {
+                    throw new Error('Jagged maps are not allowed');
+                }
+                for (let col = 0; col < cols; col++) {
+                    const char = lines[row].charAt(col);
+                    this.setTile(col, row, this.stringToTileType(char));
+                }
+            }
+        } else {
+            this.setRows(0);
+            this.setCols(0);
+        }
+    }
+
+    /**
+      * Convert a character to a TileType.
+      * @param char character to convert.
+      * @returns Converted tile.
+      */
+    stringToTileType(char: string) {
+        if (char === '.') {
+            return TileType.Grass;
+        } else if (char === 'W') {
+            return TileType.Water;
+        } else if (char === 'F') {
+            return TileType.Flower;
+        } else if (char === 'N') {
+            return TileType.Net;
+        } else {
+            throw new Error('Invalid TileType in map');
+        }
     }
 }
