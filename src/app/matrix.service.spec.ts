@@ -106,18 +106,26 @@ describe('MatrixService', () => {
 
     it('genMapFromString throws error on unknown TileType', () => {
         const service: MatrixService = TestBed.get(MatrixService);
+        const oldRows = service.getRows();
+        const oldCols = service.getCols();
         const map =
             '.XYZW\n' +
             '...GG\n';
         expect(() => service.genMapFromString(map)).toThrow(new Error('Invalid TileType in map'));
+        expect(service.getRows()).toBe(oldRows);
+        expect(service.getCols()).toBe(oldCols);
     });
 
     it('genMapFromString throws error on jagged map', () => {
         const service: MatrixService = TestBed.get(MatrixService);
+        const oldRows = service.getRows();
+        const oldCols = service.getCols();
         const map =
             '.....\n' +
             '..\n';
         expect(() => service.genMapFromString(map)).toThrow(new Error('Jagged maps are not allowed'));
+        expect(service.getRows()).toBe(oldRows);
+        expect(service.getCols()).toBe(oldCols);
     });
 
     it('genMapFromString empty string creates empty map', () => {
