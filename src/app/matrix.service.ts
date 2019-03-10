@@ -199,17 +199,27 @@ export class MatrixService {
             const lines = s.trim().split('\n');
             const rows = lines.length;
             const cols = lines[0].length;
+            const oldRows = this.getRows();
+            const oldCols = this.getCols();
             this.setRows(rows);
             this.setCols(cols);
 
-            for (let row = 0; row < rows; row++) {
-                if (lines[row].length !== cols) {
-                    throw new Error('Jagged maps are not allowed');
+            try {
+                for (let row = 0; row < rows; row++) {
+                    if (lines[row].length !== cols) {
+                        throw new Error('Jagged maps are not allowed');
+                    }
+                    for (let col = 0; col < cols; col++) {
+                        const char = lines[row].charAt(col);
+                        this.setTile(col, row, this.stringToTileType(char));
+                    }
                 }
-                for (let col = 0; col < cols; col++) {
-                    const char = lines[row].charAt(col);
-                    this.setTile(col, row, this.stringToTileType(char));
-                }
+            } catch (e) {
+                // reset the rows and cols to their previous values
+                // re-throw the exception
+                this.setRows(oldRows);
+                this.setCols(oldCols);
+                throw e;
             }
         } else {
             this.setRows(0);
