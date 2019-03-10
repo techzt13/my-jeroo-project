@@ -27,6 +27,11 @@ export class DashboardComponent {
 
     constructor(private matrixService: MatrixService) { }
 
+    clearMap() {
+        this.matrixService.resetMap();
+        this.jerooMatrix.redraw();
+    }
+
     openMapFile() {
         (this.mapFileInput.nativeElement as HTMLInputElement).click();
     }

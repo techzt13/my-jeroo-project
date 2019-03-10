@@ -70,9 +70,9 @@
                         <fa-icon icon="step-forward"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <mat-slider class="menu-button" thumbLabel min="1" max="5" value="1" tickInterval="1"></mat-slider>
+                    <mat-slider class="menu-button" thumbLabel min="1" max="6" value="3" tickInterval="1"></mat-slider>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <button mat-icon-button matTooltip="Create new island layout">
+                    <button mat-icon-button matTooltip="Create new island layout" (click)="clearMap()">
                         <fa-icon icon="eraser"></fa-icon>
                     </button>
                     <button mat-icon-button matTooltip="Open an island file" (click)="openMapFile()">
@@ -179,7 +179,7 @@
             </mat-menu>
             <mat-menu #islandfile="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item>New</button>
+                    <button mat-menu-item (click)="clearMap()">New</button>
                     <button mat-menu-item (click)="openMapFile()">Open</button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="saveMapFile()">Save</button>

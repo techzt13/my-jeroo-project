@@ -14,7 +14,7 @@ export class MatrixDialogComponent implements OnInit {
 
     constructor(private fb: FormBuilder,
         private dialogRef: MatDialogRef<MatrixDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) data) {
+        @Inject(MAT_DIALOG_DATA) data: any) {
         this.widthValue = data.xValue;
         this.heightValue = data.yValue;
     }

@@ -21,7 +21,7 @@ export class MatrixService {
     /**
      * Resets the tile map to all grass
      */
-    resetMap() {
+    public resetMap() {
         this.tiles = [];
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
