@@ -233,6 +233,6 @@
     </mat-sidenav-content>
 </mat-sidenav-container>
 <!-- map file input -->
-<input #mapFileInput class="invisible" type="file" (change)="mapFileSelected($event.target.files[0])" />
+<input #mapFileInput class="invisible" type="file" file-accept="jev" (change)="mapFileSelected($event.target.files[0])" />
 <!-- file saver input -->
 <a #mapSaver class="invisible"></a>
