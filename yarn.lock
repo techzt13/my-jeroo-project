@@ -359,6 +359,18 @@
     semver "5.5.1"
     semver-intersect "1.4.0"
 
+"@types/codemirror@^0.0.72":
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-0.0.72.tgz#75e95e3b488717605d2591cd80c4d2ed88ff276e"
+  integrity sha512-dKtEP139Jxdrog/6zW8akX3LdhJ3V8NjYNCpIHdBVVo6ZiYpShPamtQoGpVhzrUzTOu5A6NlozOSiZipCEVCow==
+  dependencies:
+    "@types/tern" "*"
+
+"@types/estree@*":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
+  integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
+
 "@types/jasmine@*":
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.3.5.tgz#3738ffbf34dffae9ecaac4503d7d969744f0e1d7"
@@ -400,6 +412,13 @@
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
+
+"@types/tern@*":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@types/tern/-/tern-0.23.0.tgz#144326f7a53b013a7dcbf770f6026e075febbd01"
+  integrity sha512-klmHtUmX+in4DA8l+Hj/zFO8M3g+otgQ9n7AfiEJ3Er9xjxjEsidKVyifLV4klwVu/X7qh8oIFY4d+GNgZiR7Q==
+  dependencies:
+    "@types/estree" "*"
 
 "@types/webpack-sources@^0.1.5":
   version "0.1.5"
@@ -1602,6 +1621,11 @@ codelyzer@~4.5.0:
     semver-dsl "^1.0.1"
     source-map "^0.5.7"
     sprintf-js "^1.1.1"
+
+codemirror@^5.44.0:
+  version "5.44.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.44.0.tgz#80dc2a231eeb7aab25ec2405cdca37e693ccf9cc"
+  integrity sha512-3l42syTNakCdCQuYeZJXTyxina6Y9i4V0ighSJXNCQtRbaCN76smKKLu1ZHPHQon3rnzC7l4i/0r4gp809K1wg==
 
 collection-visit@^1.0.0:
   version "1.0.0"
