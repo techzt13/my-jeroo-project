@@ -42,4 +42,8 @@ export class TextEditorComponent implements AfterViewInit {
             this.editor.setOption('autoCloseBrackets', '()');
         }
     }
+
+    getText() {
+        return this.editor.getValue();
+    }
 }

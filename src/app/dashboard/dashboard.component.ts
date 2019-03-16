@@ -3,6 +3,7 @@ import { MatrixService } from '../matrix.service';
 import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
+import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
 
 interface Language {
     value: SelectedLanguage;
@@ -19,6 +20,7 @@ export class DashboardComponent {
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
     @ViewChild('mapSaver') mapSaver: ElementRef;
     @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
+    @ViewChild('extensionMethodsTextEditor') extensionMethodsTextEditor: TextEditorComponent;
 
     selectedLanguage = SelectedLanguage.Java;
     languages: Language[] = [
@@ -27,7 +29,33 @@ export class DashboardComponent {
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
-    constructor(private matrixService: MatrixService) { }
+    constructor(private bytecodeService: BytecodeInterpreterService, private matrixService: MatrixService) { }
+
+    runCode() {
+        const jerooCode = this.createJerooCode();
+        console.log(jerooCode);
+        const result = JerooCompiler.compile(jerooCode);
+        const context = this.jerooMatrix.getCanvas().getContext('2d');
+        if (result.successful) {
+            const instructions = result.bytecode;
+            this.bytecodeService.executeInstructions(instructions, this.matrixService, context);
+        }
+    }
+
+    private createJerooCode() {
+        let jerooCode = '';
+        if (this.selectedLanguage === SelectedLanguage.Java) {
+            jerooCode += '@Java\n';
+        } else if (this.selectedLanguage === SelectedLanguage.Vb) {
+            jerooCode += '@VB\n';
+        } else {
+            throw new Error('Unsupported Language');
+        }
+        jerooCode += this.extensionMethodsTextEditor.getText();
+        jerooCode += '\n@@\n';
+        jerooCode += this.mainMethodTextEditor.getText();
+        return jerooCode;
+    }
 
     clearMap() {
         this.matrixService.resetMap();
