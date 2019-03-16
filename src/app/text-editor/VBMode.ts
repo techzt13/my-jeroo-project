@@ -1,0 +1,37 @@
+export const VBMode: any = {
+    start: [
+        {
+            regex: /sub|if|else|while/i,
+            token: 'keyword',
+            indent: true
+        },
+        {
+            regex: /dim/i,
+            token: 'keyword'
+        },
+        {
+            regex: /end (sub|if|else|while)/i,
+            token: 'keyword',
+            dedent: true
+        },
+        {
+            regex: /true|false|as|new|north|south|east|west|ahead|left|right|here/i,
+            token: 'atom'
+        },
+        {
+            regex: /[+-]?[0-9]+/,
+            token: 'number'
+        },
+        {
+            regex: /[-+=<>&|!]+/,
+            token: 'operator'
+        },
+        {
+            regex: /'.*/,
+            token: 'comment'
+        },
+    ],
+    meta: {
+        lineComment: '\''
+    }
+};

@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
+import { TextEditorComponent } from '../text-editor/text-editor.component';
 
 interface Language {
     value: SelectedLanguage;
@@ -17,6 +18,7 @@ export class DashboardComponent {
     @ViewChild('mapFileInput') mapFileInput: ElementRef;
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
     @ViewChild('mapSaver') mapSaver: ElementRef;
+    @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
 
     selectedLanguage = SelectedLanguage.Java;
     languages: Language[] = [
@@ -85,8 +87,8 @@ export class DashboardComponent {
         printWindow.close();
     }
 
-    setSelectedLanguage(selectedLanguage: SelectedLanguage) {
-        this.selectedLanguage = selectedLanguage;
+    onSelectedLanguageChange() {
+        this.mainMethodTextEditor.setMode(this.selectedLanguage);
     }
 
     getHelpUrl() {
