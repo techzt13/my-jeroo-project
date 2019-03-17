@@ -53,10 +53,10 @@
                     <button mat-icon-button matTooltip="Paste">
                         <fa-icon icon="paste"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Undo">
+                    <button mat-icon-button matTooltip="Undo" (click)="onUndoClick()">
                         <fa-icon icon="undo"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Redo">
+                    <button mat-icon-button matTooltip="Redo" (click)="onRedoClick()">
                         <fa-icon icon="redo"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
@@ -205,7 +205,7 @@
             <!--Text tabs Area-->
             <div class="row">
                 <div class="col-lg-7">
-                    <mat-tab-group color="accent">
+                    <mat-tab-group color="accent" (selectedIndexChange)="onEditorTabIndexChange($event)">
                         <mat-tab label="Main Method">
                           <app-text-editor #mainMethodTextEditor></app-text-editor>
                         </mat-tab>

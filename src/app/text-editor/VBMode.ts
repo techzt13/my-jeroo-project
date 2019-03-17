@@ -1,7 +1,7 @@
 export const VBMode: any = {
     start: [
         {
-            regex: /sub|if|else|while/i,
+            regex: /sub|if|elseif|else|while/i,
             token: 'keyword',
             indent: true
         },
@@ -10,7 +10,7 @@ export const VBMode: any = {
             token: 'keyword'
         },
         {
-            regex: /end (sub|if|else|while)/i,
+            regex: /end (sub|if|elseif|else|while)/i,
             token: 'keyword',
             dedent: true
         },
@@ -32,6 +32,7 @@ export const VBMode: any = {
         },
     ],
     meta: {
-        lineComment: '\''
+        lineComment: '\'',
+        electricInput: /end.*/i
     }
 };

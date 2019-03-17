@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
@@ -15,7 +15,7 @@ interface Language {
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit {
     @ViewChild('mapFileInput') mapFileInput: ElementRef;
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
     @ViewChild('mapSaver') mapSaver: ElementRef;
@@ -29,7 +29,13 @@ export class DashboardComponent {
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
+    selectedEditor: TextEditorComponent = null;
+
     constructor(private bytecodeService: BytecodeInterpreterService, private matrixService: MatrixService) { }
+
+    ngAfterViewInit() {
+        this.selectedEditor = this.mainMethodTextEditor;
+    }
 
     runCode() {
         const jerooCode = this.createJerooCode();
@@ -137,5 +143,21 @@ export class DashboardComponent {
         } else {
             throw new Error('Invalid Language');
         }
+    }
+
+    onEditorTabIndexChange(index: number) {
+        if (index === 0) {
+            this.selectedEditor = this.mainMethodTextEditor;
+        } else if (index === 1) {
+            this.selectedEditor = this.extensionMethodsTextEditor;
+        }
+    }
+
+    onUndoClick() {
+        this.selectedEditor.undo();
+    }
+
+    onRedoClick() {
+        this.selectedEditor.redo();
     }
 }
