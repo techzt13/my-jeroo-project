@@ -44,15 +44,6 @@
                         <fa-icon icon="save"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <button mat-icon-button matTooltip="Cut">
-                        <fa-icon icon="cut"></fa-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Copy" (click)="onCopyClick()">
-                        <fa-icon icon="copy"></fa-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Paste" (click)="onPasteClick()">
-                        <fa-icon icon="paste"></fa-icon>
-                    </button>
                     <button mat-icon-button matTooltip="Undo" (click)="onUndoClick()">
                         <fa-icon icon="undo"></fa-icon>
                     </button>
@@ -107,21 +98,11 @@
             </mat-menu>
             <mat-menu #edit="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item>
-                      <fa-icon icon="cut"></fa-icon><span class="col-1">Cut</span><span class="shortcut-tip">Ctrl+x</span>
-                    </button>
-                    <button mat-menu-item (click)="onCopyClick()">
-                      <fa-icon icon="copy"></fa-icon><span class="col-1">Copy</span><span class="shortcut-tip">Ctrl+c</span>
-                    </button>
-                    <button mat-menu-item (click)="onPasteClick()">
-                      <fa-icon icon="paste"></fa-icon><span class="col-1">Paste</span><span class="shortcut-tip">Ctrl+v</span>
-                    </button>
-                    <mat-divider></mat-divider>
                     <button mat-menu-item (click)="onUndoClick()">
-                      <fa-icon icon="undo"></fa-icon><span class="col-1">Undo Last Edit</span><span class="shortcut-tip">Ctrl+z</span>
+                        <fa-icon icon="undo"></fa-icon><span class="col-1">Undo Last Edit</span><span class="shortcut-tip">Ctrl+z</span>
                     </button>
                     <button mat-menu-item (click)="onRedoClick()">
-                      <fa-icon icon="redo"></fa-icon><span class="col-1">Redo Last Undo</span><span class="shortcut-tip">Ctrl+Shift+Z</span>
+                        <fa-icon icon="redo"></fa-icon><span class="col-1">Redo Last Undo</span><span class="shortcut-tip">Ctrl+Shift+Z</span>
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="onToggleCommentLines()">Comment Lines<span class="shortcut-tip">Ctrl+/</span></button>

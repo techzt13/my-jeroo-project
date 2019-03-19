@@ -50,10 +50,6 @@ export class TextEditorComponent implements AfterViewInit {
         return this.editor.getValue();
     }
 
-    focus() {
-        this.editor.focus();
-    }
-
     undo() {
         this.editor.execCommand('undo');
     }
@@ -76,13 +72,5 @@ export class TextEditorComponent implements AfterViewInit {
 
     formatSelection() {
         this.editor.execCommand('indentAuto');
-    }
-
-    copySelection() {
-        // TODO
-    }
-
-    pasteSelection() {
-        // TODO
     }
 }

@@ -123,6 +123,7 @@ export class DashboardComponent implements AfterViewInit {
 
     onSelectedLanguageChange() {
         this.mainMethodTextEditor.setMode(this.selectedLanguage);
+        this.extensionMethodsTextEditor.setMode(this.selectedLanguage);
     }
 
     getHelpUrl() {
@@ -151,8 +152,6 @@ export class DashboardComponent implements AfterViewInit {
         } else if (index === 1) {
             this.selectedEditor = this.extensionMethodsTextEditor;
         }
-        console.log('calling focus');
-        this.selectedEditor.focus();
     }
 
     onUndoClick() {
@@ -177,13 +176,5 @@ export class DashboardComponent implements AfterViewInit {
 
     onFormatSelectionClick() {
         this.selectedEditor.formatSelection();
-    }
-
-    onCopyClick() {
-        this.selectedEditor.copySelection();
-    }
-
-    onPasteClick() {
-        this.selectedEditor.pasteSelection();
     }
 }
