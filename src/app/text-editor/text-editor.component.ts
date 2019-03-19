@@ -14,7 +14,6 @@ export class TextEditorComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         const editorTextArea = this.editorTextArea.nativeElement as HTMLTextAreaElement;
-        // for some reason defineSimpleMode isn't part of the CodeMirror type
         this.editor = this.codemirrorService.getCodemirror().fromTextArea(editorTextArea, {
             mode: 'jeroo-java',
             theme: 'default',
