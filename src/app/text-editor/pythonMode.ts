@@ -9,12 +9,16 @@ export const pythonMode: any = {
             token: 'atom'
         },
         {
-            regex: /[+-]?[0-9]+/,
-            token: 'number'
-        },
-        {
             regex: /and|or|not|[+-]/,
             token: 'operator'
+        },
+        {
+            regex: /[a-zA-Z][a-zA-Z0-9]*/,
+            token: 'variable'
+        },
+        {
+            regex: /[+-]?[0-9]+/,
+            token: 'number'
         },
         {
             regex: /:/,

@@ -1,13 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import 'codemirror/lib/codemirror';
-import 'codemirror/addon/mode/simple';
-import 'codemirror/addon/edit/matchbrackets';
-import 'codemirror/addon/edit/closebrackets';
-import * as CodeMirror from 'codemirror';
-import { javaMode } from './javaMode';
 import { SelectedLanguage } from '../dashboard/SelectedLanguage';
-import { VBMode } from './VBMode';
-import { pythonMode } from './pythonMode';
+import { CodemirrorService } from '../codemirror.service';
 
 @Component({
     selector: 'app-text-editor',
@@ -17,23 +10,28 @@ export class TextEditorComponent implements AfterViewInit {
     @ViewChild('editorTextarea') editorTextArea: ElementRef;
     private editor: CodeMirror.Editor = null;
 
-    constructor() { }
+    constructor(private codemirrorService: CodemirrorService) { }
 
     ngAfterViewInit() {
         const editorTextArea = this.editorTextArea.nativeElement as HTMLTextAreaElement;
         // for some reason defineSimpleMode isn't part of the CodeMirror type
-        (CodeMirror as any).defineSimpleMode('jeroo-java', javaMode);
-        (CodeMirror as any).defineSimpleMode('jeroo-vb', VBMode);
-        (CodeMirror as any).defineSimpleMode('jeroo-python', pythonMode);
-        this.editor = CodeMirror.fromTextArea(editorTextArea, {
+        this.editor = this.codemirrorService.getCodemirror().fromTextArea(editorTextArea, {
             mode: 'jeroo-java',
             theme: 'default',
-            lineNumbers: true
+            lineNumbers: true,
+            extraKeys: {
+                'Tab': 'defaultTab',
+                'Shift-Tab': 'indentLess',
+                'Shift-Ctrl-F': 'indentAuto',
+                'Ctrl-/': 'toggleComment',
+                'Ctrl-z': 'undo',
+                'Shift-Ctrl-Z': 'redo'
+            }
         });
         this.editor.setOption('matchBrackets', true);
         this.editor.setOption('autoCloseBrackets', '{}()');
-        this.editor.refresh();
         this.editor.setSize(null, 500);
+        this.editor.refresh();
     }
 
     setMode(language: SelectedLanguage) {
@@ -54,17 +52,38 @@ export class TextEditorComponent implements AfterViewInit {
     }
 
     focus() {
-        console.log('focusing the editor');
         this.editor.focus();
-        (this.editorTextArea.nativeElement as HTMLTextAreaElement).select();
-        (this.editorTextArea.nativeElement as HTMLTextAreaElement).click();
     }
 
     undo() {
-        this.editor.getDoc().undo();
+        this.editor.execCommand('undo');
     }
 
     redo() {
-        this.editor.getDoc().redo();
+        this.editor.execCommand('redo');
+    }
+
+    toggleComment() {
+        this.editor.execCommand('toggleComment');
+    }
+
+    indentSelection() {
+        this.editor.execCommand('defaultTab');
+    }
+
+    unindentSelection() {
+        this.editor.execCommand('indentLess');
+    }
+
+    formatSelection() {
+        this.editor.execCommand('indentAuto');
+    }
+
+    copySelection() {
+        // TODO
+    }
+
+    pasteSelection() {
+        // TODO
     }
 }

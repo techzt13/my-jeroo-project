@@ -151,6 +151,8 @@ export class DashboardComponent implements AfterViewInit {
         } else if (index === 1) {
             this.selectedEditor = this.extensionMethodsTextEditor;
         }
+        console.log('calling focus');
+        this.selectedEditor.focus();
     }
 
     onUndoClick() {
@@ -159,5 +161,29 @@ export class DashboardComponent implements AfterViewInit {
 
     onRedoClick() {
         this.selectedEditor.redo();
+    }
+
+    onToggleCommentLines() {
+        this.selectedEditor.toggleComment();
+    }
+
+    onIndentSelectionClick() {
+        this.selectedEditor.indentSelection();
+    }
+
+    onUnindentSelectionClick() {
+        this.selectedEditor.unindentSelection();
+    }
+
+    onFormatSelectionClick() {
+        this.selectedEditor.formatSelection();
+    }
+
+    onCopyClick() {
+        this.selectedEditor.copySelection();
+    }
+
+    onPasteClick() {
+        this.selectedEditor.pasteSelection();
     }
 }

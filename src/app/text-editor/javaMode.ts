@@ -9,6 +9,10 @@ export const javaMode: any = {
             token: 'atom'
         },
         {
+            regex: /[a-zA-Z][a-zA-Z0-9]*/,
+            token: 'variable'
+        },
+        {
             regex: /[+-]?[0-9]+/,
             token: 'number'
         },
