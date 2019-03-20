@@ -28,13 +28,25 @@ export class DashboardComponent implements AfterViewInit {
         { viewValue: 'VB.NET', value: SelectedLanguage.Vb },
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
-
+    speeds = [475, 350, 225, 125, 25, 2];
+    speedIndex = 3;
     selectedEditor: TextEditorComponent = null;
 
     constructor(private bytecodeService: BytecodeInterpreterService, private matrixService: MatrixService) { }
 
     ngAfterViewInit() {
         this.selectedEditor = this.mainMethodTextEditor;
+    }
+
+    onRunStepwiseClick() {
+        const jerooCode = this.createJerooCode();
+        const result = JerooCompiler.compile(jerooCode);
+        const context = this.jerooMatrix.getCanvas().getContext('2d');
+        if (result.successful) {
+            const instructions = result.bytecode;
+            const speed = this.speeds[this.speedIndex - 1];
+            this.bytecodeService.executeInstructionsWithTimer(instructions, this.matrixService, context, speed);
+        }
     }
 
     runCode() {
@@ -176,5 +188,9 @@ export class DashboardComponent implements AfterViewInit {
 
     onFormatSelectionClick() {
         this.selectedEditor.formatSelection();
+    }
+
+    setSpeedIndex(speedIndex: number) {
+        this.speedIndex = speedIndex;
     }
 }

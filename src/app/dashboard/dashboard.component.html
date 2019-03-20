@@ -61,7 +61,7 @@
                         <fa-icon icon="step-forward"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <mat-slider class="menu-button" thumbLabel min="1" max="6" value="3" tickInterval="1"></mat-slider>
+                    <mat-slider class="menu-button" [(ngModel)]="speedIndex" min="1" max="6" value="3" tickInterval="1"></mat-slider>
                     <mat-divider [vertical]="true"></mat-divider>
                     <button mat-icon-button matTooltip="Create new island layout" (click)="clearMap()">
                         <fa-icon icon="eraser"></fa-icon>
@@ -119,7 +119,7 @@
                     <button mat-menu-item>
                         <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset</span>
                     </button>
-                    <button mat-menu-item>
+                    <button mat-menu-item (click)="onRunStepwiseClick()">
                         <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise</span>
                     </button>
                     <button mat-menu-item (click)="runCode()">
@@ -135,24 +135,24 @@
             </mat-menu>
             <mat-menu #speed="matMenu">
                 <ng-template matMenuContent>
-                    <mat-radio-group>
+                    <mat-radio-group [(ngModel)]="speedIndex">
                         <div mat-menu-item>
-                            <mat-radio-button value="1">1 - slow</mat-radio-button>
+                            <mat-radio-button [value]="1">1 - slow</mat-radio-button>
                         </div>
                         <div mat-menu-item>
-                            <mat-radio-button value="2">2</mat-radio-button>
+                            <mat-radio-button [value]="2">2</mat-radio-button>
                         </div>
                         <div mat-menu-item>
-                            <mat-radio-button value="3">3 - medium</mat-radio-button>
+                            <mat-radio-button [value]="3">3 - medium</mat-radio-button>
                         </div>
                         <div mat-menu-item>
-                            <mat-radio-button value="4">4</mat-radio-button>
+                            <mat-radio-button [value]="4">4</mat-radio-button>
                         </div>
                         <div mat-menu-item>
-                            <mat-radio-button value="5">5 - fast</mat-radio-button>
+                            <mat-radio-button [value]="5">5 - fast</mat-radio-button>
                         </div>
                         <div mat-menu-item>
-                            <mat-radio-button value="6">6 - max</mat-radio-button>
+                            <mat-radio-button [value]="6">6 - max</mat-radio-button>
                         </div>
                     </mat-radio-group>
                 </ng-template>

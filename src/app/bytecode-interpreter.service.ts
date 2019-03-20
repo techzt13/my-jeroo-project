@@ -42,6 +42,33 @@ export class BytecodeInterpreterService {
         }
     }
 
+    executeInstructionsWithTimer(
+        instructions: Array<Instruction>,
+        matrixService: MatrixService,
+        canvas: CanvasRenderingContext2D,
+        timer: number) {
+        this.pc = 0;
+        this.jerooReg = 0;
+        this.jerooArray = [];
+        this.cmpStack = [];
+        this.pcStack = [];
+        matrixService.resetJeroos();
+        matrixService.render(canvas);
+
+        const executeInstruction = () => {
+            const instruction = this.fetchInstruction(instructions);
+            this.interprateBytecode(instruction, matrixService);
+            matrixService.render(canvas);
+            executeInstructionsLoop();
+        };
+
+        const executeInstructionsLoop = () => {
+            setTimeout(executeInstruction, timer);
+        };
+
+        executeInstructionsLoop();
+    }
+
     /**
        * Fetch the next instruction from a sequence of instructions.
        * @param instructions The sequence of instructions.
