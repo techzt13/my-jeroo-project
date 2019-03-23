@@ -6,13 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./display-error-message.component.scss']
 })
 export class DisplayErrorMessageComponent implements OnInit {
-  message: string;
+  errorMessage: string;
   constructor() { }
   ngOnInit() {
-    this.message = 'TESTING Error message';
+    this.errorMessage = 'Error messages will show up here.';
   }
-  reportMessage(errorStr: string){
-    this.message = errorStr;
-  }
-  
 }
