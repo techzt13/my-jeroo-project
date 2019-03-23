@@ -122,20 +122,20 @@
             </mat-menu>
             <mat-menu #run="matMenu">
                 <ng-template matMenuContent>
-                  <button mat-menu-item [disabled]="resetBtnDisabled()" (click)="onResetClick()">
-                    <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset<span class="shortcut-tip">F2</span></span>
+                    <button mat-menu-item [disabled]="resetBtnDisabled()" (click)="onResetClick()">
+                        <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset<span class="shortcut-tip">F2</span></span>
                     </button>
                     <button mat-menu-item [disabled]="runBtnDisabled()" (click)="onRunStepwiseClick()">
-                      <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise<span class="shortcut-tip">F3</span></span>
+                        <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise<span class="shortcut-tip">F3</span></span>
                     </button>
                     <button mat-menu-item [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
-                      <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously<span class="shortcut-tip">F4</span></span>
+                        <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously<span class="shortcut-tip">F4</span></span>
                     </button>
                     <button mat-menu-item [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
-                      <fa-icon icon="pause"></fa-icon><span class="col-1">Pause<span class="shortcut-tip">F5</span></span>
+                        <fa-icon icon="pause"></fa-icon><span class="col-1">Pause<span class="shortcut-tip">F5</span></span>
                     </button>
                     <button mat-menu-item [disabled]="stopBtnDisabled()" (click)="onStopClick()">
-                      <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run<span class="shortcut-tip">F6</span></span>
+                        <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run<span class="shortcut-tip">F6</span></span>
                     </button>
                 </ng-template>
             </mat-menu>
@@ -150,12 +150,20 @@
             </mat-menu>
             <mat-menu #islandfile="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item (click)="clearMap()">New</button>
-                    <button mat-menu-item (click)="openMapFile()">Open</button>
+                    <button mat-menu-item (click)="clearMap()">
+                        <fa-icon icon="eraser"></fa-icon><span class="col-1">New<span class="shortcut-tip">Ctrl+Shift+N</span></span>
+                    </button>
+                    <button mat-menu-item (click)="openMapFile()">
+                        <fa-icon icon="folder"></fa-icon><span class="col-1">Open<span class="shortcut-tip">Ctrl+Shift+O</span></span>
+                    </button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="saveMapFile()">Save</button>
+                    <button mat-menu-item (click)="saveMapFile()">
+                        <fa-icon icon="save"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
+                    </button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="printMap()">Print</button>
+                    <button mat-menu-item (click)="printMap()">
+                        <fa-icon icon="print"></fa-icon><span class="col-1">Print<span class="shortcut-tip">Ctrl+Shift+P</span></span>
+                    </button>
                 </ng-template>
             </mat-menu>
             <mat-menu #islandedit="matMenu">

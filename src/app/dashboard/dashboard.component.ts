@@ -76,6 +76,22 @@ export class DashboardComponent implements AfterViewInit {
             this.onStopClick();
             return false;
         }));
+        this.hotkeysService.add(new Hotkey('ctrl+shift+n', (_event: KeyboardEvent): boolean => {
+            this.clearMap();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('ctrl+shift+o', (_event: KeyboardEvent): boolean => {
+            this.openMapFile();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('ctrl+shift+s', (_event: KeyboardEvent): boolean => {
+            this.saveMapFile();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('ctrl+shift+p', (_event: KeyboardEvent): boolean => {
+            this.printMap();
+            return false;
+        }));
     }
 
     ngAfterViewInit() {
