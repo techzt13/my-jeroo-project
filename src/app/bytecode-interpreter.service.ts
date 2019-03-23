@@ -15,11 +15,15 @@ export class RuntimeError extends Error {
     providedIn: 'root'
 })
 export class BytecodeInterpreterService {
-    pc = 0;
-    jerooReg = 0;
-    jerooArray: Array<Jeroo> = [];
-    cmpStack: Array<boolean> = [];
-    pcStack: Array<number> = [];
+    private pc = 0;
+    private jerooReg = 0;
+    private instructions: Array<Instruction>;
+    private jerooArray: Array<Jeroo> = [];
+    private cmpStack: Array<boolean> = [];
+    private pcStack: Array<number> = [];
+    private instructionSpeed = 0;
+    private paused = false;
+    private stopped = false;
 
     /**
        * Execute a given sequence of instructions and update the matrix board to reflect the game.
@@ -27,46 +31,84 @@ export class BytecodeInterpreterService {
        * @param matrixService Matrix board.
        * @param canvas Rendering canvas.
        */
-    executeInstructions(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
-        this.pc = 0;
-        this.jerooReg = 0;
-        this.jerooArray = [];
-        this.cmpStack = [];
-        this.pcStack = [];
-        matrixService.resetJeroos();
-        matrixService.render(canvas);
-        while (this.pc < instructions.length) {
-            const instruction = this.fetchInstruction(instructions);
-            this.interprateBytecode(instruction, matrixService);
-            matrixService.render(canvas);
-        }
+    executeInstructionsContinous(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+        this.reset(matrixService, canvas);
+        this.instructions = instructions;
+        this.resumeExecutionContinuous(matrixService, canvas);
     }
 
-    executeInstructionsWithTimer(
+    executeInstructionsStepwise(
         instructions: Array<Instruction>,
         matrixService: MatrixService,
         canvas: CanvasRenderingContext2D,
-        timer: number) {
+        postInstructionCallback: () => void
+    ) {
+        this.reset(matrixService, canvas);
+        this.instructions = instructions;
+        this.resumeExecutionStepwise(matrixService, canvas, postInstructionCallback);
+    }
+
+    resumeExecutionContinuous(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+        this.paused = false;
+        let executeInstructionsLoop: () => void = null;
+        const executeInstruction = () => {
+            if (this.validInstruction()) {
+                const instruction = this.fetchInstruction(this.instructions);
+                this.interprateBytecode(instruction, matrixService);
+                matrixService.render(canvas);
+                executeInstructionsLoop();
+            }
+        };
+
+        executeInstructionsLoop = () => {
+            setTimeout(executeInstruction, this.instructionSpeed);
+        };
+
+        executeInstructionsLoop();
+    }
+
+    resumeExecutionStepwise(matrixService: MatrixService, canvas: CanvasRenderingContext2D, postInstructionCallback: () => void) {
+        this.paused = false;
+        const executeInstruction = () => {
+            if (this.validInstruction()) {
+                const instruction = this.fetchInstruction(this.instructions);
+                this.interprateBytecode(instruction, matrixService);
+                matrixService.render(canvas);
+                this.pauseExecution();
+                postInstructionCallback();
+            }
+        };
+
+        setTimeout(executeInstruction, this.instructionSpeed);
+    }
+
+    private validInstruction() {
+        return this.pc < this.instructions.length && !this.paused && !this.stopped;
+    }
+
+    pauseExecution() {
+        this.paused = true;
+    }
+
+    stopExecution() {
+        this.instructions = [];
+        this.stopped = true;
+    }
+
+    reset(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
         this.pc = 0;
         this.jerooReg = 0;
         this.jerooArray = [];
         this.cmpStack = [];
         this.pcStack = [];
+        this.paused = false;
+        this.stopped = false;
         matrixService.resetJeroos();
         matrixService.render(canvas);
+    }
 
-        const executeInstruction = () => {
-            const instruction = this.fetchInstruction(instructions);
-            this.interprateBytecode(instruction, matrixService);
-            matrixService.render(canvas);
-            executeInstructionsLoop();
-        };
-
-        const executeInstructionsLoop = () => {
-            setTimeout(executeInstruction, timer);
-        };
-
-        executeInstructionsLoop();
+    setInstructionSpeed(instructionSpeed: number) {
+        this.instructionSpeed = instructionSpeed;
     }
 
     /**

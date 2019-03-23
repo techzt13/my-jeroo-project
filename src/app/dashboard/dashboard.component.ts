@@ -10,6 +10,11 @@ interface Language {
     viewValue: string;
 }
 
+interface Speed {
+    name: string;
+    value: number;
+}
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -28,35 +33,86 @@ export class DashboardComponent implements AfterViewInit {
         { viewValue: 'VB.NET', value: SelectedLanguage.Vb },
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
-    speeds = [475, 350, 225, 125, 25, 2];
+    private speeds = [475, 350, 225, 125, 25, 2];
     speedIndex = 3;
+    speedsRadio: Speed[] = [
+        { name: '1 - Slow', value: 1 },
+        { name: '2', value: 2 },
+        { name: '3 - Medium', value: 3 },
+        { name: '4', value: 4 },
+        { name: '5 - Fast', value: 5 },
+        { name: '6 - Max', value: 6 }
+    ];
+    selectedSpeedRadio = this.speedsRadio[2].value;
     selectedEditor: TextEditorComponent = null;
+    reset = true;
+    executing = false;
+    paused = false;
+    stopped = false;
 
     constructor(private bytecodeService: BytecodeInterpreterService, private matrixService: MatrixService) { }
 
     ngAfterViewInit() {
         this.selectedEditor = this.mainMethodTextEditor;
+        const instructionSpeed = this.speeds[this.speedIndex - 1];
+        this.bytecodeService.setInstructionSpeed(instructionSpeed);
+    }
+
+    onUndoClick() {
+        this.selectedEditor.undo();
+    }
+
+    onRedoClick() {
+        this.selectedEditor.redo();
+    }
+
+    onToggleCommentLines() {
+        this.selectedEditor.toggleComment();
+    }
+
+    onIndentSelectionClick() {
+        this.selectedEditor.indentSelection();
+    }
+
+    onUnindentSelectionClick() {
+        this.selectedEditor.unindentSelection();
+    }
+
+    onFormatSelectionClick() {
+        this.selectedEditor.formatSelection();
     }
 
     onRunStepwiseClick() {
-        const jerooCode = this.createJerooCode();
-        const result = JerooCompiler.compile(jerooCode);
-        const context = this.jerooMatrix.getCanvas().getContext('2d');
-        if (result.successful) {
-            const instructions = result.bytecode;
-            const speed = this.speeds[this.speedIndex - 1];
-            this.bytecodeService.executeInstructionsWithTimer(instructions, this.matrixService, context, speed);
+        if (!this.executing) {
+            const context = this.jerooMatrix.getContext();
+            if (this.reset) {
+                const jerooCode = this.createJerooCode();
+                const result = JerooCompiler.compile(jerooCode);
+                if (result.successful) {
+                    const instructions = result.bytecode;
+                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context, () => this.pause());
+                }
+            } else {
+                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context, () => this.pause());
+            }
+            this.execute();
         }
     }
 
-    runCode() {
-        const jerooCode = this.createJerooCode();
-        console.log(jerooCode);
-        const result = JerooCompiler.compile(jerooCode);
-        const context = this.jerooMatrix.getCanvas().getContext('2d');
-        if (result.successful) {
-            const instructions = result.bytecode;
-            this.bytecodeService.executeInstructions(instructions, this.matrixService, context);
+    onRunContiniousClick() {
+        if (!this.executing) {
+            const context = this.jerooMatrix.getContext();
+            if (this.reset) {
+                const jerooCode = this.createJerooCode();
+                const result = JerooCompiler.compile(jerooCode);
+                if (result.successful) {
+                    const instructions = result.bytecode;
+                    this.bytecodeService.executeInstructionsContinous(instructions, this.matrixService, context);
+                }
+            } else {
+                this.bytecodeService.resumeExecutionContinuous(this.matrixService, context);
+            }
+            this.execute();
         }
     }
 
@@ -73,6 +129,60 @@ export class DashboardComponent implements AfterViewInit {
         jerooCode += '\n@@\n';
         jerooCode += this.mainMethodTextEditor.getText();
         return jerooCode;
+    }
+
+    onResetClick() {
+        this.resetState();
+        const context = this.jerooMatrix.getCanvas().getContext('2d');
+        this.bytecodeService.reset(this.matrixService, context);
+    }
+
+    onPauseClick() {
+        this.pause();
+        this.bytecodeService.pauseExecution();
+    }
+
+    onStopClick() {
+        this.stop();
+        this.bytecodeService.stopExecution();
+    }
+
+    private stop() {
+        this.stopped = true;
+        this.executing = false;
+        this.reset = false;
+        this.paused = false;
+    }
+
+    private execute() {
+        this.executing = true;
+        this.reset = false;
+        this.paused = false;
+        this.stopped = false;
+    }
+
+    private resetState() {
+        this.reset = true;
+        this.executing = false;
+        this.paused = false;
+        this.stopped = false;
+    }
+
+    private pause() {
+        this.paused = true;
+        this.executing = false;
+        this.stopped = false;
+        this.reset = false;
+    }
+
+    onSpeedRadioClick(speedValue: number) {
+        this.speedIndex = speedValue;
+        this.onSpeedIndexChange();
+    }
+
+    onSpeedIndexChange() {
+        const instructionSpeed = this.speeds[this.speedIndex - 1];
+        this.bytecodeService.setInstructionSpeed(instructionSpeed);
     }
 
     clearMap() {
@@ -164,33 +274,5 @@ export class DashboardComponent implements AfterViewInit {
         } else if (index === 1) {
             this.selectedEditor = this.extensionMethodsTextEditor;
         }
-    }
-
-    onUndoClick() {
-        this.selectedEditor.undo();
-    }
-
-    onRedoClick() {
-        this.selectedEditor.redo();
-    }
-
-    onToggleCommentLines() {
-        this.selectedEditor.toggleComment();
-    }
-
-    onIndentSelectionClick() {
-        this.selectedEditor.indentSelection();
-    }
-
-    onUnindentSelectionClick() {
-        this.selectedEditor.unindentSelection();
-    }
-
-    onFormatSelectionClick() {
-        this.selectedEditor.formatSelection();
-    }
-
-    setSpeedIndex(speedIndex: number) {
-        this.speedIndex = speedIndex;
     }
 }

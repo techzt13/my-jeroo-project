@@ -64,6 +64,10 @@ export class JerooMatrixComponent implements AfterViewInit {
         return this.canvas;
     }
 
+    getContext() {
+        return this.context;
+    }
+
     selectedTileTypeChange(tileType: string) {
         this.selectedTileType = this.tileTypeToString(tileType);
     }

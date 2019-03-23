@@ -51,17 +51,23 @@
                         <fa-icon icon="redo"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <button mat-icon-button matTooltip="Step Backwards">
+                    <button mat-icon-button matTooltip="Reset" [disabled]="!paused && !stopped && !reset && !stopped" (click)="onResetClick()">
                         <fa-icon icon="step-backward"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Play">
+                    <button mat-icon-button matTooltip="Run" [disabled]="!paused && !reset" (click)="onRunStepwiseClick()">
                         <fa-icon icon="play"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Step Forwards">
+                    <button mat-icon-button matTooltip="Run Continiously" [disabled]="!paused && !reset" (click)="onRunContiniousClick()">
                         <fa-icon icon="step-forward"></fa-icon>
                     </button>
+                    <button mat-icon-button matTooltip="Pause" [disabled]="!executing" (click)="onPauseClick()">
+                        <fa-icon icon="pause"></fa-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Stop" [disabled]="!executing && !paused" (click)="onStopClick()">
+                        <fa-icon icon="stop"></fa-icon>
+                    </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <mat-slider class="menu-button" [(ngModel)]="speedIndex" min="1" max="6" value="3" tickInterval="1"></mat-slider>
+                    <mat-slider class="menu-button" [(ngModel)]="speedIndex" (change)="onSpeedIndexChange()" min="1" max="6" tickInterval="1" thumbLabel></mat-slider>
                     <mat-divider [vertical]="true"></mat-divider>
                     <button mat-icon-button matTooltip="Create new island layout" (click)="clearMap()">
                         <fa-icon icon="eraser"></fa-icon>
@@ -116,19 +122,19 @@
             </mat-menu>
             <mat-menu #run="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item>
+                  <button mat-menu-item [disabled]="!paused && !stopped && !reset && !stopped" (click)="onResetClick()">
                         <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset</span>
                     </button>
-                    <button mat-menu-item (click)="onRunStepwiseClick()">
+                    <button mat-menu-item [disabled]="!paused && !reset" (click)="onRunStepwiseClick()">
                         <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise</span>
                     </button>
-                    <button mat-menu-item (click)="runCode()">
+                    <button mat-menu-item [disabled]="!paused && !reset" (click)="onRunContiniousClick()">
                         <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously</span>
                     </button>
-                    <button mat-menu-item>
+                    <button mat-menu-item [disabled]="!executing" (click)="onPauseClick()">
                         <fa-icon icon="pause"></fa-icon><span class="col-1">Pause</span>
                     </button>
-                    <button mat-menu-item>
+                    <button mat-menu-item [disabled]="!executing && !paused" (click)="onStopClick()">
                         <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run</span>
                     </button>
                 </ng-template>
@@ -136,23 +142,8 @@
             <mat-menu #speed="matMenu">
                 <ng-template matMenuContent>
                     <mat-radio-group [(ngModel)]="speedIndex">
-                        <div mat-menu-item>
-                            <mat-radio-button [value]="1">1 - slow</mat-radio-button>
-                        </div>
-                        <div mat-menu-item>
-                            <mat-radio-button [value]="2">2</mat-radio-button>
-                        </div>
-                        <div mat-menu-item>
-                            <mat-radio-button [value]="3">3 - medium</mat-radio-button>
-                        </div>
-                        <div mat-menu-item>
-                            <mat-radio-button [value]="4">4</mat-radio-button>
-                        </div>
-                        <div mat-menu-item>
-                            <mat-radio-button [value]="5">5 - fast</mat-radio-button>
-                        </div>
-                        <div mat-menu-item>
-                            <mat-radio-button [value]="6">6 - max</mat-radio-button>
+                        <div mat-menu-item *ngFor="let speed of speedsRadio" (click)="onSpeedRadioClick(speed.value)">
+                            <mat-radio-button class="speed-radio-btn" [value]="speed.value">{{ speed.name }}</mat-radio-button>
                         </div>
                     </mat-radio-group>
                 </ng-template>
@@ -169,10 +160,6 @@
             </mat-menu>
             <mat-menu #islandedit="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item>Plant Flowers</button>
-                    <button mat-menu-item>Set Nets</button>
-                    <button mat-menu-item>Add Water</button>
-                    <mat-divider></mat-divider>
                     <button mat-menu-item>Clear Island</button>
                 </ng-template>
             </mat-menu>
