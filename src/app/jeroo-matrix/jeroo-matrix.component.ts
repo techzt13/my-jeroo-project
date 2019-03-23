@@ -6,7 +6,8 @@ import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component'
 
 @Component({
     selector: 'app-jeroo-matrix',
-    templateUrl: './jeroo-matrix.component.html'
+    templateUrl: './jeroo-matrix.component.html',
+    styleUrls: ['./jeroo-matrix.component.scss']
 })
 export class JerooMatrixComponent implements AfterViewInit {
     @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
