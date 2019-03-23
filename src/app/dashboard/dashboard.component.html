@@ -105,7 +105,7 @@
             <mat-menu #edit="matMenu">
                 <ng-template matMenuContent>
                     <button mat-menu-item (click)="onUndoClick()">
-                        <fa-icon icon="undo"></fa-icon><span class="col-1">Undo Last Edit</span><span class="shortcut-tip">Ctrl+z</span>
+                        <fa-icon icon="undo"></fa-icon><span class="col-1">Undo Last Edit</span><span class="shortcut-tip">Ctrl+Z</span>
                     </button>
                     <button mat-menu-item (click)="onRedoClick()">
                         <fa-icon icon="redo"></fa-icon><span class="col-1">Redo Last Undo</span><span class="shortcut-tip">Ctrl+Shift+Z</span>
@@ -123,19 +123,19 @@
             <mat-menu #run="matMenu">
                 <ng-template matMenuContent>
                   <button mat-menu-item [disabled]="resetBtnDisabled()" (click)="onResetClick()">
-                        <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset</span>
+                    <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset<span class="shortcut-tip">F2</span></span>
                     </button>
                     <button mat-menu-item [disabled]="runStepwiseBtnDisabled()" (click)="onRunStepwiseClick()">
-                        <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise</span>
+                      <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise<span class="shortcut-tip">F3</span></span>
                     </button>
                     <button mat-menu-item [disabled]="runContiniousBtnDisabled()" (click)="onRunContiniousClick()">
-                        <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously</span>
+                      <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously<span class="shortcut-tip">F4</span></span>
                     </button>
                     <button mat-menu-item [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
-                        <fa-icon icon="pause"></fa-icon><span class="col-1">Pause</span>
+                      <fa-icon icon="pause"></fa-icon><span class="col-1">Pause<span class="shortcut-tip">F5</span></span>
                     </button>
                     <button mat-menu-item [disabled]="stopBtnDisabled()" (click)="onStopClick()">
-                        <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run</span>
+                      <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run<span class="shortcut-tip">F6</span></span>
                     </button>
                 </ng-template>
             </mat-menu>

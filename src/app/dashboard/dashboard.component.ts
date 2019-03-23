@@ -1,4 +1,5 @@
 import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatrixService } from '../matrix.service';
 import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
@@ -50,7 +51,32 @@ export class DashboardComponent implements AfterViewInit {
     paused = false;
     stopped = false;
 
-    constructor(private bytecodeService: BytecodeInterpreterService, private matrixService: MatrixService) { }
+    constructor(
+        private bytecodeService: BytecodeInterpreterService,
+        private matrixService: MatrixService,
+        private hotkeysService: HotkeysService
+    ) {
+        this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
+            this.onResetClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('f3', (_event: KeyboardEvent): boolean => {
+            this.onRunStepwiseClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('f4', (_event: KeyboardEvent): boolean => {
+            this.onRunContiniousClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('f5', (_event: KeyboardEvent): boolean => {
+            this.onPauseClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('f6', (_event: KeyboardEvent): boolean => {
+            this.onStopClick();
+            return false;
+        }));
+    }
 
     ngAfterViewInit() {
         this.selectedEditor = this.mainMethodTextEditor;
@@ -83,34 +109,34 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onRunStepwiseClick() {
-        if (!this.executing) {
+        if (!this.runStepwiseBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
             if (this.reset) {
                 const jerooCode = this.createJerooCode();
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
                     const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context, () => this.pause());
+                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context, () => this.pause(), () => this.stop());
                 }
             } else {
-                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context, () => this.pause());
+                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context, () => this.pause(), () => this.stop());
             }
             this.execute();
         }
     }
 
     onRunContiniousClick() {
-        if (!this.executing) {
+        if (!this.runContiniousBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
             if (this.reset) {
                 const jerooCode = this.createJerooCode();
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
                     const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context);
+                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context, () => this.stop());
                 }
             } else {
-                this.bytecodeService.resumeExecutionContinious(this.matrixService, context);
+                this.bytecodeService.resumeExecutionContinious(this.matrixService, context, () => this.stop());
             }
             this.execute();
         }
@@ -132,19 +158,25 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onResetClick() {
-        this.resetState();
-        const context = this.jerooMatrix.getCanvas().getContext('2d');
-        this.bytecodeService.reset(this.matrixService, context);
+        if (!this.resetBtnDisabled()) {
+            this.resetState();
+            const context = this.jerooMatrix.getCanvas().getContext('2d');
+            this.bytecodeService.reset(this.matrixService, context);
+        }
     }
 
     onPauseClick() {
-        this.pause();
-        this.bytecodeService.pauseExecution();
+        if (!this.pauseBtnDisabled()) {
+            this.pause();
+            this.bytecodeService.pauseExecution();
+        }
     }
 
     onStopClick() {
-        this.stop();
-        this.bytecodeService.stopExecution();
+        if (!this.stopBtnDisabled()) {
+            this.stop();
+            this.bytecodeService.stopExecution();
+        }
     }
 
     private stop() {

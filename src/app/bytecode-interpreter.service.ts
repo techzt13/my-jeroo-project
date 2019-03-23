@@ -31,24 +31,25 @@ export class BytecodeInterpreterService {
        * @param matrixService Matrix board.
        * @param canvas Rendering canvas.
        */
-    executeInstructionsContinious(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+    executeInstructionsContinious(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
         this.reset(matrixService, canvas);
         this.instructions = instructions;
-        this.resumeExecutionContinious(matrixService, canvas);
+        this.resumeExecutionContinious(matrixService, canvas, endInstructionsCallback);
     }
 
     executeInstructionsStepwise(
         instructions: Array<Instruction>,
         matrixService: MatrixService,
         canvas: CanvasRenderingContext2D,
-        postInstructionCallback: () => void
+        postInstructionCallback: () => void,
+        endInstructionsCallback: () => void
     ) {
         this.reset(matrixService, canvas);
         this.instructions = instructions;
-        this.resumeExecutionStepwise(matrixService, canvas, postInstructionCallback);
+        this.resumeExecutionStepwise(matrixService, canvas, postInstructionCallback, endInstructionsCallback);
     }
 
-    resumeExecutionContinious(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+    resumeExecutionContinious(matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
         this.paused = false;
         let executeInstructionsLoop: () => void = null;
         const executeInstruction = () => {
@@ -57,6 +58,8 @@ export class BytecodeInterpreterService {
                 this.interprateBytecode(instruction, matrixService);
                 matrixService.render(canvas);
                 executeInstructionsLoop();
+            } else {
+                endInstructionsCallback();
             }
         };
 
@@ -67,7 +70,7 @@ export class BytecodeInterpreterService {
         executeInstructionsLoop();
     }
 
-    resumeExecutionStepwise(matrixService: MatrixService, canvas: CanvasRenderingContext2D, postInstructionCallback: () => void) {
+    resumeExecutionStepwise(matrixService: MatrixService, canvas: CanvasRenderingContext2D, postInstructionCallback: () => void, endInstructionsCallback: () => void) {
         this.paused = false;
         const executeInstruction = () => {
             if (this.validInstruction()) {
@@ -76,6 +79,8 @@ export class BytecodeInterpreterService {
                 matrixService.render(canvas);
                 this.pauseExecution();
                 postInstructionCallback();
+            } else {
+                endInstructionsCallback();
             }
         };
 
