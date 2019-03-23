@@ -54,10 +54,10 @@
                     <button mat-icon-button matTooltip="Reset the program and the island" [disabled]="resetBtnDisabled()" (click)="onResetClick()">
                         <fa-icon icon="step-backward"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Run the program step-by-step" [disabled]="runStepwiseBtnDisabled()" (click)="onRunStepwiseClick()">
+                    <button mat-icon-button matTooltip="Run the program step-by-step" [disabled]="runBtnDisabled()" (click)="onRunStepwiseClick()">
                         <fa-icon icon="play"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Run the program continuously" [disabled]="runContiniousBtnDisabled()" (click)="onRunContiniousClick()">
+                    <button mat-icon-button matTooltip="Run the program continuously" [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
                         <fa-icon icon="step-forward"></fa-icon>
                     </button>
                     <button mat-icon-button matTooltip="Pause a currently running program" [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
@@ -125,10 +125,10 @@
                   <button mat-menu-item [disabled]="resetBtnDisabled()" (click)="onResetClick()">
                     <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset<span class="shortcut-tip">F2</span></span>
                     </button>
-                    <button mat-menu-item [disabled]="runStepwiseBtnDisabled()" (click)="onRunStepwiseClick()">
+                    <button mat-menu-item [disabled]="runBtnDisabled()" (click)="onRunStepwiseClick()">
                       <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise<span class="shortcut-tip">F3</span></span>
                     </button>
-                    <button mat-menu-item [disabled]="runContiniousBtnDisabled()" (click)="onRunContiniousClick()">
+                    <button mat-menu-item [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
                       <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously<span class="shortcut-tip">F4</span></span>
                     </button>
                     <button mat-menu-item [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">

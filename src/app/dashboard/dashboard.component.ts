@@ -109,34 +109,44 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onRunStepwiseClick() {
-        if (!this.runStepwiseBtnDisabled()) {
+        if (!this.runBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
             if (this.reset) {
                 const jerooCode = this.createJerooCode();
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
                     const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context, () => this.pause(), () => this.stop());
+                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context,
+                        () => this.pause(),
+                        () => this.stop()
+                    );
                 }
             } else {
-                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context, () => this.pause(), () => this.stop());
+                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context,
+                    () => this.pause(),
+                    () => this.stop()
+                );
             }
             this.execute();
         }
     }
 
     onRunContiniousClick() {
-        if (!this.runContiniousBtnDisabled()) {
+        if (!this.runBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
             if (this.reset) {
                 const jerooCode = this.createJerooCode();
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
                     const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context, () => this.stop());
+                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context,
+                        () => this.stop()
+                    );
                 }
             } else {
-                this.bytecodeService.resumeExecutionContinious(this.matrixService, context, () => this.stop());
+                this.bytecodeService.resumeExecutionContinious(this.matrixService, context,
+                    () => this.stop()
+                );
             }
             this.execute();
         }
@@ -316,11 +326,7 @@ export class DashboardComponent implements AfterViewInit {
         return !this.paused && !this.stopped && !this.reset && !this.stopped;
     }
 
-    runStepwiseBtnDisabled() {
-        return !this.paused && !this.reset;
-    }
-
-    runContiniousBtnDisabled() {
+    runBtnDisabled() {
         return !this.paused && !this.reset;
     }
 

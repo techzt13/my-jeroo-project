@@ -26,10 +26,11 @@ export class BytecodeInterpreterService {
     private stopped = false;
 
     /**
-       * Execute a given sequence of instructions and update the matrix board to reflect the game.
+       * Execute a given sequence of instructions continuously and update the matrix board to reflect the game.
        * @param instructions The sequence of instructions.
        * @param matrixService Matrix board.
        * @param canvas Rendering canvas.
+       * @param endInstructionsCallback callback function for when the instructions are finished executing.
        */
     executeInstructionsContinious(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
         this.reset(matrixService, canvas);
@@ -37,6 +38,14 @@ export class BytecodeInterpreterService {
         this.resumeExecutionContinious(matrixService, canvas, endInstructionsCallback);
     }
 
+    /**
+       * Execute the first instruction in a sequence of instructions, update the matrix board, then pause the game.
+       * @param instructions The sequence of instructions.
+       * @param matrixService Matrix board.
+       * @param canvas Rendering canvas.
+       * @param postInstructionCallback callback function for when an instruction finished executing.
+       * @param endInstructionsCallback callback function for when the instructions are finished executing.
+       */
     executeInstructionsStepwise(
         instructions: Array<Instruction>,
         matrixService: MatrixService,
@@ -49,15 +58,23 @@ export class BytecodeInterpreterService {
         this.resumeExecutionStepwise(matrixService, canvas, postInstructionCallback, endInstructionsCallback);
     }
 
+    /**
+      * Resume execution of the previous instruction set after a pause then pause after executing one instruction.
+      * @param matrixService Matrix board.
+      * @param canvas Rendering canvas.
+      * @param endInstructionsCallback callback function for when the instructions are finished executing.
+      */
     resumeExecutionContinious(matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
         this.paused = false;
         let executeInstructionsLoop: () => void = null;
         const executeInstruction = () => {
             if (this.validInstruction()) {
-                const instruction = this.fetchInstruction(this.instructions);
-                this.interprateBytecode(instruction, matrixService);
-                matrixService.render(canvas);
-                executeInstructionsLoop();
+                if (!this.paused && !this.stopped) {
+                    const instruction = this.fetchInstruction(this.instructions);
+                    this.executeBytecode(instruction, matrixService);
+                    matrixService.render(canvas);
+                    executeInstructionsLoop();
+                }
             } else {
                 endInstructionsCallback();
             }
@@ -70,15 +87,29 @@ export class BytecodeInterpreterService {
         executeInstructionsLoop();
     }
 
-    resumeExecutionStepwise(matrixService: MatrixService, canvas: CanvasRenderingContext2D, postInstructionCallback: () => void, endInstructionsCallback: () => void) {
+    /**
+      * Resume execution of the previous instruction set after a pause.
+      * @param matrixService Matrix board.
+      * @param canvas Rendering canvas.
+      * @param postInstructionCallback callback function for after each instruction is done executing.
+      * @param endInstructionsCallback callback function for when the instructions are finished executing.
+      */
+    resumeExecutionStepwise(
+        matrixService: MatrixService,
+        canvas: CanvasRenderingContext2D,
+        postInstructionCallback: () => void,
+        endInstructionsCallback: () => void
+    ) {
         this.paused = false;
         const executeInstruction = () => {
             if (this.validInstruction()) {
-                const instruction = this.fetchInstruction(this.instructions);
-                this.interprateBytecode(instruction, matrixService);
-                matrixService.render(canvas);
-                this.pauseExecution();
-                postInstructionCallback();
+                if (!this.stopped && !this.paused) {
+                    const instruction = this.fetchInstruction(this.instructions);
+                    this.executeBytecode(instruction, matrixService);
+                    matrixService.render(canvas);
+                    this.pauseExecution();
+                    postInstructionCallback();
+                }
             } else {
                 endInstructionsCallback();
             }
@@ -88,18 +119,29 @@ export class BytecodeInterpreterService {
     }
 
     private validInstruction() {
-        return this.pc < this.instructions.length && !this.paused && !this.stopped;
+        return this.pc < this.instructions.length;
     }
 
+    /**
+      * Pause the execution of the instructions.
+      */
     pauseExecution() {
         this.paused = true;
     }
 
+    /**
+      * Clear the previously stored instructions and stop execution.
+      */
     stopExecution() {
         this.instructions = [];
         this.stopped = true;
     }
 
+    /**
+      * Reset the state of the bytecode interpreter, clear the board of jeroos, and re-render the board state to the canvas.
+      * @param matrixService Matrix service.
+      * @param canvas Rendering canvas.
+      */
     reset(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
         this.pc = 0;
         this.jerooReg = 0;
@@ -132,7 +174,7 @@ export class BytecodeInterpreterService {
        * @param command The given command.
        * @param matService Matrix service.
        */
-    interprateBytecode(command: Instruction, matService: MatrixService) {
+    executeBytecode(command: Instruction, matService: MatrixService) {
         switch (command.op) {
             case 'CSR': {
                 this.jerooReg = command.a;
