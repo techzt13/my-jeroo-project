@@ -152,6 +152,7 @@ export class DashboardComponent implements AfterViewInit {
         this.executing = false;
         this.reset = false;
         this.paused = false;
+        this.jerooMatrix.disableEditing();
     }
 
     private execute() {
@@ -159,6 +160,7 @@ export class DashboardComponent implements AfterViewInit {
         this.reset = false;
         this.paused = false;
         this.stopped = false;
+        this.jerooMatrix.disableEditing();
     }
 
     private resetState() {
@@ -166,6 +168,7 @@ export class DashboardComponent implements AfterViewInit {
         this.executing = false;
         this.paused = false;
         this.stopped = false;
+        this.jerooMatrix.enableEditing();
     }
 
     private pause() {
@@ -173,6 +176,7 @@ export class DashboardComponent implements AfterViewInit {
         this.executing = false;
         this.stopped = false;
         this.reset = false;
+        this.jerooMatrix.disableEditing();
     }
 
     onSpeedRadioClick(speedValue: number) {

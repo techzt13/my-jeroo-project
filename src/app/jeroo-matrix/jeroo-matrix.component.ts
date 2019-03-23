@@ -17,6 +17,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     private selectedTileType: TileType = null;
     mouseRow: number = null;
     mouseColumn: number = null;
+    private editingEnabled = true;
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog) { }
 
@@ -122,7 +123,7 @@ export class JerooMatrixComponent implements AfterViewInit {
         if (tileCol >= 0 && tileRow >= 0
             && tileCol < cols && tileRow < rows) {
             // update the col and row
-            if (this.mouseDown && this.selectedTileType !== null) {
+            if (this.editingEnabled && this.mouseDown && this.selectedTileType !== null) {
                 // only re-render if we change the map
                 if (this.matrixService.getTile(tileCol, tileRow) !== this.selectedTileType) {
                     this.matrixService.setTile(tileCol, tileRow, this.selectedTileType);
@@ -135,5 +136,13 @@ export class JerooMatrixComponent implements AfterViewInit {
             this.mouseRow = null;
             this.mouseDown = false;
         }
+    }
+
+    enableEditing() {
+        this.editingEnabled = true;
+    }
+
+    disableEditing() {
+        this.editingEnabled = false;
     }
 }
