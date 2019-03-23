@@ -107,10 +107,10 @@ export class DashboardComponent implements AfterViewInit {
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
                     const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsContinous(instructions, this.matrixService, context);
+                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context);
                 }
             } else {
-                this.bytecodeService.resumeExecutionContinuous(this.matrixService, context);
+                this.bytecodeService.resumeExecutionContinious(this.matrixService, context);
             }
             this.execute();
         }

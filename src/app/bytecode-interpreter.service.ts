@@ -31,10 +31,10 @@ export class BytecodeInterpreterService {
        * @param matrixService Matrix board.
        * @param canvas Rendering canvas.
        */
-    executeInstructionsContinous(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+    executeInstructionsContinious(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
         this.reset(matrixService, canvas);
         this.instructions = instructions;
-        this.resumeExecutionContinuous(matrixService, canvas);
+        this.resumeExecutionContinious(matrixService, canvas);
     }
 
     executeInstructionsStepwise(
@@ -48,7 +48,7 @@ export class BytecodeInterpreterService {
         this.resumeExecutionStepwise(matrixService, canvas, postInstructionCallback);
     }
 
-    resumeExecutionContinuous(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+    resumeExecutionContinious(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
         this.paused = false;
         let executeInstructionsLoop: () => void = null;
         const executeInstruction = () => {
