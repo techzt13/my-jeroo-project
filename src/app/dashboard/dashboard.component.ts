@@ -279,4 +279,24 @@ export class DashboardComponent implements AfterViewInit {
             this.selectedEditor = this.extensionMethodsTextEditor;
         }
     }
+
+    resetBtnDisabled() {
+        return !this.paused && !this.stopped && !this.reset && !this.stopped;
+    }
+
+    runStepwiseBtnDisabled() {
+        return !this.paused && !this.reset;
+    }
+
+    runContiniousBtnDisabled() {
+        return !this.paused && !this.reset;
+    }
+
+    pauseBtnDisabled() {
+        return !this.executing;
+    }
+
+    stopBtnDisabled() {
+        return !this.executing && !this.paused;
+    }
 }

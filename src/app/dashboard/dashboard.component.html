@@ -51,19 +51,19 @@
                         <fa-icon icon="redo"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <button mat-icon-button matTooltip="Reset the program and the island" [disabled]="!paused && !stopped && !reset && !stopped" (click)="onResetClick()">
+                    <button mat-icon-button matTooltip="Reset the program and the island" [disabled]="resetBtnDisabled()" (click)="onResetClick()">
                         <fa-icon icon="step-backward"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Run the program step-by-step" [disabled]="!paused && !reset" (click)="onRunStepwiseClick()">
+                    <button mat-icon-button matTooltip="Run the program step-by-step" [disabled]="runStepwiseBtnDisabled()" (click)="onRunStepwiseClick()">
                         <fa-icon icon="play"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Run the program continuously" [disabled]="!paused && !reset" (click)="onRunContiniousClick()">
+                    <button mat-icon-button matTooltip="Run the program continuously" [disabled]="runContiniousBtnDisabled()" (click)="onRunContiniousClick()">
                         <fa-icon icon="step-forward"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Pause a currently running program" [disabled]="!executing" (click)="onPauseClick()">
+                    <button mat-icon-button matTooltip="Pause a currently running program" [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
                         <fa-icon icon="pause"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Stop a running program" [disabled]="!executing && !paused" (click)="onStopClick()">
+                    <button mat-icon-button matTooltip="Stop a running program" [disabled]="stopBtnDisabled()" (click)="onStopClick()">
                         <fa-icon icon="stop"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
@@ -122,19 +122,19 @@
             </mat-menu>
             <mat-menu #run="matMenu">
                 <ng-template matMenuContent>
-                  <button mat-menu-item [disabled]="!paused && !stopped && !reset && !stopped" (click)="onResetClick()">
+                  <button mat-menu-item [disabled]="resetBtnDisabled()" (click)="onResetClick()">
                         <fa-icon icon="step-backward"></fa-icon><span class="col-1">Reset</span>
                     </button>
-                    <button mat-menu-item [disabled]="!paused && !reset" (click)="onRunStepwiseClick()">
+                    <button mat-menu-item [disabled]="runStepwiseBtnDisabled()" (click)="onRunStepwiseClick()">
                         <fa-icon icon="play"></fa-icon><span class="col-1">Run Stepwise</span>
                     </button>
-                    <button mat-menu-item [disabled]="!paused && !reset" (click)="onRunContiniousClick()">
+                    <button mat-menu-item [disabled]="runContiniousBtnDisabled()" (click)="onRunContiniousClick()">
                         <fa-icon icon="step-forward"></fa-icon><span class="col-1">Run Continuously</span>
                     </button>
-                    <button mat-menu-item [disabled]="!executing" (click)="onPauseClick()">
+                    <button mat-menu-item [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
                         <fa-icon icon="pause"></fa-icon><span class="col-1">Pause</span>
                     </button>
-                    <button mat-menu-item [disabled]="!executing && !paused" (click)="onStopClick()">
+                    <button mat-menu-item [disabled]="stopBtnDisabled()" (click)="onStopClick()">
                         <fa-icon icon="stop"></fa-icon><span class="col-1">Stop Run</span>
                     </button>
                 </ng-template>
