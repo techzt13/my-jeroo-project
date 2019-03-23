@@ -11,10 +11,10 @@ export class DisplayErrorMessageComponent implements OnInit {
   ngOnInit() {
     this.errorMessage = 'Error messages will show up here.';
   }
-  setErrorMessage(message:string){
+  setErrorMessage(message: string) {
     this.errorMessage = message;
   }
-  getErrorMessage(){
+  getErrorMessage() {
     return this.errorMessage;
   }
 }
