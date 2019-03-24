@@ -69,7 +69,7 @@ generate-ocaml-documentation:
     - opam update
     - ocamlc --version
     - opam --version
-    - opam install odoc
+    - opam install dune odoc menhir
     - odoc --version
     - cd src/compiler
     - dune build lib @doc-private
