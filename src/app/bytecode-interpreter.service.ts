@@ -32,7 +32,12 @@ export class BytecodeInterpreterService {
        * @param canvas Rendering canvas.
        * @param endInstructionsCallback callback function for when the instructions are finished executing.
        */
-    executeInstructionsContinious(instructions: Array<Instruction>, matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
+    executeInstructionsContinious(
+        instructions: Array<Instruction>,
+        matrixService: MatrixService,
+        canvas: CanvasRenderingContext2D,
+        endInstructionsCallback: () => void
+    ) {
         this.reset(matrixService, canvas);
         this.instructions = instructions;
         this.resumeExecutionContinious(matrixService, canvas, endInstructionsCallback);
