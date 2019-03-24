@@ -24,6 +24,8 @@
     "@fortawesome/angular-fontawesome": "^0.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
+    "@types/hammerjs": "^2.0.36",
+    "angular-webstorage-service": "^1.0.2",
     "bootstrap": "^4.2.1",
     "codemirror": "^5.44.0",
     "core-js": "^2.5.4",

@@ -14,10 +14,14 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 </div>
-<div class="d-flex justify-content-center">
-    <canvas #jerooGameCanvas (mousedown)="canvasMouseDown($event)" (mouseup)="canvasMouseUp()" (mousemove)="canvasMouseMove($event)">
+<div class="d-flex justify-content-center scale">
+    <canvas #jerooGameCanvas (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="disableScrolling()">
     </canvas>
 </div>
+{{printMouseTest}}
+{{printTapTest}}
+{{printTapTest2}}
+{{tapTypeTest}}
 <div class="d-flex justify-content-center">
     <div *ngIf="mouseRow !== null && mouseColumn !== null; else elseBlock">
         Cursor Location: ({{mouseColumn}}, {{mouseRow}})

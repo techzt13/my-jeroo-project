@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, HammerInput } from '@angular/material';
 import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
 
 @Component({
@@ -17,6 +17,10 @@ export class JerooMatrixComponent implements AfterViewInit {
     private selectedTileType: TileType = null;
     mouseRow: number = null;
     mouseColumn: number = null;
+    printMouseTest: String = 'initial';
+    printTapTest: String = 'initial';
+    printTapTest2: String = 'initial';
+    tapTypeTest: String = 'up';
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog) { }
 
@@ -82,8 +86,9 @@ export class JerooMatrixComponent implements AfterViewInit {
         }
     }
 
-    canvasMouseUp() {
+    canvasGestureUp() {
         this.mouseDown = false;
+        this.tapTypeTest = 'up';
     }
 
     canvasMouseDown(event: MouseEvent) {
@@ -91,15 +96,41 @@ export class JerooMatrixComponent implements AfterViewInit {
         this.updateScreenFromMouseEvent(event);
     }
 
+    canvasTapDown(event: any) {
+        this.mouseDown = true;
+        this.tapTypeTest = 'down';
+        this.updateScreenFromTapEvent(event);
+    }
+
     canvasMouseMove(event: MouseEvent) {
         this.updateScreenFromMouseEvent(event);
+    }
+
+    canvasTapMove(event: any) {
+        this.updateScreenFromTapEvent(event);
+    }
+
+    disableScrolling() {
+
     }
 
     private updateScreenFromMouseEvent(event: MouseEvent) {
         const rect = this.canvas.getBoundingClientRect();
         // bitwise or is the same as casting a float to a number
-        const pixelX = (event.clientX - rect.left) | 0;
-        const pixelY = (event.clientY - rect.top) | 0;
+        // const pixelX = (event.clientX - rect.left) | 0;
+        // const pixelY = (event.clientY - rect.top) | 0;
+        const pixelX = event.offsetX;
+        const pixelY = event.offsetY;
+        this.printMouseTest = pixelX + 'and' + pixelY;
+        this.updateScreen(pixelX, pixelY);
+    }
+
+    private updateScreenFromTapEvent(event: TouchEvent) {
+        const rect = this.canvas.getBoundingClientRect();
+        // const target = event.touches[0].target as HTMLTextAreaElement;
+        const pixelX = (event.touches[0].pageX - rect.left) | 0;
+        const pixelY = (event.touches[0].pageY - rect.top) | 0;
+        this.printTapTest = pixelX + 'and' + rect.top;
         this.updateScreen(pixelX, pixelY);
     }
 
