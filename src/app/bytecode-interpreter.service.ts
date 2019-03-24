@@ -71,25 +71,27 @@ export class BytecodeInterpreterService {
       */
     resumeExecutionContinious(matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
         this.paused = false;
-        let executeInstructionsLoop: () => void = null;
         const executeInstruction = () => {
-            if (this.validInstruction()) {
-                if (!this.paused && !this.stopped) {
-                    const instruction = this.fetchInstruction(this.instructions);
-                    this.executeBytecode(instruction, matrixService);
-                    matrixService.render(canvas);
-                    executeInstructionsLoop();
+            const line_num = this.instructions[this.pc].f;
+            while (true) {
+                if (!this.validInstruction()) {
+                    endInstructionsCallback();
+                    break;
                 }
-            } else {
-                endInstructionsCallback();
+                const current_line_num = this.instructions[this.pc].f;
+                if (line_num !== current_line_num) {
+                    setTimeout(executeInstruction, this.instructionSpeed);
+                    break;
+                }
+                if (this.stopped || this.paused) {
+                    break;
+                }
+                const instruction = this.fetchInstruction();
+                this.executeBytecode(instruction, matrixService);
+                matrixService.render(canvas);
             }
         };
-
-        executeInstructionsLoop = () => {
-            setTimeout(executeInstruction, this.instructionSpeed);
-        };
-
-        executeInstructionsLoop();
+        setTimeout(executeInstruction, this.instructionSpeed);
     }
 
     /**
@@ -105,18 +107,26 @@ export class BytecodeInterpreterService {
         postInstructionCallback: () => void,
         endInstructionsCallback: () => void
     ) {
+        const line_num = this.instructions[this.pc].f;
         this.paused = false;
         const executeInstruction = () => {
-            if (this.validInstruction()) {
-                if (!this.stopped && !this.paused) {
-                    const instruction = this.fetchInstruction(this.instructions);
-                    this.executeBytecode(instruction, matrixService);
-                    matrixService.render(canvas);
+            while (true) {
+                if (!this.validInstruction()) {
+                    endInstructionsCallback();
+                    break;
+                }
+                const current_line_num = this.instructions[this.pc].f;
+                if (line_num !== current_line_num) {
                     this.pauseExecution();
                     postInstructionCallback();
+                    break;
                 }
-            } else {
-                endInstructionsCallback();
+                if (this.stopped || this.paused) {
+                    break;
+                }
+                const instruction = this.fetchInstruction();
+                this.executeBytecode(instruction, matrixService);
+                matrixService.render(canvas);
             }
         };
 
@@ -168,8 +178,8 @@ export class BytecodeInterpreterService {
        * @param instructions The sequence of instructions.
        * @return The next instruction.
        */
-    fetchInstruction(instructions: Array<Instruction>) {
-        const instruction = instructions[this.pc];
+    fetchInstruction() {
+        const instruction = this.instructions[this.pc];
         this.pc++;
         return instruction;
     }
