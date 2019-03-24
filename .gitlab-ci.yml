@@ -38,6 +38,8 @@ build-angular:
 test-angular:
   image: timbru31/node-chrome:slim
   stage: test-angular
+  dependencies:
+    - build-angular
   script:
     - apt-get update && apt-get install -y procps
     - google-chrome-stable --version
@@ -49,6 +51,8 @@ test-angular:
 generate-typescript-documentation:
   image: node:8.15-alpine
   stage: generate-documentation
+  dependencies:
+    - build-angular
   artifacts:
     paths:
       - docs
