@@ -18,7 +18,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     private selectedTileType: TileType = null;
     mouseRow: number = null;
     mouseColumn: number = null;
-    private editingEnabled = true;
+    editingEnabled = true;
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog) { }
 
