@@ -40,10 +40,12 @@ export class JerooMatrixComponent implements AfterViewInit {
 
         const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
         dialogRef.afterClosed().subscribe(data => {
-            this.matrixService.setCols(+data.xValue);
-            this.matrixService.setRows(+data.yValue);
-            this.matrixService.resetMap();
-            this.redraw();
+            if (this.editingEnabled) {
+                this.matrixService.setCols(+data.xValue);
+                this.matrixService.setRows(+data.yValue);
+                this.matrixService.resetMap();
+                this.redraw();
+            }
         });
     }
 
@@ -58,8 +60,10 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     clearMap() {
-        this.matrixService.resetMap();
-        this.matrixService.render(this.context);
+        if (this.editingEnabled) {
+            this.matrixService.resetMap();
+            this.matrixService.render(this.context);
+        }
     }
 
     getCanvas() {
