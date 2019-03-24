@@ -248,8 +248,10 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     clearMap() {
-        this.matrixService.resetMap();
-        this.jerooMatrix.redraw();
+        if (this.reset) {
+            this.matrixService.resetMap();
+            this.jerooMatrix.redraw();
+        }
     }
 
     openMapFile() {
@@ -257,13 +259,15 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     mapFileSelected(file: File) {
-        const reader = new FileReader();
-        reader.readAsText(file, 'UTF-8');
-        reader.onload = (readerEvent: any) => {
-            const content: string = readerEvent.target.result;
-            this.matrixService.genMapFromString(content);
-            this.jerooMatrix.redraw();
-        };
+        if (this.reset) {
+            const reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+            reader.onload = (readerEvent: any) => {
+                const content: string = readerEvent.target.result;
+                this.matrixService.genMapFromString(content);
+                this.jerooMatrix.redraw();
+            };
+        }
     }
 
     saveMapFile() {
