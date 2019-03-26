@@ -156,7 +156,7 @@
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="saveMapFile()">
-                        <fa-icon icon="save"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
+                        <fa-icon icon="saanve"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="printMap()">
@@ -196,10 +196,11 @@
                 <div class="col-lg-5">
                     <app-jeroo-matrix #jerooMatrix></app-jeroo-matrix>
                 </div>
+                <!--Error Area-->
                 <div class="col-lg-7">                    
                     <mat-tab-group>
                         <mat-tab label="Error Message Display">
-                            <app-display-error-message></app-display-error-message>
+                            <app-display-error-message #errorMessage></app-display-error-message>
                         </mat-tab>
                     </mat-tab-group>
                 </div>
