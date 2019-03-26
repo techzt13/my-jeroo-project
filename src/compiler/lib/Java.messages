@@ -8,7 +8,7 @@ translation_unit: HEADER MAIN_METH_SEP METHOD ID LPAREN RPAREN LBRACKET RBRACKET
 ## HEADER list(fxn) MAIN_METH_SEP fxn
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected EOF
 
 translation_unit: HEADER MAIN_METH_SEP WHILE
 ##
@@ -20,7 +20,7 @@ translation_unit: HEADER MAIN_METH_SEP WHILE
 ## HEADER list(fxn) MAIN_METH_SEP
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `method`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID EQ WEST RPAREN
 ##
@@ -39,10 +39,10 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID EQ WEST RPAREN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 31, spurious reduction of production expr -> arith_expr 
+## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, `(`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID EQ WHILE
 ##
@@ -54,7 +54,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID EQ WHILE
 ## ID ID EQ
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID WHILE
 ##
@@ -66,7 +66,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID WHILE
 ## ID ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `=`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID WHILE
 ##
@@ -79,7 +79,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID WHILE
 ## ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, operator, or a variable declaration
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST RPAREN SEMICOLON
 ##
@@ -93,7 +93,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST RPAREN 
 ## IF LPAREN expr RPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected statement or block
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST RPAREN WEST SEMICOLON ELSE SEMICOLON
 ##
@@ -106,7 +106,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST RPAREN 
 ## IF LPAREN expr RPAREN closed_stmt ELSE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected statement or block
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST RPAREN WEST SEMICOLON SEMICOLON
 ##
@@ -120,7 +120,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST RPAREN 
 ## IF LPAREN expr RPAREN closed_stmt
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `else` or statement
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST SEMICOLON
 ##
@@ -141,10 +141,10 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WEST SEMICOL
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 31, spurious reduction of production expr -> arith_expr 
+## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `)` or operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WHILE
 ##
@@ -158,7 +158,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF LPAREN WHILE
 ## IF LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF WHILE
 ##
@@ -172,7 +172,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET IF WHILE
 ## IF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `(`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET LPAREN WEST SEMICOLON
 ##
@@ -191,10 +191,10 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET LPAREN WEST SEMICOLON
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 31, spurious reduction of production expr -> arith_expr 
+## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `)`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET LPAREN WHILE
 ##
@@ -206,7 +206,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET LPAREN WHILE
 ## LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NEW WEST LPAREN RPAREN WHILE
 ##
@@ -222,7 +222,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NEW WEST LPAREN RPAREN
 ## NEW expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected ';' at the end of declaration
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NEW WHILE
 ##
@@ -234,7 +234,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NEW WHILE
 ## NEW
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NOT WEST LPAREN RPAREN WHILE
 ##
@@ -250,7 +250,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NOT WEST LPAREN RPAREN
 ## NOT expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `(`, `)`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NOT WHILE
 ##
@@ -262,7 +262,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET NOT WHILE
 ## NOT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET RBRACKET WHILE
 ##
@@ -274,7 +274,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET RBRACKET WHILE
 ## fxn
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `@@` (likely due to an error in the input file)
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET SEMICOLON
 ##
@@ -286,7 +286,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET SEMICOLON
 ## LBRACKET
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `}`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST AND WEST LPAREN RPAREN WHILE
 ##
@@ -302,7 +302,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST AND WEST LPAREN R
 ## expr AND expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, `(`, `)`, or and operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST AND WHILE
 ##
@@ -314,7 +314,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST AND WHILE
 ## expr AND
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST DOT WHILE
 ##
@@ -326,7 +326,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST DOT WHILE
 ## expr DOT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST EQ WEST LPAREN RPAREN WHILE
 ##
@@ -342,7 +342,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST EQ WEST LPAREN RP
 ## expr EQ expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST EQ WHILE
 ##
@@ -354,7 +354,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST EQ WHILE
 ## expr EQ
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WEST COMMA WHILE
 ##
@@ -366,7 +366,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WEST COMMA
 ## expr COMMA
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WEST SEMICOLON
 ##
@@ -386,10 +386,10 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WEST SEMIC
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 31, spurious reduction of production expr -> arith_expr 
+## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `)`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WHILE
 ##
@@ -401,7 +401,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WHILE
 ## arith_expr LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected optional expression(s) followed by a `)`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST OR WEST LPAREN RPAREN WHILE
 ##
@@ -417,7 +417,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST OR WEST LPAREN RP
 ## expr OR expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST OR WHILE
 ##
@@ -429,7 +429,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST OR WHILE
 ## expr OR
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST RPAREN
 ##
@@ -448,10 +448,10 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST RPAREN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 31, spurious reduction of production expr -> arith_expr 
+## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `(`, `while`, `if`, `else, identifier, `;`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST SEMICOLON SEMICOLON
 ##
@@ -463,7 +463,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST SEMICOLON SEMICOL
 ## stmt
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `}`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST WHILE
 ##
@@ -476,7 +476,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST WHILE
 ## arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `;`, `.`, `(`, `)`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WEST RPAREN SEMICOLON
 ##
@@ -489,7 +489,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WEST RPAR
 ## WHILE LPAREN expr RPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected statement or block
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WEST SEMICOLON
 ##
@@ -509,10 +509,10 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WEST SEMI
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 31, spurious reduction of production expr -> arith_expr 
+## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `)` or operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WHILE
 ##
@@ -525,7 +525,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WHILE
 ## WHILE LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE WHILE
 ##
@@ -538,7 +538,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE WHILE
 ## WHILE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `(`
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN WHILE
 ##
@@ -550,7 +550,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN WHILE
 ## METHOD ID LPAREN RPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `{`
 
 translation_unit: HEADER METHOD ID LPAREN WHILE
 ##
@@ -562,7 +562,7 @@ translation_unit: HEADER METHOD ID LPAREN WHILE
 ## METHOD ID LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `)`
 
 translation_unit: HEADER METHOD ID WHILE
 ##
@@ -574,7 +574,7 @@ translation_unit: HEADER METHOD ID WHILE
 ## METHOD ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `(`
 
 translation_unit: HEADER METHOD WHILE
 ##
@@ -586,7 +586,7 @@ translation_unit: HEADER METHOD WHILE
 ## METHOD
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected identifier
 
 translation_unit: HEADER WHILE
 ##
@@ -598,7 +598,7 @@ translation_unit: HEADER WHILE
 ## HEADER
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `method`
 
 translation_unit: WHILE
 ##
@@ -610,5 +610,4 @@ translation_unit: WHILE
 ##
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
+expected `method`
