@@ -1,5 +1,10 @@
 exception HeaderException of string
 
+exception ParserException of {
+    message: string;
+    lnum: int;
+  }
+
 let parse_java lexbuf =
   let rec loop lexbuf checkpoint =
     match checkpoint with
@@ -14,11 +19,19 @@ let parse_java lexbuf =
       loop lexbuf checkpoint
     | JavaParser.MenhirInterpreter.HandlingError env ->
       let state = JavaParser.MenhirInterpreter.current_state_number env in
-      print_endline ("error state: " ^ string_of_int state);
+      let lnum = lexbuf.lex_curr_p.pos_lnum in
       let message = JavaMessages.message state in
-      failwith message;
+      raise (ParserException {
+          message = message;
+          lnum = lnum
+        })
     | JavaParser.MenhirInterpreter.Accepted tree -> tree
-    | JavaParser.MenhirInterpreter.Rejected -> failwith "Syntax Error"
+    | JavaParser.MenhirInterpreter.Rejected ->
+      let lnum = lexbuf.lex_curr_p.pos_lnum in
+      raise (ParserException {
+          message = "Syntax Error";
+          lnum = lnum
+        })
   in
   loop lexbuf (JavaParser.Incremental.translation_unit lexbuf.lex_curr_p)
 
