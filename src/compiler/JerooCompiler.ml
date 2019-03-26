@@ -24,6 +24,9 @@ let _ =
             | Compiler.ParserException e ->
               (Printf.sprintf "Syntax error on line %d: %s\n" e.lnum e.message)
               |> Js.string
+            | Compiler.HeaderException e ->
+              (Printf.sprintf "File header error: %s\n" e)
+              |> Js.string
             | e -> raise e
           in
           (object%js
