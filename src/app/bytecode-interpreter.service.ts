@@ -33,7 +33,6 @@ export class BytecodeInterpreterService {
                     break;
                 }
                 const instruction = this.fetchInstruction(instructions);
-                console.log(instruction);
                 this.executeBytecode(instruction, matrixService);
             }
         }
