@@ -17,139 +17,30 @@ export class RuntimeError extends Error {
 export class BytecodeInterpreterService {
     private pc = 0;
     private jerooReg = 0;
-    private instructions: Array<Instruction>;
     private jerooArray: Array<Jeroo> = [];
     private cmpStack: Array<boolean> = [];
     private pcStack: Array<number> = [];
-    private instructionSpeed = 0;
-    private paused = false;
-    private stopped = false;
 
-    /**
-       * Execute a given sequence of instructions continuously and update the matrix board to reflect the game.
-       * @param instructions The sequence of instructions.
-       * @param matrixService Matrix board.
-       * @param canvas Rendering canvas.
-       * @param endInstructionsCallback callback function for when the instructions are finished executing.
-       */
-    executeInstructionsContinious(
-        instructions: Array<Instruction>,
-        matrixService: MatrixService,
-        canvas: CanvasRenderingContext2D,
-        endInstructionsCallback: () => void
-    ) {
-        this.reset(matrixService, canvas);
-        this.instructions = instructions;
-        this.resumeExecutionContinious(matrixService, canvas, endInstructionsCallback);
-    }
-
-    /**
-       * Execute the first instruction in a sequence of instructions, update the matrix board, then pause the game.
-       * @param instructions The sequence of instructions.
-       * @param matrixService Matrix board.
-       * @param canvas Rendering canvas.
-       * @param postInstructionCallback callback function for when an instruction finished executing.
-       * @param endInstructionsCallback callback function for when the instructions are finished executing.
-       */
-    executeInstructionsStepwise(
-        instructions: Array<Instruction>,
-        matrixService: MatrixService,
-        canvas: CanvasRenderingContext2D,
-        postInstructionCallback: () => void,
-        endInstructionsCallback: () => void
-    ) {
-        this.reset(matrixService, canvas);
-        this.instructions = instructions;
-        this.resumeExecutionStepwise(matrixService, canvas, postInstructionCallback, endInstructionsCallback);
-    }
-
-    /**
-      * Resume execution of the previous instruction set after a pause then pause after executing one instruction.
-      * @param matrixService Matrix board.
-      * @param canvas Rendering canvas.
-      * @param endInstructionsCallback callback function for when the instructions are finished executing.
-      */
-    resumeExecutionContinious(matrixService: MatrixService, canvas: CanvasRenderingContext2D, endInstructionsCallback: () => void) {
-        this.paused = false;
-        const executeInstruction = () => {
-            const line_num = this.instructions[this.pc].f;
+    executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
+        if (this.validInstruction(instructions)) {
+            const line_num = instructions[this.pc].f;
             while (true) {
-                if (!this.validInstruction()) {
-                    endInstructionsCallback();
+                if (!this.validInstruction(instructions)) {
                     break;
                 }
-                const current_line_num = this.instructions[this.pc].f;
+                const current_line_num = instructions[this.pc].f;
                 if (line_num !== current_line_num) {
-                    setTimeout(executeInstruction, this.instructionSpeed);
                     break;
                 }
-                if (this.stopped || this.paused) {
-                    break;
-                }
-                const instruction = this.fetchInstruction();
+                const instruction = this.fetchInstruction(instructions);
+                console.log(instruction);
                 this.executeBytecode(instruction, matrixService);
-                matrixService.render(canvas);
             }
-        };
-        setTimeout(executeInstruction, this.instructionSpeed);
+        }
     }
 
-    /**
-      * Resume execution of the previous instruction set after a pause.
-      * @param matrixService Matrix board.
-      * @param canvas Rendering canvas.
-      * @param postInstructionCallback callback function for after each instruction is done executing.
-      * @param endInstructionsCallback callback function for when the instructions are finished executing.
-      */
-    resumeExecutionStepwise(
-        matrixService: MatrixService,
-        canvas: CanvasRenderingContext2D,
-        postInstructionCallback: () => void,
-        endInstructionsCallback: () => void
-    ) {
-        const line_num = this.instructions[this.pc].f;
-        this.paused = false;
-        const executeInstruction = () => {
-            while (true) {
-                if (!this.validInstruction()) {
-                    endInstructionsCallback();
-                    break;
-                }
-                const current_line_num = this.instructions[this.pc].f;
-                if (line_num !== current_line_num) {
-                    this.pauseExecution();
-                    postInstructionCallback();
-                    break;
-                }
-                if (this.stopped || this.paused) {
-                    break;
-                }
-                const instruction = this.fetchInstruction();
-                this.executeBytecode(instruction, matrixService);
-                matrixService.render(canvas);
-            }
-        };
-
-        setTimeout(executeInstruction, this.instructionSpeed);
-    }
-
-    private validInstruction() {
-        return this.pc < this.instructions.length;
-    }
-
-    /**
-      * Pause the execution of the instructions.
-      */
-    pauseExecution() {
-        this.paused = true;
-    }
-
-    /**
-      * Clear the previously stored instructions and stop execution.
-      */
-    stopExecution() {
-        this.instructions = [];
-        this.stopped = true;
+    validInstruction(instructions: Array<Instruction>) {
+        return this.pc < instructions.length;
     }
 
     /**
@@ -163,14 +54,8 @@ export class BytecodeInterpreterService {
         this.jerooArray = [];
         this.cmpStack = [];
         this.pcStack = [];
-        this.paused = false;
-        this.stopped = false;
         matrixService.resetJeroos();
         matrixService.render(canvas);
-    }
-
-    setInstructionSpeed(instructionSpeed: number) {
-        this.instructionSpeed = instructionSpeed;
     }
 
     /**
@@ -178,8 +63,8 @@ export class BytecodeInterpreterService {
        * @param instructions The sequence of instructions.
        * @return The next instruction.
        */
-    fetchInstruction() {
-        const instruction = this.instructions[this.pc];
+    fetchInstruction(instructions: Array<Instruction>) {
+        const instruction = instructions[this.pc];
         this.pc++;
         return instruction;
     }

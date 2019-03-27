@@ -29,7 +29,7 @@ export class DashboardComponent implements AfterViewInit {
     @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
     @ViewChild('extensionMethodsTextEditor') extensionMethodsTextEditor: TextEditorComponent;
     @ViewChild('errorMessage') displayError: DisplayErrorMessageComponent;
-    
+
     selectedLanguage = SelectedLanguage.Java;
     languages: Language[] = [
         { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
@@ -52,6 +52,7 @@ export class DashboardComponent implements AfterViewInit {
     executing = false;
     paused = false;
     stopped = false;
+    private instructions: Array<Instruction> = null;
 
     constructor(
         private bytecodeService: BytecodeInterpreterService,
@@ -98,8 +99,6 @@ export class DashboardComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.selectedEditor = this.mainMethodTextEditor;
-        const instructionSpeed = this.speeds[this.speedIndex - 1];
-        this.bytecodeService.setInstructionSpeed(instructionSpeed);
     }
 
     onUndoClick() {
@@ -130,60 +129,68 @@ export class DashboardComponent implements AfterViewInit {
         if (!this.runBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
             this.displayError.clearErrorMessage();
-            try{
-                if (this.reset) {
-                    const jerooCode = this.createJerooCode();
-                    const result = JerooCompiler.compile(jerooCode);
-                    if (result.successful) {
-                        const instructions = result.bytecode;
-                        
-                        this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context,
-                            () => this.pause(),
-                            () => this.stop()
-                        );
-                    } else {
-                        this.displayError.setErrorMessage(result.error_message);
-                    }
+            if (this.reset || this.instructions === null) {
+                const jerooCode = this.createJerooCode();
+                const result = JerooCompiler.compile(jerooCode);
+                if (result.successful) {
+                    this.instructions = result.bytecode;
+                    this.bytecodeService.reset(this.matrixService, context);
                 } else {
-                    this.bytecodeService.resumeExecutionStepwise(this.matrixService, context,
-                        () => this.pause(),
-                        () => this.stop()
-                    );
+                    this.displayError.setErrorMessage(result.error_message);
                 }
-            }catch(e){
-                this.displayError.setErrorMessage(e);
             }
-
+            const instructionSpeed = this.speeds[this.speedIndex - 1];
+            setTimeout(() => {
+                try {
+                    this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
+                    this.matrixService.render(context);
+                    if (this.bytecodeService.validInstruction(this.instructions)) {
+                        this.pause();
+                    } else {
+                        this.stop();
+                    }
+                } catch (e) {
+                    this.displayError.setErrorMessage(e);
+                    this.stop();
+                }
+            }, instructionSpeed);
             this.execute();
         }
     }
 
     onRunContiniousClick() {
         if (!this.runBtnDisabled()) {
-            try{
-                const context = this.jerooMatrix.getContext();
-                this.displayError.clearErrorMessage();
-                if (this.reset) {
-                    const jerooCode = this.createJerooCode();
-                    const result = JerooCompiler.compile(jerooCode);
-                    if (result.successful) {
-                        const instructions = result.bytecode;
-                        this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context,
-                            () => this.stop()
-                        );
-                    } else {
-                        this.displayError.setErrorMessage(result.error_message);
-                    }
+            const context = this.jerooMatrix.getContext();
+            this.displayError.clearErrorMessage();
+            if (this.reset || this.instructions === null) {
+                const jerooCode = this.createJerooCode();
+                const result = JerooCompiler.compile(jerooCode);
+                if (result.successful) {
+                    this.instructions = result.bytecode;
+                    this.bytecodeService.reset(this.matrixService, context);
                 } else {
-                    this.bytecodeService.resumeExecutionContinious(this.matrixService, context,
-                        () => this.stop()
-                    );
+                    this.displayError.setErrorMessage(result.error_message);
                 }
-            }catch(e){
-                this.displayError.setErrorMessage(e);
             }
-
+            const instructionSpeed = this.speeds[this.speedIndex - 1];
+            const executeInstructions = () => {
+                try {
+                    this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
+                    this.matrixService.render(context);
+                    if (this.bytecodeService.validInstruction(this.instructions)) {
+                        if (!this.paused && !this.stopped) {
+                            setTimeout(executeInstructions, instructionSpeed);
+                        }
+                    } else {
+                        this.stop();
+                    }
+                } catch (e) {
+                    this.displayError.setErrorMessage(e);
+                    this.stop();
+                }
+            };
             this.execute();
+            setTimeout(executeInstructions, instructionSpeed);
         }
     }
 
@@ -214,14 +221,12 @@ export class DashboardComponent implements AfterViewInit {
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
             this.pause();
-            this.bytecodeService.pauseExecution();
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
             this.stop();
-            this.bytecodeService.stopExecution();
         }
     }
 
@@ -263,8 +268,6 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onSpeedIndexChange() {
-        const instructionSpeed = this.speeds[this.speedIndex - 1];
-        this.bytecodeService.setInstructionSpeed(instructionSpeed);
     }
 
     clearMap() {
