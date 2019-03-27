@@ -541,29 +541,24 @@ describe('BytecodeInterpreterService', () => {
         expect(head).toBe(true);
     });
 
-    // it('assert callbk and retr sets the PC correctly', () => {
-    //     const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
-    //     const matService: MatrixService = TestBed.get(MatrixService);
-    //     const instructions = [
-    //         newInstruction('JUMP', 3, 0, 0, 0, 0, 0),
-    //         newInstruction('HOP', 1, 0, 0, 0, 0, 0),
-    //         newInstruction('RETR', 0, 0, 0, 0, 0, 0),
-    //         newInstruction('NEW', 0, 1, 1, 0, 0, 0),
-    //         newInstruction('CSR', 0, 0, 0, 0, 0, 0),
-    //         newInstruction('CALLBK', 0, 0, 0, 0, 0, 0),
-    //         newInstruction('JUMP', 1, 0, 0, 0, 0, 0)
-    //     ];
+    it('assert callbk and retr sets the PC correctly', () => {
+        const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
+        const matService: MatrixService = TestBed.get(MatrixService);
+        const instructions = [
+            newInstruction('JUMP', 3, 0, 0, 0, 0, 0),
+            newInstruction('HOP', 1, 0, 0, 0, 0, 0),
+            newInstruction('RETR', 0, 0, 0, 0, 0, 0),
+            newInstruction('NEW', 0, 1, 1, 0, 0, 0),
+            newInstruction('CSR', 0, 0, 0, 0, 0, 0),
+            newInstruction('CALLBK', 0, 0, 0, 0, 0, 0),
+            newInstruction('JUMP', 1, 0, 0, 0, 0, 0)
+        ];
 
-    //     let pc = 0;
-    //     while (pc < instructions.length) {
-    //         const instruction = service.fetchInstruction(instructions);
-    //         service.executeBytecode(instruction, matService);
-    //         pc = service.getPc();
-    //     }
+        service.executeInstructionsUntilLNumChanges(instructions, matService);
 
-    //     const currJeroo = service.getCurrentJeroo();
-    //     expect(matService.getJeroo(1, 0)).toEqual(currJeroo);
-    // });
+        const currJeroo = service.getCurrentJeroo();
+        expect(matService.getJeroo(1, 0)).toEqual(currJeroo);
+    });
 });
 
 function newInstruction(
