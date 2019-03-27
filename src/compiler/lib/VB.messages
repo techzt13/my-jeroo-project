@@ -11,8 +11,8 @@ translation_unit: HEADER MAIN_METH_SEP NEWLINE MAIN_METH_SEP
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 2, spurious reduction of production list(NEWLINE) -> 
-## In state 3, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE) 
+## In state 2, spurious reduction of production list(NEWLINE) ->
+## In state 3, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -30,8 +30,8 @@ translation_unit: HEADER MAIN_METH_SEP SUB ID LPAREN RPAREN NEWLINE END SUB NEWL
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 2, spurious reduction of production list(NEWLINE) -> 
-## In state 3, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE) 
+## In state 2, spurious reduction of production list(NEWLINE) ->
+## In state 3, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -46,7 +46,7 @@ translation_unit: HEADER MAIN_METH_SEP SUB ID LPAREN RPAREN NEWLINE END SUB WHIL
 ## HEADER fxns list(NEWLINE) MAIN_METH_SEP list(NEWLINE) fxn
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected EOF
 
 translation_unit: HEADER MAIN_METH_SEP WHILE
 ##
@@ -58,7 +58,7 @@ translation_unit: HEADER MAIN_METH_SEP WHILE
 ## HEADER fxns list(NEWLINE) MAIN_METH_SEP
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `Sub`
 
 translation_unit: HEADER NEWLINE EOF
 ##
@@ -74,8 +74,8 @@ translation_unit: HEADER NEWLINE EOF
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 2, spurious reduction of production list(NEWLINE) -> 
-## In state 3, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE) 
+## In state 2, spurious reduction of production list(NEWLINE) ->
+## In state 3, spurious reduction of production list(NEWLINE) -> NEWLINE list(NEWLINE)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -90,7 +90,7 @@ translation_unit: HEADER NEWLINE WHILE
 ## NEWLINE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `Sub`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS ID EQ WEST THEN
 ##
@@ -109,7 +109,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS ID EQ WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -124,7 +124,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS ID EQ WHILE
 ## DIM ID AS ID EQ
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS ID WHILE
 ##
@@ -136,7 +136,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS ID WHILE
 ## DIM ID AS ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `=`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS WHILE
 ##
@@ -148,7 +148,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID AS WHILE
 ## DIM ID AS
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected type identifier
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID WHILE
 ##
@@ -160,7 +160,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM ID WHILE
 ## DIM ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `As`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM WHILE
 ##
@@ -172,7 +172,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE DIM WHILE
 ## DIM
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected identifier
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE ELSEIF
 ##
@@ -187,9 +187,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE ELSEIF
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -204,7 +204,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE END SUB WHILE
 ## list(NEWLINE) fxn
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected new line
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE END WHILE
 ##
@@ -216,7 +216,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE END WHILE
 ## SUB ID LPAREN RPAREN block END
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `Sub`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN NEWLINE ELSE NEWLINE ELSEIF
 ##
@@ -231,9 +231,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -248,7 +248,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN block ELSE block END IF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected new line
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN NEWLINE ELSE NEWLINE END WHILE
 ##
@@ -260,7 +260,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN block ELSE block END
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `If`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN NEWLINE ELSE WHILE
 ##
@@ -272,7 +272,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN block ELSE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected new line
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN NEWLINE ELSEIF WEST THEN NEWLINE END IF WHILE
 ##
@@ -284,7 +284,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN block elseif_stmt
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected new line
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN NEWLINE END IF WHILE
 ##
@@ -296,7 +296,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN block END IF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected new line
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN NEWLINE END WHILE
 ##
@@ -308,7 +308,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN block END
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `If`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN WHILE
 ##
@@ -322,7 +322,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN THEN
 ## IF LPAREN expr RPAREN THEN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected new line
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN WHILE
 ##
@@ -337,7 +337,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST RPAREN WHIL
 ## IF LPAREN expr RPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `Then`
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST THEN
 ##
@@ -359,7 +359,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -377,7 +377,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF LPAREN WHILE
 ## IF LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST RPAREN
 ##
@@ -398,7 +398,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST RPAREN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -416,9 +416,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST THEN NEWLINE ELSE 
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -484,9 +484,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST THEN NEWLINE ELSEI
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -576,7 +576,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST THEN NEWLINE ELSEI
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -615,7 +615,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST THEN NEWLINE ELSEI
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -633,9 +633,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE IF WEST THEN NEWLINE ELSEI
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -779,7 +779,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE LPAREN WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -963,7 +963,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE WEST LPAREN WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -1025,7 +1025,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -1056,9 +1056,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE WHILE LPAREN WEST RPAREN N
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -1118,7 +1118,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE WHILE LPAREN WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -1149,9 +1149,9 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE WHILE WEST NEWLINE ELSEIF
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE 
-## In state 11, spurious reduction of production list(stmt) -> 
-## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt) 
+## In state 9, spurious reduction of production nonempty_list(NEWLINE) -> NEWLINE
+## In state 11, spurious reduction of production list(stmt) ->
+## In state 125, spurious reduction of production block -> nonempty_list(NEWLINE) list(stmt)
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -1197,7 +1197,7 @@ translation_unit: HEADER SUB ID LPAREN RPAREN NEWLINE WHILE WEST THEN
 ## This implies that, although the LR(1) items shown above provide an
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production expr -> arith_expr 
+## In state 35, spurious reduction of production expr -> arith_expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -1286,4 +1286,3 @@ translation_unit: WHILE
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
-
