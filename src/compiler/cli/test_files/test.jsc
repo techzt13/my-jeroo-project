@@ -1,6 +1,7 @@
 @Java
 method a() {
-foo(1,2;
+foo();
+while(tr) a;
 }
 @@
 method main() {

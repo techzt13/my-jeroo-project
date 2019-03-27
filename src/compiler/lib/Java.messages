@@ -42,7 +42,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID EQ WEST RPAREN
 ## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-expected one of `;`, `.`, `(`, or an operator
+expected one of `;`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET ID ID EQ WHILE
 ##
@@ -389,7 +389,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WEST SEMIC
 ## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-expected one of `)`, `.`, or an operator
+expected one of `)`, `,`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST LPAREN WHILE
 ##
@@ -431,7 +431,19 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST OR WHILE
 
 expected expression
 
-translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST RPAREN
+translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST SEMICOLON SEMICOLON
+##
+## Ends in an error in state: 69.
+##
+## list(stmt) -> stmt . list(stmt) [ RBRACKET ]
+##
+## The known suffix of the stack is as follows:
+## stmt
+##
+
+expected `}`
+
+translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST WHILE
 ##
 ## Ends in an error in state: 60.
 ##
@@ -451,32 +463,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST RPAREN
 ## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-expected one of `(`, `while`, `if`, `else, identifier, `;`, `.`, or an operator
-
-translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST SEMICOLON SEMICOLON
-##
-## Ends in an error in state: 69.
-##
-## list(stmt) -> stmt . list(stmt) [ RBRACKET ]
-##
-## The known suffix of the stack is as follows:
-## stmt
-##
-
-expected `}`
-
-translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WEST WHILE
-##
-## Ends in an error in state: 31.
-##
-## expr -> arith_expr . [ SEMICOLON RPAREN OR LPAREN EQ DOT COMMA AND ]
-## expr -> arith_expr . LPAREN arguments RPAREN [ SEMICOLON RPAREN OR LPAREN EQ DOT COMMA AND ]
-##
-## The known suffix of the stack is as follows:
-## arith_expr
-##
-
-expected one of `;`, `.`, `(`, `)`, or an operator
+expected one of `;`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WEST RPAREN SEMICOLON
 ##
@@ -512,7 +499,7 @@ translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WEST SEMI
 ## In state 31, spurious reduction of production expr -> arith_expr
 ##
 
-expected `)` or operator
+expected `)`, `.`, or an operator
 
 translation_unit: HEADER METHOD ID LPAREN RPAREN LBRACKET WHILE LPAREN WHILE
 ##
