@@ -23,7 +23,7 @@ open AST
 %%
 
 translation_unit:
-  | HEADER fs = fxns NEWLINE* MAIN_METH_SEP NEWLINE* f = fxn NEWLINE* EOF { { extension_fxns = fs; main_fxn = f} }
+  | HEADER fs = fxns MAIN_METH_SEP NEWLINE* f = fxn NEWLINE* EOF { { extension_fxns = fs; main_fxn = f} }
 
 fxns:
   | NEWLINE* { [] }
