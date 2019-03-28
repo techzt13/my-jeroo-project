@@ -23,7 +23,7 @@ open AST
 %%
 
 translation_unit:
-  | HEADER fs = fxns NEWLINE* MAIN_METH_SEP NEWLINE* f = fxn NEWLINE* EOF { { extension_fxns = fs; main_fxn = f;} }
+  | HEADER fs = fxns NEWLINE* MAIN_METH_SEP NEWLINE* f = fxn NEWLINE* EOF { { extension_fxns = fs; main_fxn = f} }
 
 fxns:
   | NEWLINE* { [] }
@@ -45,11 +45,11 @@ block:
   | NEWLINE+ stmts = stmt* { stmts }
 
 stmt:
-(* if statment *)
+(* if statement *)
   | ln = IF LPAREN e = expr RPAREN THEN b = block END IF NEWLINE+ { AST.IfStmt(e, AST.BlockStmt(b), ln) }
-(* if statment, no parenthesis *)
+(* if statement, no parenthesis *)
   | ln = IF e = expr THEN b = block END IF NEWLINE+ { AST.IfStmt(e, AST.BlockStmt(b), ln) }
-(* if-else statment *)
+(* if-else statement *)
   | ln = IF LPAREN e = expr RPAREN THEN b1 = block ELSE b2 = block END IF NEWLINE+ { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
 (* else-if statement *)
   | ln = IF LPAREN e = expr RPAREN THEN b1 = block s = elseif_stmt NEWLINE+ { AST.IfElseStmt(e, AST.BlockStmt(b1), s, ln) }
