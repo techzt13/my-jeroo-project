@@ -172,7 +172,7 @@
             </mat-menu>
             <!--Text tabs Area-->
             <div class="row">
-                <div class="col-lg-7">
+                <div class="col-lg-5">
                     <mat-tab-group color="accent" (selectedIndexChange)="onEditorTabIndexChange($event)">
                         <mat-tab label="Main Method">
                             <app-text-editor #mainMethodTextEditor></app-text-editor>
@@ -190,18 +190,22 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                   </div>                </div>
+                    </div>
+                </div>
                 <!--Matrix Area-->
-                <div class="col-lg-5">
+                
+                <div class="col-lg-7">
                     <app-jeroo-matrix #jerooMatrix></app-jeroo-matrix>
                 </div>
+            </div>
+            <div class="row">
                 <!--Error Area-->
-                <div class="col-lg-7">
-                    <mat-tab-group>
-                        <mat-tab label="Error Message Display">
+                <div class="col-lg-5">                    
+                    <mat-card class="scrollable-content">
+                        <mat-card-content >
                             <app-display-error-message #errorMessage></app-display-error-message>
-                        </mat-tab>
-                    </mat-tab-group>
+                        </mat-card-content>
+                    </mat-card>
                 </div>
             </div>
         </main>

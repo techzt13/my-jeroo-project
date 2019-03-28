@@ -13,10 +13,10 @@ export class DisplayErrorMessageComponent extends ErrorHandler implements OnInit
     super();
   }
   ngOnInit() {
-    this.errorMessage = 'This should change';
+    this.errorMessage = '';
   }
   setErrorMessage(message: string) {
-    this.errorMessage = message;
+    this.errorMessage = "\t" + message;
   }
   getErrorMessage() {
     return this.errorMessage;
@@ -24,7 +24,4 @@ export class DisplayErrorMessageComponent extends ErrorHandler implements OnInit
   clearErrorMessage() {
     this.errorMessage = '';
   } 
-  testErrorMessage(){
-    this.errorMessage = 'Changed to new'
-  }
 }

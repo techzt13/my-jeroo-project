@@ -29,7 +29,7 @@ export class TextEditorComponent implements AfterViewInit {
         });
         this.editor.setOption('matchBrackets', true);
         this.editor.setOption('autoCloseBrackets', '{}()');
-        this.editor.setSize(null, 500);
+        this.editor.setSize(null, 700);
         this.editor.refresh();
     }
 
