@@ -29,7 +29,7 @@ fxns:
   |  fs = fxn*  { fs }
 
 fxn:
-  | start_lnum = SUB id = ID LPAREN RPAREN b = block end_lnum = END SUB NEWLINE* {
+  | start_lnum = SUB id = ID LPAREN RPAREN NEWLINE b = block end_lnum = END SUB NEWLINE+ {
                                           let (id, _) = id in
                                           let stmts = b in
                                           {
@@ -41,37 +41,26 @@ fxn:
                                         }
 
 block:
-  | NEWLINE stmts = stmt* { stmts }
+  | stmts = stmt* { stmts }
 
 stmt:
-(* if statement *)
-  | ln = IF LPAREN e = expr RPAREN THEN b = block END IF NEWLINE { AST.IfStmt(e, AST.BlockStmt(b), ln) }
 (* if statement, no parenthesis *)
-  | ln = IF e = expr THEN b = block END IF NEWLINE { AST.IfStmt(e, AST.BlockStmt(b), ln) }
-(* if-else statement *)
-  | ln = IF LPAREN e = expr RPAREN THEN b1 = block ELSE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
-(* else-if statement *)
-  | ln = IF LPAREN e = expr RPAREN THEN b1 = block s = elseif_stmt { AST.IfElseStmt(e, AST.BlockStmt(b1), s, ln) }
+  | ln = IF e = expr THEN NEWLINE b = block END IF NEWLINE { AST.IfStmt(e, AST.BlockStmt(b), ln) }
 (* else-if statement, no parenthesis *)
-  | ln = IF e = expr THEN b1 = block s = elseif_stmt NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), s, ln) }
+  | ln = IF e = expr THEN NEWLINE b1 = block s = elseif_stmt NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), s, ln) }
 (* if-else statement, no parenthesis *)
-  | ln = IF e = expr THEN b1 = block ELSE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
-(* while statement *)
-  | ln = WHILE LPAREN e = expr RPAREN b = block END WHILE NEWLINE { AST.WhileStmt(e, AST.BlockStmt(b), ln) }
+  | ln = IF e = expr THEN NEWLINE b1 = block ELSE NEWLINE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
 (* while statement, no parenthesis *)
-  | ln = WHILE e = expr b = block END WHILE NEWLINE { AST.WhileStmt(e, AST.BlockStmt(b), ln) }
+  | ln = WHILE e = expr NEWLINE b = block END WHILE NEWLINE { AST.WhileStmt(e, AST.BlockStmt(b), ln) }
 (* variable declaration statement *)
   | DIM id = ID AS ty = ID EQ e = expr NEWLINE { let (id, _) = id in let (ty, _) = ty in AST.DeclStmt(ty, id, e) }
 (* expression statement *)
   | e = expr? NEWLINE { AST.ExprStmt(e) }
 
 elseif_stmt:
-  | ln = ELSEIF LPAREN e = expr RPAREN THEN b = block elseif = elseif_stmt { AST.IfElseStmt(e, AST.BlockStmt(b), elseif, ln) }
-  | ln = ELSEIF e = expr THEN b = block elseif = elseif_stmt { AST.IfElseStmt(e, AST.BlockStmt(b), elseif, ln) }
-  | ln = ELSEIF LPAREN e = expr RPAREN THEN b1 = block ELSE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
-  | ln = ELSEIF e = expr THEN b1 = block ELSE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
-  | ln = ELSEIF LPAREN e = expr RPAREN THEN b = block END IF { AST.IfStmt(e, AST.BlockStmt(b), ln) }
-  | ln = ELSEIF e = expr THEN b = block END IF NEWLINE { AST.IfStmt(e, AST.BlockStmt(b), ln) }
+  | ln = ELSEIF e = expr THEN NEWLINE b = block elseif = elseif_stmt { AST.IfElseStmt(e, AST.BlockStmt(b), elseif, ln) }
+  | ln = ELSEIF e = expr THEN NEWLINE b1 = block ELSE NEWLINE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
+  | ln = ELSEIF e = expr THEN NEWLINE b = block END IF NEWLINE { AST.IfStmt(e, AST.BlockStmt(b), ln) }
 
 arguments:
   | args = separated_list(COMMA, expr) { args }
