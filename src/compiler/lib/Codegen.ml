@@ -249,11 +249,10 @@ let codegen translation_unit =
     | AST.ExprStmt expr ->
       (* generate code for an expression statement *)
       begin match expr with
-        | Some e -> begin
-            gen_code_expr expr pane_num;
-            expr.lnum
-          end
-        | None -> ()
+        | { a = (Some e); lnum = lnum } ->
+          gen_code_expr e pane_num;
+          lnum
+        | { a = None; lnum = lnum } -> lnum
       end
     | AST.DeclStmt (ty, id, meta_expr) ->
       (* generate code for a Jeroo declaration *)

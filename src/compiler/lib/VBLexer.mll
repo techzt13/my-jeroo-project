@@ -129,6 +129,6 @@ rule token = parse
 | '.'
   { DOT (LexingUtils.get_lnum lexbuf) }
 | newline
-  { new_line lexbuf; NEWLINE }
+  { new_line lexbuf; NEWLINE (LexingUtils.get_lnum lexbuf) }
 | eof
   { EOF }

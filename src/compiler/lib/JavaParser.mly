@@ -60,7 +60,7 @@ closed_stmt:
 simple_stmt:
   | b = block { let (stmts, _, _) = b in AST.BlockStmt(stmts) }
   | ty = ID id = ID EQ e = expr SEMICOLON { let (id, _) = id in let (ty, _) = ty in AST.DeclStmt(ty, id, e) }
-  | e = expr? SEMICOLON { AST.ExprStmt(e) }
+  | e = expr? ln = SEMICOLON { AST.ExprStmt({ a = e; lnum = ln }) }
 
 arguments:
   | args = separated_list(COMMA, expr) { args }

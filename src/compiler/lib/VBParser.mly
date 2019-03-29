@@ -8,7 +8,7 @@ open AST
 %token <int> LEFT RIGHT AHEAD HERE TRUE FALSE
 %token <int> NORTH SOUTH EAST WEST
 %token <int> LPAREN RPAREN COMMA THEN DIM AS
-%token NEWLINE
+%token <int> NEWLINE
 %token HEADER MAIN_METH_SEP
 %token EOF
 
@@ -20,6 +20,11 @@ open AST
 %left DOT
 
 %start <AST.translation_unit> translation_unit
+
+%on_error_reduce list(NEWLINE)
+%on_error_reduce nonempty_list(NEWLINE)
+%on_error_reduce list(stmt)
+%on_error_reduce expr
 %%
 
 translation_unit:
@@ -55,7 +60,7 @@ stmt:
 (* variable declaration statement *)
   | DIM id = ID AS ty = ID EQ e = expr NEWLINE { let (id, _) = id in let (ty, _) = ty in AST.DeclStmt(ty, id, e) }
 (* expression statement *)
-  | e = expr? NEWLINE { AST.ExprStmt(e) }
+  | e = expr? ln = NEWLINE { AST.ExprStmt({a = e; lnum = ln}) }
 
 elseif_stmt:
   | ln = ELSEIF e = expr THEN NEWLINE b = block elseif = elseif_stmt { AST.IfElseStmt(e, AST.BlockStmt(b), elseif, ln) }
