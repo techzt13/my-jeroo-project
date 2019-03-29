@@ -47,7 +47,7 @@ type stmt =
   | WhileStmt of expr meta * stmt * int
   (* type, identifier, initialization expression *)
   | DeclStmt of string * string * expr meta
-  | ExprStmt of expr meta
+  | ExprStmt of expr meta option
 
 
 type fxn = {

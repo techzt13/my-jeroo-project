@@ -248,8 +248,13 @@ let codegen translation_unit =
       |> List.fold_left (fun _ stmt -> gen_code_stmt stmt pane_num) 0
     | AST.ExprStmt expr ->
       (* generate code for an expression statement *)
-      gen_code_expr expr pane_num;
-      expr.lnum
+      begin match expr with
+        | Some e -> begin
+            gen_code_expr expr pane_num;
+            expr.lnum
+          end
+        | None -> ()
+      end
     | AST.DeclStmt (ty, id, meta_expr) ->
       (* generate code for a Jeroo declaration *)
       let line_num = meta_expr.lnum in
