@@ -117,10 +117,10 @@ export class JerooMatrixComponent implements AfterViewInit {
     private updateScreenFromMouseEvent(event: MouseEvent) {
         const rect = this.canvas.getBoundingClientRect();
         // bitwise or is the same as casting a float to a number
-        // const pixelX = (event.clientX - rect.left) | 0;
-        // const pixelY = (event.clientY - rect.top) | 0;
-        const pixelX = event.offsetX;
-        const pixelY = event.offsetY;
+        const pixelX = (event.clientX - rect.left) | 0;
+        const pixelY = (event.clientY - rect.top) | 0;
+        // const pixelX = event.pageX;
+        // const pixelY = event.pageY;
         this.printMouseTest = pixelX + 'and' + pixelY;
         this.updateScreen(pixelX, pixelY);
     }
@@ -128,8 +128,8 @@ export class JerooMatrixComponent implements AfterViewInit {
     private updateScreenFromTapEvent(event: TouchEvent) {
         const rect = this.canvas.getBoundingClientRect();
         // const target = event.touches[0].target as HTMLTextAreaElement;
-        const pixelX = (event.touches[0].pageX - rect.left) | 0;
-        const pixelY = (event.touches[0].pageY - rect.top) | 0;
+        const pixelX = (event.touches[0].clientX - rect.left) | 0;
+        const pixelY = (event.touches[0].clientY - rect.top) | 0;
         this.printTapTest = pixelX + 'and' + rect.top;
         this.updateScreen(pixelX, pixelY);
     }
