@@ -119,8 +119,6 @@ export class JerooMatrixComponent implements AfterViewInit {
         // bitwise or is the same as casting a float to a number
         const pixelX = (event.clientX - rect.left) | 0;
         const pixelY = (event.clientY - rect.top) | 0;
-        // const pixelX = event.pageX;
-        // const pixelY = event.pageY;
         this.printMouseTest = pixelX + 'and' + pixelY;
         this.updateScreen(pixelX, pixelY);
     }
