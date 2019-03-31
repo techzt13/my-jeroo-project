@@ -12,6 +12,11 @@
             "element",
             "app",
             "kebab-case"
+        ],
+        "no-console": [
+            true,
+            "log",
+            "error"
         ]
     }
 }
