@@ -114,6 +114,7 @@ export class MatrixService {
                 this.renderTiles(context, imageAtlas);
                 this.imageAtlas = imageAtlas;
             });
+            // context.scale(0.95, 0.95);
         } else {
             this.renderTiles(context, this.imageAtlas);
         }
