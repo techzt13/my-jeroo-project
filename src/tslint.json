@@ -15,8 +15,7 @@
         ],
         "no-console": [
             true,
-            "log",
-            "error"
+            "log"
         ]
     }
 }
