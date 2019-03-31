@@ -11,34 +11,6 @@ mat-sidenav {
   width: 250px;
 }
 
-mat-card {
-  height: 150px;
-  width: 100%;
-  
-}
-.mat-card.scrollable-content {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  > .mat-card-title-group {
-    display: block;
-  }
-
-  > .mat-card-content {
-    overflow-y: auto;
-  }
-}
-mat-card-content {
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  overflow: hidden;
-  height: 150px;
-  width: 100%;
-  
-}
-
-
 mat-divider {
   height: 24px;
   margin-left: 8px;

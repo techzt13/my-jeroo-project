@@ -156,7 +156,7 @@
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="saveMapFile()">
-                        <fa-icon icon="saanve"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
+                        <fa-icon icon="save"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="printMap()">
@@ -172,7 +172,7 @@
             </mat-menu>
             <!--Text tabs Area-->
             <div class="row">
-                <div class="col-lg-5">
+                <div class="col-lg-7">
                     <mat-tab-group color="accent" (selectedIndexChange)="onEditorTabIndexChange($event)">
                         <mat-tab label="Main Method">
                             <app-text-editor #mainMethodTextEditor></app-text-editor>
@@ -198,8 +198,8 @@
                     </mat-card>
                 </div>
                 <!--Matrix Area-->
-                
-                <div class="col-lg-7">
+
+                <div class="col-lg-5">
                     <app-jeroo-matrix #jerooMatrix></app-jeroo-matrix>
                 </div>
             </div>

@@ -136,7 +136,7 @@ export class DashboardComponent implements AfterViewInit {
                     this.instructions = result.bytecode;
                     this.bytecodeService.reset(this.matrixService, context);
                 } else {
-                    this.displayError.setErrorMessage(result.error_message);
+                    this.displayError.setErrorMessage(result.error);
                 }
             }
             const instructionSpeed = this.speeds[this.speedIndex - 1];
@@ -169,7 +169,7 @@ export class DashboardComponent implements AfterViewInit {
                     this.instructions = result.bytecode;
                     this.bytecodeService.reset(this.matrixService, context);
                 } else {
-                    this.displayError.setErrorMessage(result.error_message);
+                    this.displayError.setErrorMessage(result.error);
                 }
             }
             const instructionSpeed = this.speeds[this.speedIndex - 1];
