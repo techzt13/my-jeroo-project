@@ -143,7 +143,6 @@ export class JerooMatrixComponent implements AfterViewInit {
 
     private updateScreenFromTapEvent(event: TouchEvent) {
         const rect = this.canvas.getBoundingClientRect();
-        // const target = event.touches[0].target as HTMLTextAreaElement;
         const pixelX = (event.touches[0].clientX - rect.left) | 0;
         const pixelY = (event.touches[0].clientY - rect.top) | 0;
         this.updateScreen(pixelX, pixelY);
