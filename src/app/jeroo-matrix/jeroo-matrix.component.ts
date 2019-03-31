@@ -3,11 +3,12 @@ import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
-import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
+import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 
 @Component({
     selector: 'app-jeroo-matrix',
-    templateUrl: './jeroo-matrix.component.html'
+    templateUrl: './jeroo-matrix.component.html',
+    styleUrls: ['./jeroo-matrix.component.scss']
 })
 export class JerooMatrixComponent implements AfterViewInit {
     @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
@@ -19,6 +20,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     private boardCache = 'board';
     mouseRow: number = null;
     mouseColumn: number = null;
+    editingEnabled = true;
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
                 @Inject(LOCAL_STORAGE) private storage: WebStorageService) { }
@@ -45,10 +47,12 @@ export class JerooMatrixComponent implements AfterViewInit {
 
         const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
         dialogRef.afterClosed().subscribe(data => {
-            this.matrixService.setCols(+data.xValue);
-            this.matrixService.setRows(+data.yValue);
-            this.matrixService.resetMap();
-            this.redraw();
+            if (this.editingEnabled) {
+                this.matrixService.setCols(+data.xValue);
+                this.matrixService.setRows(+data.yValue);
+                this.matrixService.resetMap();
+                this.redraw();
+            }
         });
     }
 
@@ -65,14 +69,20 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     clearMap() {
-        this.matrixService.resetMap();
-        // if the board is cleared, also save into service incase the size has been changed
-        this.saveInLocal(this.boardCache, this.matrixService.toString());
-        this.matrixService.render(this.context);
+        if (this.editingEnabled) {
+            this.matrixService.resetMap();
+            // if the board is cleared, also save into service incase the size has been changed
+            this.saveInLocal(this.boardCache, this.matrixService.toString());
+            this.matrixService.render(this.context);
+        }
     }
 
     getCanvas() {
         return this.canvas;
+    }
+
+    getContext() {
+        return this.context;
     }
 
     selectedTileTypeChange(tileType: string) {
@@ -154,7 +164,7 @@ export class JerooMatrixComponent implements AfterViewInit {
         if (tileCol >= 0 && tileRow >= 0
             && tileCol < cols && tileRow < rows) {
             // update the col and row
-            if (this.mouseDown && this.selectedTileType !== null) {
+            if (this.editingEnabled && this.mouseDown && this.selectedTileType !== null) {
                 // only re-render if we change the map
                 if (this.matrixService.getTile(tileCol, tileRow) !== this.selectedTileType) {
                     this.matrixService.setTile(tileCol, tileRow, this.selectedTileType);
@@ -173,4 +183,11 @@ export class JerooMatrixComponent implements AfterViewInit {
         this.storage.set(key, val);
     }
 
+    enableEditing() {
+        this.editingEnabled = true;
+    }
+
+    disableEditing() {
+        this.editingEnabled = false;
+    }
 }
