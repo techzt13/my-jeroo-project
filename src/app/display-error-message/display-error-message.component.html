@@ -1,1 +1,9 @@
-{{errorMessage}}
+<mat-card *ngIf="messageService.messages.length">
+    <mat-card-content class="error-window">
+        <p *ngFor="let message of messageService.messages">{{message}}</p>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions>
+        <button mat-raised-button (click)="messageService.clear()">clear</button>
+    </mat-card-actions>
+</mat-card>
