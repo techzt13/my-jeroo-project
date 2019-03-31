@@ -28,22 +28,25 @@ open AST
 %%
 
 translation_unit:
-  | HEADER NEWLINE* fs = fxns MAIN_METH_SEP NEWLINE* f = fxn EOF { { extension_fxns = fs; main_fxn = f} }
+  | HEADER NEWLINE* fs = fxns MAIN_METH_SEP NEWLINE* f = fxn NEWLINE* EOF { { extension_fxns = fs; main_fxn = f} }
 
 fxns:
-  |  fs = fxn*  { fs }
+  |  fs = extension_fxn*  { fs }
+
+extension_fxn:
+  | f = fxn NEWLINE+ { f }
 
 fxn:
-  | start_lnum = SUB id = ID LPAREN RPAREN NEWLINE b = block end_lnum = END SUB NEWLINE+ {
-                                          let (id, _) = id in
-                                          let stmts = b in
-                                          {
-                                            id = id;
-                                            stmts = stmts;
-                                            start_lnum = start_lnum;
-                                            end_lnum = end_lnum
-                                          }
-                                        }
+  | start_lnum = SUB id = ID LPAREN RPAREN NEWLINE b = block end_lnum = END SUB {
+        let (id, _) = id in
+        let stmts = b in
+        {
+          id = id;
+          stmts = stmts;
+          start_lnum = start_lnum;
+          end_lnum = end_lnum
+        }
+      }
 
 block:
   | stmts = stmt* { stmts }
@@ -52,7 +55,7 @@ stmt:
 (* if statement, no parenthesis *)
   | ln = IF e = expr THEN NEWLINE b = block END IF NEWLINE { AST.IfStmt(e, AST.BlockStmt(b), ln) }
 (* else-if statement, no parenthesis *)
-  | ln = IF e = expr THEN NEWLINE b1 = block s = elseif_stmt NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), s, ln) }
+  | ln = IF e = expr THEN NEWLINE b1 = block s = elseif_stmt { AST.IfElseStmt(e, AST.BlockStmt(b1), s, ln) }
 (* if-else statement, no parenthesis *)
   | ln = IF e = expr THEN NEWLINE b1 = block ELSE NEWLINE b2 = block END IF NEWLINE { AST.IfElseStmt(e, AST.BlockStmt(b1), AST.BlockStmt(b2), ln) }
 (* while statement, no parenthesis *)

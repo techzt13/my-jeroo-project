@@ -129,6 +129,6 @@ rule token = parse
 | '.'
   { DOT (LexingUtils.get_lnum lexbuf) }
 | newline
-  { new_line lexbuf; NEWLINE (LexingUtils.get_lnum lexbuf) }
+  { let lnum = LexingUtils.get_lnum lexbuf in new_line lexbuf; NEWLINE lnum }
 | eof
   { EOF }
