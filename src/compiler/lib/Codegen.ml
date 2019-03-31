@@ -199,6 +199,25 @@ let codegen translation_unit =
                 message = "Invalid arguments, isWater requires a relative direction"
               })
           end
+        | "isClear" -> begin match args with
+            | meta_e :: [] ->
+              let relative_dir = relative_dir_of_expr meta_e in
+              let instrs = [
+                Bytecode.ISJEROO (relative_dir, pane_num, line_num);
+                Bytecode.ISWATER (relative_dir, pane_num, line_num);
+                Bytecode.ISNET (relative_dir, pane_num, line_num);
+                Bytecode.ISFLWR (relative_dir, pane_num, line_num);
+                Bytecode.OR (pane_num, line_num);
+                Bytecode.OR (pane_num, line_num);
+                Bytecode.OR (pane_num, line_num);
+                Bytecode.NOT (pane_num, line_num)
+              ] |> List.to_seq in
+              Queue.add_seq code_queue instrs
+            | _ -> raise (SemanticException {
+                lnum = line_num;
+                message = "Invalid arguments, isClear requires a relative direction"
+              })
+          end
         | _ ->
           (* calling a user-defined function *)
           if Hashtbl.mem fxn_tbl id then
