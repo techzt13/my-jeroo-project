@@ -225,6 +225,8 @@ let codegen translation_unit =
     match args with
     | [] ->
       Bytecode.NEW (id_loc, 0, 0, 0, Bytecode.North, line_num)
+    | { a = AST.IntExpr(num_flowers); _ } :: [] ->
+      Bytecode.NEW (id_loc, 0, 0, num_flowers, Bytecode.North, line_num)
     | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: [] ->
       Bytecode.NEW (id_loc, x, y, 0, Bytecode.North, line_num)
     | { a = AST.IntExpr(x); _ } :: { a = AST.IntExpr(y); _ } :: { a = AST.IntExpr(num_flowers); _ } :: [] ->
