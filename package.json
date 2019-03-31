@@ -57,6 +57,6 @@
     "tslint": "~5.11.0",
     "typedoc": "^0.14.2",
     "@types/hammerjs": "^2.0.36",
-    "typescript": "~3.2.2",
+    "typescript": "~3.2.2"
   }
 }
