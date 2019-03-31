@@ -125,9 +125,6 @@ export class DashboardComponent implements AfterViewInit {
         this.selectedEditor.formatSelection();
     }
 
-    compileAndRenderCode() {
-    }
-
     onRunStepwiseClick() {
         if (!this.runBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
@@ -158,10 +155,7 @@ export class DashboardComponent implements AfterViewInit {
                         this.stop();
                     }
                 } catch (e) {
-                    const runtimeError: RuntimeError = e;
-                    this.messageService.clear();
-                    this.messageService.add(runtimeError.message);
-                    this.stop();
+                    this.handleException(e);
                 }
             }, instructionSpeed);
             this.execute();
@@ -200,15 +194,20 @@ export class DashboardComponent implements AfterViewInit {
                         this.stop();
                     }
                 } catch (e) {
-                    const runtimeError: RuntimeError = e;
-                    this.messageService.clear();
-                    this.messageService.add(runtimeError.message);
-                    this.stop();
+                    this.handleException(e);
                 }
             };
             this.execute();
             setTimeout(executeInstructions, instructionSpeed);
         }
+    }
+
+    private handleException(e: any) {
+        const runtimeError: RuntimeError = e;
+        this.messageService.clear();
+        const message = `Runtime error line ${runtimeError.line_num}: ${runtimeError.message}`;
+        this.messageService.add(message);
+        this.stop();
     }
 
     private createJerooCode() {
