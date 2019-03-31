@@ -33,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
+import { StorageServiceModule } from 'angular-webstorage-service';
 
 library.add(
     faFile,
@@ -71,6 +72,7 @@ library.add(
         FormsModule,
         ReactiveFormsModule,
         FontAwesomeModule,
+        StorageServiceModule,
         HotkeyModule.forRoot()
     ],
     providers: [],
