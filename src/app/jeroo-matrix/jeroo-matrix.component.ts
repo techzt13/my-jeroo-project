@@ -19,10 +19,6 @@ export class JerooMatrixComponent implements AfterViewInit {
     private boardCache = 'board';
     mouseRow: number = null;
     mouseColumn: number = null;
-    printMouseTest: String = 'initial';
-    printTapTest: String = 'initial';
-    printTapTest2: String = 'initial';
-    tapTypeTest: String = 'up';
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
                 @Inject(LOCAL_STORAGE) private storage: WebStorageService) { }
@@ -101,7 +97,6 @@ export class JerooMatrixComponent implements AfterViewInit {
         this.mouseDown = false;
         // save board when user is done editing
         this.saveInLocal(this.boardCache, this.matrixService.toString());
-        this.tapTypeTest = 'up';
     }
 
     canvasMouseDown(event: MouseEvent) {
@@ -111,7 +106,6 @@ export class JerooMatrixComponent implements AfterViewInit {
 
     canvasTapDown(event: any) {
         this.mouseDown = true;
-        this.tapTypeTest = 'down';
         this.updateScreenFromTapEvent(event);
     }
 
@@ -134,7 +128,6 @@ export class JerooMatrixComponent implements AfterViewInit {
         // bitwise or is the same as casting a float to a number
         const pixelX = (event.clientX - rect.left) | 0;
         const pixelY = (event.clientY - rect.top) | 0;
-        this.printMouseTest = pixelX + 'and' + pixelY;
         this.updateScreen(pixelX, pixelY);
     }
 
@@ -143,7 +136,6 @@ export class JerooMatrixComponent implements AfterViewInit {
         // const target = event.touches[0].target as HTMLTextAreaElement;
         const pixelX = (event.touches[0].clientX - rect.left) | 0;
         const pixelY = (event.touches[0].clientY - rect.top) | 0;
-        this.printTapTest = pixelX + 'and' + rect.top;
         this.updateScreen(pixelX, pixelY);
     }
 

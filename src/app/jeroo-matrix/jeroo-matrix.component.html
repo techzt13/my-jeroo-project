@@ -18,10 +18,6 @@
     <canvas #jerooGameCanvas (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="disableScrolling()">
     </canvas>
 </div>
-{{printMouseTest}}
-{{printTapTest}}
-{{printTapTest2}}
-{{tapTypeTest}}
 <div class="d-flex justify-content-center">
     <div *ngIf="mouseRow !== null && mouseColumn !== null; else elseBlock">
         Cursor Location: ({{mouseColumn}}, {{mouseRow}})
