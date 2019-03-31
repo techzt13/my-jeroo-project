@@ -212,7 +212,7 @@ export class DashboardComponent implements AfterViewInit {
     onResetClick() {
         if (!this.resetBtnDisabled()) {
             this.resetState();
-            const context = this.jerooMatrix.getCanvas().getContext('2d');
+            const context = this.jerooMatrix.getContext();
             this.bytecodeService.reset(this.matrixService, context);
             this.displayError.clearErrorMessage();
         }
