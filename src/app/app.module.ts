@@ -31,6 +31,7 @@ import { MatrixDialogComponent } from './matrix-dialog/matrix-dialog.component';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { DashboardDialogComponent } from './dashboard-dialog/dashboard-dialog.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
@@ -61,6 +62,7 @@ library.add(
         DashboardComponent,
         JerooMatrixComponent,
         MatrixDialogComponent,
+        DisplayErrorMessageComponent,
         TextEditorComponent,
         DashboardDialogComponent,
     ],
