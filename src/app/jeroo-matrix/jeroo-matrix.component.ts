@@ -51,6 +51,7 @@ export class JerooMatrixComponent implements AfterViewInit {
                 this.matrixService.setCols(+data.xValue + 2);
                 this.matrixService.setRows(+data.yValue + 2);
                 this.matrixService.resetMap();
+                this.matrixService.resetJeroos();
                 this.redraw();
             }
         });
@@ -71,6 +72,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     clearMap() {
         if (this.editingEnabled) {
             this.matrixService.resetMap();
+            this.matrixService.resetJeroos();
             // if the board is cleared, also save into service incase the size has been changed
             this.saveInLocal(this.boardCache, this.matrixService.toString());
             this.matrixService.render(this.context);
