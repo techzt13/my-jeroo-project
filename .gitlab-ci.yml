@@ -19,7 +19,6 @@ build-ocaml:
     - opam update && opam upgrade
     - ocamlc --version
     - opam --version
-    # - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
     - opam install --deps-only .
     - eval $(opam env)
     - dune build ./JerooCompiler.bc.js --profile release

@@ -11,7 +11,7 @@ doc:          "https://gitlab.com/bkonzUNOmaha/jeroo/wikis/home"
 build: [
   ["dune" "subst"]
   ["dune" "build" "-p" name "-j" jobs]
-  ["dune" "runtest" "-p" name "-j1" "--no-buffer"] {with-test}
+  ["dune" "runtest" "-p" name "-j1" "--no-buffer"]
 ]
 
 depends: [
@@ -22,5 +22,5 @@ depends: [
   "js_of_ocaml-compiler" {>= "3.3.0"}
   "js_of_ocaml-ppx" {>= "3.3.0"}
   "js_of_ocaml" {>= "3.3.0"}
-  "ounit"        {with-test & >= "2.0.8"}
+  "ounit"        {>= "2.0.8"}
 ]
