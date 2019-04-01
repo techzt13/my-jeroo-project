@@ -5,6 +5,8 @@ import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
 import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
+import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 
 interface Language {
     value: SelectedLanguage;
@@ -27,6 +29,8 @@ export class DashboardComponent implements AfterViewInit {
     @ViewChild('mapSaver') mapSaver: ElementRef;
     @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
     @ViewChild('extensionMethodsTextEditor') extensionMethodsTextEditor: TextEditorComponent;
+    @ViewChild('errorMessage') displayError: DisplayErrorMessageComponent;
+    
 
     selectedLanguage = SelectedLanguage.Java;
     languages: Language[] = [
@@ -50,6 +54,7 @@ export class DashboardComponent implements AfterViewInit {
     executing = false;
     paused = false;
     stopped = false;
+    private instructions: Array<Instruction> = null;
 
     constructor(
         private bytecodeService: BytecodeInterpreterService,
@@ -92,12 +97,14 @@ export class DashboardComponent implements AfterViewInit {
             this.printMap();
             return false;
         }));
+        this.hotkeysService.add(new Hotkey('f1', (_event: KeyboardEvent): boolean => {
+            this.getHelpUrl();
+            return false;
+        }));
     }
 
     ngAfterViewInit() {
         this.selectedEditor = this.mainMethodTextEditor;
-        const instructionSpeed = this.speeds[this.speedIndex - 1];
-        this.bytecodeService.setInstructionSpeed(instructionSpeed);
     }
 
     onUndoClick() {
@@ -127,22 +134,32 @@ export class DashboardComponent implements AfterViewInit {
     onRunStepwiseClick() {
         if (!this.runBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
-            if (this.reset) {
+            this.displayError.clearErrorMessage();
+            if (this.reset || this.instructions === null) {
                 const jerooCode = this.createJerooCode();
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
-                    const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context,
-                        () => this.pause(),
-                        () => this.stop()
-                    );
+                    this.instructions = result.bytecode;
+                    this.bytecodeService.reset(this.matrixService, context);
+                } else {
+                    this.displayError.setErrorMessage(result.error_message);
                 }
-            } else {
-                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context,
-                    () => this.pause(),
-                    () => this.stop()
-                );
             }
+            const instructionSpeed = this.speeds[this.speedIndex - 1];
+            setTimeout(() => {
+                try {
+                    this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
+                    this.matrixService.render(context);
+                    if (this.bytecodeService.validInstruction(this.instructions)) {
+                        this.pause();
+                    } else {
+                        this.stop();
+                    }
+                } catch (e) {
+                    this.displayError.setErrorMessage(e);
+                    this.stop();
+                }
+            }, instructionSpeed);
             this.execute();
         }
     }
@@ -150,21 +167,36 @@ export class DashboardComponent implements AfterViewInit {
     onRunContiniousClick() {
         if (!this.runBtnDisabled()) {
             const context = this.jerooMatrix.getContext();
-            if (this.reset) {
+            this.displayError.clearErrorMessage();
+            if (this.reset || this.instructions === null) {
                 const jerooCode = this.createJerooCode();
                 const result = JerooCompiler.compile(jerooCode);
                 if (result.successful) {
-                    const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context,
-                        () => this.stop()
-                    );
+                    this.instructions = result.bytecode;
+                    this.bytecodeService.reset(this.matrixService, context);
+                } else {
+                    this.displayError.setErrorMessage(result.error_message);
                 }
-            } else {
-                this.bytecodeService.resumeExecutionContinious(this.matrixService, context,
-                    () => this.stop()
-                );
             }
+            const instructionSpeed = this.speeds[this.speedIndex - 1];
+            const executeInstructions = () => {
+                try {
+                    this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
+                    this.matrixService.render(context);
+                    if (this.bytecodeService.validInstruction(this.instructions)) {
+                        if (!this.paused && !this.stopped) {
+                            setTimeout(executeInstructions, instructionSpeed);
+                        }
+                    } else {
+                        this.stop();
+                    }
+                } catch (e) {
+                    this.displayError.setErrorMessage(e);
+                    this.stop();
+                }
+            };
             this.execute();
+            setTimeout(executeInstructions, instructionSpeed);
         }
     }
 
@@ -188,20 +220,19 @@ export class DashboardComponent implements AfterViewInit {
             this.resetState();
             const context = this.jerooMatrix.getCanvas().getContext('2d');
             this.bytecodeService.reset(this.matrixService, context);
+            this.displayError.clearErrorMessage();
         }
     }
 
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
             this.pause();
-            this.bytecodeService.pauseExecution();
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
             this.stop();
-            this.bytecodeService.stopExecution();
         }
     }
 
@@ -243,8 +274,6 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onSpeedIndexChange() {
-        const instructionSpeed = this.speeds[this.speedIndex - 1];
-        this.bytecodeService.setInstructionSpeed(instructionSpeed);
     }
 
     clearMap() {
@@ -318,6 +347,10 @@ export class DashboardComponent implements AfterViewInit {
         return `/help/${this.selectedLanguageToString(this.selectedLanguage)}`;
     }
 
+    getHomeUrl() {
+        return `/`;
+    }
+
     getTutorialUrl() {
         return `/help/${this.selectedLanguageToString(this.selectedLanguage)}/tutorial`;
     }
@@ -356,5 +389,13 @@ export class DashboardComponent implements AfterViewInit {
 
     stopBtnDisabled() {
         return !this.executing && !this.paused;
+    }
+    openAboutJeroo() {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = {
+            xValue: this.matrixService.getCols(),
+            yValue: this.matrixService.getRows()
+        };
     }
 }

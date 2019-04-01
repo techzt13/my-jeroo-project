@@ -156,7 +156,7 @@
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="saveMapFile()">
-                        <fa-icon icon="save"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
+                        <fa-icon icon="saanve"></fa-icon><span class="col-1">Save<span class="shortcut-tip">Ctrl+Shift+S</span></span>
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="printMap()">
@@ -166,13 +166,22 @@
             </mat-menu>
             <mat-menu #help="matMenu">
                 <ng-template matMenuContent>
-                    <a mat-menu-item routerLink="{{getHelpUrl()}}" target="_blank">Help</a>
-                    <a mat-menu-item routerLink="{{getTutorialUrl()}}" target="_blank">Tutorial</a>
+                    <a mat-menu-item routerLink="{{getHelpUrl()}}" target="_blank"><span class="col-1">Langauge Summary<span class="shortcut-tip">F1</span></span></a>
+                    <mat-divider ></mat-divider>
+                    <a mat-menu-item routerLink="{{getTutorialUrl()}}" target="_blank"><span class="col-1">Getting Started Tutorial</span></a>
+                    <mat-divider></mat-divider>
+                    <a mat-menu-item routerLink="{{getHomeUrl()}}" target="_blank"><span class="col-1">Jeroo Home Page</span></a>
+                    <mat-divider></mat-divider>
+                    <a mat-menu-item routerLink="" target="_blank"><span class="col-1">About Jeroo</span></a>
+                    
+                    <a mat-menu-item routerLink="" target="_blank"><span class="col-1">Awards Received</span></a>
+                    <a mat-menu-item routerLink="" target="_blank"><span class="col-1">Jeroo's History</span></a>
+                    <a mat-menu-item routerLink="" target="_blank"><span class="col-1">Copyright Notice</span></a>
                 </ng-template>
             </mat-menu>
             <!--Text tabs Area-->
             <div class="row">
-                <div class="col-lg-7">
+                <div class="col-lg-5">
                     <mat-tab-group color="accent" (selectedIndexChange)="onEditorTabIndexChange($event)">
                         <mat-tab label="Main Method">
                             <app-text-editor #mainMethodTextEditor></app-text-editor>
@@ -193,7 +202,8 @@
                     </div>
                 </div>
                 <!--Matrix Area-->
-                <div class="col-lg-5">
+                
+                <div class="col-lg-7">
                     <app-jeroo-matrix #jerooMatrix></app-jeroo-matrix>
                 </div>
             </div>

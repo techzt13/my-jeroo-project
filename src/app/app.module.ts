@@ -32,6 +32,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
+import { DashboardDialogComponent } from './dashboard-dialog/dashboard-dialog.component';
 
 library.add(
     faFile,
@@ -60,6 +61,7 @@ library.add(
         JerooMatrixComponent,
         MatrixDialogComponent,
         TextEditorComponent,
+        DashboardDialogComponent,
     ],
     imports: [
         BrowserModule,
