@@ -36,7 +36,7 @@ export class MatrixService {
      */
     public resetMap() {
         this.tiles = [];
-        for (let row = 0; row < this.rows; row++) {
+        for (let col = 0; col < this.cols; col++) {
             this.tiles.push(TileType.Water);
         }
         for (let row = 0; row < this.rows - 2; row++) {
@@ -46,7 +46,7 @@ export class MatrixService {
             }
             this.tiles.push(TileType.Water);
         }
-        for (let row = 0; row < this.rows; row++) {
+        for (let col = 0; col < this.cols; col++) {
             this.tiles.push(TileType.Water);
         }
     }
@@ -231,8 +231,8 @@ export class MatrixService {
       */
     toString() {
         let mapContents = '';
-        for (let row = 0; row < this.rows; row++) {
-            for (let col = 0; col < this.cols; col++) {
+        for (let row = 1; row < this.rows - 1; row++) {
+            for (let col = 1; col < this.cols - 1; col++) {
                 const tile = this.tileTypeToString(this.getTile(col, row));
                 mapContents += tile;
             }
@@ -271,18 +271,26 @@ export class MatrixService {
             const cols = lines[0].length;
             const oldRows = this.getRows();
             const oldCols = this.getCols();
-            this.setRows(rows);
-            this.setCols(cols);
+            this.setRows(rows + 2);
+            this.setCols(cols + 2);
 
             try {
-                for (let row = 0; row < rows; row++) {
-                    if (lines[row].length !== cols) {
+                for (let col = 0; col < cols + 2; col++) {
+                    this.setTile(col, 0, TileType.Water);
+                }
+                for (let row = 1; row < rows + 1; row++) {
+                    if (lines[row - 1].length !== cols) {
                         throw new Error('Jagged maps are not allowed');
                     }
-                    for (let col = 0; col < cols; col++) {
-                        const char = lines[row].charAt(col);
+                    this.setTile(0, row, TileType.Water);
+                    for (let col = 1; col < cols + 1; col++) {
+                        const char = lines[row - 1].charAt(col - 1);
                         this.setTile(col, row, this.stringToTileType(char));
                     }
+                    this.setTile(cols + 1, row, TileType.Water);
+                }
+                for (let col = 0; col < cols + 2; col++) {
+                    this.setTile(col, 0, TileType.Water);
                 }
             } catch (e) {
                 // reset the rows and cols to their previous values

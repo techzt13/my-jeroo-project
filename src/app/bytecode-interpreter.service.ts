@@ -94,7 +94,7 @@ export class BytecodeInterpreterService {
                 if (tile === TileType.Net) {
                     throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', command.f);
                 }
-                if (matService.getJeroo(command.b, command.c) !== null) {
+                if (matService.getJeroo(command.b + 1, command.c + 1) !== null) {
                     throw new RuntimeError('INSTANTIATION ERROR: Jeroo started on another Jeroo', command.f);
                 }
                 if (this.jerooArray.length >= 4) {
