@@ -21,7 +21,8 @@ build-ocaml:
     # - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
     - opam install -y dune
     - cd src/compiler
-    - dune build ./JerooCompiler.bc.js --profile release @install
+    - dune build @install
+    - dune build ./JerooCompiler.bc.js --profile release
     - dune runtest
 
 build-angular:
