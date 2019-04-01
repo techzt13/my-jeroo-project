@@ -15,13 +15,13 @@ build-ocaml:
   script:
     - sudo apk update
     - sudo apk add m4
-    - opam update
+    - opam update && opam upgrade
     - ocamlc --version
     - opam --version
     # - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
-    - opam install -y dune
+    - opam install --deps-only .
+    - eval $(opam env)
     - cd src/compiler
-    - dune build @install
     - dune build ./JerooCompiler.bc.js --profile release
     - dune runtest
 
