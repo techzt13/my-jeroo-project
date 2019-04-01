@@ -18,10 +18,10 @@ build-ocaml:
     - opam update
     - ocamlc --version
     - opam --version
-    - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
+    # - opam install -y dune menhir js_of_ocaml-compiler js_of_ocaml-ppx js_of_ocaml ounit
     - cd src/compiler
+    - dune build ./JerooCompiler.bc.js --profile release @install
     - dune runtest
-    - dune build ./JerooCompiler.bc.js --profile release
 
 build-angular:
   image: node:8.15-alpine
