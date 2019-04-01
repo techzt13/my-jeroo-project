@@ -24,10 +24,7 @@ export class BytecodeInterpreterService {
     executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
         if (this.validInstruction(instructions)) {
             const line_num = instructions[this.pc].f;
-            while (true) {
-                if (!this.validInstruction(instructions)) {
-                    break;
-                }
+            while (this.validInstruction(instructions)) {
                 const current_line_num = instructions[this.pc].f;
                 if (line_num !== current_line_num) {
                     break;
@@ -90,7 +87,7 @@ export class BytecodeInterpreterService {
                 break;
             }
             case 'NEW': {
-                const tile = matService.getTile(command.b, command.c);
+                const tile = matService.getTile(command.b + 1, command.c + 1);
                 if (tile === TileType.Water) {
                     throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', command.f);
                 }
@@ -105,7 +102,7 @@ export class BytecodeInterpreterService {
                 }
                 try {
                     const direction = numberToCardinalDirection(command.e);
-                    const jeroo = new Jeroo(command.a, command.b, command.c, command.d, direction);
+                    const jeroo = new Jeroo(command.a, command.b + 1, command.c + 1, command.d, direction);
                     this.jerooArray.push(jeroo);
                     matService.setJeroo(jeroo.getX(), jeroo.getY(), jeroo);
                 } catch (e) {

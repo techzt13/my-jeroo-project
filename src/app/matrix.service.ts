@@ -10,8 +10,8 @@ import { Jeroo } from './jeroo';
 })
 export class MatrixService {
 
-    private rows = 24;
-    private cols = 24;
+    private rows = 26;
+    private cols = 26;
     private tsize = 28;
     private tiles: TileType[] = [];
     private imageAtlas: HTMLImageElement;
@@ -37,9 +37,17 @@ export class MatrixService {
     public resetMap() {
         this.tiles = [];
         for (let row = 0; row < this.rows; row++) {
-            for (let col = 0; col < this.cols; col++) {
+            this.tiles.push(TileType.Water);
+        }
+        for (let row = 0; row < this.rows - 2; row++) {
+            this.tiles.push(TileType.Water);
+            for (let col = 0; col < this.cols - 2; col++) {
                 this.tiles.push(TileType.Grass);
             }
+            this.tiles.push(TileType.Water);
+        }
+        for (let row = 0; row < this.rows; row++) {
+            this.tiles.push(TileType.Water);
         }
     }
 
@@ -124,47 +132,61 @@ export class MatrixService {
     }
 
     private renderTiles(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement) {
-        // fill the top row with water
-        for (let col = 0; col < this.cols + 2; col++) {
-            this.renderTile(context, imageAtlas, TileType.Water, col, 0);
-        }
         for (let row = 0; row < this.rows; row++) {
-            // fill in the left water tile
-            this.renderTile(context, imageAtlas, TileType.Water, 0, row + 1);
             for (let col = 0; col < this.cols; col++) {
                 const jeroo = this.getJeroo(col, row);
                 if (jeroo !== null) {
                     this.renderJeroo(context, imageAtlas, jeroo);
                 } else {
                     const tile = this.getTile(col, row);
-                    this.renderTile(context, imageAtlas, tile, col + 1, row + 1);
+                    this.renderTile(context, imageAtlas, tile, col, row);
                 }
             }
-            // fill in the right water tile
-            this.renderTile(context, imageAtlas, TileType.Water, this.cols + 1, row + 1);
-        }
-        // fill the bottom row with water
-        for (let col = 0; col < this.cols + 2; col++) {
-            this.renderTile(context, imageAtlas, TileType.Water, col, this.rows + 1);
         }
     }
 
     private renderJeroo(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, jeroo: Jeroo) {
         const jerooOffset = jeroo.getId() + 1;
         const directionOffset = jeroo.getDirection();
-        const col = jeroo.getX() + 1;
-        const row = jeroo.getY() + 1;
-        context.drawImage(
-            imageAtlas,
-            directionOffset * this.tsize,
-            jerooOffset * this.tsize,
-            this.tsize,
-            this.tsize,
-            col * this.tsize,
-            row * this.tsize,
-            this.tsize,
-            this.tsize
-        );
+        const col = jeroo.getX();
+        const row = jeroo.getY();
+        if (!jeroo.isInWater() && !jeroo.isInNet()) {
+            context.drawImage(
+                imageAtlas,
+                directionOffset * this.tsize,
+                jerooOffset * this.tsize,
+                this.tsize,
+                this.tsize,
+                col * this.tsize,
+                row * this.tsize,
+                this.tsize,
+                this.tsize
+            );
+        } else if (jeroo.isInWater()) {
+            context.drawImage(
+                imageAtlas,
+                0,
+                5 * this.tsize,
+                this.tsize,
+                this.tsize,
+                col * this.tsize,
+                row * this.tsize,
+                this.tsize,
+                this.tsize
+            );
+        } else if (jeroo.isInNet()) {
+            context.drawImage(
+                imageAtlas,
+                1 * this.tsize,
+                5 * this.tsize,
+                this.tsize,
+                this.tsize,
+                col * this.tsize,
+                row * this.tsize,
+                this.tsize,
+                this.tsize
+            );
+        }
     }
 
     private renderTile(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, tileType: TileType, col: number, row: number) {

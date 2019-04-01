@@ -155,6 +155,7 @@ export class DashboardComponent implements AfterViewInit {
                         this.stop();
                     }
                 } catch (e) {
+                    this.matrixService.render(context);
                     this.handleException(e);
                 }
             }, instructionSpeed);
@@ -179,13 +180,13 @@ export class DashboardComponent implements AfterViewInit {
                 }
             }
             this.messageService.add('Running resumed...');
-            const instructionSpeed = this.speeds[this.speedIndex - 1];
             const executeInstructions = () => {
                 try {
                     this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
                     this.matrixService.render(context);
                     if (this.bytecodeService.validInstruction(this.instructions)) {
                         if (!this.paused && !this.stopped) {
+                            const instructionSpeed = this.speeds[this.speedIndex - 1];
                             setTimeout(executeInstructions, instructionSpeed);
                         }
                     } else {
@@ -194,11 +195,12 @@ export class DashboardComponent implements AfterViewInit {
                         this.stop();
                     }
                 } catch (e) {
+                    this.matrixService.render(context);
                     this.handleException(e);
                 }
             };
             this.execute();
-            setTimeout(executeInstructions, instructionSpeed);
+            setTimeout(executeInstructions, this.speeds[this.speedIndex - 1]);
         }
     }
 
