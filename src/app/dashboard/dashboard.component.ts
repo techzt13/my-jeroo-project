@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatrixService } from '../matrix.service';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
-import { EditorTabAreaComponent } from '../editor-tab-area/editor-tab-area.component';
+import { EditorTabAreaComponent, EditorState } from '../editor-tab-area/editor-tab-area.component';
 import { MessageService } from '../message.service';
 
 interface Speed {
@@ -33,10 +33,13 @@ export class DashboardComponent {
         { name: '6 - Max', value: 6 }
     ];
     selectedSpeedRadio = this.speedsRadio[2].value;
-    reset = true;
-    executing = false;
-    paused = false;
-    stopped = false;
+
+    jerooEditorState: EditorState = {
+        reset: true,
+        executing: false,
+        paused: false,
+        stopped: false
+    };
 
     constructor(
         private matrixService: MatrixService,
@@ -145,7 +148,7 @@ export class DashboardComponent {
     }
 
     clearMap() {
-        if (this.reset) {
+        if (this.jerooEditorState.reset) {
             this.jerooMatrix.clearMap();
         }
     }
@@ -155,7 +158,7 @@ export class DashboardComponent {
     }
 
     mapFileSelected(file: File) {
-        if (this.reset) {
+        if (this.jerooEditorState.reset) {
             const reader = new FileReader();
             reader.readAsText(file, 'UTF-8');
             reader.onload = (readerEvent: any) => {
@@ -214,22 +217,22 @@ export class DashboardComponent {
     }
 
     resetBtnDisabled() {
-        return !this.paused && !this.stopped && !this.reset && !this.stopped;
+        return !this.jerooEditorState.reset;
     }
 
     runBtnDisabled() {
-        return !this.paused && !this.reset;
+        return !this.jerooEditorState.paused && !this.jerooEditorState.reset;
     }
 
     pauseBtnDisabled() {
-        return !this.executing;
+        return !this.jerooEditorState.executing;
     }
 
     stopBtnDisabled() {
-        return !this.executing && !this.paused;
+        return !this.jerooEditorState.executing && !this.jerooEditorState.paused;
     }
 
     matrixEditingEnabled() {
-        return this.reset;
+        return this.jerooEditorState.reset;
     }
 }

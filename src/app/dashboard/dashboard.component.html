@@ -173,7 +173,7 @@
             <!--Text tabs Area-->
             <div class="row">
                 <div class="col-lg-7">
-                    <app-editor-tab-area #jerooEditor [(executing)]="executing" [(paused)]="paused" [(stopped)]="stopped" [(reset)]="reset" [speed]="runtimeSpeed"></app-editor-tab-area>
+                    <app-editor-tab-area #jerooEditor [(editorState)]="jerooEditorState" [speed]="runtimeSpeed"></app-editor-tab-area>
                 </div>
                 <!--Matrix Area-->
                 <div class="col-lg-5">

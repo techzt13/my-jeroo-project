@@ -10,6 +10,13 @@ interface Language {
     viewValue: string;
 }
 
+export interface EditorState {
+    reset: boolean;
+    executing: boolean;
+    paused: boolean;
+    stopped: boolean;
+}
+
 @Component({
     selector: 'app-editor-tab-area',
     templateUrl: './editor-tab-area.component.html'
@@ -30,54 +37,17 @@ export class EditorTabAreaComponent implements AfterViewInit {
     private instructions: Array<Instruction> = null;
     private previousInstruction: Instruction = null;
 
-    executingValue: boolean;
+    editorStateValue: EditorState;
     @Output()
-    executingChange = new EventEmitter<boolean>();
+    editorStateChange = new EventEmitter<EditorState>();
     @Input()
-    get executing() {
-        return this.executingValue;
+    get editorState() {
+        return this.editorStateValue;
     }
-    set executing(val) {
-        this.executingValue = val;
-        this.executingChange.emit(this.executingValue);
+    set editorState(val) {
+        this.editorState = val;
+        this.editorStateChange.emit(this.editorState);
     }
-
-    pausedValue: boolean;
-    @Output()
-    pausedChange = new EventEmitter<boolean>();
-    @Input()
-    get paused() {
-        return this.pausedValue;
-    }
-    set paused(val) {
-        this.pausedValue = val;
-        this.pausedChange.emit(this.pausedValue);
-    }
-
-    stoppedValue: boolean;
-    @Output()
-    stoppedChange = new EventEmitter<boolean>();
-    @Input()
-    get stopped() {
-        return this.stoppedValue;
-    }
-    set stopped(val) {
-        this.stoppedValue = val;
-        this.stoppedChange.emit(this.stoppedValue);
-    }
-
-    resetValue: boolean;
-    @Output()
-    resetChange = new EventEmitter<boolean>();
-    @Input()
-    get reset() {
-        return this.resetValue;
-    }
-    set reset(val) {
-        this.resetValue = val;
-        this.resetChange.emit(this.resetValue);
-    }
-
 
     constructor(private messageService: MessageService,
         private bytecodeService: BytecodeInterpreterService,
@@ -88,7 +58,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     runStepwise(context: CanvasRenderingContext2D) {
-        if (this.reset || this.instructions === null) {
+        if (this.editorState.reset || this.instructions === null) {
             this.messageService.clear();
             this.messageService.add('Compiling...');
             const jerooCode = this.createJerooCode();
@@ -121,7 +91,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     runContinious(context: CanvasRenderingContext2D) {
-        if (this.reset || this.instructions === null) {
+        if (this.editorState.reset || this.instructions === null) {
             this.messageService.clear();
             this.messageService.add('Compiling...');
             const jerooCode = this.createJerooCode();
@@ -143,7 +113,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
                 this.matrixService.render(context);
                 this.highlightCurrentLine();
                 if (this.bytecodeService.validInstruction(this.instructions)) {
-                    if (!this.paused && !this.stopped) {
+                    if (!this.editorState.paused && !this.editorState.stopped) {
                         setTimeout(executeInstructions, this.speed);
                     }
                 } else {
@@ -216,30 +186,42 @@ export class EditorTabAreaComponent implements AfterViewInit {
         return jerooCode;
     }
 
-    undo() { }
+    undo() {
+        this.selectedEditor.undo();
+    }
 
-    redo() { }
+    redo() {
+        this.selectedEditor.redo();
+    }
 
-    toggleComment() { }
+    toggleComment() {
+        this.selectedEditor.toggleComment();
+    }
 
-    indentSelection() { }
+    indentSelection() {
+        this.selectedEditor.indentSelection();
+    }
 
-    unindentSelection() { }
+    unindentSelection() {
+        this.selectedEditor.unindentSelection();
+    }
 
-    formatSelection() { }
+    formatSelection() {
+        this.selectedEditor.formatSelection();
+    }
 
     executingState() {
-        this.executing = true;
-        this.reset = false;
-        this.paused = false;
-        this.stopped = false;
+        this.editorState.executing = true;
+        this.editorState.reset = false;
+        this.editorState.paused = false;
+        this.editorState.stopped = false;
     }
 
     resetState() {
-        this.reset = true;
-        this.executing = false;
-        this.paused = false;
-        this.stopped = false;
+        this.editorState.reset = true;
+        this.editorState.executing = false;
+        this.editorState.paused = false;
+        this.editorState.stopped = false;
         this.messageService.clear();
         this.bytecodeService.reset();
         this.unhighlightPreviousLine();
@@ -248,17 +230,17 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     pauseState() {
-        this.paused = true;
-        this.executing = false;
-        this.stopped = false;
-        this.reset = false;
+        this.editorState.paused = true;
+        this.editorState.executing = false;
+        this.editorState.stopped = false;
+        this.editorState.reset = false;
     }
 
     stopState() {
-        this.stopped = true;
-        this.executing = false;
-        this.reset = false;
-        this.paused = false;
+        this.editorState.stopped = true;
+        this.editorState.executing = false;
+        this.editorState.reset = false;
+        this.editorState.paused = false;
     }
 
     onEditorTabIndexChange(index: number) {
