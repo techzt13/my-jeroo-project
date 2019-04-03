@@ -45,17 +45,13 @@ export class BytecodeInterpreterService {
 
     /**
       * Reset the state of the bytecode interpreter, clear the board of jeroos, and re-render the board state to the canvas.
-      * @param matrixService Matrix service.
-      * @param canvas Rendering canvas.
       */
-    reset(matrixService: MatrixService, canvas: CanvasRenderingContext2D) {
+    reset() {
         this.pc = 0;
         this.jerooReg = 0;
         this.jerooArray = [];
         this.cmpStack = [];
         this.pcStack = [];
-        matrixService.resetJeroos();
-        matrixService.render(canvas);
     }
 
     /**

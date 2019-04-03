@@ -1,16 +1,9 @@
-import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatrixService } from '../matrix.service';
-import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
-import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter.service';
+import { EditorTabAreaComponent } from '../editor-tab-area/editor-tab-area.component';
 import { MessageService } from '../message.service';
-
-interface Language {
-    value: SelectedLanguage;
-    viewValue: string;
-}
 
 interface Speed {
     name: string;
@@ -22,20 +15,14 @@ interface Speed {
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent {
     @ViewChild('mapFileInput') mapFileInput: ElementRef;
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
+    @ViewChild('jerooEditor') jerooEditor: EditorTabAreaComponent;
     @ViewChild('mapSaver') mapSaver: ElementRef;
-    @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
-    @ViewChild('extensionMethodsTextEditor') extensionMethodsTextEditor: TextEditorComponent;
 
-    selectedLanguage = SelectedLanguage.Java;
-    languages: Language[] = [
-        { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
-        { viewValue: 'VB.NET', value: SelectedLanguage.Vb },
-        { viewValue: 'PYTHON', value: SelectedLanguage.Python }
-    ];
     private speeds = [475, 350, 225, 125, 25, 2];
+    runtimeSpeed = this.speeds[2];
     speedIndex = 3;
     speedsRadio: Speed[] = [
         { name: '1 - Slow', value: 1 },
@@ -46,16 +33,12 @@ export class DashboardComponent implements AfterViewInit {
         { name: '6 - Max', value: 6 }
     ];
     selectedSpeedRadio = this.speedsRadio[2].value;
-    selectedEditor: TextEditorComponent = null;
     reset = true;
     executing = false;
     paused = false;
     stopped = false;
-    private instructions: Array<Instruction> = null;
-    private previousInstruction: Instruction = null;
 
     constructor(
-        private bytecodeService: BytecodeInterpreterService,
         private matrixService: MatrixService,
         private hotkeysService: HotkeysService,
         private messageService: MessageService
@@ -98,241 +81,72 @@ export class DashboardComponent implements AfterViewInit {
         }));
     }
 
-    ngAfterViewInit() {
-        this.selectedEditor = this.mainMethodTextEditor;
-    }
-
     onUndoClick() {
-        this.selectedEditor.undo();
+        this.jerooEditor.undo();
     }
 
     onRedoClick() {
-        this.selectedEditor.redo();
+        this.jerooEditor.redo();
     }
 
     onToggleCommentLines() {
-        this.selectedEditor.toggleComment();
+        this.jerooEditor.toggleComment();
     }
 
     onIndentSelectionClick() {
-        this.selectedEditor.indentSelection();
+        this.jerooEditor.indentSelection();
     }
 
     onUnindentSelectionClick() {
-        this.selectedEditor.unindentSelection();
+        this.jerooEditor.unindentSelection();
     }
 
     onFormatSelectionClick() {
-        this.selectedEditor.formatSelection();
+        this.jerooEditor.formatSelection();
     }
 
     onRunStepwiseClick() {
-        if (!this.runBtnDisabled()) {
-            const context = this.jerooMatrix.getContext();
-            if (this.reset || this.instructions === null) {
-                this.messageService.clear();
-                this.messageService.add('Compiling...');
-                const jerooCode = this.createJerooCode();
-                const result = JerooCompiler.compile(jerooCode);
-                if (result.successful) {
-                    this.instructions = result.bytecode;
-                    this.bytecodeService.reset(this.matrixService, context);
-                } else {
-                    this.messageService.add(result.error);
-                    return;
-                }
-            }
-            this.messageService.add('Stepping...');
-            const instructionSpeed = this.speeds[this.speedIndex - 1];
-            setTimeout(() => {
-                try {
-                    this.mainMethodTextEditor.setReadOnly(true);
-                    this.mainMethodTextEditor.setReadOnly(true);
-                    this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
-                    this.matrixService.render(context);
-                    if (this.bytecodeService.validInstruction(this.instructions)) {
-                        this.pause();
-                        this.highlightCurrentLine();
-                    } else {
-                        this.cleanupExecution();
-                    }
-                } catch (e) {
-                    this.matrixService.render(context);
-                    this.handleException(e);
-                }
-            }, instructionSpeed);
-            this.execute();
-        }
+        this.jerooEditor.runStepwise(this.jerooMatrix.getContext());
     }
 
     onRunContiniousClick() {
-        if (!this.runBtnDisabled()) {
-            const context = this.jerooMatrix.getContext();
-            if (this.reset || this.instructions === null) {
-                this.messageService.clear();
-                this.messageService.add('Compiling...');
-                const jerooCode = this.createJerooCode();
-                const result = JerooCompiler.compile(jerooCode);
-                if (result.successful) {
-                    this.instructions = result.bytecode;
-                    this.bytecodeService.reset(this.matrixService, context);
-                } else {
-                    this.messageService.add(result.error);
-                    return;
-                }
-            }
-            this.messageService.add('Running resumed...');
-            const executeInstructions = () => {
-                try {
-                    this.mainMethodTextEditor.setReadOnly(true);
-                    this.extensionMethodsTextEditor.setReadOnly(true);
-                    this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
-                    this.matrixService.render(context);
-                    this.highlightCurrentLine();
-                    if (this.bytecodeService.validInstruction(this.instructions)) {
-                        if (!this.paused && !this.stopped) {
-                            const instructionSpeed = this.speeds[this.speedIndex - 1];
-                            setTimeout(executeInstructions, instructionSpeed);
-                        }
-                    } else {
-                        this.cleanupExecution();
-                    }
-                } catch (e) {
-                    this.matrixService.render(context);
-                    this.handleException(e);
-                }
-            };
-            this.execute();
-            setTimeout(executeInstructions, this.speeds[this.speedIndex - 1]);
-        }
-    }
-
-    private cleanupExecution() {
-        this.mainMethodTextEditor.setReadOnly(false);
-        this.extensionMethodsTextEditor.setReadOnly(false);
-        this.unhighlightPreviousLine();
-        this.previousInstruction = null;
-        this.messageService.clear();
-        this.messageService.add('Program completed');
-        this.stop();
-    }
-
-    private highlightCurrentLine() {
-        this.unhighlightPreviousLine();
-        if (this.bytecodeService.validInstruction(this.instructions)) {
-            const instruction = this.bytecodeService.getCurrentInstruction(this.instructions);
-            if (instruction.e === 0 || instruction.op === 'NEW') {
-                this.mainMethodTextEditor.highlightLine(instruction.f);
-            } else if (instruction.e === 1) {
-                this.extensionMethodsTextEditor.highlightLine(instruction.f);
-            }
-            this.previousInstruction = instruction;
-        } else {
-            this.previousInstruction = null;
-        }
-    }
-
-    private unhighlightPreviousLine() {
-        if (this.previousInstruction !== null) {
-            if (this.previousInstruction.e === 0 || this.previousInstruction.op === 'NEW') {
-                this.mainMethodTextEditor.unhighlightLine(this.previousInstruction.f);
-            } else if (this.previousInstruction.e === 1) {
-                this.extensionMethodsTextEditor.unhighlightLine(this.previousInstruction.f);
-            }
-        }
-    }
-
-    private handleException(e: any) {
-        const runtimeError: RuntimeError = e;
-        this.messageService.clear();
-        const message = `Runtime error line ${runtimeError.line_num}: ${runtimeError.message}`;
-        this.messageService.add(message);
-        this.stop();
-    }
-
-    private createJerooCode() {
-        let jerooCode = '';
-        if (this.selectedLanguage === SelectedLanguage.Java) {
-            jerooCode += '@Java\n';
-        } else if (this.selectedLanguage === SelectedLanguage.Vb) {
-            jerooCode += '@VB\n';
-        } else {
-            throw new Error('Unsupported Language');
-        }
-        jerooCode += this.extensionMethodsTextEditor.getText();
-        jerooCode += '\n@@\n';
-        jerooCode += this.mainMethodTextEditor.getText();
-        return jerooCode;
+        this.jerooEditor.runContinious(this.jerooMatrix.getContext());
     }
 
     onResetClick() {
         if (!this.resetBtnDisabled()) {
-            this.resetState();
-            const context = this.jerooMatrix.getContext();
-            this.unhighlightPreviousLine();
-            this.bytecodeService.reset(this.matrixService, context);
-            this.messageService.clear();
-            this.mainMethodTextEditor.setReadOnly(false);
-            this.extensionMethodsTextEditor.setReadOnly(false);
+            this.jerooEditor.resetState();
+            this.jerooMatrix.clearMap();
         }
     }
 
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
+            this.jerooEditor.pauseState();
             this.messageService.add('Program paused by user');
-            this.pause();
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
+            this.jerooEditor.stopState();
             this.messageService.clear();
             this.messageService.add('Program stopped by user');
-            this.stop();
         }
-    }
-
-    private stop() {
-        this.stopped = true;
-        this.executing = false;
-        this.reset = false;
-        this.paused = false;
-        this.jerooMatrix.disableEditing();
-    }
-
-    private execute() {
-        this.executing = true;
-        this.reset = false;
-        this.paused = false;
-        this.stopped = false;
-        this.jerooMatrix.disableEditing();
-    }
-
-    private resetState() {
-        this.reset = true;
-        this.executing = false;
-        this.paused = false;
-        this.stopped = false;
-        this.jerooMatrix.enableEditing();
-        this.messageService.clear();
-    }
-
-    private pause() {
-        this.paused = true;
-        this.executing = false;
-        this.stopped = false;
-        this.reset = false;
-        this.jerooMatrix.disableEditing();
     }
 
     onSpeedRadioClick(speedValue: number) {
         this.speedIndex = speedValue;
+        this.onSpeedIndexChange();
+    }
+
+    onSpeedIndexChange() {
+        this.runtimeSpeed = this.speeds[this.speedIndex - 1];
     }
 
     clearMap() {
         if (this.reset) {
-            this.matrixService.resetMap();
-            this.jerooMatrix.redraw();
+            this.jerooMatrix.clearMap();
         }
     }
 
@@ -391,37 +205,12 @@ export class DashboardComponent implements AfterViewInit {
         printWindow.close();
     }
 
-    onSelectedLanguageChange() {
-        this.mainMethodTextEditor.setMode(this.selectedLanguage);
-        this.extensionMethodsTextEditor.setMode(this.selectedLanguage);
-    }
-
     getHelpUrl() {
-        return `/help/${this.selectedLanguageToString(this.selectedLanguage)}`;
+        return this.jerooEditor.getHelpUrl();
     }
 
     getTutorialUrl() {
-        return `/help/${this.selectedLanguageToString(this.selectedLanguage)}/tutorial`;
-    }
-
-    private selectedLanguageToString(lang: SelectedLanguage) {
-        if (lang === SelectedLanguage.Java) {
-            return 'java';
-        } else if (lang === SelectedLanguage.Vb) {
-            return 'vb';
-        } else if (lang === SelectedLanguage.Python) {
-            return 'python';
-        } else {
-            throw new Error('Invalid Language');
-        }
-    }
-
-    onEditorTabIndexChange(index: number) {
-        if (index === 0) {
-            this.selectedEditor = this.mainMethodTextEditor;
-        } else if (index === 1) {
-            this.selectedEditor = this.extensionMethodsTextEditor;
-        }
+        return this.jerooEditor.getTutorialUrl();
     }
 
     resetBtnDisabled() {
@@ -438,5 +227,9 @@ export class DashboardComponent implements AfterViewInit {
 
     stopBtnDisabled() {
         return !this.executing && !this.paused;
+    }
+
+    matrixEditingEnabled() {
+        return this.reset;
     }
 }

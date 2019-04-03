@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';
@@ -12,6 +12,7 @@ import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 })
 export class JerooMatrixComponent implements AfterViewInit {
     @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
+    @Input() editingEnabled: boolean;
 
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
@@ -20,7 +21,6 @@ export class JerooMatrixComponent implements AfterViewInit {
     private boardCache = 'board';
     mouseRow: number = null;
     mouseColumn: number = null;
-    editingEnabled = true;
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
         @Inject(LOCAL_STORAGE) private storage: WebStorageService) { }
@@ -70,13 +70,11 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     clearMap() {
-        if (this.editingEnabled) {
-            this.matrixService.resetMap();
-            this.matrixService.resetJeroos();
-            // if the board is cleared, also save into service incase the size has been changed
-            this.saveInLocal(this.boardCache, this.matrixService.toString());
-            this.matrixService.render(this.context);
-        }
+        this.matrixService.resetMap();
+        this.matrixService.resetJeroos();
+        // if the board is cleared, also save into service incase the size has been changed
+        this.saveInLocal(this.boardCache, this.matrixService.toString());
+        this.matrixService.render(this.context);
     }
 
     getCanvas() {
@@ -176,13 +174,5 @@ export class JerooMatrixComponent implements AfterViewInit {
 
     saveInLocal(key: string, val: any): void {
         this.storage.set(key, val);
-    }
-
-    enableEditing() {
-        this.editingEnabled = true;
-    }
-
-    disableEditing() {
-        this.editingEnabled = false;
     }
 }
