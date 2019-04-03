@@ -109,11 +109,15 @@ export class DashboardComponent {
     }
 
     onRunStepwiseClick() {
-        this.jerooEditor.runStepwise(this.jerooMatrix.getContext());
+        if (!this.runBtnDisabled()) {
+            this.jerooEditor.runStepwise(this.jerooMatrix.getContext());
+        }
     }
 
     onRunContiniousClick() {
-        this.jerooEditor.runContinious(this.jerooMatrix.getContext());
+        if (!this.runBtnDisabled()) {
+            this.jerooEditor.runContinious(this.jerooMatrix.getContext());
+        }
     }
 
     onResetClick() {
