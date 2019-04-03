@@ -52,6 +52,7 @@ export class DashboardComponent implements AfterViewInit {
     paused = false;
     stopped = false;
     private instructions: Array<Instruction> = null;
+    private previousInstruction: Instruction = null;
 
     constructor(
         private bytecodeService: BytecodeInterpreterService,
@@ -145,14 +146,15 @@ export class DashboardComponent implements AfterViewInit {
             const instructionSpeed = this.speeds[this.speedIndex - 1];
             setTimeout(() => {
                 try {
+                    this.mainMethodTextEditor.setReadOnly(true);
+                    this.mainMethodTextEditor.setReadOnly(true);
                     this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
                     this.matrixService.render(context);
                     if (this.bytecodeService.validInstruction(this.instructions)) {
                         this.pause();
+                        this.highlightCurrentLine();
                     } else {
-                        this.messageService.clear();
-                        this.messageService.add('Program completed');
-                        this.stop();
+                        this.cleanupExecution();
                     }
                 } catch (e) {
                     this.matrixService.render(context);
@@ -182,17 +184,18 @@ export class DashboardComponent implements AfterViewInit {
             this.messageService.add('Running resumed...');
             const executeInstructions = () => {
                 try {
+                    this.mainMethodTextEditor.setReadOnly(true);
+                    this.extensionMethodsTextEditor.setReadOnly(true);
                     this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
                     this.matrixService.render(context);
+                    this.highlightCurrentLine();
                     if (this.bytecodeService.validInstruction(this.instructions)) {
                         if (!this.paused && !this.stopped) {
                             const instructionSpeed = this.speeds[this.speedIndex - 1];
                             setTimeout(executeInstructions, instructionSpeed);
                         }
                     } else {
-                        this.messageService.clear();
-                        this.messageService.add('Program completed');
-                        this.stop();
+                        this.cleanupExecution();
                     }
                 } catch (e) {
                     this.matrixService.render(context);
@@ -201,6 +204,41 @@ export class DashboardComponent implements AfterViewInit {
             };
             this.execute();
             setTimeout(executeInstructions, this.speeds[this.speedIndex - 1]);
+        }
+    }
+
+    private cleanupExecution() {
+        this.mainMethodTextEditor.setReadOnly(false);
+        this.extensionMethodsTextEditor.setReadOnly(false);
+        this.unhighlightPreviousLine();
+        this.previousInstruction = null;
+        this.messageService.clear();
+        this.messageService.add('Program completed');
+        this.stop();
+    }
+
+    private highlightCurrentLine() {
+        this.unhighlightPreviousLine();
+        if (this.bytecodeService.validInstruction(this.instructions)) {
+            const instruction = this.bytecodeService.getCurrentInstruction(this.instructions);
+            if (instruction.e === 0 || instruction.op === 'NEW') {
+                this.mainMethodTextEditor.highlightLine(instruction.f);
+            } else if (instruction.e === 1) {
+                this.extensionMethodsTextEditor.highlightLine(instruction.f);
+            }
+            this.previousInstruction = instruction;
+        } else {
+            this.previousInstruction = null;
+        }
+    }
+
+    private unhighlightPreviousLine() {
+        if (this.previousInstruction !== null) {
+            if (this.previousInstruction.e === 0 || this.previousInstruction.op === 'NEW') {
+                this.mainMethodTextEditor.unhighlightLine(this.previousInstruction.f);
+            } else if (this.previousInstruction.e === 1) {
+                this.extensionMethodsTextEditor.unhighlightLine(this.previousInstruction.f);
+            }
         }
     }
 
@@ -231,8 +269,11 @@ export class DashboardComponent implements AfterViewInit {
         if (!this.resetBtnDisabled()) {
             this.resetState();
             const context = this.jerooMatrix.getContext();
+            this.unhighlightPreviousLine();
             this.bytecodeService.reset(this.matrixService, context);
             this.messageService.clear();
+            this.mainMethodTextEditor.setReadOnly(false);
+            this.extensionMethodsTextEditor.setReadOnly(false);
         }
     }
 
@@ -286,10 +327,6 @@ export class DashboardComponent implements AfterViewInit {
 
     onSpeedRadioClick(speedValue: number) {
         this.speedIndex = speedValue;
-        this.onSpeedIndexChange();
-    }
-
-    onSpeedIndexChange() {
     }
 
     clearMap() {

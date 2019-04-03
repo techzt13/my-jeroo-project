@@ -23,10 +23,10 @@ export class BytecodeInterpreterService {
 
     executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
         if (this.validInstruction(instructions)) {
-            const line_num = instructions[this.pc].f;
+            const prevInstruction = this.getCurrentInstruction(instructions);
             while (this.validInstruction(instructions)) {
-                const current_line_num = instructions[this.pc].f;
-                if (line_num !== current_line_num) {
+                const currInstruction = this.getCurrentInstruction(instructions);
+                if ((prevInstruction.f !== currInstruction.f) || (currInstruction.e !== prevInstruction.e)) {
                     break;
                 }
                 const instruction = this.fetchInstruction(instructions);
@@ -37,6 +37,10 @@ export class BytecodeInterpreterService {
 
     validInstruction(instructions: Array<Instruction>) {
         return this.pc < instructions.length;
+    }
+
+    getCurrentInstruction(instructions: Array<Instruction>) {
+        return instructions[this.pc];
     }
 
     /**

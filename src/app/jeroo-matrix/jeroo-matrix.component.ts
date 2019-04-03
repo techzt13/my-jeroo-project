@@ -125,14 +125,8 @@ export class JerooMatrixComponent implements AfterViewInit {
         this.updateScreenFromMouseEvent(event);
     }
 
-    canvasTapMove(event: any) {
+    canvasTapMove(event: TouchEvent) {
         this.updateScreenFromTapEvent(event);
-    }
-
-    // having a hammerjs action bound to a function will prevent the screen from scrolling while
-    // being on the canvas on mobile devices
-    disableScrolling() {
-
     }
 
     private updateScreenFromMouseEvent(event: MouseEvent) {
@@ -159,11 +153,11 @@ export class JerooMatrixComponent implements AfterViewInit {
         const tileRow = ((pixelY / pixelsInRow) | 0);
 
         // update the mouse locations
-        this.mouseColumn = tileCol;
-        this.mouseRow = tileRow;
+        this.mouseColumn = tileCol - 1;
+        this.mouseRow = tileRow - 1;
 
-        if (tileCol >= 0 && tileRow >= 0
-            && tileCol < cols - 2 && tileRow < rows - 2) {
+        if (tileCol > 0 && tileRow > 0
+            && tileCol < cols - 1 && tileRow < rows - 1) {
             // update the col and row
             if (this.editingEnabled && this.mouseDown && this.selectedTileType !== null) {
                 // only re-render if we change the map
@@ -180,7 +174,7 @@ export class JerooMatrixComponent implements AfterViewInit {
         }
     }
 
-    saveInLocal(key, val): void {
+    saveInLocal(key: string, val: any): void {
         this.storage.set(key, val);
     }
 
