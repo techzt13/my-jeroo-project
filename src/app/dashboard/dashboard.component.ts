@@ -1,15 +1,9 @@
-import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatrixService } from '../matrix.service';
-import { SelectedLanguage } from './SelectedLanguage';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
-import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
-
-interface Language {
-    value: SelectedLanguage;
-    viewValue: string;
-}
+import { EditorTabAreaComponent, EditorState } from '../editor-tab-area/editor-tab-area.component';
+import { MessageService } from '../message.service';
 
 interface Speed {
     name: string;
@@ -21,20 +15,14 @@ interface Speed {
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent {
     @ViewChild('mapFileInput') mapFileInput: ElementRef;
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
+    @ViewChild('jerooEditor') jerooEditor: EditorTabAreaComponent;
     @ViewChild('mapSaver') mapSaver: ElementRef;
-    @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
-    @ViewChild('extensionMethodsTextEditor') extensionMethodsTextEditor: TextEditorComponent;
 
-    selectedLanguage = SelectedLanguage.Java;
-    languages: Language[] = [
-        { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
-        { viewValue: 'VB.NET', value: SelectedLanguage.Vb },
-        { viewValue: 'PYTHON', value: SelectedLanguage.Python }
-    ];
     private speeds = [475, 350, 225, 125, 25, 2];
+    runtimeSpeed = this.speeds[2];
     speedIndex = 3;
     speedsRadio: Speed[] = [
         { name: '1 - Slow', value: 1 },
@@ -45,16 +33,18 @@ export class DashboardComponent implements AfterViewInit {
         { name: '6 - Max', value: 6 }
     ];
     selectedSpeedRadio = this.speedsRadio[2].value;
-    selectedEditor: TextEditorComponent = null;
-    reset = true;
-    executing = false;
-    paused = false;
-    stopped = false;
+
+    jerooEditorState: EditorState = {
+        reset: true,
+        executing: false,
+        paused: false,
+        stopped: false
+    };
 
     constructor(
-        private bytecodeService: BytecodeInterpreterService,
         private matrixService: MatrixService,
-        private hotkeysService: HotkeysService
+        private hotkeysService: HotkeysService,
+        private messageService: MessageService
     ) {
         this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
             this.onResetClick();
@@ -94,153 +84,62 @@ export class DashboardComponent implements AfterViewInit {
         }));
     }
 
-    ngAfterViewInit() {
-        this.selectedEditor = this.mainMethodTextEditor;
-        const instructionSpeed = this.speeds[this.speedIndex - 1];
-        this.bytecodeService.setInstructionSpeed(instructionSpeed);
-    }
-
     onUndoClick() {
-        this.selectedEditor.undo();
+        this.jerooEditor.undo();
     }
 
     onRedoClick() {
-        this.selectedEditor.redo();
+        this.jerooEditor.redo();
     }
 
     onToggleCommentLines() {
-        this.selectedEditor.toggleComment();
+        this.jerooEditor.toggleComment();
     }
 
     onIndentSelectionClick() {
-        this.selectedEditor.indentSelection();
+        this.jerooEditor.indentSelection();
     }
 
     onUnindentSelectionClick() {
-        this.selectedEditor.unindentSelection();
+        this.jerooEditor.unindentSelection();
     }
 
     onFormatSelectionClick() {
-        this.selectedEditor.formatSelection();
+        this.jerooEditor.formatSelection();
     }
 
     onRunStepwiseClick() {
         if (!this.runBtnDisabled()) {
-            const context = this.jerooMatrix.getContext();
-            if (this.reset) {
-                const jerooCode = this.createJerooCode();
-                const result = JerooCompiler.compile(jerooCode);
-                if (result.successful === true) {
-                    const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsStepwise(instructions, this.matrixService, context,
-                        () => this.pause(),
-                        () => this.stop()
-                    );
-                    this.execute();
-                } else {
-                    console.log(result.error);
-                }
-            } else {
-                this.bytecodeService.resumeExecutionStepwise(this.matrixService, context,
-                    () => this.pause(),
-                    () => this.stop()
-                );
-                this.execute();
-            }
+            this.jerooEditor.runStepwise(this.jerooMatrix.getContext());
         }
     }
 
     onRunContiniousClick() {
         if (!this.runBtnDisabled()) {
-            const context = this.jerooMatrix.getContext();
-            if (this.reset) {
-                const jerooCode = this.createJerooCode();
-                const result = JerooCompiler.compile(jerooCode);
-                if (result.successful) {
-                    const instructions = result.bytecode;
-                    this.bytecodeService.executeInstructionsContinious(instructions, this.matrixService, context,
-                        () => this.stop()
-                    );
-                    this.execute();
-                } else {
-                    console.log(result.error);
-                }
-            } else {
-                this.bytecodeService.resumeExecutionContinious(this.matrixService, context,
-                    () => this.stop()
-                );
-                this.execute();
-            }
+            this.jerooEditor.runContinious(this.jerooMatrix.getContext());
         }
-    }
-
-    private createJerooCode() {
-        let jerooCode = '';
-        if (this.selectedLanguage === SelectedLanguage.Java) {
-            jerooCode += '@Java\n';
-        } else if (this.selectedLanguage === SelectedLanguage.Vb) {
-            jerooCode += '@VB\n';
-        } else {
-            throw new Error('Unsupported Language');
-        }
-        jerooCode += this.extensionMethodsTextEditor.getText();
-        jerooCode += '\n@@\n';
-        jerooCode += this.mainMethodTextEditor.getText();
-        return jerooCode;
     }
 
     onResetClick() {
         if (!this.resetBtnDisabled()) {
-            this.resetState();
-            const context = this.jerooMatrix.getContext();
-            this.bytecodeService.reset(this.matrixService, context);
+            this.jerooEditor.resetState();
+            this.jerooMatrix.clearMap();
         }
     }
 
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
-            this.pause();
-            this.bytecodeService.pauseExecution();
+            this.jerooEditor.pauseState();
+            this.messageService.add('Program paused by user');
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
-            this.stop();
-            this.bytecodeService.stopExecution();
+            this.jerooEditor.stopState();
+            this.messageService.clear();
+            this.messageService.add('Program stopped by user');
         }
-    }
-
-    private stop() {
-        this.stopped = true;
-        this.executing = false;
-        this.reset = false;
-        this.paused = false;
-        this.jerooMatrix.disableEditing();
-    }
-
-    private execute() {
-        this.executing = true;
-        this.reset = false;
-        this.paused = false;
-        this.stopped = false;
-        this.jerooMatrix.disableEditing();
-    }
-
-    private resetState() {
-        this.reset = true;
-        this.executing = false;
-        this.paused = false;
-        this.stopped = false;
-        this.jerooMatrix.enableEditing();
-    }
-
-    private pause() {
-        this.paused = true;
-        this.executing = false;
-        this.stopped = false;
-        this.reset = false;
-        this.jerooMatrix.disableEditing();
     }
 
     onSpeedRadioClick(speedValue: number) {
@@ -249,14 +148,12 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onSpeedIndexChange() {
-        const instructionSpeed = this.speeds[this.speedIndex - 1];
-        this.bytecodeService.setInstructionSpeed(instructionSpeed);
+        this.runtimeSpeed = this.speeds[this.speedIndex - 1];
     }
 
     clearMap() {
-        if (this.reset) {
-            this.matrixService.resetMap();
-            this.jerooMatrix.redraw();
+        if (this.jerooEditorState.reset) {
+            this.jerooMatrix.clearMap();
         }
     }
 
@@ -265,7 +162,7 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     mapFileSelected(file: File) {
-        if (this.reset) {
+        if (this.jerooEditorState.reset) {
             const reader = new FileReader();
             reader.readAsText(file, 'UTF-8');
             reader.onload = (readerEvent: any) => {
@@ -315,52 +212,33 @@ export class DashboardComponent implements AfterViewInit {
         printWindow.close();
     }
 
-    onSelectedLanguageChange() {
-        this.mainMethodTextEditor.setMode(this.selectedLanguage);
-        this.extensionMethodsTextEditor.setMode(this.selectedLanguage);
-    }
-
     getHelpUrl() {
-        return `/help/${this.selectedLanguageToString(this.selectedLanguage)}`;
+        return this.jerooEditor.getHelpUrl();
     }
 
     getTutorialUrl() {
-        return `/help/${this.selectedLanguageToString(this.selectedLanguage)}/tutorial`;
-    }
-
-    private selectedLanguageToString(lang: SelectedLanguage) {
-        if (lang === SelectedLanguage.Java) {
-            return 'java';
-        } else if (lang === SelectedLanguage.Vb) {
-            return 'vb';
-        } else if (lang === SelectedLanguage.Python) {
-            return 'python';
-        } else {
-            throw new Error('Invalid Language');
-        }
-    }
-
-    onEditorTabIndexChange(index: number) {
-        if (index === 0) {
-            this.selectedEditor = this.mainMethodTextEditor;
-        } else if (index === 1) {
-            this.selectedEditor = this.extensionMethodsTextEditor;
-        }
+        return this.jerooEditor.getTutorialUrl();
     }
 
     resetBtnDisabled() {
-        return !this.paused && !this.stopped && !this.reset && !this.stopped;
+        return !this.jerooEditorState.reset
+            && !this.jerooEditorState.paused
+            && !this.jerooEditorState.stopped;
     }
 
     runBtnDisabled() {
-        return !this.paused && !this.reset;
+        return !this.jerooEditorState.paused && !this.jerooEditorState.reset;
     }
 
     pauseBtnDisabled() {
-        return !this.executing;
+        return !this.jerooEditorState.executing;
     }
 
     stopBtnDisabled() {
-        return !this.executing && !this.paused;
+        return !this.jerooEditorState.executing && !this.jerooEditorState.paused;
+    }
+
+    matrixEditingEnabled() {
+        return this.jerooEditorState.reset;
     }
 }

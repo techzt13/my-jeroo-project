@@ -31,7 +31,10 @@ import { MatrixDialogComponent } from './matrix-dialog/matrix-dialog.component';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
+import { StorageServiceModule } from 'angular-webstorage-service';
+import { EditorTabAreaComponent } from './editor-tab-area/editor-tab-area.component';
 
 library.add(
     faFile,
@@ -59,7 +62,9 @@ library.add(
         DashboardComponent,
         JerooMatrixComponent,
         MatrixDialogComponent,
+        DisplayErrorMessageComponent,
         TextEditorComponent,
+        EditorTabAreaComponent,
     ],
     imports: [
         BrowserModule,
@@ -69,6 +74,7 @@ library.add(
         FormsModule,
         ReactiveFormsModule,
         FontAwesomeModule,
+        StorageServiceModule,
         HotkeyModule.forRoot()
     ],
     providers: [],
