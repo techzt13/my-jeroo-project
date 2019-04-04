@@ -221,7 +221,9 @@ export class DashboardComponent {
     }
 
     resetBtnDisabled() {
-        return !this.jerooEditorState.reset;
+        return !this.jerooEditorState.reset
+            && !this.jerooEditorState.paused
+            && !this.jerooEditorState.stopped;
     }
 
     runBtnDisabled() {

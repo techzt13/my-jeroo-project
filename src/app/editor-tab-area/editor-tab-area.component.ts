@@ -45,8 +45,8 @@ export class EditorTabAreaComponent implements AfterViewInit {
         return this.editorStateValue;
     }
     set editorState(val) {
-        this.editorState = val;
-        this.editorStateChange.emit(this.editorState);
+        this.editorStateValue = val;
+        this.editorStateChange.emit(this.editorStateValue);
     }
 
     constructor(private messageService: MessageService,
