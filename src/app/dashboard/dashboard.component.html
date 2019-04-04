@@ -67,10 +67,10 @@
                     <mat-divider [vertical]="true"></mat-divider>
                     <mat-slider class="menu-button" [(ngModel)]="speedIndex" (change)="onSpeedIndexChange()" min="1" max="6" tickInterval="1" thumbLabel></mat-slider>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <button mat-icon-button matTooltip="Create new island layout" [disabled]="!reset" (click)="clearMap()">
+                    <button mat-icon-button matTooltip="Create new island layout" [disabled]="!matrixEditingEnabled()" (click)="clearMap()">
                         <fa-icon icon="eraser"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Open an island file" [disabled]="!reset" (click)="openMapFile()">
+                    <button mat-icon-button matTooltip="Open an island file" [disabled]="!matrixEditingEnabled()" (click)="openMapFile()">
                         <fa-icon icon="folder"></fa-icon>
                     </button>
                     <button mat-icon-button matTooltip="Save the island to a file" (click)="saveMapFile()">
