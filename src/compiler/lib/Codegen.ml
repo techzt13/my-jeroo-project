@@ -79,9 +79,16 @@ let rec gen_code_expr codegen_state meta_expr pane_num =
     gen_code_expr codegen_state e pane_num;
     Queue.add (Bytecode.NOT (pane_num, line_num)) codegen_state.code_queue
   | AST.BinOpExpr ({ a = AST.IdExpr(id); _ }, AST.Dot, e) ->
-    let id_loc = Hashtbl.find codegen_state.jeroo_tbl id in
-    Queue.add (Bytecode.CSR (id_loc, pane_num, line_num)) codegen_state.code_queue;
-    gen_code_expr codegen_state e pane_num
+    if not (Hashtbl.mem codegen_state.jeroo_tbl id) then
+      raise (SemanticException {
+          lnum = line_num;
+          message = "Unknown Jeroo: " ^ id
+        })
+    else begin
+      let id_loc = Hashtbl.find codegen_state.jeroo_tbl id in
+      Queue.add (Bytecode.CSR (id_loc, pane_num, line_num)) codegen_state.code_queue;
+      gen_code_expr codegen_state e pane_num
+    end
   | AST.FxnAppExpr ({ a = AST.IdExpr(id); _ }, args) -> gen_code_fxn codegen_state id args line_num pane_num
   | _ -> raise (SemanticException {
       lnum = line_num;
@@ -270,6 +277,11 @@ and gen_code_decl_stmt codegen_state ty id meta_expr =
         lnum = line_num;
         message = "Invalid type, Jeroo is the only valid type"
       })
+  else if Hashtbl.mem codegen_state.jeroo_tbl id then
+    raise (SemanticException {
+        lnum = line_num;
+        message = "Duplicate Jeroo declaration, " ^ id ^ " already defined"
+      })
   else
     Hashtbl.add codegen_state.jeroo_tbl id (Hashtbl.length codegen_state.jeroo_tbl);
   let expr = meta_expr.a in
@@ -341,11 +353,18 @@ and gen_code_while codegen_state e s line_num pane_num =
   end_while_lnum
 
 let gen_code_fxn codegen_state fxn pane_num =
-  Hashtbl.add codegen_state.fxn_tbl fxn.id ();
-  Queue.add (Bytecode.LABEL (fxn.id, pane_num, fxn.start_lnum)) codegen_state.code_queue;
-  fxn.stmts
-  |> List.iter (fun stmt -> let _ = gen_code_stmt codegen_state stmt pane_num in ());
-  Queue.add (Bytecode.RETR (pane_num, fxn.end_lnum)) codegen_state.code_queue
+  if Hashtbl.mem codegen_state.fxn_tbl fxn.id then
+    raise (SemanticException {
+        lnum = fxn.start_lnum;
+        message = "duplicate function declaration, " ^ fxn.id ^ " already defined"
+      })
+  else begin
+    Hashtbl.add codegen_state.fxn_tbl fxn.id ();
+    Queue.add (Bytecode.LABEL (fxn.id, pane_num, fxn.start_lnum)) codegen_state.code_queue;
+    fxn.stmts
+    |> List.iter (fun stmt -> let _ = gen_code_stmt codegen_state stmt pane_num in ());
+    Queue.add (Bytecode.RETR (pane_num, fxn.end_lnum)) codegen_state.code_queue
+  end
 
 let gen_code_main_fxn codegen_state fxn =
   if not (String.equal fxn.id "main") then

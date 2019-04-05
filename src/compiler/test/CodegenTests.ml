@@ -266,6 +266,42 @@ let codegen_unknown_ctor _test_ctxt =
       message = "Invalid constructor: jer, Jeroo is the only valid constructor"
     }) (fun () -> Codegen.codegen ast)
 
+let codegen_duplicate_jeroo _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
+                    lnum = 2;
+                  }, []);
+                lnum = 2;
+              });
+            lnum = 2;
+          });
+        AST.DeclStmt("Jeroo", "j", {
+            a = AST.UnOpExpr(AST.New, {
+                a = AST.FxnAppExpr({
+                    a = AST.IdExpr("Jeroo");
+                    lnum = 3;
+                  }, []);
+                lnum = 3;
+              });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  assert_raises (Codegen.SemanticException {
+      lnum = 3;
+      message = "Duplicate Jeroo declaration, j already defined"
+    }) (fun () -> Codegen.codegen ast)
+
 let codegen_jeroo_hop _test_ctxt =
   let ast = {
     extension_fxns = [];
@@ -1321,6 +1357,84 @@ let codegen_while _test_ctxt =
     Bytecode.RETR (0, 6);
   ]
 
+let codegen_unknown_fxn _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        ExprStmt({
+            a = Some {
+                a = FxnAppExpr({
+                    a = IdExpr("foo");
+                    lnum = 1;
+                  }, []);
+                lnum = 1;
+              };
+            lnum = 1;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 3;
+    }
+  } in
+  assert_raises (Codegen.SemanticException {
+      lnum = 1;
+      message = "Unknown function: foo"
+    }) (fun () -> Codegen.codegen ast)
+
+let codegen_duplicate_fxn _test_ctxt =
+  let ast = {
+    extension_fxns = [{
+        id = "main";
+        stmts = [];
+        start_lnum = 1;
+        end_lnum = 2;
+      }];
+    main_fxn = {
+      id = "main";
+      stmts = [];
+      start_lnum = 1;
+      end_lnum = 2;
+    }
+  } in
+  assert_raises (Codegen.SemanticException {
+      lnum = 1;
+      message = "duplicate function declaration, main already defined"
+    }) (fun () -> Codegen.codegen ast)
+
+let codegen_unknown_jeroo _test_ctxt =
+  let ast = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.ExprStmt({
+            a = Some({
+                a = AST.BinOpExpr({
+                    a = AST.IdExpr("j");
+                    lnum = 3;
+                  }, AST.Dot, {
+                      a = AST.FxnAppExpr({
+                          a = AST.IdExpr("foo");
+                          lnum = 3;
+                        }, []);
+                      lnum = 3;
+                    });
+                lnum = 3;
+              });
+            lnum = 3;
+          })
+      ];
+      start_lnum = 1;
+      end_lnum = 4;
+    }
+  } in
+  assert_raises (Codegen.SemanticException {
+      lnum = 3;
+      message = "Unknown Jeroo: j"
+    }) (fun () -> Codegen.codegen ast)
+
 let suite =
   "Codegen">::: [
     "Generate jeroo decl with default args">:: codegen_jeroo_decl_no_args;
@@ -1331,6 +1445,7 @@ let suite =
     "Generate jeroo decl no new expr">:: codegen_jeroo_decl_no_new;
     "Generate unknown type throws exception">:: codegen_unknown_decl_type;
     "Generate unknown constructor throws exception">:: codegen_unknown_ctor;
+    "Generate duplicate jeroo throws exception">::codegen_duplicate_jeroo;
     "Generate Jeroo hop">:: codegen_jeroo_hop;
     "Generate CSR for multiple Jeroos">:: codegen_multiple_jeroos_csr;
     "Generate pick instruction">:: codegen_pick_flower;
@@ -1350,4 +1465,7 @@ let suite =
     "Generate if statement">:: codegen_if_stmt;
     "Generate if-else statement">:: codegen_if_else;
     "Generate while statement">:: codegen_while;
+    "Generate unknown function throws exception">:: codegen_unknown_fxn;
+    "Generate duplicate function throws exception">:: codegen_duplicate_fxn;
+    "Generate unknown jeroo throws exception">:: codegen_unknown_jeroo;
   ]
