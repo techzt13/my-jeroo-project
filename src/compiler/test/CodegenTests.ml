@@ -217,7 +217,7 @@ let codegen_jeroo_decl_no_new _test_ctxt =
   } in
   assert_raises (Codegen.SemanticException {
       lnum = 2;
-      message = "Invalid right hand side of declaration, must be a Jeroo constructor"
+      message = "Invalid right hand side of assignment, must be a Jeroo constructor"
     }) (fun () -> Codegen.codegen ast)
 
 let codegen_unknown_decl_type _test_ctxt =
