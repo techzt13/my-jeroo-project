@@ -2,7 +2,10 @@
 open VBParser
 open Lexing
 
-exception Error of string
+exception Error of {
+    message : string;
+    lnum : int;
+  }
 }
 
 let whitespace = [' ' '\t' '\r']+
@@ -132,3 +135,7 @@ rule token = parse
   { let lnum = LexingUtils.get_lnum lexbuf in new_line lexbuf; NEWLINE lnum }
 | eof
   { EOF }
+| _ { raise (Error {
+      message = "Illegal character: " ^ Lexing.lexeme lexbuf;
+      lnum = LexingUtils.get_lnum lexbuf
+    })}

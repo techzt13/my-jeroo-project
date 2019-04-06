@@ -33,7 +33,13 @@ let parse_java lexbuf =
           lnum = lnum
         })
   in
-  loop lexbuf (JavaParser.Incremental.translation_unit lexbuf.lex_curr_p)
+  try
+    loop lexbuf (JavaParser.Incremental.translation_unit lexbuf.lex_curr_p)
+  with
+  | JavaLexer.Error e -> raise (ParserException {
+      message = e.message;
+      lnum = e.lnum
+    })
 
 let parse_vb lexbuf =
   let rec loop lexbuf checkpoint =
@@ -63,7 +69,13 @@ let parse_vb lexbuf =
           lnum = lnum
         })
   in
-  loop lexbuf (VBParser.Incremental.translation_unit lexbuf.lex_curr_p)
+  try
+    loop lexbuf (VBParser.Incremental.translation_unit lexbuf.lex_curr_p)
+  with
+  | VBLexer.Error e -> raise (ParserException {
+      message = e.message;
+      lnum = e.lnum;
+    })
 
 let compile code =
   let lexbuf = Lexing.from_string code in
