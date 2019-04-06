@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input } from '
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
+import { MatrixDialogComponent, DialogData } from '../matrix-dialog/matrix-dialog.component';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 
 @Component({
@@ -47,8 +47,8 @@ export class JerooMatrixComponent implements AfterViewInit {
         };
 
         const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
-        dialogRef.afterClosed().subscribe(data => {
-            if (this.editingEnabled) {
+        dialogRef.afterClosed().subscribe((data: DialogData) => {
+          if (data !== undefined && this.editingEnabled) {
                 this.matrixService.setCols(+data.xValue + 2);
                 this.matrixService.setRows(+data.yValue + 2);
                 this.matrixService.resetMap();
