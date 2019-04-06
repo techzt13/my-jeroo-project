@@ -2,3 +2,11 @@
 @import '~bootstrap/scss/bootstrap-reboot.scss';
 @import '~bootstrap/scss/bootstrap-grid.scss';
 @import '~codemirror/lib/codemirror.css';
+
+html, body {
+  height: 100%;
+}
+
+.min-100 {
+  min-height: 100%;
+}

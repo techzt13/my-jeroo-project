@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center">
-    <mat-button-toggle-group #group="matButtonToggleGroup">
+  <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle value="grass" matTooltip="Grass" (change)="selectedTileTypeChange($event.value)">
             <img src="assets/images/grass.jpg" alt='G'>
         </mat-button-toggle>
@@ -14,10 +14,8 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 </div>
-<div class="d-flex justify-content-center">
-    <canvas #jerooGameCanvas [className]="editingEnabled ? 'default-cursor' : 'not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
-    </canvas>
-</div>
+<canvas #jerooGameCanvas [className]="editingEnabled ? 'jeroo-matrix default-cursor' : 'jeroo-matrix not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
+</canvas>
 <div class="d-flex justify-content-center">
     <div *ngIf="mouseRow !== null && mouseColumn !== null; else elseBlock">
         Cursor Location: ({{mouseColumn}}, {{mouseRow}})
