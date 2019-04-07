@@ -61,6 +61,8 @@ generate-typescript-documentation:
 generate-ocaml-documentation:
   image: ocaml/opam2:alpine-3.9-ocaml-4.07
   stage: generate-documentation
+  only:
+    - master
   artifacts:
     paths:
       - src/compiler/_build/default/_doc/_html
