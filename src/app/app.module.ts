@@ -79,6 +79,6 @@ library.add(
     ],
     providers: [],
     bootstrap: [AppComponent],
-    entryComponents: [MatrixDialogComponent]
+    entryComponents: [MatrixDialogComponent, DashboardDialogComponent]
 })
 export class AppModule { }

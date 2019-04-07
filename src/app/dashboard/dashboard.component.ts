@@ -7,6 +7,7 @@ import { TextEditorComponent } from '../text-editor/text-editor.component';
 import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
 import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DashboardDialogComponent } from '../dashboard-dialog/dashboard-dialog.component';
 
 interface Language {
     value: SelectedLanguage;
@@ -59,7 +60,8 @@ export class DashboardComponent implements AfterViewInit {
     constructor(
         private bytecodeService: BytecodeInterpreterService,
         private matrixService: MatrixService,
-        private hotkeysService: HotkeysService
+        private hotkeysService: HotkeysService,
+        public dialog: MatDialog
     ) {
         this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
             this.onResetClick();
@@ -391,11 +393,15 @@ export class DashboardComponent implements AfterViewInit {
         return !this.executing && !this.paused;
     }
     openAboutJeroo() {
-        const dialogConfig = new MatDialogConfig();
-        dialogConfig.autoFocus = true;
-        dialogConfig.data = {
-            xValue: this.matrixService.getCols(),
-            yValue: this.matrixService.getRows()
-        };
+        
+        const dialogRef = this.dialog.open(DashboardDialogComponent, {
+            width: '500px',
+            height: '500px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+          
     }
 }
