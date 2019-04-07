@@ -146,10 +146,10 @@
             </mat-menu>
             <mat-menu #islandfile="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item [disabled]="!reset" (click)="clearMap()">
+                    <button mat-menu-item [disabled]="!matrixEditingEnabled()" (click)="clearMap()">
                         <fa-icon icon="eraser"></fa-icon><span class="menu-text">New<span class="shortcut-tip">Ctrl+Shift+N</span></span>
                     </button>
-                    <button mat-menu-item [disabled]="!reset" (click)="openMapFile()">
+                    <button mat-menu-item [disabled]="!matrixEditingEnabled()" (click)="openMapFile()">
                         <fa-icon icon="folder"></fa-icon><span class="menu-text">Open<span class="shortcut-tip">Ctrl+Shift+O</span></span>
                     </button>
                     <mat-divider></mat-divider>
