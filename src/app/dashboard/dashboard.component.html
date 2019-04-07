@@ -19,7 +19,7 @@
                             <fa-icon icon="bars"></fa-icon>
                         </button>
                     </div>
-                    <div fxLayout="row" fxLayoutAlign="none center" fxHide.sm>
+                    <div fxLayout="row" fxLayoutAlign="none center" fxHide.lt-md>
                         <img src="/assets/JerooLogo.png" />
                         <button class="menu-button" mat-button [matMenuTriggerFor]="file">Source File</button>
                         <button class="menu-button" mat-button [matMenuTriggerFor]="edit">Source Edit</button>
@@ -29,7 +29,7 @@
                         <button class="menu-button" mat-button [matMenuTriggerFor]="help">Help</button>
                     </div>
                 </mat-toolbar-row>
-                <mat-toolbar-row fxHide.sm>
+                <mat-toolbar-row fxHide.lt-md>
                     <button mat-icon-button matTooltip="New File">
                         <fa-icon icon="file"></fa-icon>
                     </button>
