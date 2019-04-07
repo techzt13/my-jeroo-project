@@ -19,10 +19,8 @@
                             <fa-icon icon="bars"></fa-icon>
                         </button>
                     </div>
-                    <div class="menu-button">
-                        Welcome to Jeroo
-                    </div>
-                    <div fxHide.sm>
+                    <div fxLayout="row" fxLayoutAlign="none center" fxHide.sm>
+                        <img src="/assets/JerooLogo.png" />
                         <button class="menu-button" mat-button [matMenuTriggerFor]="file">Source File</button>
                         <button class="menu-button" mat-button [matMenuTriggerFor]="edit">Source Edit</button>
                         <button class="menu-button" mat-button [matMenuTriggerFor]="run">Run</button>

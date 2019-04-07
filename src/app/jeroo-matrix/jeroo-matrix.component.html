@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutAlign=" center" >
+<div fxLayout="column" fxLayoutAlign=" center">
     <div>
         <mat-button-toggle-group #group="matButtonToggleGroup">
             <mat-button-toggle value="grass" matTooltip="Grass" (change)="selectedTileTypeChange($event.value)">
@@ -15,11 +15,11 @@
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>
-    <div>
-        <canvas #jerooGameCanvas [className]="editingEnabled ? 'jeroo-matrix default-cursor' : 'jeroo-matrix not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
-        </canvas>
-    </div>
-    <div style="margin: 10px;">
+</div>
+<canvas #jerooGameCanvas [className]="editingEnabled ? 'jeroo-matrix default-cursor' : 'jeroo-matrix not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
+</canvas>
+<div fxLayout="column" fxLayoutAlign=" center">
+    <div class="cursor-loc-container">
         <div *ngIf="mouseRow !== null && mouseColumn !== null; else elseBlock">
             Cursor Location: ({{mouseColumn}}, {{mouseRow}})
         </div>
