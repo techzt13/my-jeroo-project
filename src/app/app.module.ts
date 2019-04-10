@@ -70,6 +70,10 @@ library.add(
         DisplayErrorMessageComponent,
         TextEditorComponent,
         EditorTabAreaComponent,
+        DashboardDialogComponent,
+        DashboardDialogAwardsComponent,
+        DashboardDialogHistoryComponent,
+        DashboardDialogCopyrightComponent
     ],
     imports: [
         BrowserModule,
@@ -85,10 +89,12 @@ library.add(
     ],
     providers: [],
     bootstrap: [AppComponent],
-    entryComponents: [MatrixDialogComponent, 
+    entryComponents: [
+        MatrixDialogComponent, 
         DashboardDialogComponent,
         DashboardDialogAwardsComponent,
         DashboardDialogHistoryComponent,
-        DashboardDialogCopyrightComponent,]
+        DashboardDialogCopyrightComponent
+    ]
 })
 export class AppModule { }

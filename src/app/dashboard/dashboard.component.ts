@@ -2,9 +2,6 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatrixService } from '../matrix.service';
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
-import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
-import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DashboardDialogComponent } from '../dashboard-dialog/dashboard-dialog.component';
 import { DashboardDialogAwardsComponent } from '../dashboard-dialog-awards/dashboard-dialog-awards.component';
@@ -143,15 +140,15 @@ export class DashboardComponent {
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
             this.jerooEditor.pauseState();
-            this.messageService.add('Program paused by user');
+            //this.MessageService.add('Program paused by user');
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
             this.jerooEditor.stopState();
-            this.messageService.clear();
-            this.messageService.add('Program stopped by user');
+            //this.MessageService.clear();
+            //this.MessageService.add('Program stopped by user');
         }
     }
 
