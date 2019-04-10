@@ -1,8 +1,8 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input } from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
+import { MatrixDialogComponent, DialogData } from '../matrix-dialog/matrix-dialog.component';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 
 @Component({
@@ -12,15 +12,16 @@ import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 })
 export class JerooMatrixComponent implements AfterViewInit {
     @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
+    @Input() editingEnabled: boolean;
+
+    mouseRow: number = null;
+    mouseColumn: number = null;
 
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private mouseDown = false;
     private selectedTileType: TileType = null;
     private boardCache = 'board';
-    mouseRow: number = null;
-    mouseColumn: number = null;
-    editingEnabled = true;
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
         @Inject(LOCAL_STORAGE) private storage: WebStorageService) { }
@@ -32,9 +33,9 @@ export class JerooMatrixComponent implements AfterViewInit {
         }
         this.canvas = this.jerooGameCanvas.nativeElement as HTMLCanvasElement;
         this.context = this.canvas.getContext('2d');
-        this.canvas.width = this.matrixService.getTsize() * (this.matrixService.getCols());
-        this.canvas.height = this.matrixService.getTsize() * (this.matrixService.getRows());
-        this.matrixService.render(this.context);
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+        this.redraw();
     }
 
     openDialog() {
@@ -46,11 +47,12 @@ export class JerooMatrixComponent implements AfterViewInit {
         };
 
         const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
-        dialogRef.afterClosed().subscribe(data => {
-            if (this.editingEnabled) {
+        dialogRef.afterClosed().subscribe((data: DialogData) => {
+          if (data !== undefined && this.editingEnabled) {
                 this.matrixService.setCols(+data.xValue + 2);
                 this.matrixService.setRows(+data.yValue + 2);
                 this.matrixService.resetMap();
+                this.matrixService.resetJeroos();
                 this.redraw();
             }
         });
@@ -69,12 +71,11 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     clearMap() {
-        if (this.editingEnabled) {
-            this.matrixService.resetMap();
-            // if the board is cleared, also save into service incase the size has been changed
-            this.saveInLocal(this.boardCache, this.matrixService.toString());
-            this.matrixService.render(this.context);
-        }
+        this.matrixService.resetMap();
+        this.matrixService.resetJeroos();
+        // if the board is cleared, also save into service incase the size has been changed
+        this.saveInLocal(this.boardCache, this.matrixService.toString());
+        this.matrixService.render(this.context);
     }
 
     getCanvas() {
@@ -123,45 +124,38 @@ export class JerooMatrixComponent implements AfterViewInit {
         this.updateScreenFromMouseEvent(event);
     }
 
-    canvasTapMove(event: any) {
+    canvasTapMove(event: TouchEvent) {
         this.updateScreenFromTapEvent(event);
-    }
-
-    // having a hammerjs action bound to a function will prevent the screen from scrolling while
-    // being on the canvas on mobile devices
-    disableScrolling() {
-
     }
 
     private updateScreenFromMouseEvent(event: MouseEvent) {
         const rect = this.canvas.getBoundingClientRect();
-        // bitwise or is the same as casting a float to a number
-        const pixelX = (event.clientX - rect.left) | 0;
-        const pixelY = (event.clientY - rect.top) | 0;
+        const pixelX = event.clientX - rect.left;
+        const pixelY = event.clientY - rect.top;
         this.updateScreen(pixelX, pixelY);
     }
 
     private updateScreenFromTapEvent(event: TouchEvent) {
         const rect = this.canvas.getBoundingClientRect();
-        const pixelX = (event.touches[0].clientX - rect.left) | 0;
-        const pixelY = (event.touches[0].clientY - rect.top) | 0;
+        const pixelX = event.touches[0].clientX - rect.left;
+        const pixelY = event.touches[0].clientY - rect.top;
         this.updateScreen(pixelX, pixelY);
     }
 
     private updateScreen(pixelX: number, pixelY: number) {
         const cols = this.matrixService.getCols();
         const rows = this.matrixService.getRows();
-        const pixelsInCol = this.matrixService.getTsize();
-        const pixelsInRow = this.matrixService.getTsize();
-        const tileCol = ((pixelX / pixelsInCol) | 0);
-        const tileRow = ((pixelY / pixelsInRow) | 0);
+        const pixelsInCol = this.canvas.offsetWidth / cols;
+        const pixelsInRow = this.canvas.offsetHeight / rows;
+        const tileCol = Math.floor(pixelX / pixelsInCol);
+        const tileRow = Math.floor(pixelY / pixelsInRow);
 
         // update the mouse locations
-        this.mouseColumn = tileCol;
-        this.mouseRow = tileRow;
+        this.mouseColumn = tileCol - 1;
+        this.mouseRow = tileRow - 1;
 
-        if (tileCol >= 0 && tileRow >= 0
-            && tileCol < cols - 2 && tileRow < rows - 2) {
+        if (tileCol > 0 && tileRow > 0
+            && tileCol < cols - 1 && tileRow < rows - 1) {
             // update the col and row
             if (this.editingEnabled && this.mouseDown && this.selectedTileType !== null) {
                 // only re-render if we change the map
@@ -178,15 +172,7 @@ export class JerooMatrixComponent implements AfterViewInit {
         }
     }
 
-    saveInLocal(key, val): void {
+    saveInLocal(key: string, val: any) {
         this.storage.set(key, val);
-    }
-
-    enableEditing() {
-        this.editingEnabled = true;
-    }
-
-    disableEditing() {
-        this.editingEnabled = false;
     }
 }

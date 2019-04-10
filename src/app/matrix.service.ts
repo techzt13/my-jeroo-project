@@ -135,7 +135,7 @@ export class MatrixService {
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
                 const jeroo = this.getJeroo(col, row);
-                if (jeroo !== null) {
+                if (jeroo !== null && jeroo !== undefined) {
                     this.renderJeroo(context, imageAtlas, jeroo);
                 } else {
                     const tile = this.getTile(col, row);
@@ -290,7 +290,7 @@ export class MatrixService {
                     this.setTile(cols + 1, row, TileType.Water);
                 }
                 for (let col = 0; col < cols + 2; col++) {
-                    this.setTile(col, 0, TileType.Water);
+                    this.setTile(col, rows + 1, TileType.Water);
                 }
             } catch (e) {
                 // reset the rows and cols to their previous values
