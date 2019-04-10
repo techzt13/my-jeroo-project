@@ -1,12 +1,12 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav role="navigation">
         <mat-nav-list>
-            <button class="menu-button" mat-menu-item [matMenuTriggerFor]="file">Source File</button>
-            <button class="menu-button" mat-menu-item [matMenuTriggerFor]="edit">Source Edit</button>
-            <button class="menu-button" mat-menu-item [matMenuTriggerFor]="run">Run</button>
-            <button class="menu-button" mat-menu-item [matMenuTriggerFor]="speed">Run Speed</button>
-            <button class="menu-button" mat-menu-item [matMenuTriggerFor]="islandfile">Island File</button>
-            <button class="menu-button" mat-menu-item [matMenuTriggerFor]="help">Help</button>
+            <button mat-menu-item [matMenuTriggerFor]="file">Source File</button>
+            <button mat-menu-item [matMenuTriggerFor]="edit">Source Edit</button>
+            <button mat-menu-item [matMenuTriggerFor]="run">Run</button>
+            <button mat-menu-item [matMenuTriggerFor]="speed">Run Speed</button>
+            <button mat-menu-item [matMenuTriggerFor]="islandfile">Island File</button>
+            <button mat-menu-item [matMenuTriggerFor]="help">Help</button>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -19,14 +19,14 @@
                             <fa-icon icon="bars"></fa-icon>
                         </button>
                     </div>
-                    <div fxLayout="row" fxLayoutAlign="none center" fxHide.lt-md>
+                    <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="3px" fxHide.lt-md>
                         <img src="assets/JerooLogo.png" alt="Jeroo Logo" />
-                        <button class="menu-button" mat-button [matMenuTriggerFor]="file">Source File</button>
-                        <button class="menu-button" mat-button [matMenuTriggerFor]="edit">Source Edit</button>
-                        <button class="menu-button" mat-button [matMenuTriggerFor]="run">Run</button>
-                        <button class="menu-button" mat-button [matMenuTriggerFor]="speed">Run Speed</button>
-                        <button class="menu-button" mat-button [matMenuTriggerFor]="islandfile">Island File</button>
-                        <button class="menu-button" mat-button [matMenuTriggerFor]="help">Help</button>
+                        <button mat-button [matMenuTriggerFor]="file">Source File</button>
+                        <button mat-button [matMenuTriggerFor]="edit">Source Edit</button>
+                        <button mat-button [matMenuTriggerFor]="run">Run</button>
+                        <button mat-button [matMenuTriggerFor]="speed">Run Speed</button>
+                        <button mat-button [matMenuTriggerFor]="islandfile">Island File</button>
+                        <button mat-button [matMenuTriggerFor]="help">Help</button>
                     </div>
                 </mat-toolbar-row>
                 <mat-toolbar-row fxHide.lt-md>
