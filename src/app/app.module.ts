@@ -35,6 +35,9 @@ import { DisplayErrorMessageComponent } from './display-error-message/display-er
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { DashboardDialogComponent } from './dashboard-dialog/dashboard-dialog.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
+import { DashboardDialogAwardsComponent } from './dashboard-dialog-awards/dashboard-dialog-awards.component';
+import { DashboardDialogHistoryComponent } from './dashboard-dialog-history/dashboard-dialog-history.component';
+import { DashboardDialogCopyrightComponent } from './dashboard-dialog-copyright/dashboard-dialog-copyright.component';
 
 library.add(
     faFile,
@@ -65,6 +68,9 @@ library.add(
         DisplayErrorMessageComponent,
         TextEditorComponent,
         DashboardDialogComponent,
+        DashboardDialogAwardsComponent,
+        DashboardDialogHistoryComponent,
+        DashboardDialogCopyrightComponent,
     ],
     imports: [
         BrowserModule,
@@ -79,6 +85,10 @@ library.add(
     ],
     providers: [],
     bootstrap: [AppComponent],
-    entryComponents: [MatrixDialogComponent, DashboardDialogComponent]
+    entryComponents: [MatrixDialogComponent, 
+        DashboardDialogComponent,
+        DashboardDialogAwardsComponent,
+        DashboardDialogHistoryComponent,
+        DashboardDialogCopyrightComponent,]
 })
 export class AppModule { }

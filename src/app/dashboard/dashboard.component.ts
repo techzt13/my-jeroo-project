@@ -8,6 +8,9 @@ import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
 import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DashboardDialogComponent } from '../dashboard-dialog/dashboard-dialog.component';
+import { DashboardDialogAwardsComponent } from '../dashboard-dialog-awards/dashboard-dialog-awards.component';
+import { DashboardDialogHistoryComponent } from '../dashboard-dialog-history/dashboard-dialog-history.component';
+import { DashboardDialogCopyrightComponent } from '../dashboard-dialog-copyright/dashboard-dialog-copyright.component';
 
 interface Language {
     value: SelectedLanguage;
@@ -99,8 +102,8 @@ export class DashboardComponent implements AfterViewInit {
             this.printMap();
             return false;
         }));
-        this.hotkeysService.add(new Hotkey('f1', (_event: KeyboardEvent): boolean => {
-            this.getHelpUrl();
+        this.hotkeysService.add(new Hotkey('f8', (_event: KeyboardEvent): boolean => {
+            window.open(this.getHelpUrl());
             return false;
         }));
     }
@@ -395,6 +398,18 @@ export class DashboardComponent implements AfterViewInit {
     openAboutJeroo() {
         
         const dialogRef = this.dialog.open(DashboardDialogComponent, {
+            width: '60%',
+            height: '90%'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+          
+    }
+    openAwards() {
+        
+        const dialogRef = this.dialog.open(DashboardDialogAwardsComponent, {
             width: '500px',
             height: '500px'
         });
@@ -402,6 +417,27 @@ export class DashboardComponent implements AfterViewInit {
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
-          
+    }
+    openHistory() {
+        
+        const dialogRef = this.dialog.open(DashboardDialogHistoryComponent, {
+            width: '500px',
+            height: '500px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+    openCopyright() {
+        
+        const dialogRef = this.dialog.open(DashboardDialogCopyrightComponent, {
+            width: '500px',
+            height: '500px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 }
