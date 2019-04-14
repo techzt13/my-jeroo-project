@@ -178,15 +178,12 @@ export class EditorTabAreaComponent implements AfterViewInit {
             jerooCode += '@Java\n';
         } else if (this.selectedLanguage === SelectedLanguage.Vb) {
             jerooCode += '@VB\n';
-        } else if (this.selectedLanguage === SelectedLanguage.Python) {
-          jerooCode += '@PYTHON\n';
         } else {
             throw new Error('Unsupported Language');
         }
         jerooCode += this.extensionMethodsTextEditor.getText();
-        jerooCode += '@@\n';
+        jerooCode += '\n@@\n';
         jerooCode += this.mainMethodTextEditor.getText();
-      console.log(jerooCode);
         return jerooCode;
     }
 

@@ -8,7 +8,7 @@ open AST
 %token <int> DEF IF ELIF ELSE WHILE
 %token <int> LPAREN RPAREN
 %token <int> INDENT DEDENT
-%token <int> COLON COMMA DOT NEWLINE /*SEMICOLON*/
+%token <int> COLON COMMA DOT NEWLINE SEMICOLON
 %token <int> LEFT RIGHT AHEAD HERE
 %token <int> NORTH EAST SOUTH WEST
 %token HEADER MAIN_METH_SEP
@@ -23,54 +23,42 @@ open AST
 %%
 
 translation_unit:
-  | HEADER fs = newline_or_fxn_list MAIN_METH_SEP stmts = newline_or_stmt_list end_lnum = EOF
-    {
-      {
-        extension_fxns = fs;
-        main_fxn = {
-            id = "main";
-            stmts = stmts;
-            start_lnum = 1;
-            end_lnum = end_lnum
-          }
-      }
-    }
+  | HEADER fs = fxn* MAIN_METH_SEP stmts = stmt* end_lnum = EOF {
+                                                                {
+                                                                  extension_fxns = fs;
+                                                                  main_fxn = {
+                                                                      id = "main";
+                                                                      stmts = stmts;
+                                                                      start_lnum = 1;
+                                                                      end_lnum = end_lnum
+                                                                    }
+                                                                }
+                                                              }
 
 fxn:
-  | start_lnum = DEF id_lnum = ID LPAREN RPAREN COLON b = suite end_lnum = NEWLINE
-    {
-      let (id, _) = id_lnum in
-      {
-        id = id;
-        stmts = b;
-        start_lnum = start_lnum;
-        end_lnum = end_lnum
-      }
-    }
-
-newline_or_stmt_list:
-  | NEWLINE stmts = newline_or_stmt_list { stmts }
-  | s = stmt stmts = newline_or_stmt_list { s :: stmts }
-  | { [] }
-
-newline_or_fxn_list:
-  | NEWLINE fxns = newline_or_fxn_list { fxns }
-  | fxn = fxn fxns = newline_or_fxn_list { fxn :: fxns }
-  | { [] }
+  | start_lnum = DEF id_lnum = ID LPAREN RPAREN COLON b = suite end_lnum = NEWLINE {
+                                                                                       let (id, _) = id_lnum in
+                                                                                       {
+                                                                                         id = id;
+                                                                                         stmts = b;
+                                                                                         start_lnum = start_lnum;
+                                                                                         end_lnum = end_lnum
+                                                                                       }
+                                                                                     }
 
 compound_stmt:
   | s = if_stmt { s }
   | s = while_stmt { s }
 
 stmt:
-  | s = simple_stmt { AST.BlockStmt([s]) }
+  | s = stmt_list NEWLINE { AST.BlockStmt(s) }
   | s = compound_stmt { s }
 
-/* stmt_list: */
-/*   | stmts = separated_nonempty_list(SEMICOLON, simple_stmt) { stmts } */
+stmt_list:
+  | stmts = separated_nonempty_list(SEMICOLON, simple_stmt) { stmts }
 
 suite:
-  | /*stmts = stmt_list NEWLINE*/ stmts = simple_stmt { [stmts] }
+  | stmts = stmt_list NEWLINE { stmts }
   | NEWLINE INDENT stmts = stmt+ DEDENT { stmts }
 
 if_stmt:
@@ -94,14 +82,14 @@ simple_stmt:
   | s = assignment_stmt { s }
 
 expression_stmt:
-  | e = expr ln = NEWLINE { AST.ExprStmt({ a = Some e; lnum = ln }) }
+  | e = expr { let ln = e.lnum in AST.ExprStmt({ a = Some e; lnum = ln }) }
 
 assignment_stmt:
-  | id_ln = ID EQ e = expr NEWLINE { let (id, ln) = id_ln in AST.DeclStmt("Jeroo", id, { a = AST.UnOpExpr(AST.New, e); lnum = ln}) }
+  | id_ln = ID EQ e = expr { let (id, ln) = id_ln in AST.DeclStmt("Jeroo", id, { a = AST.UnOpExpr(AST.New, e); lnum = ln}) }
 
 expr:
   | e = arith_expr { e }
-  | id_ln = ID LPAREN args = arguments RPAREN { let (id, ln) = id_ln in { a = AST.FxnAppExpr({ a = IdExpr id; lnum = ln }, args); lnum = ln } }
+  | id_ln = ID LPAREN args = arguments RPAREN { let (id, ln) = id_ln in { a = AST.FxnAppExpr({ a = IdExpr(id); lnum = ln }, args); lnum = ln } }
 
 arith_expr:
   | e = primary_expr { e }
@@ -111,7 +99,7 @@ arith_expr:
   | ln = NOT e = expr { { a = AST.UnOpExpr(AST.Not, e); lnum = ln } }
 
 primary_expr:
-  | id_ln = ID {  let (id, ln) = id_ln in { a = AST.IdExpr(id); lnum = ln } }
+  | id_ln = ID { let (id, ln) = id_ln in { a = AST.IdExpr(id); lnum = ln } }
   | i_ln = INT { let (i, ln) = i_ln in { a = AST.IntExpr(i); lnum = ln} }
   | ln = TRUE { { a = AST.TrueExpr; lnum = ln } }
   | ln = FALSE { { a = AST.FalseExpr; lnum = ln } }

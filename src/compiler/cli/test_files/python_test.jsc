@@ -1,5 +1,15 @@
 @PYTHON
 @@
 j = Jeroo()
-if j.hasFlower():
-   j.hop()
+j.hop()
+if True:
+   j.turn(RIGHT)
+else: j.turn(LEFT)
+while False:
+      j.hop()
+
+      j.hop()
+      if True:
+         j.hop()
+      else:
+              j.toss()
