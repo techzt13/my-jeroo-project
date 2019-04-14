@@ -21,7 +21,7 @@ let newline = ('\n' | "\r\n")+
 let whitespace = [' ' '\t']
 let comment = '#' [^ '\n' '\r']*
 
-              let digit = ['0'-'9']
+let digit = ['0'-'9']
 let nonzerodigit = ['1'-'9']
 let decimalinteger = nonzerodigit digit*
 let identifier = ['a'-'z' 'A'-'Z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
@@ -34,22 +34,18 @@ rule token state = parse
       if curr_offset < last_offset
       then (ignore (Stack.pop state.offset_stack); DEDENT lnum)
       else if curr_offset > last_offset
-      then (Stack.push curr_offset state.offset_stack; INDENT lnum)
+      then (Stack.push curr_offset state.offset_stack; (print_endline "pushing"); INDENT lnum)
       else _token state lexbuf
     }
 and _token state = parse
   | ((whitespace* comment? whitespace*) whitespace* comment?) newline
     {
       let lines = count_lines (lexeme lexbuf) in
-      let pos = lexbuf.lex_curr_p in
-      lexbuf.lex_curr_p <-
-        { pos with
-          pos_bol = pos.pos_cnum;
-          pos_lnum = pos.pos_lnum + lines };
+      LexingUtils.next_n_lines lines lexbuf;
       if state.nl_ignore <= 0 then begin
         state.curr_offset <- 0;
         offset state lexbuf;
-        NEWLINE (pos.pos_lnum)
+        NEWLINE (LexingUtils.get_lnum lexbuf)
       end else
         _token state lexbuf
     }
@@ -104,6 +100,8 @@ and _token state = parse
       { LEFT (LexingUtils.get_lnum lexbuf) }
   | "RIGHT"
       { RIGHT (LexingUtils.get_lnum lexbuf) }
+  (* | "Self"
+   *   { SELF (LexingUtils.get_lnum lexbuf) } *)
   | '('
       { LPAREN (LexingUtils.get_lnum lexbuf) }
   | ')'
@@ -114,15 +112,27 @@ and _token state = parse
       { COMMA (LexingUtils.get_lnum lexbuf) }
   | '='
       { EQ (LexingUtils.get_lnum lexbuf) }
-  | ';'
-    { SEMICOLON (LexingUtils.get_lnum lexbuf) }
+  (* | ';'
+   *   { SEMICOLON (LexingUtils.get_lnum lexbuf) } *)
   | '.'
     { DOT (LexingUtils.get_lnum lexbuf) }
   | identifier as id
-    { ID (id, (LexingUtils.get_lnum lexbuf)) }
+    {  ID (id, (LexingUtils.get_lnum lexbuf)) }
   | decimalinteger as i
     { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
-  | eof { EOF (LexingUtils.get_lnum lexbuf) }
+  | eof {
+      print_endline ("FOUND EOF " ^ (string_of_int (Stack.length state.offset_stack)));
+      if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) != 0) then begin
+        print_endline "SENDING DEDENTS";
+        ignore (Stack.pop state.offset_stack);
+        lexbuf.lex_curr_pos <- 0;
+
+        DEDENT (LexingUtils.get_lnum lexbuf)
+      end else begin
+        print_endline "SENDING EOF";
+        EOF (LexingUtils.get_lnum lexbuf)
+      end
+    }
   | _ { raise (Error {
         message = "Illegal character: " ^ Lexing.lexeme lexbuf;
         lnum = LexingUtils.get_lnum lexbuf
