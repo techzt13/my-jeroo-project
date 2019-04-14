@@ -258,8 +258,8 @@ export class DashboardComponent {
     openAboutJeroo() {
         
         const dialogRef = this.dialog.open(DashboardDialogComponent, {
-            width: '60%',
-            height: '90%'
+            width: '500px',
+            height: '750px'
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -271,7 +271,7 @@ export class DashboardComponent {
         
         const dialogRef = this.dialog.open(DashboardDialogAwardsComponent, {
             width: '500px',
-            height: '500px'
+            height: '750px'
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -282,7 +282,7 @@ export class DashboardComponent {
         
         const dialogRef = this.dialog.open(DashboardDialogHistoryComponent, {
             width: '500px',
-            height: '500px'
+            height: '750px'
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -293,7 +293,7 @@ export class DashboardComponent {
         
         const dialogRef = this.dialog.open(DashboardDialogCopyrightComponent, {
             width: '500px',
-            height: '500px'
+            height: '750px'
         });
     
         dialogRef.afterClosed().subscribe(result => {
