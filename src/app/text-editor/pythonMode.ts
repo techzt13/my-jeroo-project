@@ -5,11 +5,11 @@ export const pythonMode: any = {
             token: 'keyword'
         },
         {
-            regex: /True|False|new|NORTH|SOUTH|EAST|WEST|AHEAD|LEFT|RIGHT|HERE/,
+            regex: /True|False|new|NORTH|SOUTH|EAST|WEST|AHEAD|LEFT|RIGHT|HERE|not|and|or/,
             token: 'atom'
         },
         {
-            regex: /and|or|not|[+-]/,
+            regex: /[+-]/,
             token: 'operator'
         },
         {

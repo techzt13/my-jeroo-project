@@ -17,8 +17,8 @@ let id = letter (letter | digit)*
                             let comment = "//" [^'\n']* '\n'
 let ml_comment = "/*" [^'*']* [^'/']* "*/"
 
-let whitespace = ['\r' ' ' '\t']+
-                 let newline = '\n'
+let whitespace = [' ' '\t']+
+let newline = ('\n' | "\r\n")
 
 rule token = parse
   | whitespace

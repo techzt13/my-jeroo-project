@@ -68,7 +68,7 @@ arguments:
 
 expr:
   | e = arith_expr { e }
-  | id_ln = ID LPAREN args = arguments RPAREN { let (id, ln) = id_ln in { a = AST.FxnAppExpr({ a = (AST.IdExpr id); lnum = ln }, args); lnum = ln } }
+  | id_ln = ID LPAREN args = arguments RPAREN { let (id, ln) = id_ln in { a = AST.FxnAppExpr({ a = IdExpr id; lnum = ln }, args); lnum = ln } }
 
 arith_expr:
   | e = primary_expr { e }

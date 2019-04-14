@@ -1,24 +1,41 @@
 (library
   (name Lib)
-  (libraries menhirLib)
-)
-(ocamllex JavaLexer VBLexer PythonLexer)
+  (libraries
+    sedlex
+    menhirLib
+  )
+  (virtual_deps cppo menhir)
+  (preprocess (pps sedlex.ppx)))
+(ocamllex JavaLexer VBLexer)
 (rule
   (targets JavaMessages.ml)
   (deps Java.messages)
   (action (with-stdout-to %{targets}
-          (run menhir --compile-errors %{workspace_root}/lib/Java.messages %{workspace_root}/lib/JavaParser.mly)
-          )
-  )
-)
+           (run menhir --compile-errors %{workspace_root}/lib/Java.messages %{workspace_root}/lib/JavaParser.mly))))
 (rule
   (targets VBMessages.ml)
   (deps VB.messages)
   (action (with-stdout-to %{targets}
-          (run menhir --compile-errors %{workspace_root}/lib/VB.messages %{workspace_root}/lib/VBParser.mly)
-          )
-  )
-)
-(menhir (modules JavaParser VBParser PythonParser)
-(flags ("--table" "--dump" "--explain"))
-)
+           (run menhir --compile-errors %{workspace_root}/lib/VB.messages %{workspace_root}/lib/VBParser.mly))))
+(rule
+  (targets Tokens.ml)
+  (deps PythonParser.mly)
+  (action (run menhir --only-tokens %{deps} --base Tokens)))
+(rule
+  (targets PythonLexer.ml)
+  (deps (:f PythonLexer.cppo.ml) Tokens.ml)
+  (action (run cppo %{f} -n -o %{targets})))
+(rule
+  (targets PythonLexer.mli)
+  (deps (:f PythonLexer.cppo.mli) Tokens.ml)
+  (action (run cppo %{f} -n -o %{targets})))
+(menhir
+  (modules JavaParser VBParser)
+  (flags ("--table" "--dump" "--explain")))
+(menhir
+  (modules PythonParser)
+  (flags (--external-tokens PythonLexer)))
+
+(env
+  (dev
+   (flags (:standard -warn-error -A))))
