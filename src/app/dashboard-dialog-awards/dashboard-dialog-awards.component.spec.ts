@@ -8,9 +8,9 @@ describe('DashboardDialogAwardsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardDialogAwardsComponent ]
+      declarations: [DashboardDialogAwardsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

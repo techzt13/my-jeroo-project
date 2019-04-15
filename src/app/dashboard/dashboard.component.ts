@@ -49,6 +49,7 @@ export class DashboardComponent {
     constructor(
         private matrixService: MatrixService,
         private hotkeysService: HotkeysService,
+        private MessageService: MessageService,
         public dialog: MatDialog
     ) {
         this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
@@ -140,15 +141,15 @@ export class DashboardComponent {
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
             this.jerooEditor.pauseState();
-            //this.MessageService.add('Program paused by user');
+            this.MessageService.add('Program paused by user');
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
             this.jerooEditor.stopState();
-            //this.MessageService.clear();
-            //this.MessageService.add('Program stopped by user');
+            this.MessageService.clear();
+            this.MessageService.add('Program stopped by user');
         }
     }
 
@@ -186,8 +187,8 @@ export class DashboardComponent {
     saveMapFile() {
         const mapSaver = (this.mapSaver.nativeElement as HTMLAnchorElement);
         // kind of a hack to get the browser to save the map data to a file
-        const saveBlob = (function() {
-            return function(b: Blob, fileName: string) {
+        const saveBlob = (function () {
+            return function (b: Blob, fileName: string) {
                 const url = window.URL.createObjectURL(b);
                 mapSaver.href = url;
                 mapSaver.download = fileName;
@@ -256,46 +257,46 @@ export class DashboardComponent {
         return this.jerooEditorState.reset;
     }
     openAboutJeroo() {
-        
+
         const dialogRef = this.dialog.open(DashboardDialogComponent, {
             width: '500px',
             height: '750px'
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
-          
+
     }
     openAwards() {
-        
+
         const dialogRef = this.dialog.open(DashboardDialogAwardsComponent, {
             width: '500px',
             height: '750px'
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
     }
     openHistory() {
-        
+
         const dialogRef = this.dialog.open(DashboardDialogHistoryComponent, {
             width: '500px',
             height: '750px'
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
     }
     openCopyright() {
-        
+
         const dialogRef = this.dialog.open(DashboardDialogCopyrightComponent, {
             width: '500px',
             height: '750px'
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });

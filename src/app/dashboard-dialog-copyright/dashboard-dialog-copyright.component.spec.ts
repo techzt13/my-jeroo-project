@@ -8,9 +8,9 @@ describe('DashboardDialogCopyrightComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardDialogCopyrightComponent ]
+      declarations: [DashboardDialogCopyrightComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

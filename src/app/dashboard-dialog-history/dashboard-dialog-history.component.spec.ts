@@ -8,9 +8,9 @@ describe('DashboardDialogHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardDialogHistoryComponent ]
+      declarations: [DashboardDialogHistoryComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
