@@ -17,7 +17,7 @@ let count_lines s =
 (* epsilon *)
 let e = ""
 
-let newline = ('\n' | "\r\n")+
+let newline = ('\n' | "\r\n")
 let whitespace = [' ' '\t']
 let comment = '#' [^ '\n' '\r']*
 
@@ -28,16 +28,14 @@ let identifier = ['a'-'z' 'A'-'Z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
 rule token state = parse
   | e {
-      if state.is_at_end then process_end state lexbuf
-      else
-        let lnum = LexingUtils.get_lnum lexbuf in
-        let curr_offset = state.curr_offset in
-        let last_offset = Stack.top state.offset_stack in
-        if curr_offset < last_offset
-        then (ignore (Stack.pop state.offset_stack); DEDENT lnum)
-        else if curr_offset > last_offset
-        then (Stack.push curr_offset state.offset_stack; INDENT lnum)
-        else _token state lexbuf
+      let lnum = LexingUtils.get_lnum lexbuf in
+      let curr_offset = state.curr_offset in
+      let last_offset = Stack.top state.offset_stack in
+      if curr_offset < last_offset
+      then (ignore (Stack.pop state.offset_stack); DEDENT lnum)
+      else if curr_offset > last_offset
+      then (Stack.push curr_offset state.offset_stack; INDENT lnum)
+      else _token state lexbuf
     }
 and _token state = parse
   | ((whitespace* comment? whitespace*) whitespace* comment?) newline
@@ -102,8 +100,8 @@ and _token state = parse
       { LEFT (LexingUtils.get_lnum lexbuf) }
   | "RIGHT"
       { RIGHT (LexingUtils.get_lnum lexbuf) }
-  (* | "Self"
-   *   { SELF (LexingUtils.get_lnum lexbuf) } *)
+  | "self"
+    { SELF (LexingUtils.get_lnum lexbuf) }
   | '('
       { LPAREN (LexingUtils.get_lnum lexbuf) }
   | ')'
@@ -114,8 +112,6 @@ and _token state = parse
       { COMMA (LexingUtils.get_lnum lexbuf) }
   | '='
       { EQ (LexingUtils.get_lnum lexbuf) }
-  (* | ';'
-   *   { SEMICOLON (LexingUtils.get_lnum lexbuf) } *)
   | '.'
     { DOT (LexingUtils.get_lnum lexbuf) }
   | identifier as id
@@ -123,16 +119,18 @@ and _token state = parse
   | decimalinteger as i
     { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
   | eof {
+      (* If there are tray indentation levels, send corresponding DEDENT tokens to pair them up *)
       if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) != 0) then begin
-        state.is_at_end <- true;
         ignore (Stack.pop state.offset_stack);
+        let indent = Stack.top state.offset_stack in
+        state.curr_offset <- indent;
+        (* backtrack the lexer one token *)
         lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
                               pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
 
         DEDENT (LexingUtils.get_lnum lexbuf)
-      end else begin
+      end else
         EOF (LexingUtils.get_lnum lexbuf)
-      end
     }
   | _ { raise (Error {
         message = "Illegal character: " ^ Lexing.lexeme lexbuf;
@@ -142,16 +140,3 @@ and offset state = parse
   | e { }
   | ' ' { state.curr_offset <- state.curr_offset + 1; offset state lexbuf }
   | '\t' { state.curr_offset <- state.curr_offset + 8; offset state lexbuf }
-
-and process_end state = parse
-  | eof {
-      if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) != 0) then begin
-        ignore (Stack.pop state.offset_stack);
-        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
-                              pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
-
-        DEDENT (LexingUtils.get_lnum lexbuf)
-      end else begin
-        EOF (LexingUtils.get_lnum lexbuf)
-      end
-    }

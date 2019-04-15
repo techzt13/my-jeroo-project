@@ -6,8 +6,6 @@ let parse_string s =
   let lexbuf = Lexing.from_string s in
   PythonParser.translation_unit (PythonLexer.token (PythonLexerState.create())) lexbuf
 
-let parse_def _test_ctxt = ()
-
 let parse_empty _test_ctxt =
   let code = "@PYTHON\n@@\n" in
   let ast = parse_string code in
@@ -329,13 +327,167 @@ let parse_or _test_ctxt =
   } in
   assert_equal expected ast
 
-let parse_not _test_ctxt = ()
+let parse_not _test_ctxt =
+  let code = "@PYTHON\n@@\n if not True: False\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.IfStmt({
+            a = UnOpExpr(AST.Not, {
+                a = TrueExpr;
+                lnum = 1;
+              });
+            lnum = 1;
+          }, AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = FalseExpr;
+                    lnum = 1;
+                  };
+                lnum = 2;
+              })
+          ]), 1)
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal expected ast
 
-let parse_comment _test_ctxt = ()
+let parse_comment _test_ctxt =
+  let code = "@PYTHON\n@@\n#this is a comment###\n\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [];
+      start_lnum = 1;
+      end_lnum = 3;
+    };
+  } in
+  assert_equal ast expected
 
-let parse_inline_comment _test_ctxt = ()
+let parse_inline_comment _test_ctxt =
+  let code = "@PYTHON\n @@\n True #This is a comment too \n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = AST.TrueExpr;
+                    lnum = 1;
+                  };
+                lnum = 2;
+              });
+          ])
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal expected ast
 
-let parse_newlines _test_ctxt = ()
+let parse_newlines _test_ctxt =
+  let code = "@PYTHON\n\n\n\n\n\n@@\n\n\n\n\nTrue\n\n\n\n\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = AST.TrueExpr;
+                    lnum = 5;
+                  };
+                lnum = 6;
+              });
+          ])
+      ];
+      start_lnum = 1;
+      end_lnum = 10;
+    };
+  } in
+  assert_equal expected ast
+
+let parse_def _test_ctxt =
+  let code = "@PYTHON\ndef foo(self):\n\tself.hop()\n\n@@\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [
+      {
+        id = "foo";
+        stmts = [
+        AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = FxnAppExpr({
+                        a = IdExpr("hop");
+                        lnum = 2;
+                      }, []);
+                    lnum = 2;
+                  };
+                lnum = 3;
+              });
+          ])
+        ];
+        start_lnum = 1;
+        end_lnum = 4;
+      }
+    ];
+    main_fxn = {
+      id = "main";
+      stmts = [];
+      start_lnum = 1;
+      end_lnum = 1;
+    };
+  } in
+  assert_equal expected ast
+
+let parse_fxn_application _test_ctxt =
+  let code = "@PYTHON\n@@\nfoo(True, NORTH)\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = AST.FxnAppExpr({
+                        a = IdExpr("foo");
+                        lnum = 1;
+                      }, [
+                          {
+                            a = TrueExpr;
+                            lnum = 1;
+                          };
+                          {
+                            a = NorthExpr;
+                            lnum = 1;
+                          }
+                        ]);
+                    lnum = 1;
+                  };
+                lnum = 2;
+              });
+          ])
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal expected ast
 
 let suite =
   "Python Parsing">::: [
@@ -346,11 +498,12 @@ let suite =
     "Parse if elif">:: parse_if_elif;
     "Parse if elif else">:: parse_if_elif_else;
     "Parse nested if">::parse_nested_if;
-    "Parse def">:: parse_def;
     "Parse while">:: parse_while;
     "Parse and">:: parse_and;
     "Parse not">:: parse_not;
     "Parse comment">:: parse_comment;
     "Parse inline comment">:: parse_inline_comment;
     "Parse newlines">:: parse_newlines;
+    "Parse def">:: parse_def;
+    "Parse fxn application">:: parse_fxn_application;
   ]

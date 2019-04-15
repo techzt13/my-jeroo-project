@@ -5,10 +5,10 @@ open AST
 %token <string * int> ID
 %token <int> TRUE FALSE
 %token <int> NOT AND OR EQ
-%token <int> DEF IF ELIF ELSE WHILE
+%token <int> DEF IF ELIF ELSE WHILE SELF
 %token <int> LPAREN RPAREN
 %token <int> INDENT DEDENT
-%token <int> COLON COMMA DOT NEWLINE /*SEMICOLON*/
+%token <int> COLON COMMA DOT NEWLINE
 %token <int> LEFT RIGHT AHEAD HERE
 %token <int> NORTH EAST SOUTH WEST
 %token HEADER MAIN_METH_SEP
@@ -37,7 +37,7 @@ translation_unit:
     }
 
 fxn:
-  | start_lnum = DEF id_lnum = ID LPAREN RPAREN COLON b = suite end_lnum = NEWLINE
+  | start_lnum = DEF id_lnum = ID LPAREN SELF RPAREN COLON b = suite end_lnum = NEWLINE
     {
       let (id, _) = id_lnum in
       {
@@ -66,11 +66,8 @@ stmt:
   | s = simple_stmt { AST.BlockStmt([s]) }
   | s = compound_stmt { s }
 
-/* stmt_list: */
-/*   | stmts = separated_nonempty_list(SEMICOLON, simple_stmt) { stmts } */
-
 suite:
-  | /*stmts = stmt_list NEWLINE*/ stmts = simple_stmt { [stmts] }
+  | stmts = simple_stmt { [stmts] }
   | NEWLINE INDENT stmts = stmt+ DEDENT { stmts }
 
 if_stmt:
@@ -107,11 +104,17 @@ arith_expr:
   | e = primary_expr { e }
   | e1 = expr ln = AND e2 = expr { { a = AST.BinOpExpr(e1, AST.And, e2); lnum = ln } }
   | e1 = expr ln = OR e2 = expr { { a = AST.BinOpExpr(e1, AST.Or, e2); lnum = ln } }
-  | e1 = expr ln = DOT e2 = expr { { a = AST.BinOpExpr(e1, AST.Dot, e2); lnum = ln } }
+  | e1 = expr ln = DOT e2 = expr
+    {
+      match e1.a with
+      | AST.IdExpr("self") -> { a = e2.a; lnum = ln }
+      | _ ->  { a = AST.BinOpExpr(e1, AST.Dot, e2); lnum = ln }
+    }
   | ln = NOT e = expr { { a = AST.UnOpExpr(AST.Not, e); lnum = ln } }
 
 primary_expr:
   | id_ln = ID {  let (id, ln) = id_ln in { a = AST.IdExpr(id); lnum = ln } }
+  | ln = SELF { { a = AST.IdExpr("self"); lnum = ln } }
   | i_ln = INT { let (i, ln) = i_ln in { a = AST.IntExpr(i); lnum = ln} }
   | ln = TRUE { { a = AST.TrueExpr; lnum = ln } }
   | ln = FALSE { { a = AST.FalseExpr; lnum = ln } }
