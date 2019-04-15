@@ -28,14 +28,16 @@ let identifier = ['a'-'z' 'A'-'Z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
 rule token state = parse
   | e {
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let curr_offset = state.curr_offset in
-      let last_offset = Stack.top state.offset_stack in
-      if curr_offset < last_offset
-      then (ignore (Stack.pop state.offset_stack); DEDENT lnum)
-      else if curr_offset > last_offset
-      then (Stack.push curr_offset state.offset_stack; (print_endline "pushing"); INDENT lnum)
-      else _token state lexbuf
+      if state.is_at_end then process_end state lexbuf
+      else
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let curr_offset = state.curr_offset in
+        let last_offset = Stack.top state.offset_stack in
+        if curr_offset < last_offset
+        then (ignore (Stack.pop state.offset_stack); DEDENT lnum)
+        else if curr_offset > last_offset
+        then (Stack.push curr_offset state.offset_stack; INDENT lnum)
+        else _token state lexbuf
     }
 and _token state = parse
   | ((whitespace* comment? whitespace*) whitespace* comment?) newline
@@ -121,15 +123,14 @@ and _token state = parse
   | decimalinteger as i
     { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
   | eof {
-      print_endline ("FOUND EOF " ^ (string_of_int (Stack.length state.offset_stack)));
       if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) != 0) then begin
-        print_endline "SENDING DEDENTS";
+        state.is_at_end <- true;
         ignore (Stack.pop state.offset_stack);
-        lexbuf.lex_curr_pos <- 0;
+        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
+                              pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
 
         DEDENT (LexingUtils.get_lnum lexbuf)
       end else begin
-        print_endline "SENDING EOF";
         EOF (LexingUtils.get_lnum lexbuf)
       end
     }
@@ -141,3 +142,16 @@ and offset state = parse
   | e { }
   | ' ' { state.curr_offset <- state.curr_offset + 1; offset state lexbuf }
   | '\t' { state.curr_offset <- state.curr_offset + 8; offset state lexbuf }
+
+and process_end state = parse
+  | eof {
+      if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) != 0) then begin
+        ignore (Stack.pop state.offset_stack);
+        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
+                              pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
+
+        DEDENT (LexingUtils.get_lnum lexbuf)
+      end else begin
+        EOF (LexingUtils.get_lnum lexbuf)
+      end
+    }

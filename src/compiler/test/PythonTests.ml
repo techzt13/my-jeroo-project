@@ -193,7 +193,7 @@ let parse_if_elif_else _test_ctxt =
   assert_equal expected ast
 
 let parse_nested_if _test_ctxt =
-  let code = "@PYTHON\n@@\nif True:\n\tif False:\n\t\tFalse\nelse:\n\tTrue\n\n" in
+  let code = "@PYTHON\n@@\nif True:\n\tif False:\n\t\tFalse\nelse:\n\tTrue\n" in
   let ast = parse_string code in
   let expected = {
     extension_fxns = [];
@@ -225,13 +225,13 @@ let parse_nested_if _test_ctxt =
                         a = TrueExpr;
                         lnum = 5;
                       };
-                    lnum = 7;
+                    lnum = 6;
                   })
               ])
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 7;
+      end_lnum = 6;
     };
   } in
   assert_equal expected ast
@@ -263,40 +263,71 @@ let parse_while _test_ctxt =
   } in
   assert_equal expected ast
 
-(* let parse_and _test_ctxt =
- *   let code = "@PYTHON\n@@\n if True and False: False\n" in
- *   let ast = parse_string code in
- *   let expected = {
- *     extension_fxns = [];
- *     main_fxn = {
- *       id = "main";
- *       stmts = [
- *         AST.WhileStmt({
- *             a = BinOpExpr({
- *                 a = TrueExpr;
- *                 lnum = 1;
- *               }, AST.And, {
- *                   a = FalseExpr;
- *                   lnum = 1;
- *                 });
- *             lnum = 1;
- *           }, AST.BlockStmt([
- *             AST.ExprStmt({
- *                 a = Some {
- *                     a = FalseExpr;
- *                     lnum = 1;
- *                   };
- *                 lnum = 2;
- *               })
- *           ]), 1)
- *       ];
- *       start_lnum = 1;
- *       end_lnum = 2;
- *     };
- *   } in
- *   assert_equal expected ast *)
+let parse_and _test_ctxt =
+  let code = "@PYTHON\n@@\n if True and False: False\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.IfStmt({
+            a = BinOpExpr({
+                a = TrueExpr;
+                lnum = 1;
+              }, AST.And, {
+                  a = FalseExpr;
+                  lnum = 1;
+                });
+            lnum = 1;
+          }, AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = FalseExpr;
+                    lnum = 1;
+                  };
+                lnum = 2;
+              })
+          ]), 1)
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal expected ast
 
-let parse_or _test_ctxt = ()
+let parse_or _test_ctxt =
+  let code = "@PYTHON\n@@\n if True or False: False\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.IfStmt({
+            a = BinOpExpr({
+                a = TrueExpr;
+                lnum = 1;
+              }, AST.Or, {
+                  a = FalseExpr;
+                  lnum = 1;
+                });
+            lnum = 1;
+          }, AST.BlockStmt([
+            AST.ExprStmt({
+                a = Some {
+                    a = FalseExpr;
+                    lnum = 1;
+                  };
+                lnum = 2;
+              })
+          ]), 1)
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal expected ast
 
 let parse_not _test_ctxt = ()
 
@@ -317,7 +348,7 @@ let suite =
     "Parse nested if">::parse_nested_if;
     "Parse def">:: parse_def;
     "Parse while">:: parse_while;
-    (* "Parse and">:: parse_and; *)
+    "Parse and">:: parse_and;
     "Parse not">:: parse_not;
     "Parse comment">:: parse_comment;
     "Parse inline comment">:: parse_inline_comment;
