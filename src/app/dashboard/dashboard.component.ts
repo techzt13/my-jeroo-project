@@ -263,9 +263,7 @@ export class DashboardComponent {
             height: '750px'
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
+        dialogRef.afterClosed().subscribe(result => {});
 
     }
     openAwards() {
@@ -275,9 +273,7 @@ export class DashboardComponent {
             height: '750px'
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
+        dialogRef.afterClosed().subscribe(result => {});
     }
     openHistory() {
 
@@ -286,9 +282,7 @@ export class DashboardComponent {
             height: '750px'
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
+        dialogRef.afterClosed().subscribe(result => {});
     }
     openCopyright() {
 
@@ -297,8 +291,6 @@ export class DashboardComponent {
             height: '750px'
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
+        dialogRef.afterClosed().subscribe(result => {});
     }
 }
