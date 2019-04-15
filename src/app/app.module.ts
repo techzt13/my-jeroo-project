@@ -90,7 +90,7 @@ library.add(
     providers: [],
     bootstrap: [AppComponent],
     entryComponents: [
-        MatrixDialogComponent, 
+        MatrixDialogComponent,
         DashboardDialogComponent,
         DashboardDialogAwardsComponent,
         DashboardDialogHistoryComponent,
