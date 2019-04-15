@@ -427,18 +427,18 @@ let parse_def _test_ctxt =
       {
         id = "foo";
         stmts = [
-        AST.BlockStmt([
-            AST.ExprStmt({
-                a = Some {
-                    a = FxnAppExpr({
-                        a = IdExpr("hop");
-                        lnum = 2;
-                      }, []);
-                    lnum = 2;
-                  };
-                lnum = 3;
-              });
-          ])
+          AST.BlockStmt([
+              AST.ExprStmt({
+                  a = Some {
+                      a = FxnAppExpr({
+                          a = IdExpr("hop");
+                          lnum = 2;
+                        }, []);
+                      lnum = 2;
+                    };
+                  lnum = 3;
+                });
+            ])
         ];
         start_lnum = 1;
         end_lnum = 4;
@@ -489,6 +489,158 @@ let parse_fxn_application _test_ctxt =
   } in
   assert_equal expected ast
 
+let parse_paren_precedence _test_ctxt =
+  let code = "@PYTHON\n@@\nif True and (True and True):True\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = AST.TrueExpr;
+                lnum = 1;
+              }, AST.And, {
+                  a = AST.BinOpExpr({
+                      a = AST.TrueExpr;
+                      lnum = 1;
+                    }, AST.And, {
+                        a = AST.TrueExpr;
+                        lnum = 1;
+                      });
+                  lnum = 1;
+                });
+            lnum = 1;
+          }, AST.BlockStmt [
+            AST.ExprStmt {
+              a = Some {
+                  a = TrueExpr;
+                  lnum = 1;
+                };
+              lnum = 2;
+            }
+          ], 1)
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    }
+  } in
+  assert_equal ast expected
+
+let parse_and_or_precedence _test_ctxt =
+  let code = "@PYTHON\n@@\nif True and True or True:True\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = BinOpExpr({
+                    a = TrueExpr;
+                    lnum = 1;
+                  }, AST.And, {
+                      a = TrueExpr;
+                      lnum = 1;
+                    });
+                lnum = 1;
+              }, AST.Or, {
+                  a = TrueExpr;
+                  lnum = 1;
+                });
+            lnum = 1;
+          }, AST.BlockStmt [
+            AST.ExprStmt {
+              a = Some {
+                  a = TrueExpr;
+                  lnum = 1;
+                };
+              lnum = 2;
+            }
+          ], 1)
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    }
+  } in
+  assert_equal ast expected
+
+let parse_not_precedence _test_ctxt =
+  let code = "@PYTHON\n@@\nif not True and True: True\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        AST.IfStmt({
+            a = AST.BinOpExpr({
+                a = AST.UnOpExpr(AST.Not, {
+                    a = AST.TrueExpr;
+                    lnum = 1;
+                  });
+                lnum = 1;
+              }, AST.And, {
+                  a = AST.TrueExpr;
+                  lnum = 1;
+                });
+            lnum = 1;
+          }, AST.BlockStmt [
+            AST.ExprStmt {
+              a = Some {
+                  a = TrueExpr;
+                  lnum = 1;
+                };
+              lnum = 2;
+            }
+          ], 1)
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal expected ast
+
+let parse_object_member_access _test_ctxt =
+  let code = "@PYTHON\n@@\na.b(1)\n" in
+  let ast = parse_string code in
+  let expected = {
+    extension_fxns = [];
+    main_fxn = {
+      id = "main";
+      stmts = [
+        BlockStmt [
+          ExprStmt {
+            a = Some {
+                a = BinOpExpr({
+                    a = IdExpr("a");
+                    lnum = 1;
+                  }, Dot, {
+                      a = FxnAppExpr({
+                          a = IdExpr("b");
+                          lnum = 1;
+                        }, [
+                            {
+                              a = IntExpr(1);
+                              lnum = 1;
+                            }
+                          ]);
+                      lnum = 1;
+                    });
+                lnum = 1;
+              };
+            lnum = 2;
+          }
+        ]
+      ];
+      start_lnum = 1;
+      end_lnum = 2;
+    };
+  } in
+  assert_equal ast expected
+
 let suite =
   "Python Parsing">::: [
     "Parse empty">:: parse_empty;
@@ -506,4 +658,8 @@ let suite =
     "Parse newlines">:: parse_newlines;
     "Parse def">:: parse_def;
     "Parse fxn application">:: parse_fxn_application;
+    "Parse paren precedence">:: parse_paren_precedence;
+    "Parse and or precedence">:: parse_and_or_precedence;
+    "Parse not precedence">:: parse_not_precedence;
+    "Parse object call">:: parse_object_member_access;
   ]
