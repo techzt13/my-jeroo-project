@@ -49,7 +49,7 @@ export class DashboardComponent {
     constructor(
         private matrixService: MatrixService,
         private hotkeysService: HotkeysService,
-        private MessageService: MessageService,
+        private messageService: MessageService,
         public dialog: MatDialog
     ) {
         this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
@@ -141,15 +141,15 @@ export class DashboardComponent {
     onPauseClick() {
         if (!this.pauseBtnDisabled()) {
             this.jerooEditor.pauseState();
-            this.MessageService.add('Program paused by user');
+            this.messageService.add('Program paused by user');
         }
     }
 
     onStopClick() {
         if (!this.stopBtnDisabled()) {
             this.jerooEditor.stopState();
-            this.MessageService.clear();
-            this.MessageService.add('Program stopped by user');
+            this.messageService.clear();
+            this.messageService.add('Program stopped by user');
         }
     }
 
