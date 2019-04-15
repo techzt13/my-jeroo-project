@@ -262,9 +262,6 @@ export class DashboardComponent {
             width: '500px',
             height: '750px'
         });
-
-        dialogRef.afterClosed().subscribe(result => {});
-
     }
     openAwards() {
 
@@ -272,8 +269,6 @@ export class DashboardComponent {
             width: '500px',
             height: '750px'
         });
-
-        dialogRef.afterClosed().subscribe(result => {});
     }
     openHistory() {
 
@@ -281,8 +276,6 @@ export class DashboardComponent {
             width: '500px',
             height: '750px'
         });
-
-        dialogRef.afterClosed().subscribe(result => {});
     }
     openCopyright() {
 
@@ -290,7 +283,5 @@ export class DashboardComponent {
             width: '500px',
             height: '750px'
         });
-
-        dialogRef.afterClosed().subscribe(result => {});
     }
 }

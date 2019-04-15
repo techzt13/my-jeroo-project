@@ -3,8 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-dashboard-dialog-awards',
-  templateUrl: './dashboard-dialog-awards.component.html',
-  styleUrls: ['./dashboard-dialog-awards.component.scss']
+  templateUrl: './dashboard-dialog-awards.component.html'
 })
 export class DashboardDialogAwardsComponent {
 

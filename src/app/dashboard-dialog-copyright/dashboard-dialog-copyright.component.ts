@@ -3,8 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-dashboard-dialog-copyright',
-  templateUrl: './dashboard-dialog-copyright.component.html',
-  styleUrls: ['./dashboard-dialog-copyright.component.scss']
+  templateUrl: './dashboard-dialog-copyright.component.html'
 })
 export class DashboardDialogCopyrightComponent {
 

@@ -3,8 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-dashboard-dialog-history',
-  templateUrl: './dashboard-dialog-history.component.html',
-  styleUrls: ['./dashboard-dialog-history.component.scss']
+  templateUrl: './dashboard-dialog-history.component.html'
 })
 export class DashboardDialogHistoryComponent {
 
