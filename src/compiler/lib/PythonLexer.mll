@@ -38,7 +38,7 @@ rule token state = parse
       else _token state lexbuf
     }
 and _token state = parse
-  | ((whitespace* comment? whitespace*) whitespace* comment?) newline
+  | ((whitespace* comment? newline)* whitespace* comment?) newline
     {
       let lines = count_lines (lexeme lexbuf) in
       LexingUtils.next_n_lines lines lexbuf;
@@ -120,7 +120,7 @@ and _token state = parse
     { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
   | eof {
       (* If there are tray indentation levels, send corresponding DEDENT tokens to pair them up *)
-      if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) != 0) then begin
+      if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) > 0) then begin
         ignore (Stack.pop state.offset_stack);
         let indent = Stack.top state.offset_stack in
         state.curr_offset <- indent;
