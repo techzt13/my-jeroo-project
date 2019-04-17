@@ -23,7 +23,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     private mouseDown = false;
     private selectedTileType: TileType = null;
     private boardCache = 'board';
-    private jerooArray: Array<Jeroo> = [];
+    jerooArray: Array<Jeroo> = [];
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
         private service: BytecodeInterpreterService,
