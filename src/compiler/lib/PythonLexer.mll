@@ -38,6 +38,26 @@ rule token state = parse
       else _token state lexbuf
     }
 and _token state = parse
+  | (whitespace* comment? newline)* whitespace* comment? eof {
+      (* If there are stray indentation levels, send corresponding DEDENT tokens to pair them up *)
+      if (state.emitted_eof_nl == false) then begin
+        state.emitted_eof_nl <- true;
+        (* backtrack the lexer one token *)
+        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
+                              pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
+        NEWLINE (LexingUtils.get_lnum lexbuf)
+      end else if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) > 0) then begin
+          ignore (Stack.pop state.offset_stack);
+          let indent = Stack.top state.offset_stack in
+          state.curr_offset <- indent;
+          (* backtrack the lexer one token *)
+          lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
+                                pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
+
+          DEDENT (LexingUtils.get_lnum lexbuf)
+      end else
+        EOF (LexingUtils.get_lnum lexbuf)
+    }
   | ((whitespace* comment? newline)* whitespace* comment?) newline
     {
       let lines = count_lines (lexeme lexbuf) in
@@ -118,20 +138,6 @@ and _token state = parse
     {  ID (id, (LexingUtils.get_lnum lexbuf)) }
   | decimalinteger as i
     { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
-  | eof {
-      (* If there are tray indentation levels, send corresponding DEDENT tokens to pair them up *)
-      if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) > 0) then begin
-        ignore (Stack.pop state.offset_stack);
-        let indent = Stack.top state.offset_stack in
-        state.curr_offset <- indent;
-        (* backtrack the lexer one token *)
-        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
-                              pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
-
-        DEDENT (LexingUtils.get_lnum lexbuf)
-      end else
-        EOF (LexingUtils.get_lnum lexbuf)
-    }
   | _ { raise (Error {
         message = "Illegal character: " ^ Lexing.lexeme lexbuf;
         lnum = LexingUtils.get_lnum lexbuf

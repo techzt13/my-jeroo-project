@@ -23,7 +23,7 @@ open AST
 %%
 
 translation_unit:
-  | HEADER fs = newline_or_fxn_list MAIN_METH_SEP stmts = stmt_list
+  | HEADER fs = newline_or_fxn_list MAIN_METH_SEP stmts = stmt_list end_lnum = EOF
     {
       {
         extension_fxns = fs;
@@ -31,7 +31,7 @@ translation_unit:
             id = "main";
             stmts;
             start_lnum = 1;
-            end_lnum = 1;
+            end_lnum;
           }
       }
     }
@@ -51,7 +51,7 @@ fxn:
 stmt_list:
   | NEWLINE stmts = stmt_list { stmts }
   | s = stmt stmts = stmt_list { s :: stmts }
-  | s = test_stmt { [s] }
+  | { [] }
 
 newline_or_fxn_list:
   | NEWLINE fxns = newline_or_fxn_list { fxns }
@@ -62,119 +62,39 @@ compound_stmt:
   | s = if_stmt { s }
   | s = while_stmt { s }
 
-test_compound_stmt:
-  | s = test_if_stmt { s }
-  | s = test_while_stmt { s }
-
-test2_compound_stmt:
-  | s = test2_if_stmt { s }
-  | s = test2_while_stmt { s }
-
 stmt:
   | s = simple_stmt { AST.BlockStmt([s]) }
   | s = compound_stmt { s }
 
-test_stmt:
-  | s = test_simple_stmt { AST.BlockStmt([s]) }
-  | s = test_compound_stmt { s }
-
-test2_stmt:
-  | s = test2_simple_stmt { AST.BlockStmt([s]) }
-  | s = test2_compound_stmt { s }
-
 suite:
   | stmts = simple_stmt { [stmts] }
   | NEWLINE INDENT stmts = stmt+ DEDENT { stmts }
-
-test_suite:
-  | stmts = test_simple_stmt { [stmts] }
-  | NEWLINE INDENT stmts = foo DEDENT EOF { stmts }
-
-foo:
-  | s = stmt stmts = foo { s :: stmts }
-  | s = test2_stmt { [s] }
-
-test2_suite:
-  | stmts = test2_simple_stmt { [stmts] }
-  | NEWLINE INDENT stmts = foo DEDENT { stmts }
 
 if_stmt:
   | ln = IF e = expr COLON s = suite { AST.IfStmt(e, AST.BlockStmt(s), ln) }
   | ln = IF e = expr COLON s1 = suite s2 = else_stmt { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
   | ln = IF e = expr COLON s1 = suite s2 = elseif_stmts { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
 
-test_if_stmt:
-  | ln = IF e = expr COLON s = test_suite { AST.IfStmt(e, AST.BlockStmt(s), ln) }
-  | ln = IF e = expr COLON s1 = suite s2 = test_else_stmt { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-  | ln = IF e = expr COLON s1 = suite s2 = test_elseif_stmts { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-
-test2_if_stmt:
-  | ln = IF e = expr COLON s = test2_suite { AST.IfStmt(e, AST.BlockStmt(s), ln) }
-  | ln = IF e = expr COLON s1 = suite s2 = test2_else_stmt { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-  | ln = IF e = expr COLON s1 = suite s2 = test2_elseif_stmts { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-
 elseif_stmts:
   | ln = ELIF e = expr COLON s1 = suite s2 = elseif_stmts { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
   | ln = ELIF e = expr COLON s = suite { AST.IfStmt(e, AST.BlockStmt(s), ln) }
   | ln = ELIF e = expr COLON s1 = suite s2 = else_stmt { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
 
-test_elseif_stmts:
-  | ln = ELIF e = expr COLON s1 = suite s2 = test_elseif_stmts { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-  | ln = ELIF e = expr COLON s = test_suite { AST.IfStmt(e, AST.BlockStmt(s), ln) }
-  | ln = ELIF e = expr COLON s1 = suite s2 = test_else_stmt { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-
-test2_elseif_stmts:
-  | ln = ELIF e = expr COLON s1 = suite s2 = test2_elseif_stmts { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-  | ln = ELIF e = expr COLON s = test2_suite { AST.IfStmt(e, AST.BlockStmt(s), ln) }
-  | ln = ELIF e = expr COLON s1 = suite s2 = test2_else_stmt { AST.IfElseStmt(e, AST.BlockStmt(s1), s2, ln) }
-
 else_stmt:
   | ELSE COLON s = suite { AST.BlockStmt(s) }
 
-test_else_stmt:
-  | ELSE COLON s = test_suite { AST.BlockStmt(s) }
-
-test2_else_stmt:
-  | ELSE COLON s = test2_suite { AST.BlockStmt(s) }
-
 while_stmt:
   | ln = WHILE e = expr COLON s = suite { AST.WhileStmt(e, AST.BlockStmt(s), ln) }
-
-test_while_stmt:
-  | ln = WHILE e = expr COLON s = test_suite { AST.WhileStmt(e, AST.BlockStmt(s), ln) }
-
-test2_while_stmt:
-  | ln = WHILE e = expr COLON s = test2_suite { AST.WhileStmt(e, AST.BlockStmt(s), ln) }
 
 simple_stmt:
   | s = expression_stmt { s }
   | s = assignment_stmt { s }
 
-test_simple_stmt:
-  | s = test_expression_stmt { s }
-  | s = test_assignment_stmt { s }
-
-test2_simple_stmt:
-  | s = test2_expression_stmt { s }
-  | s = test2_assignment_stmt { s }
-
 expression_stmt:
   | e = expr ln = NEWLINE { AST.ExprStmt({ a = Some e; lnum = ln }) }
 
-test_expression_stmt:
-  | e = expr ln = EOF { AST.ExprStmt({ a = Some e; lnum = ln }) }
-
-test2_expression_stmt:
-  | e = expr { AST.ExprStmt({ a = Some e; lnum = e.lnum }) }
-
 assignment_stmt:
   | id_ln = ID EQ e = expr NEWLINE { let (id, ln) = id_ln in AST.DeclStmt("Jeroo", id, { a = AST.UnOpExpr(AST.New, e); lnum = ln}) }
-
-test_assignment_stmt:
-  | id_ln = ID EQ e = expr EOF { let (id, ln) = id_ln in AST.DeclStmt("Jeroo", id, { a = AST.UnOpExpr(AST.New, e); lnum = ln}) }
-
-test2_assignment_stmt:
-  | id_ln = ID EQ e = expr { let (id, ln) = id_ln in AST.DeclStmt("Jeroo", id, { a = AST.UnOpExpr(AST.New, e); lnum = ln}) }
 
 expr:
   | e = arith_expr { e }
