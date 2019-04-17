@@ -27,11 +27,10 @@
             Cursor off of map
         </ng-template>
     </div>
-    <div>
-        {{this.jerooArray.length}}
-        <!--{{this.jerooArray[0].getId()}} {{this.jerooArray[0].getNumFlowers()}}
-        {{this.jerooArray[1].getId()}} {{this.jerooArray[1].getNumFlowers()}}
-      <mat-table [datasrc]="jerooArray"></mat-table> -->
+    <div *ngIf="this.jerooArray.length != 0">
+      <div *ngFor="let index of jerooArray">
+        Jeroo ID: {{index.getId()}} Flowers: {{index.getNumFlowers()}} Direction: {{index.getDirection()}}
+      </div>
     </div>
     <div>
         <button mat-button [disabled]="!editingEnabled" (click)="openDialog()">Change Size</button>

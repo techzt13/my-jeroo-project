@@ -24,6 +24,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     private selectedTileType: TileType = null;
     private boardCache = 'board';
     private jerooArray: Array<Jeroo> = [];
+
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
         private service: BytecodeInterpreterService,
         @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
@@ -64,15 +65,13 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     updateJeroos() {
+      if (this.count === 0) {
+        this.jerooArray = [];
+      }
      for ( let i = 0; i < this.count; i++) {
        this.jerooArray[i] = this.service.getJerooAtIndex(i);
      }
     }
-
-    addJeroo(j: Jeroo) {
-      this.jerooArray.push(j);
-    }
-
 
     redraw() {
         this.context.clearRect(0, 0,

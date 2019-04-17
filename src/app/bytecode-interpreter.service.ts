@@ -3,7 +3,6 @@ import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
 import { TileType } from './matrixConstants';
 import { numberToRelativeDirection, numberToCardinalDirection } from './jerooConstants';
-//import { JerooMatrixComponent} from './jeroo-matrix/jeroo-matrix.component';
 import {Observable, Subject} from 'rxjs';
 
 export class RuntimeError extends Error {
@@ -23,7 +22,7 @@ export class BytecodeInterpreterService {
     private jerooArray: Array<Jeroo> = [];
     private cmpStack: Array<boolean> = [];
     private pcStack: Array<number> = [];
-    //private jerooMatrixComponent = JerooMatrixComponent;
+
     executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
         if (this.validInstruction(instructions)) {
             const prevInstruction = this.getCurrentInstruction(instructions);
@@ -243,9 +242,5 @@ export class BytecodeInterpreterService {
 
     getJerooAtIndex(x: number) {
       return this.jerooArray[x];
-    }
-
-    getJerooArray() {
-      return this.jerooArray;
     }
 }
