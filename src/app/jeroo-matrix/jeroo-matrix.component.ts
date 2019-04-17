@@ -1,9 +1,11 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input} from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { MatrixDialogComponent, DialogData } from '../matrix-dialog/matrix-dialog.component';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
+import {Jeroo} from '../jeroo';
+import {BytecodeInterpreterService} from '../bytecode-interpreter.service';
 
 @Component({
     selector: 'app-jeroo-matrix',
@@ -13,18 +15,21 @@ import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 export class JerooMatrixComponent implements AfterViewInit {
     @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
     @Input() editingEnabled: boolean;
-
     mouseRow: number = null;
     mouseColumn: number = null;
-
+    count: number = null;
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private mouseDown = false;
     private selectedTileType: TileType = null;
     private boardCache = 'board';
-
+    private jerooArray: Array<Jeroo> = [];
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
-        @Inject(LOCAL_STORAGE) private storage: WebStorageService) { }
+        private service: BytecodeInterpreterService,
+        @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
+        service.count.subscribe((newCount: number) => { this.count = newCount; });
+        service.count.subscribe((newCount: number) => {this.updateJeroos(); } );
+      }
 
     ngAfterViewInit() {
         // check if something has been stored in the cache to load if it has
@@ -57,6 +62,17 @@ export class JerooMatrixComponent implements AfterViewInit {
             }
         });
     }
+
+    updateJeroos() {
+     for ( let i = 0; i < this.count; i++) {
+       this.jerooArray[i] = this.service.getJerooAtIndex(i);
+     }
+    }
+
+    addJeroo(j: Jeroo) {
+      this.jerooArray.push(j);
+    }
+
 
     redraw() {
         this.context.clearRect(0, 0,

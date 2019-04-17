@@ -3,7 +3,8 @@ import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
 import { TileType } from './matrixConstants';
 import { numberToRelativeDirection, numberToCardinalDirection } from './jerooConstants';
-
+//import { JerooMatrixComponent} from './jeroo-matrix/jeroo-matrix.component';
+import {Observable, Subject} from 'rxjs';
 
 export class RuntimeError extends Error {
     constructor(message: string, public line_num: number) {
@@ -15,12 +16,14 @@ export class RuntimeError extends Error {
     providedIn: 'root'
 })
 export class BytecodeInterpreterService {
+    count: Observable<number>;
+    private countSubject: Subject<number>;
     private pc = 0;
     private jerooReg = 0;
     private jerooArray: Array<Jeroo> = [];
     private cmpStack: Array<boolean> = [];
     private pcStack: Array<number> = [];
-
+    //private jerooMatrixComponent = JerooMatrixComponent;
     executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
         if (this.validInstruction(instructions)) {
             const prevInstruction = this.getCurrentInstruction(instructions);
@@ -33,6 +36,11 @@ export class BytecodeInterpreterService {
                 this.executeBytecode(instruction, matrixService);
             }
         }
+    }
+
+    constructor() {
+        this.countSubject = new Subject<number>();
+        this.count = this.countSubject.asObservable();
     }
 
     validInstruction(instructions: Array<Instruction>) {
@@ -52,6 +60,8 @@ export class BytecodeInterpreterService {
         this.jerooArray = [];
         this.cmpStack = [];
         this.pcStack = [];
+        this.countSubject.next(0);
+        this.count = this.countSubject;
     }
 
     /**
@@ -105,6 +115,8 @@ export class BytecodeInterpreterService {
                     const jeroo = new Jeroo(command.a, command.b + 1, command.c + 1, command.d, direction);
                     this.jerooArray.push(jeroo);
                     matService.setJeroo(jeroo.getX(), jeroo.getY(), jeroo);
+                    this.countSubject.next(this.jerooArray.length);
+                    this.count = this.countSubject;
                 } catch (e) {
                     throw new RuntimeError(e.message, command.f);
                 }
@@ -227,5 +239,13 @@ export class BytecodeInterpreterService {
 
     getCmpStack() {
         return this.cmpStack;
+    }
+
+    getJerooAtIndex(x: number) {
+      return this.jerooArray[x];
+    }
+
+    getJerooArray() {
+      return this.jerooArray;
     }
 }

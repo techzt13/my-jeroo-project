@@ -28,6 +28,12 @@
         </ng-template>
     </div>
     <div>
+        {{this.jerooArray.length}}
+        <!--{{this.jerooArray[0].getId()}} {{this.jerooArray[0].getNumFlowers()}}
+        {{this.jerooArray[1].getId()}} {{this.jerooArray[1].getNumFlowers()}}
+      <mat-table [datasrc]="jerooArray"></mat-table> -->
+    </div>
+    <div>
         <button mat-button [disabled]="!editingEnabled" (click)="openDialog()">Change Size</button>
         <button mat-button [disabled]="!editingEnabled" (click)="clearMap()">Clear Map</button>
     </div>
