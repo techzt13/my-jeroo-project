@@ -37,14 +37,14 @@ translation_unit:
     }
 
 fxn:
-  | start_lnum = DEF id_lnum = ID LPAREN SELF RPAREN COLON stmts = suite end_lnum = NEWLINE
+  | start_lnum = DEF id_lnum = ID LPAREN SELF RPAREN COLON stmts = suite
     {
       let (id, _) = id_lnum in
       {
         id;
         stmts;
         start_lnum;
-        end_lnum
+        end_lnum = 1;
       }
     }
 

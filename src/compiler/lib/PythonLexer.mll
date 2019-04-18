@@ -42,21 +42,44 @@ and _token state = parse
       (* If there are stray indentation levels, send corresponding DEDENT tokens to pair them up *)
       if (state.emitted_eof_nl == false) then begin
         state.emitted_eof_nl <- true;
+        let indent = Stack.top state.offset_stack in
+        state.curr_offset <- indent;
         (* backtrack the lexer one token *)
         lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
                               pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
         NEWLINE (LexingUtils.get_lnum lexbuf)
       end else if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) > 0) then begin
-          ignore (Stack.pop state.offset_stack);
-          let indent = Stack.top state.offset_stack in
-          state.curr_offset <- indent;
-          (* backtrack the lexer one token *)
-          lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
-                                pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
+        ignore (Stack.pop state.offset_stack);
+        let indent = Stack.top state.offset_stack in
+        state.curr_offset <- indent;
+        (* backtrack the lexer one token *)
+        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with
+                              pos_cnum = lexbuf.lex_curr_p.pos_cnum - 1 };
 
-          DEDENT (LexingUtils.get_lnum lexbuf)
+        DEDENT (LexingUtils.get_lnum lexbuf)
       end else
         EOF (LexingUtils.get_lnum lexbuf)
+    }
+  | (whitespace* comment? newline)* whitespace* comment? "@@\n" {
+      if (state.emitted_eof_nl == false) then begin
+        state.emitted_eof_nl <- true;
+        let indent = Stack.top state.offset_stack in
+        state.curr_offset <- indent;
+        (* backtrack the lexer 3 characters *)
+        lexbuf.lex_curr_pos <- lexbuf.lex_curr_pos - 3;
+        NEWLINE (LexingUtils.get_lnum lexbuf)
+      end else if ((not (Stack.is_empty state.offset_stack)) && (Stack.top state.offset_stack) > 0) then begin
+        ignore (Stack.pop state.offset_stack);
+        let indent = Stack.top state.offset_stack in
+        state.curr_offset <- indent;
+        (* backtrack the lexer 3 characters *)
+        lexbuf.lex_curr_pos <- lexbuf.lex_curr_pos - 3;
+          DEDENT (LexingUtils.get_lnum lexbuf)
+      end else begin
+        LexingUtils.reset_lnum lexbuf;
+        state.emitted_eof_nl <- false;
+        MAIN_METH_SEP
+      end
     }
   | ((whitespace* comment? newline)* whitespace* comment?) newline
     {
@@ -82,8 +105,6 @@ and _token state = parse
     { _token state lexbuf }
   | "@PYTHON\n"
       { HEADER }
-  | "@@\n"
-      { LexingUtils.reset_lnum lexbuf; MAIN_METH_SEP }
   | "def"
       { DEF (LexingUtils.get_lnum lexbuf) }
   | "and"

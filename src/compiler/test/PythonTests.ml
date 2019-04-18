@@ -34,12 +34,12 @@ let parse_main _test_ctxt =
                     a = AST.TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               });
           ])
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -61,12 +61,12 @@ let parse_if _test_ctxt =
                     a = TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -88,7 +88,7 @@ let parse_if_else _test_ctxt =
                     a = TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), AST.BlockStmt([
             AST.ExprStmt({
@@ -96,12 +96,12 @@ let parse_if_else _test_ctxt =
                     a = FalseExpr;
                     lnum = 2;
                   };
-                lnum = 3;
+                lnum = 2;
               })
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 3;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -123,7 +123,7 @@ let parse_if_elif _test_ctxt =
                     a = TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), AST.IfStmt({
             a = AST.FalseExpr;
@@ -134,12 +134,12 @@ let parse_if_elif _test_ctxt =
                     a = FalseExpr;
                     lnum = 2;
                   };
-                lnum = 3;
+                lnum = 2;
               })
           ]), 2), 1)
       ];
       start_lnum = 1;
-      end_lnum = 3;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -223,13 +223,13 @@ let parse_nested_if _test_ctxt =
                         a = TrueExpr;
                         lnum = 5;
                       };
-                    lnum = 6;
+                    lnum = 5;
                   })
               ])
-          ]), 1)
+          ]), 2)
       ];
       start_lnum = 1;
-      end_lnum = 6;
+      end_lnum = 5;
     };
   } in
   assert_equal expected ast
@@ -251,12 +251,12 @@ let parse_while _test_ctxt =
                     a = FalseExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -284,12 +284,12 @@ let parse_and _test_ctxt =
                     a = FalseExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -347,12 +347,12 @@ let parse_not _test_ctxt =
                     a = FalseExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -366,7 +366,7 @@ let parse_comment _test_ctxt =
       id = "main";
       stmts = [];
       start_lnum = 1;
-      end_lnum = 3;
+      end_lnum = 1;
     };
   } in
   assert_equal ast expected
@@ -385,12 +385,12 @@ let parse_inline_comment _test_ctxt =
                     a = AST.TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               });
           ])
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -409,18 +409,18 @@ let parse_newlines _test_ctxt =
                     a = AST.TrueExpr;
                     lnum = 5;
                   };
-                lnum = 6;
+                lnum = 5;
               });
           ])
       ];
       start_lnum = 1;
-      end_lnum = 10;
+      end_lnum = 5;
     };
   } in
   assert_equal expected ast
 
 let parse_def _test_ctxt =
-  let code = "@PYTHON\ndef foo(self):\n\tself.hop()\n\n@@\n" in
+  let code = "@PYTHON\ndef foo(self):\n\tself.hop()@@\n" in
   let ast = parse_string code in
   let expected = {
     extension_fxns = [
@@ -436,12 +436,12 @@ let parse_def _test_ctxt =
                         }, []);
                       lnum = 2;
                     };
-                  lnum = 3;
+                  lnum = 2;
                 });
             ])
         ];
         start_lnum = 1;
-        end_lnum = 4;
+        end_lnum = 2;
       }
     ];
     main_fxn = {
@@ -479,12 +479,12 @@ let parse_fxn_application _test_ctxt =
                         ]);
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               });
           ])
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -518,12 +518,12 @@ let parse_paren_precedence _test_ctxt =
                   a = TrueExpr;
                   lnum = 1;
                 };
-              lnum = 2;
+              lnum = 1;
             }
           ], 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     }
   } in
   assert_equal ast expected
@@ -557,12 +557,12 @@ let parse_and_or_precedence _test_ctxt =
                   a = TrueExpr;
                   lnum = 1;
                 };
-              lnum = 2;
+              lnum = 1;
             }
           ], 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     }
   } in
   assert_equal ast expected
@@ -593,12 +593,12 @@ let parse_not_precedence _test_ctxt =
                   a = TrueExpr;
                   lnum = 1;
                 };
-              lnum = 2;
+              lnum = 1;
             }
           ], 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal expected ast
@@ -631,12 +631,12 @@ let parse_object_member_access _test_ctxt =
                     });
                 lnum = 1;
               };
-            lnum = 2;
+            lnum = 1;
           }
         ]
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 1;
     };
   } in
   assert_equal ast expected
@@ -644,7 +644,7 @@ let parse_object_member_access _test_ctxt =
 let suite =
   "Python Parsing">::: [
     "Parse empty">:: parse_empty;
-    "Parse decl">:: parse_main;
+    "Parse main">:: parse_main;
     "Parse if">:: parse_if;
     "Parse if else">:: parse_if_else;
     "Parse if elif">:: parse_if_elif;
@@ -661,5 +661,5 @@ let suite =
     "Parse paren precedence">:: parse_paren_precedence;
     "Parse and or precedence">:: parse_and_or_precedence;
     "Parse not precedence">:: parse_not_precedence;
-    "Parse object call">:: parse_object_member_access;
+    "Parse object member access">:: parse_object_member_access;
   ]
