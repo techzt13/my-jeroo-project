@@ -72,36 +72,40 @@ let parse_if _test_ctxt =
   assert_equal expected ast
 
 let parse_if_else _test_ctxt =
-  let code = "@PYTHON\n@@\nif True: True\nelse: False\n" in
+  let code = "@PYTHON\n@@\nif True:\n\t True\nelse:\n\t False\n" in
   let ast = parse_string code in
   let expected = {
     extension_fxns = [];
     main_fxn = {
       id = "main";
       stmts = [
-        AST.IfElseStmt({
+        AST.IfElseStmt(
+          {
             a = AST.TrueExpr;
             lnum = 1;
           }, AST.BlockStmt([
-            AST.ExprStmt({
-                a = Some {
-                    a = TrueExpr;
-                    lnum = 1;
-                  };
-                lnum = 1;
-              })
-          ]), AST.BlockStmt([
+              AST.BlockStmt [
+                AST.ExprStmt({
+                    a = Some {
+                        a = TrueExpr;
+                        lnum = 2;
+                      };
+                    lnum = 3;
+                  })
+              ]]),
+        AST.BlockStmt([
+            BlockStmt [
             AST.ExprStmt({
                 a = Some {
                     a = FalseExpr;
-                    lnum = 2;
+                    lnum = 4;
                   };
-                lnum = 2;
-              })
-          ]), 1)
+                lnum = 4;
+              })]]),
+        1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 4;
     };
   } in
   assert_equal expected ast
@@ -123,7 +127,7 @@ let parse_if_elif _test_ctxt =
                     a = TrueExpr;
                     lnum = 1;
                   };
-                lnum = 1;
+                lnum = 2;
               })
           ]), AST.IfStmt({
             a = AST.FalseExpr;
@@ -180,12 +184,12 @@ let parse_if_elif_else _test_ctxt =
                     a = TrueExpr;
                     lnum = 3;
                   };
-                lnum = 4;
+                lnum = 3;
               })
           ]), 2), 1)
       ];
       start_lnum = 1;
-      end_lnum = 4;
+      end_lnum = 3;
     };
   } in
   assert_equal expected ast
@@ -226,7 +230,7 @@ let parse_nested_if _test_ctxt =
                     lnum = 5;
                   })
               ])
-          ]), 2)
+          ]), 1)
       ];
       start_lnum = 1;
       end_lnum = 5;
@@ -441,7 +445,7 @@ let parse_def _test_ctxt =
             ])
         ];
         start_lnum = 1;
-        end_lnum = 2;
+        end_lnum = 1;
       }
     ];
     main_fxn = {
