@@ -18,8 +18,8 @@
 </div>
 <canvas #jerooGameCanvas [className]="editingEnabled ? 'jeroo-matrix default-cursor' : 'jeroo-matrix not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
 </canvas>
-<div fxLayout="column" fxLayoutAlign=" center">
-    <div class="cursor-loc-container">
+<div fxLayout="column" fxLayoutAlign=" center" fxLayoutGap="10px">
+    <div>
         <div *ngIf="mouseRow !== null && mouseColumn !== null; else elseBlock">
             Cursor Location: ({{mouseColumn}}, {{mouseRow}})
         </div>
@@ -27,10 +27,27 @@
             Cursor off of map
         </ng-template>
     </div>
-    <div *ngIf="this.jerooArray.length != 0">
-      <div *ngFor="let index of jerooArray">
-        Jeroo ID: {{index.getId()}} Flowers: {{index.getNumFlowers()}} Direction: {{index.getDirection()}}
-      </div>
+    <div>
+        <div *ngIf="bytecodeService.jerooArray.length > 0">
+            <div fxLayout="column" fxLayoutGap="5px">
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <div *ngFor="let jeroo of bytecodeService.jerooArray.slice(0,2)">
+                        <img src="assets/images/flower.jpg" alt="flower" />
+                        {{bytecodeService.jerooMap[jeroo.getId()]}}
+                        <img src="assets/images/flower.jpg" alt="flower" />
+                        {{jeroo.getNumFlowers()}}
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <div *ngFor="let jeroo of bytecodeService.jerooArray.slice(2,4)">
+                        <img src="assets/images/flower.jpg" alt="flower" />
+                        {{bytecodeService.jerooMap[jeroo.getId()]}}
+                        <img src="assets/images/flower.jpg" alt="flower" />
+                        {{jeroo.getNumFlowers()}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div>
         <button mat-button [disabled]="!editingEnabled" (click)="openDialog()">Change Size</button>

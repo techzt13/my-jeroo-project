@@ -19,7 +19,8 @@ export class BytecodeInterpreterService {
     private countSubject: Subject<number>;
     private pc = 0;
     private jerooReg = 0;
-    private jerooArray: Array<Jeroo> = [];
+    jerooArray: Array<Jeroo> = [];
+    jerooMap: Array<JerooMapValue> = [];
     private cmpStack: Array<boolean> = [];
     private pcStack: Array<number> = [];
 
@@ -57,6 +58,7 @@ export class BytecodeInterpreterService {
         this.pc = 0;
         this.jerooReg = 0;
         this.jerooArray = [];
+        this.jerooMap = [];
         this.cmpStack = [];
         this.pcStack = [];
         this.countSubject.next(0);

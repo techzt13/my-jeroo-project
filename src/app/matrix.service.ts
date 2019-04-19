@@ -14,7 +14,7 @@ export class MatrixService {
     private cols = 26;
     private tsize = 28;
     private tiles: TileType[] = [];
-    private imageAtlas: HTMLImageElement;
+    imageAtlas: HTMLImageElement;
     private jeroos: Jeroo[] = [];
 
     constructor() {
@@ -145,7 +145,7 @@ export class MatrixService {
         }
     }
 
-    private renderJeroo(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, jeroo: Jeroo) {
+    renderJeroo(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, jeroo: Jeroo) {
         const jerooOffset = jeroo.getId() + 1;
         const directionOffset = jeroo.getDirection();
         const col = jeroo.getX();

@@ -4,7 +4,6 @@ import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { MatrixDialogComponent, DialogData } from '../matrix-dialog/matrix-dialog.component';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
-import {Jeroo} from '../jeroo';
 import {BytecodeInterpreterService} from '../bytecode-interpreter.service';
 
 @Component({
@@ -23,13 +22,10 @@ export class JerooMatrixComponent implements AfterViewInit {
     private mouseDown = false;
     private selectedTileType: TileType = null;
     private boardCache = 'board';
-    jerooArray: Array<Jeroo> = [];
 
     constructor(private matrixService: MatrixService, private dialog: MatDialog,
-        private service: BytecodeInterpreterService,
+        public bytecodeService: BytecodeInterpreterService,
         @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
-        service.count.subscribe((newCount: number) => { this.count = newCount; });
-        service.count.subscribe((newCount: number) => {this.updateJeroos(); } );
       }
 
     ngAfterViewInit() {
@@ -62,15 +58,6 @@ export class JerooMatrixComponent implements AfterViewInit {
                 this.redraw();
             }
         });
-    }
-
-    updateJeroos() {
-      if (this.count === 0) {
-        this.jerooArray = [];
-      }
-     for ( let i = 0; i < this.count; i++) {
-       this.jerooArray[i] = this.service.getJerooAtIndex(i);
-     }
     }
 
     redraw() {
