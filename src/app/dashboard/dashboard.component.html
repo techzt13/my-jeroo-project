@@ -40,10 +40,10 @@
                         <fa-icon icon="save"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <button mat-icon-button matTooltip="Undo" (click)="onUndoClick()">
+                    <button mat-icon-button matTooltip="Undo" [disabled]="!editorEditingEnabled()" (click)="onUndoClick()">
                         <fa-icon icon="undo"></fa-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Redo" (click)="onRedoClick()">
+                    <button mat-icon-button matTooltip="Redo" [disabled]="!editorEditingEnabled()" (click)="onRedoClick()">
                         <fa-icon icon="redo"></fa-icon>
                     </button>
                     <mat-divider [vertical]="true"></mat-divider>
@@ -100,18 +100,18 @@
             </mat-menu>
             <mat-menu #edit="matMenu">
                 <ng-template matMenuContent>
-                    <button mat-menu-item (click)="onUndoClick()">
+                    <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onUndoClick()">
                         <fa-icon icon="undo"></fa-icon><span class="menu-text">Undo Last Edit</span><span class="shortcut-tip">Ctrl+Z</span>
                     </button>
-                    <button mat-menu-item (click)="onRedoClick()">
+                    <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onRedoClick()">
                         <fa-icon icon="redo"></fa-icon><span class="menu-text">Redo Last Undo</span><span class="shortcut-tip">Ctrl+Shift+Z</span>
                     </button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="onToggleCommentLines()">Comment Lines<span class="shortcut-tip">Ctrl+/</span></button>
+                    <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onToggleCommentLines()">Comment Lines<span class="shortcut-tip">Ctrl+/</span></button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="onFormatSelectionClick()">Format Selection<span class="shortcut-tip">Ctrl+Shift+F</span></button>
-                    <button mat-menu-item (click)="onIndentSelectionClick()">Indent Selection<span class="shortcut-tip">Tab</span></button>
-                    <button mat-menu-item (click)="onUnindentSelectionClick()">Un-Indent Selection<span class="shortcut-tip">Shift+Tab</span></button>
+                    <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onFormatSelectionClick()">Format Selection<span class="shortcut-tip">Ctrl+Shift+F</span></button>
+                    <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onIndentSelectionClick()">Indent Selection<span class="shortcut-tip">Tab</span></button>
+                    <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onUnindentSelectionClick()">Un-Indent Selection<span class="shortcut-tip">Shift+Tab</span></button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item>Set Prefrences</button>
                 </ng-template>

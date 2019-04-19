@@ -31,7 +31,7 @@ translation_unit:
             id = "main";
             stmts;
             start_lnum = 1;
-            end_lnum;
+            end_lnum = (succ end_lnum);
           }
       }
     }

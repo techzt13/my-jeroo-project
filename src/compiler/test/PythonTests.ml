@@ -15,7 +15,7 @@ let parse_empty _test_ctxt =
       id = "main";
       stmts = [];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal ast expected
@@ -39,7 +39,7 @@ let parse_main _test_ctxt =
           ])
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -66,7 +66,7 @@ let parse_if _test_ctxt =
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -90,7 +90,7 @@ let parse_if_else _test_ctxt =
                         a = TrueExpr;
                         lnum = 2;
                       };
-                    lnum = 3;
+                    lnum = 2;
                   })
               ]]),
         AST.BlockStmt([
@@ -105,7 +105,7 @@ let parse_if_else _test_ctxt =
         1)
       ];
       start_lnum = 1;
-      end_lnum = 4;
+      end_lnum = 5;
     };
   } in
   assert_equal expected ast
@@ -127,7 +127,7 @@ let parse_if_elif _test_ctxt =
                     a = TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), AST.IfStmt({
             a = AST.FalseExpr;
@@ -143,7 +143,7 @@ let parse_if_elif _test_ctxt =
           ]), 2), 1)
       ];
       start_lnum = 1;
-      end_lnum = 2;
+      end_lnum = 3;
     };
   } in
   assert_equal expected ast
@@ -165,7 +165,7 @@ let parse_if_elif_else _test_ctxt =
                     a = TrueExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), AST.IfElseStmt({
             a = AST.FalseExpr;
@@ -176,7 +176,7 @@ let parse_if_elif_else _test_ctxt =
                     a = FalseExpr;
                     lnum = 2;
                   };
-                lnum = 3;
+                lnum = 2;
               })
           ]), AST.BlockStmt([
             AST.ExprStmt({
@@ -189,7 +189,7 @@ let parse_if_elif_else _test_ctxt =
           ]), 2), 1)
       ];
       start_lnum = 1;
-      end_lnum = 3;
+      end_lnum = 4;
     };
   } in
   assert_equal expected ast
@@ -216,7 +216,7 @@ let parse_nested_if _test_ctxt =
                           a = FalseExpr;
                           lnum = 3;
                         };
-                      lnum = 4;
+                      lnum = 3;
                     }
                   ])
               ]), 2)
@@ -233,7 +233,7 @@ let parse_nested_if _test_ctxt =
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 5;
+      end_lnum = 6;
     };
   } in
   assert_equal expected ast
@@ -260,7 +260,7 @@ let parse_while _test_ctxt =
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -293,7 +293,7 @@ let parse_and _test_ctxt =
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -321,7 +321,7 @@ let parse_or _test_ctxt =
                     a = FalseExpr;
                     lnum = 1;
                   };
-                lnum = 2;
+                lnum = 1;
               })
           ]), 1)
       ];
@@ -356,7 +356,7 @@ let parse_not _test_ctxt =
           ]), 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -370,7 +370,7 @@ let parse_comment _test_ctxt =
       id = "main";
       stmts = [];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal ast expected
@@ -394,7 +394,7 @@ let parse_inline_comment _test_ctxt =
           ])
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -418,7 +418,7 @@ let parse_newlines _test_ctxt =
           ])
       ];
       start_lnum = 1;
-      end_lnum = 5;
+      end_lnum = 6;
     };
   } in
   assert_equal expected ast
@@ -452,7 +452,7 @@ let parse_def _test_ctxt =
       id = "main";
       stmts = [];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -488,7 +488,7 @@ let parse_fxn_application _test_ctxt =
           ])
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -527,7 +527,7 @@ let parse_paren_precedence _test_ctxt =
           ], 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     }
   } in
   assert_equal ast expected
@@ -566,7 +566,7 @@ let parse_and_or_precedence _test_ctxt =
           ], 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     }
   } in
   assert_equal ast expected
@@ -602,7 +602,7 @@ let parse_not_precedence _test_ctxt =
           ], 1)
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal expected ast
@@ -640,7 +640,7 @@ let parse_object_member_access _test_ctxt =
         ]
       ];
       start_lnum = 1;
-      end_lnum = 1;
+      end_lnum = 2;
     };
   } in
   assert_equal ast expected
