@@ -1,17 +1,17 @@
 import { Component, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { FormGroup } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 @Component({
-  selector: 'app-dashboard-dialog-copyright',
-  templateUrl: './dashboard-dialog-copyright.component.html'
+    selector: 'app-dashboard-dialog-copyright',
+    templateUrl: './dashboard-dialog-copyright.component.html'
 })
 export class DashboardDialogCopyrightComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<DashboardDialogCopyrightComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {}
+    constructor(
+        public dialogRef: MatDialogRef<DashboardDialogCopyrightComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: string) {}
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+    onCloseClick(): void {
+        this.dialogRef.close();
+    }
 }

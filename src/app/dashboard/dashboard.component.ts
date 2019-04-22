@@ -1,14 +1,14 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { MatrixService } from '../matrix.service';
-import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
-import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DashboardDialogComponent } from '../dashboard-dialog/dashboard-dialog.component';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { DashboardDialogAwardsComponent } from '../dashboard-dialog-awards/dashboard-dialog-awards.component';
-import { DashboardDialogHistoryComponent } from '../dashboard-dialog-history/dashboard-dialog-history.component';
 import { DashboardDialogCopyrightComponent } from '../dashboard-dialog-copyright/dashboard-dialog-copyright.component';
-import { EditorTabAreaComponent, EditorState } from '../editor-tab-area/editor-tab-area.component';
+import { DashboardDialogHistoryComponent } from '../dashboard-dialog-history/dashboard-dialog-history.component';
+import { EditorState, EditorTabAreaComponent } from '../editor-tab-area/editor-tab-area.component';
+import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
+import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
+import { DashboardDialogAboutComponent } from '../dashboard-dialog-about/dashboard-dialog-about.component';
 
 interface Speed {
     name: string;
@@ -227,10 +227,6 @@ export class DashboardComponent {
         return this.jerooEditor.getHelpUrl();
     }
 
-    getHomeUrl() {
-        return `/`;
-    }
-
     getTutorialUrl() {
         return this.jerooEditor.getTutorialUrl();
     }
@@ -256,32 +252,20 @@ export class DashboardComponent {
     matrixEditingEnabled() {
         return this.jerooEditorState.reset;
     }
+
     openAboutJeroo() {
-
-        const dialogRef = this.dialog.open(DashboardDialogComponent, {
-            width: '500px',
-            height: '750px'
-        });
+        this.dialog.open(DashboardDialogAboutComponent);
     }
+
     openAwards() {
-
-        const dialogRef = this.dialog.open(DashboardDialogAwardsComponent, {
-            width: '500px',
-            height: '750px'
-        });
+        this.dialog.open(DashboardDialogAwardsComponent);
     }
+
     openHistory() {
-
-        const dialogRef = this.dialog.open(DashboardDialogHistoryComponent, {
-            width: '500px',
-            height: '750px'
-        });
+        this.dialog.open(DashboardDialogHistoryComponent);
     }
-    openCopyright() {
 
-        const dialogRef = this.dialog.open(DashboardDialogCopyrightComponent, {
-            width: '500px',
-            height: '750px'
-        });
+    openCopyright() {
+        this.dialog.open(DashboardDialogCopyrightComponent);
     }
 }

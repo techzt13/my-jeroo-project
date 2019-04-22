@@ -164,16 +164,16 @@
             </mat-menu>
             <mat-menu #help="matMenu">
                 <ng-template matMenuContent>
-                    <a mat-menu-item routerLink="{{getHelpUrl()}}" target="_blank"><span class="col-1">Langauge Summary<span class="shortcut-tip">F8</span></span></a>
+                    <a mat-menu-item routerLink="{{getHelpUrl()}}" target="_blank"><span>Langauge Summary<span class="shortcut-tip">F8</span></span></a>
                     <mat-divider ></mat-divider>
-                    <a mat-menu-item routerLink="{{getTutorialUrl()}}" target="_blank"><span class="col-1">Getting Started Tutorial</span></a>
+                    <a mat-menu-item routerLink="{{getTutorialUrl()}}" target="_blank"><span>Getting Started Tutorial</span></a>
                     <mat-divider></mat-divider>
-                    <a mat-menu-item routerLink="{{getHomeUrl()}}" target="_blank"><span class="col-1">Jeroo Home Page</span></a>
+                    <a mat-menu-item href="http://jeroo.org" target="_blank">Jeroo Home Page</a>
                     <mat-divider></mat-divider>
-                    <a mat-menu-item (click)="openAboutJeroo()"><span class="col-1">About Jeroo</span></a>
-                    <a mat-menu-item (click)="openAwards()"><span class="col-1">Awards Received</span></a>
-                    <a mat-menu-item (click)="openHistory()"><span class="col-1">Jeroo's History</span></a>
-                    <a mat-menu-item (click)="openCopyright()"><span class="col-1">Copyright Notice</span></a>
+                    <a mat-menu-item (click)="openAboutJeroo()">About Jeroo</a>
+                    <a mat-menu-item (click)="openAwards()">Awards Received</a>
+                    <a mat-menu-item (click)="openHistory()">Jeroo's History</a>
+                    <a mat-menu-item (click)="openCopyright()">Copyright Notice</a>
                 </ng-template>
             </mat-menu>
             <!--Text tabs Area-->

@@ -34,12 +34,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
-import { DashboardDialogComponent } from './dashboard-dialog/dashboard-dialog.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { DashboardDialogAwardsComponent } from './dashboard-dialog-awards/dashboard-dialog-awards.component';
 import { DashboardDialogHistoryComponent } from './dashboard-dialog-history/dashboard-dialog-history.component';
 import { DashboardDialogCopyrightComponent } from './dashboard-dialog-copyright/dashboard-dialog-copyright.component';
 import { EditorTabAreaComponent } from './editor-tab-area/editor-tab-area.component';
+import { DashboardDialogAboutComponent } from './dashboard-dialog-about/dashboard-dialog-about.component';
 
 library.add(
     faFile,
@@ -70,7 +70,7 @@ library.add(
         DisplayErrorMessageComponent,
         TextEditorComponent,
         EditorTabAreaComponent,
-        DashboardDialogComponent,
+        DashboardDialogAboutComponent,
         DashboardDialogAwardsComponent,
         DashboardDialogHistoryComponent,
         DashboardDialogCopyrightComponent
@@ -91,7 +91,7 @@ library.add(
     bootstrap: [AppComponent],
     entryComponents: [
         MatrixDialogComponent,
-        DashboardDialogComponent,
+        DashboardDialogAboutComponent,
         DashboardDialogAwardsComponent,
         DashboardDialogHistoryComponent,
         DashboardDialogCopyrightComponent
