@@ -8,7 +8,7 @@ translation_unit: HEADER DEF ID LPAREN SELF RPAREN COLON AHEAD NEWLINE WHILE
 ## fxn
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either EOF or `def`
 
 translation_unit: HEADER DEF ID LPAREN SELF RPAREN COLON WHILE
 ##
@@ -20,7 +20,7 @@ translation_unit: HEADER DEF ID LPAREN SELF RPAREN COLON WHILE
 ## DEF ID LPAREN SELF RPAREN COLON
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a statement or a new indentation level
 
 translation_unit: HEADER DEF ID LPAREN SELF RPAREN WHILE
 ##
@@ -32,7 +32,7 @@ translation_unit: HEADER DEF ID LPAREN SELF RPAREN WHILE
 ## DEF ID LPAREN SELF RPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `:`
 
 translation_unit: HEADER DEF ID LPAREN SELF WHILE
 ##
@@ -44,7 +44,7 @@ translation_unit: HEADER DEF ID LPAREN SELF WHILE
 ## DEF ID LPAREN SELF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected ')'
 
 translation_unit: HEADER DEF ID LPAREN WHILE
 ##
@@ -56,7 +56,7 @@ translation_unit: HEADER DEF ID LPAREN WHILE
 ## DEF ID LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `self`
 
 translation_unit: HEADER DEF ID WHILE
 ##
@@ -68,7 +68,7 @@ translation_unit: HEADER DEF ID WHILE
 ## DEF ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `(`
 
 translation_unit: HEADER DEF WHILE
 ##
@@ -80,7 +80,7 @@ translation_unit: HEADER DEF WHILE
 ## DEF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected an identifier
 
 translation_unit: HEADER MAIN_METH_SEP ID EQ WEST WHILE
 ##
@@ -95,7 +95,7 @@ translation_unit: HEADER MAIN_METH_SEP ID EQ WEST WHILE
 ## ID EQ expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP ID EQ WHILE
 ##
@@ -107,7 +107,7 @@ translation_unit: HEADER MAIN_METH_SEP ID EQ WHILE
 ## ID EQ
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected an expression
 
 translation_unit: HEADER MAIN_METH_SEP ID LPAREN WEST COMMA WHILE
 ##
@@ -119,7 +119,7 @@ translation_unit: HEADER MAIN_METH_SEP ID LPAREN WEST COMMA WHILE
 ## expr COMMA
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected an expression
 
 translation_unit: HEADER MAIN_METH_SEP ID LPAREN WEST WHILE
 ##
@@ -135,7 +135,7 @@ translation_unit: HEADER MAIN_METH_SEP ID LPAREN WEST WHILE
 ## expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either `)` or `,`
 
 translation_unit: HEADER MAIN_METH_SEP ID LPAREN WHILE
 ##
@@ -147,7 +147,7 @@ translation_unit: HEADER MAIN_METH_SEP ID LPAREN WHILE
 ## ID LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected comma seperated arguments list
 
 translation_unit: HEADER MAIN_METH_SEP ID WHILE
 ##
@@ -161,7 +161,7 @@ translation_unit: HEADER MAIN_METH_SEP ID WHILE
 ## ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either an `=` or an operator
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE INDENT RPAREN
 ##
@@ -173,7 +173,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE INDENT RPAREN
 ## NEWLINE INDENT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected a statement
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE INDENT WEST NEWLINE RPAREN
 ##
@@ -186,7 +186,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE INDENT WEST NEWLINE
 ## stmt
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a dedent or a statement
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE WHILE
 ##
@@ -198,7 +198,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE WHILE
 ## NEWLINE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected a new indentation level
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST COLON WEST NEWLINE RPAREN
 ##
@@ -212,7 +212,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST COLO
 ## ELIF expr COLON suite
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a statement, `elif`, or `else`
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST COLON WHILE
 ##
@@ -226,7 +226,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST COLO
 ## ELIF expr COLON
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a statement or a new indentation level
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST WHILE
 ##
@@ -243,7 +243,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST WHIL
 ## ELIF expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either `:` or an operator
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WHILE
 ##
@@ -257,7 +257,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WHILE
 ## ELIF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELSE COLON WHILE
 ##
@@ -269,7 +269,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELSE COLON WHI
 ## ELSE COLON
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a statement or a new indentation level
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELSE WHILE
 ##
@@ -281,7 +281,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELSE WHILE
 ## ELSE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `:`
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE RPAREN
 ##
@@ -295,7 +295,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE RPAREN
 ## IF expr COLON suite
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a statement, `elif`, or `else`
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WHILE
 ##
@@ -309,7 +309,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WHILE
 ## IF expr COLON
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a statement or a newline followed by a new indentation level
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST WHILE
 ##
@@ -326,7 +326,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST WHILE
 ## IF expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either `:` or an operator
 
 translation_unit: HEADER MAIN_METH_SEP IF WHILE
 ##
@@ -340,7 +340,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WHILE
 ## IF
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP LPAREN ID WHILE
 ##
@@ -353,7 +353,7 @@ translation_unit: HEADER MAIN_METH_SEP LPAREN ID WHILE
 ## ID
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of either `(` comma seperated arguments list `)`, newline, operator, or an `)`
 
 translation_unit: HEADER MAIN_METH_SEP LPAREN WEST WHILE
 ##
@@ -368,7 +368,7 @@ translation_unit: HEADER MAIN_METH_SEP LPAREN WEST WHILE
 ## LPAREN expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP LPAREN WHILE
 ##
@@ -380,7 +380,7 @@ translation_unit: HEADER MAIN_METH_SEP LPAREN WHILE
 ## LPAREN
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP NEWLINE RPAREN
 ##
@@ -392,7 +392,7 @@ translation_unit: HEADER MAIN_METH_SEP NEWLINE RPAREN
 ## NEWLINE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected a statement
 
 translation_unit: HEADER MAIN_METH_SEP NOT WEST WHILE
 ##
@@ -407,7 +407,7 @@ translation_unit: HEADER MAIN_METH_SEP NOT WEST WHILE
 ## NOT expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP NOT WHILE
 ##
@@ -419,7 +419,7 @@ translation_unit: HEADER MAIN_METH_SEP NOT WHILE
 ## NOT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP RPAREN
 ##
@@ -431,7 +431,7 @@ translation_unit: HEADER MAIN_METH_SEP RPAREN
 ## HEADER newline_or_fxn_list MAIN_METH_SEP
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected a statement
 
 translation_unit: HEADER MAIN_METH_SEP WEST AND WEST WHILE
 ##
@@ -446,7 +446,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST AND WEST WHILE
 ## expr AND expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP WEST AND WHILE
 ##
@@ -458,7 +458,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST AND WHILE
 ## expr AND
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP WEST DOT WHILE
 ##
@@ -470,7 +470,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST DOT WHILE
 ## expr DOT
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP WEST NEWLINE RPAREN
 ##
@@ -482,7 +482,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST NEWLINE RPAREN
 ## stmt
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected statement
 
 translation_unit: HEADER MAIN_METH_SEP WEST OR WEST WHILE
 ##
@@ -497,7 +497,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST OR WEST WHILE
 ## expr OR expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP WEST OR WHILE
 ##
@@ -509,7 +509,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST OR WHILE
 ## expr OR
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP WEST WHILE
 ##
@@ -524,7 +524,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST WHILE
 ## expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected either a newline or an operator
 
 translation_unit: HEADER MAIN_METH_SEP WHILE WEST COLON WHILE
 ##
@@ -536,7 +536,7 @@ translation_unit: HEADER MAIN_METH_SEP WHILE WEST COLON WHILE
 ## WHILE expr COLON
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected a statement or a newline followed by a new indentation level
 
 translation_unit: HEADER MAIN_METH_SEP WHILE WEST WHILE
 ##
@@ -551,7 +551,7 @@ translation_unit: HEADER MAIN_METH_SEP WHILE WEST WHILE
 ## WHILE expr
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected one of `:`, `.`, or an operator
 
 translation_unit: HEADER MAIN_METH_SEP WHILE WHILE
 ##
@@ -563,7 +563,7 @@ translation_unit: HEADER MAIN_METH_SEP WHILE WHILE
 ## WHILE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected expression
 
 translation_unit: HEADER NEWLINE WHILE
 ##
@@ -575,7 +575,7 @@ translation_unit: HEADER NEWLINE WHILE
 ## NEWLINE
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `def`
 
 translation_unit: HEADER WHILE
 ##
@@ -587,7 +587,7 @@ translation_unit: HEADER WHILE
 ## HEADER
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
+expected `def`
 
 translation_unit: WHILE
 ##
@@ -599,5 +599,4 @@ translation_unit: WHILE
 ##
 ##
 
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
+expected `@PYTHON` (likely due to an error in your input file)
