@@ -136,9 +136,9 @@ export class MatrixService {
             for (let col = 0; col < this.cols; col++) {
                 const jeroo = this.getJeroo(col, row);
                 if (jeroo !== null && jeroo !== undefined) {
-                    const col = jeroo.getX();
-                    const row = jeroo.getY();
-                    this.renderJeroo(context, imageAtlas, jeroo, col, row);
+                    const jerooCol = jeroo.getX();
+                    const jerooRow = jeroo.getY();
+                    this.renderJeroo(context, imageAtlas, jeroo, jerooCol, jerooRow);
                 } else {
                     const tile = this.getTile(col, row);
                     this.renderTile(context, imageAtlas, tile, col, row);

@@ -6,7 +6,8 @@ import { Jeroo } from '../jeroo';
 
 @Component({
     selector: 'app-jeroo-status',
-    templateUrl: './jeroo-status.component.html'
+    templateUrl: './jeroo-status.component.html',
+    styleUrls: ['./jeroo-status.component.scss']
 })
 export class JerooStatusComponent implements AfterViewInit, OnDestroy {
     @ViewChildren('canvas') jerooIcons !: QueryList<any>;
