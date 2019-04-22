@@ -28,26 +28,7 @@
         </ng-template>
     </div>
     <div>
-        <div *ngIf="bytecodeService.jerooArray.length > 0">
-            <div fxLayout="column" fxLayoutGap="5px">
-                <div fxLayout="row" fxLayoutGap="20px">
-                    <div *ngFor="let jeroo of bytecodeService.jerooArray.slice(0,2)">
-                        <img src="assets/images/flower.jpg" alt="flower" />
-                        {{bytecodeService.jerooMap[jeroo.getId()]}}
-                        <img src="assets/images/flower.jpg" alt="flower" />
-                        {{jeroo.getNumFlowers()}}
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayoutGap="20px">
-                    <div *ngFor="let jeroo of bytecodeService.jerooArray.slice(2,4)">
-                        <img src="assets/images/flower.jpg" alt="flower" />
-                        {{bytecodeService.jerooMap[jeroo.getId()]}}
-                        <img src="assets/images/flower.jpg" alt="flower" />
-                        {{jeroo.getNumFlowers()}}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <app-jeroo-status></app-jeroo-status>
     </div>
     <div>
         <button mat-button [disabled]="!editingEnabled" (click)="openDialog()">Change Size</button>

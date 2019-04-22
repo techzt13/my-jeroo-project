@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input} from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Inject, Input, ViewChildren} from '@angular/core';
 import { MatrixService } from '../matrix.service';
 import { TileType } from '../matrixConstants';
 import { MatDialog, MatDialogConfig } from '@angular/material';

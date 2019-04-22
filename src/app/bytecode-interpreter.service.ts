@@ -3,7 +3,7 @@ import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
 import { TileType } from './matrixConstants';
 import { numberToRelativeDirection, numberToCardinalDirection } from './jerooConstants';
-import {Observable, Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 
 export class RuntimeError extends Error {
     constructor(message: string, public line_num: number) {
@@ -15,14 +15,14 @@ export class RuntimeError extends Error {
     providedIn: 'root'
 })
 export class BytecodeInterpreterService {
-    count: Observable<number>;
-    private countSubject: Subject<number>;
     private pc = 0;
     private jerooReg = 0;
     jerooArray: Array<Jeroo> = [];
-    jerooMap: Array<JerooMapValue> = [];
+    jerooMap: any = [];
     private cmpStack: Array<boolean> = [];
     private pcStack: Array<number> = [];
+    private jerooChangeSource = new Subject<Jeroo>();
+    jerooChange$ = this.jerooChangeSource.asObservable();
 
     executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
         if (this.validInstruction(instructions)) {
@@ -36,11 +36,6 @@ export class BytecodeInterpreterService {
                 this.executeBytecode(instruction, matrixService);
             }
         }
-    }
-
-    constructor() {
-        this.countSubject = new Subject<number>();
-        this.count = this.countSubject.asObservable();
     }
 
     validInstruction(instructions: Array<Instruction>) {
@@ -61,8 +56,6 @@ export class BytecodeInterpreterService {
         this.jerooMap = [];
         this.cmpStack = [];
         this.pcStack = [];
-        this.countSubject.next(0);
-        this.count = this.countSubject;
     }
 
     /**
@@ -114,10 +107,8 @@ export class BytecodeInterpreterService {
                 try {
                     const direction = numberToCardinalDirection(command.e);
                     const jeroo = new Jeroo(command.a, command.b + 1, command.c + 1, command.d, direction);
-                    this.jerooArray.push(jeroo);
+                    this.jerooArray[command.a] = jeroo;
                     matService.setJeroo(jeroo.getX(), jeroo.getY(), jeroo);
-                    this.countSubject.next(this.jerooArray.length);
-                    this.count = this.countSubject;
                 } catch (e) {
                     throw new RuntimeError(e.message, command.f);
                 }
@@ -125,7 +116,9 @@ export class BytecodeInterpreterService {
             }
             case 'TURN': {
                 const direction = numberToRelativeDirection(command.a);
-                this.getCurrentJeroo().turn(direction);
+                const jeroo = this.getCurrentJeroo();
+                jeroo.turn(direction);
+                this.jerooChangeSource.next(jeroo);
                 break;
             }
             case 'HOP': {

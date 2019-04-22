@@ -36,6 +36,7 @@ import { DisplayErrorMessageComponent } from './display-error-message/display-er
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { EditorTabAreaComponent } from './editor-tab-area/editor-tab-area.component';
+import { JerooStatusComponent } from './jeroo-status/jeroo-status.component';
 
 library.add(
     faFile,
@@ -66,6 +67,7 @@ library.add(
         DisplayErrorMessageComponent,
         TextEditorComponent,
         EditorTabAreaComponent,
+        JerooStatusComponent,
     ],
     imports: [
         BrowserModule,
