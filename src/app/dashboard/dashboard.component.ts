@@ -253,6 +253,10 @@ export class DashboardComponent {
         return this.jerooEditorState.reset;
     }
 
+    editorEditingEnabled() {
+        return !this.jerooEditorState.executing && !this.jerooEditorState.stopped && !this.jerooEditorState.paused;
+    }
+
     openAboutJeroo() {
         this.dialog.open(DashboardDialogAboutComponent);
     }
