@@ -147,7 +147,7 @@ translation_unit: HEADER MAIN_METH_SEP ID LPAREN WHILE
 ## ID LPAREN
 ##
 
-expected comma seperated arguments list
+expected comma seperated arguments list followed by a `)`
 
 translation_unit: HEADER MAIN_METH_SEP ID WHILE
 ##
@@ -198,7 +198,7 @@ translation_unit: HEADER MAIN_METH_SEP IF WEST COLON NEWLINE WHILE
 ## NEWLINE
 ##
 
-expected a new indentation level
+expected either a statement or a new indentation level
 
 translation_unit: HEADER MAIN_METH_SEP IF WEST COLON WEST NEWLINE ELIF WEST COLON WEST NEWLINE RPAREN
 ##
@@ -458,7 +458,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST AND WHILE
 ## expr AND
 ##
 
-expected either a newline or an operator
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP WEST DOT WHILE
 ##
@@ -470,7 +470,7 @@ translation_unit: HEADER MAIN_METH_SEP WEST DOT WHILE
 ## expr DOT
 ##
 
-expected either a newline or an operator
+expected expression
 
 translation_unit: HEADER MAIN_METH_SEP WEST NEWLINE RPAREN
 ##
