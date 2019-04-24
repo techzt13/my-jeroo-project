@@ -4,15 +4,11 @@ import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-warning-dialog',
-  templateUrl: './warning-dialog.component.html',
-  styleUrls: ['./warning-dialog.component.scss']
+  templateUrl: './warning-dialog.component.html'
 })
 export class WarningDialogComponent {
-  @Output() continueEvent = new EventEmitter<boolean>();
 
-  constructor(public dialogRef: MatDialogRef<WarningDialogComponent>) {
-
-  }
+  constructor(public dialogRef: MatDialogRef<WarningDialogComponent>) {}
 
   onCloseClick(): void {
     this.dialogRef.close(false);
