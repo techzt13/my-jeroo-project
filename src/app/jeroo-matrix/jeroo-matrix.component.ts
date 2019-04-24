@@ -5,7 +5,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { MatrixDialogComponent, DialogData } from '../matrix-dialog/matrix-dialog.component';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import {BytecodeInterpreterService} from '../bytecode-interpreter.service';
-import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component'
+import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component';
 
 @Component({
     selector: 'app-jeroo-matrix',

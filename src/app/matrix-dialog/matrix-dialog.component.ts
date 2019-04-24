@@ -1,11 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component'
+import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component';
 
 export interface DialogData {
-  xValue: number;
-  yValue: number;
+    xValue: number;
+    yValue: number;
 }
 
 @Component({
@@ -31,7 +31,7 @@ export class MatrixDialogComponent implements OnInit {
         dialogRef.afterClosed().subscribe((cont) => {
             if (cont) {
                 this.dialogRef.close(this.form.value);
-            }else{
+            } else {
                 this.dialogRef.close();
             }
         });

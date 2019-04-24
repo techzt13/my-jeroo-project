@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material';
 })
 export class WarningDialogComponent {
   @Output() continueEvent = new EventEmitter<boolean>();
-  
+
   constructor(public dialogRef: MatDialogRef<WarningDialogComponent>) {
 
   }
@@ -21,5 +21,5 @@ export class WarningDialogComponent {
   onContinueClick(): void {
     this.dialogRef.close(true);
   }
-  
+
 }
