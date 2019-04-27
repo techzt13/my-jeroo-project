@@ -103,4 +103,12 @@ export class TextEditorComponent implements AfterViewInit {
     markClean() {
         this.editor.getDoc().markClean();
     }
+
+    refresh() {
+        this.editor.refresh();
+    }
+
+    focus() {
+        this.editor.focus();
+    }
 }

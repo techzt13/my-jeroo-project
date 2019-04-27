@@ -39,6 +39,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
 
     selectedLanguage = SelectedLanguage.Java;
     selectedEditor: TextEditorComponent = null;
+    selectedTabIndex = 0;
     private instructions: Array<Instruction> = null;
     private previousInstruction: Instruction = null;
 
@@ -64,6 +65,10 @@ export class EditorTabAreaComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.selectedEditor = this.mainMethodTextEditor;
+        setTimeout(() => {
+            this.selectedEditor.refresh();
+            this.selectedEditor.focus();
+        });
     }
 
     runStepwise(context: CanvasRenderingContext2D) {
@@ -155,8 +160,10 @@ export class EditorTabAreaComponent implements AfterViewInit {
             const instruction = this.bytecodeService.getCurrentInstruction(this.instructions);
             if (instruction.e === 0 || instruction.op === 'NEW') {
                 this.mainMethodTextEditor.highlightLine(instruction.f);
+                this.selectedTabIndex = 0;
             } else if (instruction.e === 1) {
                 this.extensionMethodsTextEditor.highlightLine(instruction.f);
+                this.selectedTabIndex = 1;
             }
             this.previousInstruction = instruction;
         } else {
@@ -262,6 +269,10 @@ export class EditorTabAreaComponent implements AfterViewInit {
         } else if (index === 1) {
             this.selectedEditor = this.extensionMethodsTextEditor;
         }
+        setTimeout(() => {
+            this.selectedEditor.refresh();
+            this.selectedEditor.focus();
+        });
     }
 
     onSelectedLanguageChange() {

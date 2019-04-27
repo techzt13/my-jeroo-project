@@ -1,4 +1,4 @@
-<mat-tab-group color="accent" (selectedIndexChange)="onEditorTabIndexChange($event)">
+<mat-tab-group color="accent" (selectedIndexChange)="onEditorTabIndexChange($event)" [selectedIndex]="selectedTabIndex">
     <mat-tab label="Main Method">
         <app-text-editor #mainMethodTextEditor></app-text-editor>
     </mat-tab>

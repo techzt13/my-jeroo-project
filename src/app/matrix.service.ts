@@ -15,6 +15,7 @@ export class MatrixService {
     private tiles: TileType[] = [];
     imageAtlas: HTMLImageElement;
     private jeroos: Jeroo[] = [];
+    // used to store the map before any runtime edits
     private mapString = '';
 
     constructor() {
