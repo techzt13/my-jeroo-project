@@ -5,7 +5,7 @@ import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
 import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component';
 import { DialogData, MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
 import { MatrixService } from '../matrix.service';
-import { TileType } from '../matrixConstants';
+import { TileType } from '../jerooTileType';
 
 const boardCache = 'board';
 

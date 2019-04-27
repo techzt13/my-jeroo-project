@@ -4,7 +4,7 @@ import { BytecodeInterpreterService, RuntimeError } from './bytecode-interpreter
 import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
 import { TileType } from './matrixConstants';
-import { CardinalDirection } from './jerooConstants';
+import { CardinalDirection } from './jerooDirection';
 
 describe('BytecodeInterpreterService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));

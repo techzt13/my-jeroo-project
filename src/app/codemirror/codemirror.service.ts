@@ -4,9 +4,9 @@ import 'codemirror/addon/mode/simple';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/comment/comment';
-import { javaMode } from './text-editor/javaMode';
-import { VBMode } from './text-editor/VBMode';
-import { pythonMode } from './text-editor/pythonMode';
+import { javaMode } from './javaMode';
+import { VBMode } from './VBMode';
+import { pythonMode } from './pythonMode';
 import * as CodeMirror from 'codemirror';
 
 @Injectable({

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { TileType } from './matrixConstants';
+import { TileType, stringToTileType, tileTypeToString } from './jerooTileType';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Jeroo } from './jeroo';
-
 
 @Injectable({
     providedIn: 'root'
@@ -247,7 +246,7 @@ export class MatrixService {
         let mapContents = '';
         for (let row = 1; row < this.rows - 1; row++) {
             for (let col = 1; col < this.cols - 1; col++) {
-                const tile = this.tileTypeToString(this.getTile(col, row));
+                const tile = tileTypeToString(this.getTile(col, row));
                 mapContents += tile;
             }
             mapContents += '\n';
@@ -255,24 +254,6 @@ export class MatrixService {
         return mapContents;
     }
 
-    /**
-     * Converts a TileType to a string
-     * @param tileType tileType to convert
-     * @returns string representation of a TileType
-     */
-    tileTypeToString(tileType: TileType) {
-        if (tileType === TileType.Grass) {
-            return '.';
-        } else if (tileType === TileType.Water) {
-            return 'W';
-        } else if (tileType === TileType.Flower) {
-            return 'F';
-        } else if (tileType === TileType.Net) {
-            return 'N';
-        } else {
-            throw new Error('Invalid TileType');
-        }
-    }
 
     /**
      * Set the current map to a map string.
@@ -299,7 +280,7 @@ export class MatrixService {
                     this.setTile(0, row, TileType.Water);
                     for (let col = 1; col < cols + 1; col++) {
                         const char = lines[row - 1].charAt(col - 1);
-                        this.setTile(col, row, this.stringToTileType(char));
+                        this.setTile(col, row, stringToTileType(char));
                     }
                     this.setTile(cols + 1, row, TileType.Water);
                 }
@@ -317,25 +298,6 @@ export class MatrixService {
         } else {
             this.setRows(0);
             this.setCols(0);
-        }
-    }
-
-    /**
-     * Convert a character to a TileType.
-     * @param char character to convert.
-     * @returns Converted tile.
-     */
-    stringToTileType(char: string) {
-        if (char === '.') {
-            return TileType.Grass;
-        } else if (char === 'W') {
-            return TileType.Water;
-        } else if (char === 'F') {
-            return TileType.Flower;
-        } else if (char === 'N') {
-            return TileType.Net;
-        } else {
-            throw new Error('Invalid TileType in map');
         }
     }
 

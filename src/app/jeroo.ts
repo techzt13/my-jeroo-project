@@ -1,5 +1,5 @@
 import { MatrixService } from './matrix.service';
-import { TileType } from './matrixConstants';
+import { TileType } from './jerooTileType';
 import {
     Point,
     CardinalDirection,
@@ -7,7 +7,7 @@ import {
     relativeDirectionToNumber,
     cardinalDirectionToNumber,
     numberToCardinalDirection
-} from './jerooConstants';
+} from './jerooDirection';
 
 const STEP: Point[] = [
     // north

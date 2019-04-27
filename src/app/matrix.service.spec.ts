@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { TileType } from './matrixConstants';
+import { TileType, stringToTileType } from './jerooTileType';
 
 import { MatrixService } from './matrix.service';
-import { CardinalDirection } from './jerooConstants';
+import { CardinalDirection } from './jerooDirection';
 import { Jeroo } from './jeroo';
 
 describe('MatrixService', () => {
@@ -104,7 +104,7 @@ describe('MatrixService', () => {
         for (let row = 0; row < lines.length; row++) {
             for (let col = 0; col < lines[0].length; col++) {
                 const actual = service.getTile(col + 1, row + 1);
-                const expected = service.stringToTileType(lines[row].charAt(col));
+                const expected = stringToTileType(lines[row].charAt(col));
                 expect(actual).toBe(expected);
             }
         }

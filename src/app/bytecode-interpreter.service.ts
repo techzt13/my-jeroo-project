@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
-import { TileType } from './matrixConstants';
-import { numberToRelativeDirection, numberToCardinalDirection } from './jerooConstants';
+import { TileType } from './jerooTileType';
+import { numberToRelativeDirection, numberToCardinalDirection } from './jerooDirection';
 import { Subject } from 'rxjs';
 
 export class RuntimeError extends Error {

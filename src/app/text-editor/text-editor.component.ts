@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { SelectedLanguage } from '../dashboard/SelectedLanguage';
-import { CodemirrorService } from '../codemirror.service';
+import { CodemirrorService } from '../codemirror/codemirror.service';
 
 @Component({
     selector: 'app-text-editor',
