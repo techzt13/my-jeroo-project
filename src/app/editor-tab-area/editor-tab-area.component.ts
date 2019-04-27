@@ -38,7 +38,6 @@ export class EditorTabAreaComponent implements AfterViewInit {
     ];
 
     selectedLanguage = SelectedLanguage.Java;
-    selectedEditor: TextEditorComponent = null;
     selectedTabIndex = 0;
     private instructions: Array<Instruction> = null;
     private previousInstruction: Instruction = null;
@@ -64,10 +63,9 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.selectedEditor = this.mainMethodTextEditor;
         setTimeout(() => {
-            this.selectedEditor.refresh();
-            this.selectedEditor.focus();
+            this.getSelectedEditor().refresh();
+            this.getSelectedEditor().focus();
         });
     }
 
@@ -185,6 +183,9 @@ export class EditorTabAreaComponent implements AfterViewInit {
         const runtimeError: RuntimeError = e;
         this.messageService.clear();
         const message = `Runtime error line ${runtimeError.line_num}: ${runtimeError.message}`;
+        this.unhighlightPreviousLine();
+        this.selectedTabIndex = runtimeError.pane_num;
+        this.getSelectedEditor().highlightErrorLine(runtimeError.line_num);
         this.messageService.add(message);
         this.stopState();
     }
@@ -207,27 +208,27 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     undo() {
-        this.selectedEditor.undo();
+        this.getSelectedEditor().undo();
     }
 
     redo() {
-        this.selectedEditor.redo();
+        this.getSelectedEditor().redo();
     }
 
     toggleComment() {
-        this.selectedEditor.toggleComment();
+        this.getSelectedEditor().toggleComment();
     }
 
     indentSelection() {
-        this.selectedEditor.indentSelection();
+        this.getSelectedEditor().indentSelection();
     }
 
     unindentSelection() {
-        this.selectedEditor.unindentSelection();
+        this.getSelectedEditor().unindentSelection();
     }
 
     formatSelection() {
-        this.selectedEditor.formatSelection();
+        this.getSelectedEditor().formatSelection();
     }
 
     executingState() {
@@ -264,14 +265,11 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     onEditorTabIndexChange(index: number) {
-        if (index === 0) {
-            this.selectedEditor = this.mainMethodTextEditor;
-        } else if (index === 1) {
-            this.selectedEditor = this.extensionMethodsTextEditor;
-        }
+        this.selectedTabIndex = index;
+        const selectedEditor = this.getSelectedEditor();
         setTimeout(() => {
-            this.selectedEditor.refresh();
-            this.selectedEditor.focus();
+            selectedEditor.refresh();
+            selectedEditor.focus();
         });
     }
 
@@ -366,5 +364,15 @@ export class EditorTabAreaComponent implements AfterViewInit {
 
     resetCache() {
         this.storage.remove(codeCache);
+    }
+
+    private getSelectedEditor() {
+        if (this.selectedTabIndex === 0) {
+            return this.mainMethodTextEditor;
+        } else if (this.selectedTabIndex === 1) {
+            return this.extensionMethodsTextEditor;
+        } else {
+            return null;
+        }
     }
 }

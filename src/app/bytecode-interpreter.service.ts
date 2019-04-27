@@ -6,7 +6,7 @@ import { numberToRelativeDirection, numberToCardinalDirection } from './jerooDir
 import { Subject } from 'rxjs';
 
 export class RuntimeError extends Error {
-    constructor(message: string, public line_num: number) {
+    constructor(message: string, public pane_num: number, public line_num: number) {
         super(message);
     }
 }
@@ -93,16 +93,16 @@ export class BytecodeInterpreterService {
             case 'NEW': {
                 const tile = matService.getTile(command.b + 1, command.c + 1);
                 if (!matService.isInBounds(command.b + 1, command.c + 1) || tile === TileType.Water) {
-                    throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', command.f);
+                    throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', command.e, command.f);
                 }
                 if (tile === TileType.Net) {
-                    throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', command.f);
+                    throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', command.e, command.f);
                 }
                 if (matService.getJeroo(command.b + 1, command.c + 1) !== null) {
-                    throw new RuntimeError('INSTANTIATION ERROR: Jeroo started on another Jeroo', command.f);
+                    throw new RuntimeError('INSTANTIATION ERROR: Jeroo started on another Jeroo', command.e, command.f);
                 }
                 if (this.jerooArray.length >= 4) {
-                    throw new RuntimeError('INSTANTIATION ERROR: Too many jeroos', command.f);
+                    throw new RuntimeError('INSTANTIATION ERROR: Too many jeroos', command.e, command.f);
                 }
                 try {
                     const direction = numberToCardinalDirection(command.e);
@@ -114,7 +114,7 @@ export class BytecodeInterpreterService {
                     this.jerooArray[command.a] = jeroo;
                     matService.setJeroo(jeroo.getX(), jeroo.getY(), jeroo);
                 } catch (e) {
-                    throw new RuntimeError(e.message, command.f);
+                    throw new RuntimeError(e.message, command.e, command.f);
                 }
                 break;
             }
@@ -132,7 +132,7 @@ export class BytecodeInterpreterService {
                         currentJeroo.hop(matService);
                     }
                 } catch (e) {
-                    throw new RuntimeError(e.message, command.f);
+                    throw new RuntimeError(e.message, command.e, command.f);
                 } finally {
                     const currentJeroo = this.getCurrentJeroo();
                     this.jerooChangeSource.next(currentJeroo);

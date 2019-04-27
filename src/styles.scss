@@ -5,3 +5,12 @@ html, body {
   height: 100%;
   font-family: 'Roboto', sans-serif;
 }
+
+// used by codemirror for line highlighting
+.activeline-highlight {
+  background: rgb(230, 238, 255);
+}
+
+.errorline-highlight {
+  background: rgb(255, 230, 230);
+}
