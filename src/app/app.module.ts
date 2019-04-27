@@ -35,13 +35,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
-import { DashboardDialogAwardsComponent } from './dashboard-dialog-awards/dashboard-dialog-awards.component';
-import { DashboardDialogHistoryComponent } from './dashboard-dialog-history/dashboard-dialog-history.component';
-import { DashboardDialogCopyrightComponent } from './dashboard-dialog-copyright/dashboard-dialog-copyright.component';
+import { DashboardDialogAwardsComponent } from './dashboard/dashboard-dialog-awards/dashboard-dialog-awards.component';
+import { DashboardDialogHistoryComponent } from './dashboard/dashboard-dialog-history/dashboard-dialog-history.component';
+import { DashboardDialogCopyrightComponent } from './dashboard/dashboard-dialog-copyright/dashboard-dialog-copyright.component';
 import { EditorTabAreaComponent } from './editor-tab-area/editor-tab-area.component';
 import { CacheDialogComponent } from './cache-dialog/cache-dialog.component';
 import { JerooStatusComponent } from './jeroo-status/jeroo-status.component';
-import { DashboardDialogAboutComponent } from './dashboard-dialog-about/dashboard-dialog-about.component';
+import { DashboardDialogAboutComponent } from './dashboard/dashboard-dialog-about/dashboard-dialog-about.component';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 
 library.add(
