@@ -91,14 +91,16 @@ export class BytecodeInterpreterService {
                 break;
             }
             case 'NEW': {
-                const tile = matService.getTile(command.b + 1, command.c + 1);
+                const col = command.c + 1;
+                const row = command.b + 1;
+                const tile = matService.getTile(col, row);
                 if (!matService.isInBounds(command.b + 1, command.c + 1) || tile === TileType.Water) {
                     throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', command.e, command.f);
                 }
                 if (tile === TileType.Net) {
                     throw new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', command.e, command.f);
                 }
-                if (matService.getJeroo(command.b + 1, command.c + 1) !== null) {
+                if (matService.getJeroo(col, row) !== null) {
                     throw new RuntimeError('INSTANTIATION ERROR: Jeroo started on another Jeroo', command.e, command.f);
                 }
                 if (this.jerooArray.length >= 4) {
@@ -106,7 +108,7 @@ export class BytecodeInterpreterService {
                 }
                 try {
                     const direction = numberToCardinalDirection(command.e);
-                    const jeroo = new Jeroo(command.a, command.b + 1, command.c + 1, command.d, direction);
+                    const jeroo = new Jeroo(command.a, col, row, command.d, direction);
                     if (tile === TileType.Flower) {
                         jeroo.setInFlower(true);
                     }

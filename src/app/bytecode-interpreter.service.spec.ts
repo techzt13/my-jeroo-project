@@ -74,7 +74,7 @@ describe('BytecodeInterpreterService', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
         matService.setTile(3, 4, TileType.Water);
-        const newInstr = newInstruction('NEW', 0, 2, 3, 0, 0, 0);
+        const newInstr = newInstruction('NEW', 0, 3, 2, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
             .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', 0, 0));
     });
@@ -91,7 +91,7 @@ describe('BytecodeInterpreterService', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
         matService.setTile(6, 3, TileType.Net);
-        const newInstr = newInstruction('NEW', 0, 5, 2, 0, 0, 0);
+        const newInstr = newInstruction('NEW', 0, 2, 5, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
             .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', 0, 0));
     });
@@ -140,7 +140,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert hop hops the jeroo', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        const newInstr = newInstruction('NEW', 0, 1, 0, 0, 1, 0);
+        const newInstr = newInstruction('NEW', 0, 0, 1, 0, 1, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const turnInstr = newInstruction('HOP', 3, 0, 0, 0, 0, 0);
 
@@ -279,7 +279,7 @@ describe('BytecodeInterpreterService', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 1, 1, 1, 2, 0);
-        const neighborJerooInstr = newInstruction('NEW', 1, 0, 1, 0, 0, 0);
+        const neighborJerooInstr = newInstruction('NEW', 1, 1, 0, 0, 0, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const giveInstr = newInstruction('GIVE', 1, 0, 0, 0, 0, 0);
 
@@ -298,7 +298,7 @@ describe('BytecodeInterpreterService', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 1, 1, 1, 2, 0);
-        const neighborJerooInstr = newInstruction('NEW', 1, 2, 1, 0, 0, 0);
+        const neighborJerooInstr = newInstruction('NEW', 1, 1, 2, 0, 0, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const giveInstr = newInstruction('GIVE', 1, 0, 0, 0, 0, 0);
 
@@ -317,7 +317,7 @@ describe('BytecodeInterpreterService', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
-        const neighborJerooInstr = newInstruction('NEW', 1, 0, 1, 0, 0, 0);
+        const neighborJerooInstr = newInstruction('NEW', 1, 1, 0, 0, 0, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const giveInstr = newInstruction('GIVE', 1, 0, 0, 0, 0, 0);
 
@@ -458,7 +458,7 @@ describe('BytecodeInterpreterService', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
-        const neighborJerooInstr = newInstruction('NEW', 1, 0, 1, 0, 0, 0);
+        const neighborJerooInstr = newInstruction('NEW', 1, 1, 0, 0, 0, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const isJerooInstr = newInstruction('ISJEROO', 1, 0, 0, 0, 0, 0);
 
