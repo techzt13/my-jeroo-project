@@ -150,6 +150,7 @@ export class MatrixService {
     }
 
     renderJeroo(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, jeroo: Jeroo, col: number, row: number) {
+        console.log(jeroo);
         const jerooOffset = jeroo.getId() * 2 + 1;
         const directionOffset = jeroo.getDirection();
         if (jeroo.isInFlower()) {
@@ -164,7 +165,7 @@ export class MatrixService {
                 this.tsize,
                 this.tsize
             );
-        } else if (!jeroo.isInWater() && !jeroo.isInNet()) {
+        } else if (!jeroo.isInWater() && !jeroo.isInNet() && !jeroo.isInJeroo()) {
             context.drawImage(
                 imageAtlas,
                 directionOffset * this.tsize,
@@ -180,7 +181,7 @@ export class MatrixService {
             context.drawImage(
                 imageAtlas,
                 0,
-                5 * this.tsize,
+                9 * this.tsize,
                 this.tsize,
                 this.tsize,
                 col * this.tsize,
@@ -192,7 +193,19 @@ export class MatrixService {
             context.drawImage(
                 imageAtlas,
                 1 * this.tsize,
-                5 * this.tsize,
+                9 * this.tsize,
+                this.tsize,
+                this.tsize,
+                col * this.tsize,
+                row * this.tsize,
+                this.tsize,
+                this.tsize
+            );
+        } else if (jeroo.isInJeroo()) {
+            context.drawImage(
+                imageAtlas,
+                2 * this.tsize,
+                9 * this.tsize,
                 this.tsize,
                 this.tsize,
                 col * this.tsize,

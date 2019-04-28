@@ -36,6 +36,7 @@ export class Jeroo {
     private inWater = false;
     private inNet = false;
     private inFlower = false;
+    private inJeroo = false;
     /**
        * Create a new Jeroo
        * @param id A unique numerical identifier for this jeroo.
@@ -120,7 +121,14 @@ export class Jeroo {
         matrixService.setJeroo(this.getX(), this.getY(), null);
         this.x = nextLocation.x;
         this.y = nextLocation.y;
-        if (matrixService.getJeroo(nextLocation.x, nextLocation.y) !== null) {
+
+        const nextJeroo = matrixService.getJeroo(nextLocation.x, nextLocation.y);
+        if (nextJeroo) {
+            nextJeroo.setInJeroo(true);
+            this.inJeroo = true;
+            this.inWater = false;
+            this.inNet = false;
+            this.inFlower = false;
             throw new Error('LOGIC ERROR: Jeroo has collided with another jeroo');
         }
         matrixService.setJeroo(this.getX(), this.getY(), this);
@@ -128,6 +136,7 @@ export class Jeroo {
             this.inFlower = true;
             this.inWater = false;
             this.inNet = false;
+            this.inJeroo = false;
         } else {
             this.inFlower = false;
         }
@@ -135,18 +144,21 @@ export class Jeroo {
             this.inWater = true;
             this.inNet = false;
             this.inFlower = false;
+            this.inJeroo = false;
             throw new Error('LOGIC ERROR: Jeroo is out of bounds');
         }
         if (nextTile === TileType.Water) {
             this.inWater = true;
             this.inNet = false;
             this.inFlower = false;
+            this.inJeroo = false;
             throw new Error('LOGIC ERROR: Jeroo is on water');
         }
         if (nextTile === TileType.Net) {
             this.inNet = true;
             this.inWater = false;
             this.inFlower = false;
+            this.inJeroo = false;
             throw new Error('LOGIC ERROR: Jeroo is on a net');
         }
     }
@@ -290,5 +302,13 @@ export class Jeroo {
 
     setInFlower(val: boolean) {
         this.inFlower = val;
+    }
+
+    isInJeroo() {
+        return this.inJeroo;
+    }
+
+    setInJeroo(val: boolean) {
+        this.inJeroo = val;
     }
 }

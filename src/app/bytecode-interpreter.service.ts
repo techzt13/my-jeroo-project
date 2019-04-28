@@ -21,7 +21,7 @@ export class BytecodeInterpreterService {
     jerooMap: any = [];
     private cmpStack: Array<boolean> = [];
     private pcStack: Array<number> = [];
-    private jerooChangeSource = new Subject<Jeroo>();
+    private jerooChangeSource = new Subject<void>();
     jerooChange$ = this.jerooChangeSource.asObservable();
 
     executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
@@ -122,7 +122,7 @@ export class BytecodeInterpreterService {
                 const direction = numberToRelativeDirection(command.a);
                 const jeroo = this.getCurrentJeroo();
                 jeroo.turn(direction);
-                this.jerooChangeSource.next(jeroo);
+                this.jerooChangeSource.next();
                 break;
             }
             case 'HOP': {
@@ -134,8 +134,7 @@ export class BytecodeInterpreterService {
                 } catch (e) {
                     throw new RuntimeError(e.message, command.e, command.f);
                 } finally {
-                    const currentJeroo = this.getCurrentJeroo();
-                    this.jerooChangeSource.next(currentJeroo);
+                    this.jerooChangeSource.next();
                 }
                 break;
             }
