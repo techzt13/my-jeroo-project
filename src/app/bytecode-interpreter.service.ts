@@ -114,7 +114,7 @@ export class BytecodeInterpreterService {
                     this.jerooArray[command.a] = jeroo;
                     matService.setJeroo(jeroo.getX(), jeroo.getY(), jeroo);
                 } catch (e) {
-                    throw new RuntimeError(e.message, command.e, command.f);
+                    throw new RuntimeError(e.message, 0, command.f);
                 }
                 break;
             }

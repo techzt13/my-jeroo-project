@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { BytecodeInterpreterService, RuntimeError } from './bytecode-interpreter.service';
 import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
-import { TileType } from './matrixConstants';
+import { TileType } from './jerooTileType';
 import { CardinalDirection } from './jerooDirection';
 
 describe('BytecodeInterpreterService', () => {
@@ -59,7 +59,7 @@ describe('BytecodeInterpreterService', () => {
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 0, 0, -1, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
-            .toThrow(new RuntimeError('INSTANTIATION ERROR: flowers < 0', 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: flowers < 0', 0, 0));
     });
 
     it('assert new with invalid direction throws error', () => {
@@ -67,7 +67,7 @@ describe('BytecodeInterpreterService', () => {
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 0, 0, 0, 8, 0);
         expect(() => service.executeBytecode(newInstr, matService))
-            .toThrow(new RuntimeError('Unknown cardinal direction', 0));
+            .toThrow(new RuntimeError('Unknown cardinal direction', 0, 0));
     });
 
     it('assert new on water throws error', () => {
@@ -76,7 +76,7 @@ describe('BytecodeInterpreterService', () => {
         matService.setTile(3, 4, TileType.Water);
         const newInstr = newInstruction('NEW', 0, 2, 3, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
-            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', 0, 0));
     });
 
     it('assert new outside of bounds throws error', () => {
@@ -84,7 +84,7 @@ describe('BytecodeInterpreterService', () => {
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 50, -8, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
-            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', 0, 0));
     });
 
     it('assert new on net throws error', () => {
@@ -93,7 +93,7 @@ describe('BytecodeInterpreterService', () => {
         matService.setTile(6, 3, TileType.Net);
         const newInstr = newInstruction('NEW', 0, 5, 2, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
-            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', 0, 0));
     });
 
     it('assert new jeroo on another jeroo throws error', () => {
@@ -104,7 +104,7 @@ describe('BytecodeInterpreterService', () => {
 
         service.executeBytecode(newInstr1, matService);
         expect(() => service.executeBytecode(newInstr2, matService))
-            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started on another Jeroo', 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started on another Jeroo', 0, 0));
     });
 
     it('assert new jeroo fails on too many jeroos', () => {
@@ -121,7 +121,7 @@ describe('BytecodeInterpreterService', () => {
         service.executeBytecode(newInstr3, matService);
         service.executeBytecode(newInstr4, matService);
         expect(() => service.executeBytecode(newInstr5, matService))
-            .toThrow(new RuntimeError('INSTANTIATION ERROR: Too many jeroos', 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: Too many jeroos', 0, 0));
     });
 
     it('assert turn turns the jeroo', () => {
@@ -164,7 +164,7 @@ describe('BytecodeInterpreterService', () => {
         service.executeBytecode(newInstr, matService);
         service.executeBytecode(csrInstr, matService);
         expect(() => service.executeBytecode(turnInstr, matService))
-            .toThrow(new RuntimeError('LOGIC ERROR: Jeroo is on a net', 0));
+            .toThrow(new RuntimeError('LOGIC ERROR: Jeroo is on a net', 0, 0));
     });
 
     it('assert hopping on water throws error', () => {
@@ -178,7 +178,7 @@ describe('BytecodeInterpreterService', () => {
         service.executeBytecode(newInstr, matService);
         service.executeBytecode(csrInstr, matService);
         expect(() => service.executeBytecode(turnInstr, matService))
-            .toThrow(new RuntimeError('LOGIC ERROR: Jeroo is on water', 0));
+            .toThrow(new RuntimeError('LOGIC ERROR: Jeroo is on water', 0, 0));
     });
 
     it('assert hopping on another jeroo throws error', () => {
@@ -193,7 +193,7 @@ describe('BytecodeInterpreterService', () => {
         service.executeBytecode(newInstr, matService);
         service.executeBytecode(csrInstr, matService);
         expect(() => service.executeBytecode(turnInstr, matService))
-            .toThrow(new RuntimeError('LOGIC ERROR: Jeroo has collided with another jeroo', 0));
+            .toThrow(new RuntimeError('LOGIC ERROR: Jeroo has collided with another jeroo', 0, 0));
     });
 
     it('assert toss decreases flower count', () => {
