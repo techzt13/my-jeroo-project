@@ -75,7 +75,8 @@ export class TextEditorComponent implements AfterViewInit {
     }
 
     formatSelection() {
-        this.editor.execCommand('indentAuto');
+        const totalLines = (this.editor as any).lineCount();
+        (this.editor as any).autoFormatRange({line: 0, ch: 0}, {line: totalLines});
     }
 
     highlightLine(lineNum: number) {
