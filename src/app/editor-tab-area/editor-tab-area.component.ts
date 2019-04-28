@@ -6,7 +6,6 @@ import { SelectedLanguage } from '../dashboard/SelectedLanguage';
 import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { pythonMode } from '../codemirror/pythonMode';
 
 interface Language {
     value: SelectedLanguage;
@@ -302,7 +301,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
         }
     }
 
-    private loadCodeFromString(code: string) {
+    loadCodeFromString(code: string) {
         let mainMethodCodeBuffer = '';
         let extensionMethodCodeBuffer = '';
         let usingExtensionCodeBuffer = false;
@@ -385,6 +384,14 @@ export class EditorTabAreaComponent implements AfterViewInit {
             return this.extensionMethodsTextEditor;
         } else {
             return null;
+        }
+    }
+
+    clearCode() {
+        if (!this.mainMethodTextEditor.isReadOnly() && !this.extensionMethodsTextEditor.isReadOnly())  {
+            this.mainMethodTextEditor.setText('');
+            this.extensionMethodsTextEditor.setText('');
+            this.resetCache();
         }
     }
 }

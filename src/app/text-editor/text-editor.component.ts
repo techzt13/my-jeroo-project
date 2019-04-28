@@ -101,6 +101,10 @@ export class TextEditorComponent implements AfterViewInit {
         }
     }
 
+    isReadOnly() {
+        return this.editor.getOption('readOnly') as boolean;
+    }
+
     setReadOnly(readOnly: boolean) {
         this.editor.setOption('readOnly', readOnly);
     }

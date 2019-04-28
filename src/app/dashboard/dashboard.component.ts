@@ -25,9 +25,11 @@ const cacheInterval = 1000;
 })
 export class DashboardComponent implements AfterViewInit {
     @ViewChild('mapFileInput') mapFileInput: ElementRef;
+    @ViewChild('codeFileInput') codeFileInput: ElementRef;
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
     @ViewChild('jerooEditor') jerooEditor: EditorTabAreaComponent;
     @ViewChild('mapSaver') mapSaver: ElementRef;
+    @ViewChild('codeSaver') codeSaver: ElementRef;
 
     private speeds = [475, 350, 225, 125, 25, 2];
     runtimeSpeed = this.speeds[2];
@@ -122,6 +124,44 @@ export class DashboardComponent implements AfterViewInit {
         }
     }
 
+    onNewFileClick() {
+        this.jerooEditor.clearCode();
+    }
+
+    onOpenFileClick() {
+        (this.codeFileInput.nativeElement as HTMLInputElement).click();
+    }
+
+    codeFileSelected(file: File) {
+        if (this.editorEditingEnabled()) {
+            const reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+            reader.onload = (readerEvent: any) => {
+                const content: string = readerEvent.target.result;
+                this.jerooEditor.loadCodeFromString(content);
+            };
+        }
+    }
+
+    onSaveClick() {
+        const codeSaver = (this.codeSaver.nativeElement as HTMLAnchorElement);
+        const saveBlob = (function () {
+            return function (b: Blob, fileName: string) {
+                const url = window.URL.createObjectURL(b);
+                codeSaver.href = url;
+                codeSaver.download = fileName;
+                codeSaver.click();
+                window.URL.revokeObjectURL(url);
+            };
+        }());
+
+        const jerooCodeString = this.jerooEditor.createJerooCode();
+        const blob = new Blob([jerooCodeString], {
+            type: 'text/plain'
+        });
+        saveBlob(blob, 'code.jsc');
+    }
+
     onUndoClick() {
         this.jerooEditor.undo();
     }
@@ -200,7 +240,7 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     mapFileSelected(file: File) {
-        if (this.jerooEditorState.reset) {
+        if (this.matrixEditingEnabled()) {
             const reader = new FileReader();
             reader.readAsText(file, 'UTF-8');
             reader.onload = (readerEvent: any) => {
@@ -213,7 +253,6 @@ export class DashboardComponent implements AfterViewInit {
 
     saveMapFile() {
         const mapSaver = (this.mapSaver.nativeElement as HTMLAnchorElement);
-        // kind of a hack to get the browser to save the map data to a file
         const saveBlob = (function () {
             return function (b: Blob, fileName: string) {
                 const url = window.URL.createObjectURL(b);
