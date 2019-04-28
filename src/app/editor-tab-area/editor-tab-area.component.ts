@@ -6,6 +6,7 @@ import { SelectedLanguage } from '../dashboard/SelectedLanguage';
 import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
+import { pythonMode } from '../codemirror/pythonMode';
 
 interface Language {
     value: SelectedLanguage;
@@ -345,7 +346,18 @@ export class EditorTabAreaComponent implements AfterViewInit {
     }
 
     hasCachedCode() {
-        return this.storage.get(codeCache) as boolean;
+        const cachedCode = this.storage.get(codeCache) as string;
+        const starterJavaCode = '@Java@@';
+        const starterVBCode = '@VB@@';
+        const starterPythonCode = '@PYTHON@@';
+        if (cachedCode) {
+            const cachedCodeNoWhitespace = cachedCode.replace(/\s+/, '').trim();
+            return !(cachedCodeNoWhitespace === starterJavaCode
+                     || cachedCodeNoWhitespace === starterVBCode
+                     || cachedCodeNoWhitespace === starterPythonCode);
+        } else {
+            return false;
+        }
     }
 
     loadFromCache() {

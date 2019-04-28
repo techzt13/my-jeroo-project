@@ -197,7 +197,12 @@ export class JerooMatrixComponent implements AfterViewInit {
     }
 
     hasCachedMatrix() {
-        return this.storage.get(boardCache) as boolean;
+        const cachedMap = this.storage.get(boardCache);
+        if (cachedMap) {
+            return !(cachedMap === this.matrixService.toString());
+        } else {
+            return false;
+        }
     }
 
     loadCachedMap() {

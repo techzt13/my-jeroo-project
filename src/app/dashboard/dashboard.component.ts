@@ -98,9 +98,7 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-
         if (this.jerooEditor.hasCachedCode() || this.jerooMatrix.hasCachedMatrix()) {
-            // if (this.storage.get(fileCache) || this.storage.get('board')) {
             // setTimeout prevents a console error
             // see: https://github.com/angular/material2/issues/5268
             setTimeout(() => {

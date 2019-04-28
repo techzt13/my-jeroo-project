@@ -123,7 +123,7 @@ export class MatrixService {
      * @param context 2D rendering context.
      */
     render(context: CanvasRenderingContext2D) {
-        if (this.imageAtlas == null) {
+        if (!this.imageAtlas) {
             this.getTileAtlasObs().subscribe(imageAtlas => {
                 this.renderTiles(context, imageAtlas);
                 this.imageAtlas = imageAtlas;
@@ -164,18 +164,6 @@ export class MatrixService {
                 this.tsize,
                 this.tsize
             );
-        } else if (!jeroo.isInWater() && !jeroo.isInNet() && !jeroo.isInJeroo()) {
-            context.drawImage(
-                imageAtlas,
-                directionOffset * this.tsize,
-                jerooOffset * this.tsize,
-                this.tsize,
-                this.tsize,
-                col * this.tsize,
-                row * this.tsize,
-                this.tsize,
-                this.tsize
-            );
         } else if (jeroo.isInWater()) {
             context.drawImage(
                 imageAtlas,
@@ -205,6 +193,18 @@ export class MatrixService {
                 imageAtlas,
                 2 * this.tsize,
                 9 * this.tsize,
+                this.tsize,
+                this.tsize,
+                col * this.tsize,
+                row * this.tsize,
+                this.tsize,
+                this.tsize
+            );
+        } else {
+            context.drawImage(
+                imageAtlas,
+                directionOffset * this.tsize,
+                jerooOffset * this.tsize,
                 this.tsize,
                 this.tsize,
                 col * this.tsize,
