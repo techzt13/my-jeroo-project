@@ -150,7 +150,6 @@ export class MatrixService {
     }
 
     renderJeroo(context: CanvasRenderingContext2D, imageAtlas: HTMLImageElement, jeroo: Jeroo, col: number, row: number) {
-        console.log(jeroo);
         const jerooOffset = jeroo.getId() * 2 + 1;
         const directionOffset = jeroo.getDirection();
         if (jeroo.isInFlower()) {
