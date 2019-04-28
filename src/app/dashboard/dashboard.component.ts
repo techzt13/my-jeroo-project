@@ -28,8 +28,7 @@ export class DashboardComponent implements AfterViewInit {
     @ViewChild('codeFileInput') codeFileInput: ElementRef;
     @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
     @ViewChild('jerooEditor') jerooEditor: EditorTabAreaComponent;
-    @ViewChild('mapSaver') mapSaver: ElementRef;
-    @ViewChild('codeSaver') codeSaver: ElementRef;
+    @ViewChild('fileSaver') fileSaver: ElementRef;
 
     private speeds = [475, 350, 225, 125, 25, 2];
     runtimeSpeed = this.speeds[2];
@@ -144,23 +143,13 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onSaveClick() {
-        const codeSaver = (this.codeSaver.nativeElement as HTMLAnchorElement);
-        const saveBlob = (function () {
-            return function (b: Blob, fileName: string) {
-                const url = window.URL.createObjectURL(b);
-                codeSaver.href = url;
-                codeSaver.download = fileName;
-                codeSaver.click();
-                window.URL.revokeObjectURL(url);
-            };
-        }());
-
         const jerooCodeString = this.jerooEditor.createJerooCode();
         const blob = new Blob([jerooCodeString], {
             type: 'text/plain'
         });
-        saveBlob(blob, 'code.jsc');
+        this.saveBlob(blob, 'code.jsc');
     }
+
 
     onUndoClick() {
         this.jerooEditor.undo();
@@ -252,22 +241,26 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     saveMapFile() {
-        const mapSaver = (this.mapSaver.nativeElement as HTMLAnchorElement);
-        const saveBlob = (function () {
-            return function (b: Blob, fileName: string) {
-                const url = window.URL.createObjectURL(b);
-                mapSaver.href = url;
-                mapSaver.download = fileName;
-                mapSaver.click();
-                window.URL.revokeObjectURL(url);
-            };
-        }());
-
         const jerooMapString = this.matrixService.toString();
         const blob = new Blob([jerooMapString], {
             type: 'text/plain'
         });
-        saveBlob(blob, 'map.jev');
+        this.saveBlob(blob, 'map.jev');
+    }
+
+    private saveBlob(blob: Blob, fileName: string) {
+        const fileSaver = (this.fileSaver.nativeElement as HTMLAnchorElement);
+        const saveBlob = (function () {
+            return function () {
+                const url = window.URL.createObjectURL(blob);
+                fileSaver.href = url;
+                fileSaver.download = fileName;
+                fileSaver.click();
+                window.URL.revokeObjectURL(url);
+            };
+        }());
+
+        saveBlob();
     }
 
     printMap() {
