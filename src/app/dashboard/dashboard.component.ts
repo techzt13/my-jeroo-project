@@ -10,6 +10,7 @@ import { EditorState, EditorTabAreaComponent } from '../editor-tab-area/editor-t
 import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
 import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
+import { PrintService } from '../print.service';
 
 interface Speed {
     name: string;
@@ -54,6 +55,7 @@ export class DashboardComponent implements AfterViewInit {
         private matrixService: MatrixService,
         private hotkeysService: HotkeysService,
         private messageService: MessageService,
+        private printService: PrintService,
         public dialog: MatDialog
     ) {
         this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
@@ -150,6 +152,9 @@ export class DashboardComponent implements AfterViewInit {
         this.saveBlob(blob, 'code.jsc');
     }
 
+    onPrintClick() {
+        // this.printService.printDocument('map');
+    }
 
     onUndoClick() {
         this.jerooEditor.undo();
@@ -264,22 +269,7 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     printMap() {
-        const dataUrl = this.jerooMatrix.getCanvas().toDataURL();
-        const windowContent = `
-<!DOCTYPE html>
-<html>
-<head><title>Jeroo Map</title></head>
-<body>
-<img src="${dataUrl}">
-</body>
-</html>
-`;
-        const printWindow = window.open('', '', 'width=340,height=260');
-        printWindow.document.open();
-        printWindow.document.write(windowContent);
-        printWindow.document.close();
-        printWindow.print();
-        printWindow.close();
+        this.printService.printDocument('map');
     }
 
     changeMapSize() {

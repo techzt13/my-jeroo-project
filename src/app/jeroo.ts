@@ -175,7 +175,7 @@ export class Jeroo {
             const nextLocation = this.getLocation(RelativeDirection.Ahead);
             const nextTile = matrixService.getTile(nextLocation.x, nextLocation.y);
             if (nextTile === TileType.Net) {
-                matrixService.setTile(nextLocation.x, nextLocation.y, TileType.Grass);
+                matrixService.setDynamicTile(nextLocation.x, nextLocation.y, TileType.Grass);
             }
         }
     }
@@ -188,7 +188,7 @@ export class Jeroo {
     plant(matrixService: MatrixService) {
         if (this.numFlowers > 0) {
             this.numFlowers--;
-            matrixService.setTile(this.x, this.y, TileType.Flower);
+            matrixService.setDynamicTile(this.x, this.y, TileType.Flower);
         }
     }
 
@@ -221,7 +221,7 @@ export class Jeroo {
             this.inFlower = false;
             this.inWater = false;
             this.inNet = false;
-            matrixService.setTile(this.x, this.y, TileType.Grass);
+            matrixService.setDynamicTile(this.x, this.y, TileType.Grass);
         }
     }
 

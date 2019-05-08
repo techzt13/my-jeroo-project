@@ -65,9 +65,10 @@ export class JerooMatrixComponent implements AfterViewInit {
                 this.matrixService.setCols(+data.xValue + 2);
                 this.matrixService.setRows(+data.yValue + 2);
                 this.matrixService.resetMap();
+                this.matrixService.resetDynamicMap();
                 this.matrixService.resetJeroos();
                 this.redraw();
-                this.saveInLocal(boardCache, this.matrixService.getMapString());
+                this.saveInLocal(boardCache, this.matrixService.toString());
             }
         });
     }
@@ -89,9 +90,10 @@ export class JerooMatrixComponent implements AfterViewInit {
             if (cont) {
                 this.matrixService.resetMap();
                 this.matrixService.resetJeroos();
+                this.matrixService.resetDynamicMap();
                 // if the board is cleared, also save into service incase the size has been changed
                 this.saveInLocal(boardCache, this.matrixService.toString());
-                this.saveInLocal(boardCache, this.matrixService.getMapString());
+                this.saveInLocal(boardCache, this.matrixService.toString());
                 this.matrixService.render(this.context);
             }
         });
@@ -126,7 +128,7 @@ export class JerooMatrixComponent implements AfterViewInit {
     canvasGestureUp() {
         this.mouseDown = false;
         // save board when user is done editing
-        this.saveInLocal(boardCache, this.matrixService.getMapString());
+        this.saveInLocal(boardCache, this.matrixService.toString());
     }
 
     canvasMouseDown(event: MouseEvent) {
@@ -178,10 +180,9 @@ export class JerooMatrixComponent implements AfterViewInit {
             // update the col and row
             if (this.editingEnabled && this.mouseDown && this.selectedTileType !== null) {
                 // only re-render if we change the map
-                if (this.matrixService.getTile(tileCol, tileRow) !== this.selectedTileType) {
-                    this.matrixService.setTile(tileCol, tileRow, this.selectedTileType);
+                if (this.matrixService.getStaticTile(tileCol, tileRow) !== this.selectedTileType) {
+                    this.matrixService.setStaticTile(tileCol, tileRow, this.selectedTileType);
                     this.matrixService.render(this.context);
-                    this.matrixService.setMapString(this.matrixService.toString());
                 }
             }
         } else {
@@ -213,8 +214,7 @@ export class JerooMatrixComponent implements AfterViewInit {
 
     resetState() {
         this.matrixService.resetJeroos();
-        const map = this.matrixService.getMapString();
-        this.matrixService.genMapFromString(map);
+        this.matrixService.resetDynamicMap();
         this.redraw();
     }
 }

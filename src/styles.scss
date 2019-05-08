@@ -14,3 +14,27 @@ html, body {
 .errorline-highlight {
   background: rgb(255, 230, 230);
 }
+
+// hide the main display while printing
+@media print {
+  app-root > * {
+    display: none;
+  }
+
+  .mat-menu-content {
+    display: none;
+  }
+
+  app-root app-print-layout {
+    display: block;
+  }
+}
+
+// set jeroo-matrix size to it's parent
+.jeroo-matrix {
+  height: 100%;
+  max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

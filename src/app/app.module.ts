@@ -43,6 +43,9 @@ import { CacheDialogComponent } from './cache-dialog/cache-dialog.component';
 import { JerooStatusComponent } from './jeroo-status/jeroo-status.component';
 import { DashboardDialogAboutComponent } from './dashboard/dashboard-dialog-about/dashboard-dialog-about.component';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
+import { PrintLayoutComponent } from './print-layout/print-layout.component';
+import { PrintMapComponent } from './print-layout/print-map/print-map.component';
+import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
 
 library.add(
     faFile,
@@ -79,7 +82,10 @@ library.add(
         DashboardDialogAwardsComponent,
         DashboardDialogHistoryComponent,
         DashboardDialogCopyrightComponent,
-        WarningDialogComponent
+        WarningDialogComponent,
+        PrintLayoutComponent,
+        PrintMapComponent,
+        PrintCodeComponent
     ],
     imports: [
         BrowserModule,

@@ -155,6 +155,7 @@ export class BytecodeInterpreterService {
             }
             case 'PICK': {
                 this.getCurrentJeroo().pick(matService);
+                this.jerooChangeSource.next();
                 break;
             }
             case 'TRUE': {
