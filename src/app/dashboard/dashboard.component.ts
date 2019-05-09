@@ -153,7 +153,7 @@ export class DashboardComponent implements AfterViewInit {
     }
 
     onPrintClick() {
-        // this.printService.printDocument('map');
+        this.printService.printDocument('code');
     }
 
     onUndoClick() {

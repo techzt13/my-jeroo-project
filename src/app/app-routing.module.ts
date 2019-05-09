@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintMapComponent } from './print-layout/print-map/print-map.component';
+import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
 
 
 const routes: Routes = [
@@ -13,9 +14,14 @@ const routes: Routes = [
         path: 'print',
         outlet: 'print',
         component: PrintLayoutComponent,
-        children: [{
-            path: 'map', component: PrintMapComponent
-        }]
+        children: [
+            {
+                path: 'map', component: PrintMapComponent
+            },
+            {
+                path: 'code', component: PrintCodeComponent
+            }
+        ]
     }
 ];
 

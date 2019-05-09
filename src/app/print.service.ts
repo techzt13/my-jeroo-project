@@ -16,8 +16,8 @@ export class PrintService {
 
     onDataReady() {
         setTimeout(() => {
-            // window.print();
-            // this.router.navigate([{ outlets: { print: null }}]);
+            window.print();
+            this.router.navigate([{ outlets: { print: null }}]);
         });
     }
 }

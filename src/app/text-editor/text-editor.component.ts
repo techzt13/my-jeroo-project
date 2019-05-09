@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, Input } from '@angular/core';
 import { SelectedLanguage } from '../dashboard/SelectedLanguage';
 import { CodemirrorService } from '../codemirror/codemirror.service';
 
@@ -9,6 +9,23 @@ import { CodemirrorService } from '../codemirror/codemirror.service';
 export class TextEditorComponent implements AfterViewInit {
     @ViewChild('editorTextarea') editorTextArea: ElementRef;
     private editor: CodeMirror.Editor = null;
+
+    @Output()
+    codeChange = new EventEmitter<string>();
+    @Input()
+    get code() {
+        if (this.editor) {
+            return this.editor.getValue();
+        }
+    }
+    set code(val) {
+        if (this.editor) {
+            const cursor = (this.editor as any).getCursor();
+            this.editor.setValue(val);
+            (this.editor as any).setCursor(cursor);
+            this.codeChange.emit(this.editor.getValue());
+        }
+    }
 
     constructor(private codemirrorService: CodemirrorService) { }
 
@@ -31,6 +48,10 @@ export class TextEditorComponent implements AfterViewInit {
         this.editor.setOption('autoCloseBrackets', '{}()');
         this.editor.setSize(null, 500);
         this.editor.refresh();
+
+        this.editor.on('change', (editor) => {
+            this.codeChange.emit(editor.getValue());
+        });
     }
 
     setMode(language: SelectedLanguage) {
@@ -47,7 +68,7 @@ export class TextEditorComponent implements AfterViewInit {
     }
 
     getText() {
-        return this.editor.getValue();
+        return this.code;
     }
 
     setText(incomingString: string) {

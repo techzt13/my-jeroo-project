@@ -6,6 +6,7 @@ import { SelectedLanguage } from '../dashboard/SelectedLanguage';
 import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
+import { CodeService } from '../code.service';
 
 interface Language {
     value: SelectedLanguage;
@@ -58,6 +59,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
     constructor(private messageService: MessageService,
                 private bytecodeService: BytecodeInterpreterService,
                 private matrixService: MatrixService,
+                public codeService: CodeService,
                 public dialog: MatDialog,
                 @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
     }
