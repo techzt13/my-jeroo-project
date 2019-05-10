@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Print Code Options</h1>
+<div mat-dialog-content>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+        <label id="print-opitons-radio-group-label">Select a range to print</label>
+        <mat-radio-group aria-labelledby="print-options-radio-group-label" [(ngModel)]="selectedOption">
+            <div *ngFor="let option of options">
+                <mat-radio-button  [value]="option.value">
+                    {{option.viewValue}}
+                </mat-radio-button>
+            </div>
+        </mat-radio-group>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="onOkClick()">OK</button>
+    <button mat-raised-button (click)="onCancelClick()">Cancel</button>
+</div>

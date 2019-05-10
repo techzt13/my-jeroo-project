@@ -46,6 +46,7 @@ import { WarningDialogComponent } from './warning-dialog/warning-dialog.componen
 import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintMapComponent } from './print-layout/print-map/print-map.component';
 import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
+import { PrintCodeDialogComponent } from './print-layout/print-code/print-code-dialog/print-code-dialog.component';
 
 library.add(
     faFile,
@@ -85,7 +86,8 @@ library.add(
         WarningDialogComponent,
         PrintLayoutComponent,
         PrintMapComponent,
-        PrintCodeComponent
+        PrintCodeComponent,
+        PrintCodeDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -108,7 +110,8 @@ library.add(
         DashboardDialogAwardsComponent,
         DashboardDialogHistoryComponent,
         DashboardDialogCopyrightComponent,
-        WarningDialogComponent
+        WarningDialogComponent,
+        PrintCodeDialogComponent
     ]
 })
 export class AppModule { }
