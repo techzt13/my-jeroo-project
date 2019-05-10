@@ -98,6 +98,22 @@ export class DashboardComponent implements AfterViewInit {
             window.open(this.getHelpUrl());
             return false;
         }));
+        this.hotkeysService.add(new Hotkey('ctrl+n', (_event: KeyboardEvent): boolean => {
+            this.onNewFileClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('ctrl+o', (_event: KeyboardEvent): boolean => {
+            this.onOpenFileClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('ctrl+s', (_event: KeyboardEvent): boolean => {
+            this.onSaveClick();
+            return false;
+        }));
+        this.hotkeysService.add(new Hotkey('ctrl+p', (_event: KeyboardEvent): boolean => {
+            this.onPrintClick();
+            return false;
+        }));
     }
 
     ngAfterViewInit() {

@@ -14,7 +14,8 @@ interface Option {
 
 @Component({
     selector: 'app-print-code-dialog',
-    templateUrl: './print-code-dialog.component.html'
+    templateUrl: './print-code-dialog.component.html',
+    styleUrls: ['./print-code-dialog.component.scss']
 })
 export class PrintCodeDialogComponent {
     options: Option[] = [

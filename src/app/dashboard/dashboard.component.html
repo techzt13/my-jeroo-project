@@ -85,18 +85,18 @@
             <mat-menu #file="matMenu">
                 <ng-template matMenuContent>
                     <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onNewFileClick()">
-                        <fa-icon icon="file"></fa-icon><span class="menu-text">New</span>
+                        <fa-icon icon="file"></fa-icon><span class="menu-text">New</span><span class="shortcut-tip">Ctrl+N</span>
                     </button>
                     <button mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onOpenFileClick()">
-                        <fa-icon icon="folder"></fa-icon><span class="menu-text">Open</span>
+                        <fa-icon icon="folder"></fa-icon><span class="menu-text">Open</span><span class="shortcut-tip">Ctrl+O</span>
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="onSaveClick()">
-                        <fa-icon icon="save"></fa-icon><span class="menu-text">Save</span>
+                        <fa-icon icon="save"></fa-icon><span class="menu-text">Save</span><span class="shortcut-tip">Ctrl+S</span>
                     </button>
                     <mat-divider></mat-divider>
                     <button mat-menu-item (click)="onPrintClick()">
-                        <fa-icon icon="folder-open"></fa-icon><span class="menu-text">Print</span>
+                        <fa-icon icon="folder-open"></fa-icon><span class="menu-text">Print</span><span class="shortcut-tip">Ctrl+P</span>
                     </button>
                 </ng-template>
             </mat-menu>

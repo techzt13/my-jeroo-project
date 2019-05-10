@@ -25,7 +25,7 @@ export class PrintCodeComponent implements AfterViewInit {
         setTimeout(() => {
             const dialogRef = this.dialog.open(PrintCodeDialogComponent);
             dialogRef.afterClosed().subscribe((result: PrintCodeDialogResult) => {
-                if (result !== null) {
+                if (result !== null && result !== undefined) {
                     if (result === PrintCodeDialogResult.PrintMainMethod) {
                         this.displayMainMethod = true;
                     } else if (result === PrintCodeDialogResult.PrintExtensionMethods) {
