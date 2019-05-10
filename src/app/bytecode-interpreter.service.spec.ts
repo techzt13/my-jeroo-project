@@ -73,7 +73,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert new on water throws error', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(3, 4, TileType.Water);
+        matService.setStaticTile(3, 4, TileType.Water);
         const newInstr = newInstruction('NEW', 0, 3, 2, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
             .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in the water', 0, 0));
@@ -90,7 +90,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert new on net throws error', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(6, 3, TileType.Net);
+        matService.setStaticTile(6, 3, TileType.Net);
         const newInstr = newInstruction('NEW', 0, 2, 5, 0, 0, 0);
         expect(() => service.executeBytecode(newInstr, matService))
             .toThrow(new RuntimeError('INSTANTIATION ERROR: Jeroo started in a net', 0, 0));
@@ -156,7 +156,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert hopping on a net throws error', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(2, 3, TileType.Net);
+        matService.setStaticTile(2, 3, TileType.Net);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const turnInstr = newInstruction('HOP', 1, 0, 0, 0, 0, 0);
@@ -170,7 +170,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert hopping on water throws error', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(2, 3, TileType.Water);
+        matService.setStaticTile(2, 3, TileType.Water);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const turnInstr = newInstruction('HOP', 1, 0, 0, 0, 0, 0);
@@ -214,7 +214,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert toss destroys a net', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(2, 3, TileType.Net);
+        matService.setStaticTile(2, 3, TileType.Net);
         const newInstr = newInstruction('NEW', 0, 1, 1, 1, 2, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const tossInstr = newInstruction('TOSS', 0, 0, 0, 0, 0, 0);
@@ -229,7 +229,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert tossing flower with no flowers does nothing', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(1, 2, TileType.Net);
+        matService.setStaticTile(1, 2, TileType.Net);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const tossInstr = newInstruction('TOSS', 0, 0, 0, 0, 0, 0);
@@ -391,7 +391,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert isNet pushes 1 to the stack if there is a net', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(1, 2, TileType.Net);
+        matService.setStaticTile(1, 2, TileType.Net);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const isNetInstr = newInstruction('ISNET', 1, 0, 0, 0, 0, 0);
@@ -424,7 +424,7 @@ describe('BytecodeInterpreterService', () => {
     it('assert isWater pushes true to the stack if there is water', () => {
         const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
         const matService: MatrixService = TestBed.get(MatrixService);
-        matService.setTile(1, 2, TileType.Water);
+        matService.setStaticTile(1, 2, TileType.Water);
         const newInstr = newInstruction('NEW', 0, 1, 1, 0, 2, 0);
         const csrInstr = newInstruction('CSR', 0, 0, 0, 0, 0, 0);
         const isWaterInstr = newInstruction('ISWATER', 1, 0, 0, 0, 0, 0);

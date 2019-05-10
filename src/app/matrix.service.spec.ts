@@ -11,7 +11,7 @@ describe('MatrixService', () => {
 
     it('get and set correctly find entities', () => {
         const service: MatrixService = TestBed.get(MatrixService);
-        service.setTile(1, 1, TileType.Water);
+        service.setStaticTile(1, 1, TileType.Water);
         expect(service.getTile(1, 1)).toBe(TileType.Water);
     });
 
@@ -24,7 +24,7 @@ describe('MatrixService', () => {
 
     it('reset map resets map', () => {
         const service: MatrixService = TestBed.get(MatrixService);
-        service.setTile(1, 1, TileType.Water);
+        service.setStaticTile(1, 1, TileType.Water);
         service.resetMap();
         expect(service.getTile(1, 1)).toBe(TileType.Grass);
     });
@@ -39,9 +39,9 @@ describe('MatrixService', () => {
 
     it('toString correctly converts map to a string', () => {
         const service: MatrixService = TestBed.get(MatrixService);
-        service.setTile(6, 6, TileType.Water);
-        service.setTile(2, 3, TileType.Flower);
-        service.setTile(24, 24, TileType.Net);
+        service.setStaticTile(6, 6, TileType.Water);
+        service.setStaticTile(2, 3, TileType.Flower);
+        service.setStaticTile(24, 24, TileType.Net);
 
         const actual = service.toString();
         const expected =
