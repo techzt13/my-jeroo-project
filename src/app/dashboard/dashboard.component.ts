@@ -11,6 +11,7 @@ import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
 import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
 import { PrintService } from '../print.service';
+import { CodeService } from '../code.service';
 
 interface Speed {
     name: string;
@@ -56,6 +57,7 @@ export class DashboardComponent implements AfterViewInit {
         private hotkeysService: HotkeysService,
         private messageService: MessageService,
         private printService: PrintService,
+        private codeService: CodeService,
         public dialog: MatDialog
     ) {
         this.hotkeysService.add(new Hotkey('f2', (_event: KeyboardEvent): boolean => {
@@ -139,13 +141,13 @@ export class DashboardComponent implements AfterViewInit {
             reader.readAsText(file, 'UTF-8');
             reader.onload = (readerEvent: any) => {
                 const content: string = readerEvent.target.result;
-                this.jerooEditor.loadCodeFromString(content);
+                this.codeService.loadCodeFromStr(content);
             };
         }
     }
 
     onSaveClick() {
-        const jerooCodeString = this.jerooEditor.createJerooCode();
+        const jerooCodeString = this.codeService.genCodeStr();
         const blob = new Blob([jerooCodeString], {
             type: 'text/plain'
         });

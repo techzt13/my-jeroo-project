@@ -2,11 +2,10 @@ import { AfterViewInit, Component, EventEmitter, Inject, Input, Output, ViewChil
 import { MatDialog } from '@angular/material';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter.service';
-import { SelectedLanguage } from '../dashboard/SelectedLanguage';
 import { MatrixService } from '../matrix.service';
 import { MessageService } from '../message.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { CodeService } from '../code.service';
+import { CodeService, SelectedLanguage } from '../code.service';
 
 interface Language {
     value: SelectedLanguage;
@@ -38,11 +37,9 @@ export class EditorTabAreaComponent implements AfterViewInit {
         { viewValue: 'PYTHON', value: SelectedLanguage.Python }
     ];
 
-    selectedLanguage = SelectedLanguage.Java;
     selectedTabIndex = 0;
     private instructions: Array<Instruction> = null;
     private previousInstruction: Instruction = null;
-
 
     editorStateValue: EditorState;
     @Output()
@@ -75,7 +72,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
         if (this.editorState.reset || this.instructions === null) {
             this.messageService.clear();
             this.messageService.add('Compiling...');
-            const jerooCode = this.createJerooCode();
+            const jerooCode = this.codeService.genCodeStr();
             const result = JerooCompiler.compile(jerooCode);
             if (result.successful) {
                 this.instructions = result.bytecode;
@@ -109,7 +106,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
         if (this.editorState.reset || this.instructions === null) {
             this.messageService.clear();
             this.messageService.add('Compiling...');
-            const jerooCode = this.createJerooCode();
+            const jerooCode = this.codeService.genCodeStr();
             const result = JerooCompiler.compile(jerooCode);
             if (result.successful) {
                 this.instructions = result.bytecode;
@@ -192,23 +189,6 @@ export class EditorTabAreaComponent implements AfterViewInit {
         this.stopState();
     }
 
-    createJerooCode() {
-        let jerooCode = '';
-        if (this.selectedLanguage === SelectedLanguage.Java) {
-            jerooCode += '@Java\n';
-        } else if (this.selectedLanguage === SelectedLanguage.Vb) {
-            jerooCode += '@VB\n';
-        } else if (this.selectedLanguage === SelectedLanguage.Python) {
-            jerooCode += '@PYTHON\n';
-        } else {
-            throw new Error('Unsupported Language');
-        }
-        jerooCode += this.extensionMethodsTextEditor.getText();
-        jerooCode += '\n@@\n';
-        jerooCode += this.mainMethodTextEditor.getText();
-        return jerooCode;
-    }
-
     undo() {
         this.getSelectedEditor().undo();
     }
@@ -275,20 +255,12 @@ export class EditorTabAreaComponent implements AfterViewInit {
         });
     }
 
-    onSelectedLanguageChange() {
-        this.mainMethodTextEditor.setMode(this.selectedLanguage);
-        this.extensionMethodsTextEditor.setMode(this.selectedLanguage);
-        const code = this.createJerooCode();
-        this.storage.set(codeCache, code);
-        this.markClean();
-    }
-
     getHelpUrl() {
-        return `/help/${this.selectedLanguageToString(this.selectedLanguage)}`;
+        return `/help/${this.selectedLanguageToString(this.codeService.selectedLanguage)}`;
     }
 
     getTutorialUrl() {
-        return `/help/${this.selectedLanguageToString(this.selectedLanguage)}/tutorial`;
+        return `/help/${this.selectedLanguageToString(this.codeService.selectedLanguage)}/tutorial`;
     }
 
     private selectedLanguageToString(lang: SelectedLanguage) {
@@ -301,40 +273,6 @@ export class EditorTabAreaComponent implements AfterViewInit {
         } else {
             throw new Error('Invalid Language');
         }
-    }
-
-    loadCodeFromString(code: string) {
-        let mainMethodCodeBuffer = '';
-        let extensionMethodCodeBuffer = '';
-        let usingExtensionCodeBuffer = false;
-        let lookingForHeader = true;
-
-        code.split('\n').forEach(line => {
-            if (lookingForHeader && line.startsWith('@')) {
-                if (line === '@Java') {
-                    this.selectedLanguage = SelectedLanguage.Java;
-                } else if (line === '@VB') {
-                    this.selectedLanguage = SelectedLanguage.Vb;
-                } else if (line === '@PYTHON') {
-                    this.selectedLanguage = SelectedLanguage.Python;
-                }
-                this.mainMethodTextEditor.setMode(this.selectedLanguage);
-                this.extensionMethodsTextEditor.setMode(this.selectedLanguage);
-                lookingForHeader = false;
-                usingExtensionCodeBuffer = true;
-            } else if (usingExtensionCodeBuffer && line.startsWith('@@')) {
-                usingExtensionCodeBuffer = false;
-            } else {
-                if (usingExtensionCodeBuffer) {
-                    extensionMethodCodeBuffer += line + '\n';
-                } else {
-                    mainMethodCodeBuffer += line + '\n';
-                }
-            }
-        });
-
-        this.extensionMethodsTextEditor.setText(extensionMethodCodeBuffer.trim());
-        this.mainMethodTextEditor.setText(mainMethodCodeBuffer.trim());
     }
 
     private isClean() {
@@ -363,13 +301,13 @@ export class EditorTabAreaComponent implements AfterViewInit {
 
     loadFromCache() {
         const code = this.storage.get(codeCache);
-        this.loadCodeFromString(code);
+        this.codeService.loadCodeFromStr(code);
         this.markClean();
     }
 
     saveToCache() {
         if (!this.isClean()) {
-            const code = this.createJerooCode();
+            const code = this.codeService.genCodeStr();
             this.storage.set(codeCache, code);
             this.markClean();
         }

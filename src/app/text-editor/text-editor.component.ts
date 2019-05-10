@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, Input } from '@angular/core';
-import { SelectedLanguage } from '../dashboard/SelectedLanguage';
 import { CodemirrorService } from '../codemirror/codemirror.service';
+import { SelectedLanguage } from '../code.service';
 
 @Component({
     selector: 'app-text-editor',
@@ -24,6 +24,18 @@ export class TextEditorComponent implements AfterViewInit {
             this.editor.setValue(val);
             (this.editor as any).setCursor(cursor);
             this.codeChange.emit(this.editor.getValue());
+        }
+    }
+
+    private langVal: SelectedLanguage;
+    @Input()
+    get lang() {
+        return this.langVal;
+    }
+    set lang(val) {
+        this.langVal = val;
+        if (this.editor) {
+            this.setMode(this.langVal);
         }
     }
 
@@ -54,7 +66,7 @@ export class TextEditorComponent implements AfterViewInit {
         });
     }
 
-    setMode(language: SelectedLanguage) {
+    private setMode(language: SelectedLanguage) {
         if (language === SelectedLanguage.Java) {
             this.editor.setOption('mode', 'jeroo-java');
             this.editor.setOption('autoCloseBrackets', '{}()');
