@@ -142,14 +142,6 @@ export class TextEditorComponent implements AfterViewInit {
         this.editor.setOption('readOnly', readOnly);
     }
 
-    isClean() {
-        return this.editor.getDoc().isClean();
-    }
-
-    markClean() {
-        this.editor.getDoc().markClean();
-    }
-
     refresh() {
         this.editor.refresh();
     }

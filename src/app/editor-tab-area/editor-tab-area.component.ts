@@ -275,15 +275,6 @@ export class EditorTabAreaComponent implements AfterViewInit {
         }
     }
 
-    private isClean() {
-        return this.mainMethodTextEditor.isClean() && this.extensionMethodsTextEditor.isClean();
-    }
-
-    private markClean() {
-        this.mainMethodTextEditor.markClean();
-        this.extensionMethodsTextEditor.markClean();
-    }
-
     hasCachedCode() {
         const cachedCode = this.storage.get(codeCache) as string;
         const starterJavaCode = '@Java@@';
@@ -302,15 +293,11 @@ export class EditorTabAreaComponent implements AfterViewInit {
     loadFromCache() {
         const code = this.storage.get(codeCache);
         this.codeService.loadCodeFromStr(code);
-        this.markClean();
     }
 
-    saveToCache() {
-        if (!this.isClean()) {
-            const code = this.codeService.genCodeStr();
-            this.storage.set(codeCache, code);
-            this.markClean();
-        }
+    saveToLocal() {
+        const code = this.codeService.genCodeStr();
+        this.storage.set(codeCache, code);
     }
 
     resetCache() {

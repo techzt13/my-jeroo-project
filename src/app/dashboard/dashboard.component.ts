@@ -18,8 +18,6 @@ interface Speed {
     value: number;
 }
 
-const cacheInterval = 1000;
-
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -121,7 +119,6 @@ export class DashboardComponent implements AfterViewInit {
                         this.jerooEditor.resetCache();
                         this.jerooMatrix.resetCache();
                     }
-                    setInterval(() => this.jerooEditor.saveToCache(), cacheInterval);
                 });
             });
         }
