@@ -1,10 +1,9 @@
-import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
-import { CodeService } from 'src/app/code.service';
-import { PrintService } from 'src/app/print.service';
-import { CodemirrorService } from 'src/app/codemirror/codemirror.service';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { CodeService } from 'src/app/code.service';
+import { CodemirrorService } from 'src/app/codemirror/codemirror.service';
+import { PrintService } from 'src/app/print.service';
 import { PrintCodeDialogComponent, PrintCodeDialogResult } from './print-code-dialog/print-code-dialog.component';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-print-code',
@@ -20,8 +19,7 @@ export class PrintCodeComponent implements AfterViewInit {
     constructor(private printService: PrintService,
                 private codeMirrorService: CodemirrorService,
                 public codeService: CodeService,
-                public dialog: MatDialog,
-                private router: Router) { }
+                public dialog: MatDialog) { }
 
     ngAfterViewInit() {
         setTimeout(() => {
@@ -39,7 +37,7 @@ export class PrintCodeComponent implements AfterViewInit {
 
                     setTimeout(() => this.printEditors());
                 } else {
-                    this.router.navigate([{ outlets: { print: null }}]);
+                    this.printService.navigateWithoutPrinting();
                 }
             });
         });
