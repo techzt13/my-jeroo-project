@@ -552,6 +552,23 @@ describe('BytecodeInterpreterService', () => {
         const currJeroo = service.getCurrentJeroo();
         expect(matService.getJeroo(2, 1)).toEqual(currJeroo);
     });
+
+    it('assert pick picks a flower', () => {
+        const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
+        const matService: MatrixService = TestBed.get(MatrixService);
+        matService.setStaticTile(1, 1, TileType.Flower);
+        const instructions = [
+            newInstruction('NEW', 0, 0, 0, 0, 0, 0),
+            newInstruction('CSR', 0, 0, 0, 0, 0, 0),
+            newInstruction('PICK', 0, 0, 0, 0, 0, 0)
+        ];
+
+        service.executeInstructionsUntilLNumChanges(instructions, matService);
+
+        const currJeroo = service.getCurrentJeroo();
+        expect(currJeroo.getNumFlowers()).toBe(1);
+        expect(matService.getDynamicTile(1, 1)).toBe(TileType.Grass);
+    });
 });
 
 function newInstruction(
