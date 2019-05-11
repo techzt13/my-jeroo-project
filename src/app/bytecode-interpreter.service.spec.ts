@@ -569,6 +569,36 @@ describe('BytecodeInterpreterService', () => {
         expect(currJeroo.getNumFlowers()).toBe(1);
         expect(matService.getDynamicTile(1, 1)).toBe(TileType.Grass);
     });
+
+    it('assert executeUntilLNumChanges executes until line number changes', () => {
+        const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
+        const matService: MatrixService = TestBed.get(MatrixService);
+        const instructions = [
+            newInstruction('NEW', 0, 0, 0, 0, 0, 0),
+            newInstruction('CSR', 0, 0, 0, 0, 0, 0),
+            newInstruction('HOP', 1, 0, 0, 0, 1, 0),
+            newInstruction('HOP', 1, 0, 0, 0, 0, 1)
+        ];
+
+        service.executeInstructionsUntilLNumChanges(instructions, matService);
+
+        expect(service.getPc()).toBe(2);
+    });
+
+    it('assert executeUntilLNumChanges executes until panel number changes', () => {
+        const service: BytecodeInterpreterService = TestBed.get(BytecodeInterpreterService);
+        const matService: MatrixService = TestBed.get(MatrixService);
+        const instructions = [
+            newInstruction('NEW', 0, 0, 0, 0, 0, 0),
+            newInstruction('CSR', 0, 0, 0, 0, 0, 0),
+            newInstruction('HOP', 1, 0, 0, 0, 0, 1),
+            newInstruction('HOP', 1, 0, 0, 0, 0, 1)
+        ];
+
+        service.executeInstructionsUntilLNumChanges(instructions, matService);
+
+        expect(service.getPc()).toBe(2);
+    });
 });
 
 function newInstruction(
