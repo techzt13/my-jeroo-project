@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { TileType, stringToTileType } from './jerooTileType';
-
-import { MatrixService } from './matrix.service';
-import { CardinalDirection } from './jerooDirection';
 import { Jeroo } from './jeroo';
+import { CardinalDirection } from './jerooDirection';
+import { stringToTileType, TileType } from './jerooTileType';
+import { MatrixService } from './matrix.service';
 
 describe('MatrixService', () => {
 
@@ -20,6 +19,13 @@ describe('MatrixService', () => {
         const jeroo = new Jeroo(0, 1, 1, 1, CardinalDirection.East);
         service.setJeroo(1, 1, jeroo);
         expect(service.getJeroo(1, 1)).toBe(jeroo);
+    });
+
+    it('assert getTile prioritizes dynamic map', () => {
+        const service: MatrixService = TestBed.get(MatrixService);
+        service.setDynamicTile(0, 0, TileType.Water);
+        service.setStaticTile(0, 0, TileType.Net);
+        expect(service.getTile(0, 0)).toBe(TileType.Water);
     });
 
     it('reset map resets map', () => {
