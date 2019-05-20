@@ -14,7 +14,6 @@ export class DashboardPage {
 
     changeSizeForLanguageTests() {
         this.getIslandEditMenu().click();
-        browser.sleep(500);
         this.getChangeMapSize().click();
         this.getXValueInput().clear();
         this.getXValueInput().sendKeys('14');
@@ -40,8 +39,12 @@ export class DashboardPage {
         return element(by.name('stopButton'));
     }
 
-    getSpeedSlider() {
-        return element(by.name('speedSlider'));
+    getSpeedMenu() {
+        return element(by.name('runSpeedMenu'));
+    }
+
+    getSpeed6() {
+        return element(by.id('speed6Btn'));
     }
 
     getIslandEditMenu() {

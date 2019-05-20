@@ -100,7 +100,7 @@
                     </button>
                 </ng-template>
             </mat-menu>
-            <mat-menu name="editMenu" #edit="matMenu">
+            <mat-menu #edit="matMenu">
                 <ng-template matMenuContent>
                     <button name="undoMenuItem" mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onUndoClick()">
                         <fa-icon icon="undo"></fa-icon><span class="menu-text">Undo Last Edit</span><span class="shortcut-tip">Ctrl+Z</span>
@@ -140,7 +140,7 @@
             <mat-menu #speed="matMenu">
                 <ng-template matMenuContent>
                     <mat-radio-group name="speedIndex" [(ngModel)]="speedIndex">
-                        <div mat-menu-item *ngFor="let speed of speedsRadio" (click)="onSpeedRadioClick(speed.value)">
+                        <div mat-menu-item *ngFor="let speed of speedsRadio; let i = index" id="speed{{i + 1}}Btn" (click)="onSpeedRadioClick(speed.value)">
                             <mat-radio-button class="speed-radio-btn" [value]="speed.value">{{ speed.name }}</mat-radio-button>
                         </div>
                     </mat-radio-group>
