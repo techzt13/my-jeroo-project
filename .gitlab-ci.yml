@@ -25,7 +25,7 @@ build-ocaml:
     - dune runtest
 
 build-angular:
-  image: node:8.15-alpine
+  image: node:8.16-alpine
   stage: build-angular
   artifacts:
     paths:
@@ -38,15 +38,19 @@ build-angular:
     - yarn build --base-href=/beta/ --prod
 
 test-angular:
-  image: timbru31/node-chrome:slim
+  image: node:8.16-jessie
   stage: test-angular
   script:
-    - apt-get update && apt-get install -y procps
-    - google-chrome-stable --version
+    - firefox --version || true
+    - wget -O FirefoxSetup.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
+    - mkdir /opt/firefox
+    - tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/
+    - firefox --version || true
+    - whereis firefox || true
     - yarn --version
     - yarn install
     - ./node_modules/protractor/bin/webdriver-manager update
-    - yarn test --no-watch --no-progress --browsers=ChromeHeadlessCI
+    - yarn test --no-watch --no-progress --browsers=FirefoxHeadlessCI
     - yarn e2e --protractor-config=e2e/protractor-ci.conf.js
 
 generate-typescript-documentation:
