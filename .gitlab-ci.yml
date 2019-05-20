@@ -38,12 +38,14 @@ build-angular:
     - yarn build --base-href=/beta/ --prod
 
 test-angular:
-  image: node:8.15-alpine
+  image: timbru31/node-chrome:slim
   stage: test-angular
   script:
+    - apt-get update && apt-get install -y procps
+    - google-chrome-stable --version
+    - yarn --version
     - yarn global add webdriver-manager
     - webdriver-manager update
-    - yarn --version
     - yarn install
     - yarn test --no-watch --no-progress --browsers=ChromeHeadlessCI
 
