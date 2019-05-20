@@ -48,6 +48,7 @@ test-angular:
     - webdriver-manager update
     - yarn install
     - yarn test --no-watch --no-progress --browsers=ChromeHeadlessCI
+    - yarn e2e --protractor-config=e2e/protractor-ci.conf.js
 
 generate-typescript-documentation:
   image: node:8.15-alpine
