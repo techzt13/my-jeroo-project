@@ -24,23 +24,23 @@ export class DashboardPage {
     }
 
     getRunButton() {
-        return element(by.name('runButton'));
+        return element(by.id('runButton'));
     }
 
     getRunContinousButton() {
-        return element(by.name('runContiniousButton'));
+        return element(by.id('runContiniousButton'));
     }
 
     getPauseButton() {
-        return element(by.name('pauseButton'));
+        return element(by.id('pauseButton'));
     }
 
     getStopButton() {
-        return element(by.name('stopButton'));
+        return element(by.id('stopButton'));
     }
 
     getSpeedMenu() {
-        return element(by.name('runSpeedMenu'));
+        return element(by.id('runSpeedMenu'));
     }
 
     getSpeed6() {
@@ -48,39 +48,39 @@ export class DashboardPage {
     }
 
     getIslandEditMenu() {
-        return element(by.name('islandEditMenu'));
+        return element(by.id('islandEditMenu'));
     }
 
     getNewMapMenuItem() {
-        return element(by.name('newMapMenuItem'));
+        return element(by.id('newMapMenuItem'));
     }
 
     getChangeMapSize() {
-        return element(by.name('changeMapSize'));
+        return element(by.id('changeMapSize'));
     }
 
     getCloseMatrixDialogButton() {
-        return element(by.name('closeMatrixDialogButton'));
+        return element(by.id('closeMatrixDialogButton'));
     }
 
     getSubmitMatrixDialogButton() {
-        return element(by.name('submitMatrixDialogButton'));
+        return element(by.id('submitMatrixDialogButton'));
     }
 
     getXValueInput() {
-        return element(by.name('xValueInput'));
+        return element(by.id('xValueInput'));
     }
 
     getYValueInput() {
-        return element(by.name('yValueInput'));
+        return element(by.id('yValueInput'));
     }
 
     getYesWarningButton() {
-        return element(by.name('yesWarningButton'));
+        return element(by.id('yesWarningButton'));
     }
 
     getNoWarningButton() {
-        return element(by.name('noWarningButton'));
+        return element(by.id('noWarningButton'));
     }
 
     getMainEditorTab() {
