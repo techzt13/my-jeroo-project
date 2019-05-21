@@ -42,14 +42,14 @@ test-angular:
   stage: test-angular
   script:
     - apt update
-    - apt upgrade
-    - apt install firefox
+    - apt upgrade -y
+    - apt install firefox -y
     - firefox --version
-    - apt install gnupg2 curl
+    - apt install gnupg2 curl -y
     - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
     - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
     - apt update
-    - apt install yarn
+    - apt install yarn -y
     - yarn --version
     - yarn install
     - ./node_modules/protractor/bin/webdriver-manager update
