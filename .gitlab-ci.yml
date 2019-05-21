@@ -38,17 +38,18 @@ build-angular:
     - yarn build --base-href=/beta/ --prod
 
 test-angular:
-  image: node:8.16-jessie
+  image: ubuntu:18.04
   stage: test-angular
   script:
-    - firefox --version || true
-    - wget -O FirefoxSetup.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
-    - mkdir /opt/firefox
-    - tar xjf FirefoxSetup.tar.bz2 -C /usr/bin/firefox/
-    - ln -s /opt/firefox66/firefox /usr/bin/firefox
-    - firefox --version || true
-    - /usr/bin/firefox --version
-    - whereis firefox || true
+    - apt update
+    - apt upgrade
+    - apt install firefox
+    - firefox --version
+    - apt install gnupg2 curl
+    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+    - apt update
+    - apt install yarn
     - yarn --version
     - yarn install
     - ./node_modules/protractor/bin/webdriver-manager update
