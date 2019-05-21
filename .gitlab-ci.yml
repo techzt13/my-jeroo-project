@@ -44,8 +44,9 @@ test-angular:
     - firefox --version || true
     - wget -O FirefoxSetup.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
     - mkdir /opt/firefox
-    - tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/
+    - tar xjf FirefoxSetup.tar.bz2 -C /usr/bin/firefox/
     - firefox --version || true
+    - /usr/bin/firefox --version
     - whereis firefox || true
     - yarn --version
     - yarn install
