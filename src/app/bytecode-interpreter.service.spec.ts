@@ -67,7 +67,7 @@ describe('BytecodeInterpreterService', () => {
         const matService: MatrixService = TestBed.get(MatrixService);
         const newInstr = newInstruction('NEW', 0, 0, 0, 0, 8, 0);
         expect(() => service.executeBytecode(newInstr, matService))
-            .toThrow(new RuntimeError('Unknown cardinal direction', 0, 0));
+            .toThrow(new RuntimeError('INSTANTIATION ERROR: The direction is invalid', 0, 0));
     });
 
     it('assert new on water throws error', () => {
