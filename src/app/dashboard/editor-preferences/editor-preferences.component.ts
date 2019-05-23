@@ -33,12 +33,20 @@ export class EditorPreferencesComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      fontSize: [this.codeService.prefrences.fontSize, [Validators.min(1), Validators.max(30), Validators.pattern('[0-9]*')]],
+      fontSize: [
+        this.codeService.prefrences.fontSize,
+        [
+          Validators.min(1),
+          Validators.max(30),
+          Validators.pattern('[0-9]*'),
+          Validators.required
+        ]
+      ],
       colorTheme: [this.codeService.prefrences.colorTheme]
     });
 
     this.form.valueChanges.subscribe((val: EditorPreferences) => {
-      if (this.editor) {
+      if (this.editor && this.form.valid) {
         this.editor.getWrapperElement().style.fontSize = `${val.fontSize}px`;
         this.editor.setOption('theme', val.colorTheme);
       }
@@ -60,8 +68,10 @@ export class EditorPreferencesComponent implements OnInit, AfterViewInit {
   }
 
   onSaveClick() {
-    this.codeService.prefrences = this.form.value;
-    this.storage.set(Storage.Preferences, this.form.value);
+    if (this.form.valid) {
+      this.codeService.prefrences = this.form.value;
+      this.storage.set(Storage.Preferences, this.form.value);
+    }
     this.dialogRef.close();
   }
 }
