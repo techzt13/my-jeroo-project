@@ -20,9 +20,7 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program one in java', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
-    browser.waitForAngularEnabled(false);
 
     page.getExtensionEditorTab().click();
     browser.sleep(500);
@@ -68,9 +66,7 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program two in java', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
-    browser.waitForAngularEnabled(false);
 
     const code =
       'method main() {\\n' +
@@ -117,9 +113,7 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program three in java', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
-    browser.waitForAngularEnabled(false);
 
     const code =
       'method main() {\\n' +
@@ -150,13 +144,11 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program one in VB', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
 
     page.getLanguageSelection().click();
     browser.sleep(500);
     page.getVbLanguage().click();
-    browser.waitForAngularEnabled(false);
 
     page.getExtensionEditorTab().click();
     browser.sleep(500);
@@ -202,13 +194,11 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program two in VB', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
 
     page.getLanguageSelection().click();
     browser.sleep(500);
     page.getVbLanguage().click();
-    browser.waitForAngularEnabled(false);
 
     const code =
       'Sub main()\\n' +
@@ -253,13 +243,11 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program three in VB', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
 
     page.getLanguageSelection().click();
     browser.sleep(500);
     page.getVbLanguage().click();
-    browser.waitForAngularEnabled(false);
 
     const code =
       'Sub main()\\n' +
@@ -289,13 +277,11 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program one in python', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
 
     page.getLanguageSelection().click();
     browser.sleep(500);
     page.getPythonLanguage().click();
-    browser.waitForAngularEnabled(false);
 
     page.getExtensionEditorTab().click();
     browser.sleep(500);
@@ -340,13 +326,11 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program two in python', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
 
     page.getLanguageSelection().click();
     browser.sleep(500);
     page.getPythonLanguage().click();
-    browser.waitForAngularEnabled(false);
 
     const code =
       'l = Jeroo()\\n' +
@@ -387,13 +371,11 @@ describe('Jeroo Tests', () => {
   });
 
   it('Should run program three in python', () => {
-    browser.waitForAngularEnabled(true);
     page.changeSizeForLanguageTests();
 
     page.getLanguageSelection().click();
     browser.sleep(500);
     page.getPythonLanguage().click();
-    browser.waitForAngularEnabled(false);
 
     const code =
       'j = Jeroo(1, 1, 5)\\n' +
