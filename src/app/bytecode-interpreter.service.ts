@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { MatrixService } from './matrix.service';
 import { Jeroo } from './jeroo';
 import { TileType } from './jerooTileType';
-import { numberToRelativeDirection, numberToCardinalDirection } from './jerooDirection';
 import { Subject } from 'rxjs';
 
 export class RuntimeError extends Error {
@@ -107,7 +106,7 @@ export class BytecodeInterpreterService {
                     throw new RuntimeError('INSTANTIATION ERROR: Too many jeroos', command.e, command.f);
                 }
                 try {
-                    const direction = numberToCardinalDirection(command.e);
+                    const direction = command.e;
                     const jeroo = new Jeroo(command.a, col, row, command.d, direction);
                     if (tile === TileType.Flower) {
                         jeroo.setInFlower(true);
@@ -121,7 +120,7 @@ export class BytecodeInterpreterService {
                 break;
             }
             case 'TURN': {
-                const direction = numberToRelativeDirection(command.a);
+                const direction = command.a;
                 const jeroo = this.getCurrentJeroo();
                 jeroo.turn(direction);
                 this.jerooChangeSource.next();
@@ -149,7 +148,7 @@ export class BytecodeInterpreterService {
                 break;
             }
             case 'GIVE': {
-                const direction = numberToRelativeDirection(command.a);
+                const direction = command.a;
                 this.getCurrentJeroo().give(direction, matService);
                 break;
             }
@@ -172,31 +171,31 @@ export class BytecodeInterpreterService {
                 break;
             }
             case 'ISNET': {
-                const direction = numberToRelativeDirection(command.a);
+                const direction = command.a;
                 const isNet = this.getCurrentJeroo().isNet(direction, matService);
                 this.cmpStack.push(isNet);
                 break;
             }
             case 'ISWATER': {
-                const direction = numberToRelativeDirection(command.a);
+                const direction = command.a;
                 const isWater = this.getCurrentJeroo().isWater(direction, matService);
                 this.cmpStack.push(isWater);
                 break;
             }
             case 'ISJEROO': {
-                const direction = numberToRelativeDirection(command.a);
+                const direction = command.a;
                 const isJeroo = this.getCurrentJeroo().isJeroo(direction, matService);
                 this.cmpStack.push(isJeroo);
                 break;
             }
             case 'ISFLWR': {
-                const direction = numberToRelativeDirection(command.a);
+                const direction = command.a;
                 const isFlower = this.getCurrentJeroo().isFlower(direction, matService);
                 this.cmpStack.push(isFlower);
                 break;
             }
             case 'FACING': {
-                const direction = numberToCardinalDirection(command.a);
+                const direction = command.a;
                 const isFacing = this.getCurrentJeroo().isFacing(direction);
                 this.cmpStack.push(isFacing);
                 break;

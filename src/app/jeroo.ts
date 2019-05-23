@@ -3,10 +3,7 @@ import { TileType } from './jerooTileType';
 import {
     Point,
     CardinalDirection,
-    RelativeDirection,
-    relativeDirectionToNumber,
-    cardinalDirectionToNumber,
-    numberToCardinalDirection
+    RelativeDirection
 } from './jerooDirection';
 
 const STEP: Point[] = [
@@ -105,10 +102,10 @@ export class Jeroo {
        * @param turnDir The direction to turn.
        */
     turn(turnDir: RelativeDirection) {
-        const turnDirNum = relativeDirectionToNumber(turnDir);
-        let myDirNum = cardinalDirectionToNumber(this.direction);
+        const turnDirNum = turnDir;
+        let myDirNum = this.direction;
         myDirNum = (myDirNum + turnDirNum) % 4;
-        this.direction = numberToCardinalDirection(myDirNum);
+        this.direction = myDirNum;
     }
 
     /**
@@ -276,8 +273,8 @@ export class Jeroo {
     }
 
     private getLocation(direction: RelativeDirection): Point {
-        const directionNum = relativeDirectionToNumber(direction);
-        const myDirectionNum = cardinalDirectionToNumber(this.direction);
+        const directionNum = direction;
+        const myDirectionNum = this.direction;
         const lookDirection = (directionNum + myDirectionNum) % 4;
         const dx = STEP[lookDirection].x;
         const dy = STEP[lookDirection].y;

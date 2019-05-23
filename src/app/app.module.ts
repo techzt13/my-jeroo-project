@@ -47,6 +47,7 @@ import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintMapComponent } from './print-layout/print-map/print-map.component';
 import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
 import { PrintCodeDialogComponent } from './print-layout/print-code/print-code-dialog/print-code-dialog.component';
+import { EditorPreferencesComponent } from './dashboard/editor-preferences/editor-preferences.component';
 
 library.add(
     faFile,
@@ -87,7 +88,8 @@ library.add(
         PrintLayoutComponent,
         PrintMapComponent,
         PrintCodeComponent,
-        PrintCodeDialogComponent
+        PrintCodeDialogComponent,
+        EditorPreferencesComponent
     ],
     imports: [
         BrowserModule,
@@ -111,7 +113,8 @@ library.add(
         DashboardDialogHistoryComponent,
         DashboardDialogCopyrightComponent,
         WarningDialogComponent,
-        PrintCodeDialogComponent
+        PrintCodeDialogComponent,
+        EditorPreferencesComponent
     ]
 })
 export class AppModule { }
