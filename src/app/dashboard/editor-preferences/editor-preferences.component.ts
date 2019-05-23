@@ -8,8 +8,7 @@ import { Storage } from 'src/app/storage';
 
 @Component({
   selector: 'app-editor-preferences',
-  templateUrl: './editor-preferences.component.html',
-  styleUrls: ['./editor-preferences.component.scss']
+  templateUrl: './editor-preferences.component.html'
 })
 export class EditorPreferencesComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') editorRef: ElementRef;
