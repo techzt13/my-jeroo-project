@@ -1,6 +1,5 @@
 {
 open JavaParser
-open Lexing
 
 exception Error of {
     message : string;
@@ -9,34 +8,27 @@ exception Error of {
 }
 
 let digit = ['0'-'9']
-let letter = ['a'-'z' 'A'-'Z' '_']
+let nonzerodigit = ['1'-'9']
 
-let id = letter (letter | digit)*
-         let int_constant = '-'? digit+
+let id = ['a'-'z' 'A'-'Z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
+let int_constant = ['+' '-']? (digit | (nonzerodigit digit+))
 
-                            let comment = "//" [^'\n']* '\n'
-let ml_comment = "/*" [^'*']* [^'/']* "*/"
+let comment = "//" [^ '\n' '\r']*
+let ml_comment_start = "/*"
+let ml_comment_end = "*/"
 
-let whitespace = ['\r' ' ' '\t']+
-                 let newline = '\n'
+let whitespace = [' ' '\t']
+let newline = ('\n' | "\r\n")
 
 rule token = parse
-  | whitespace
-      { token lexbuf }
-  | newline
-      { new_line lexbuf; token lexbuf }
-  | comment
-      { new_line lexbuf; token lexbuf }
-  | ml_comment as text
-    { let num_lines =
-        text
-        |> String.to_seq
-        |> Seq.fold_left (fun accum ele -> if ele = '\n' then 1 + accum else accum) 0
-      in LexingUtils.next_n_lines num_lines lexbuf; token lexbuf }
+  | whitespace+ { token lexbuf }
+  | comment newline { LexingUtils.next_n_lines 1 lexbuf; token lexbuf }
+  | newline { LexingUtils.next_n_lines 1 lexbuf; token lexbuf }
+  | ml_comment_start { token_comment lexbuf }
+  | comment? "@@\n" { LexingUtils.reset_lnum lexbuf; MAIN_METH_SEP }
+  | comment? eof { EOF }
   | "@Java\n"
       { HEADER }
-  | "@@\n"
-      { LexingUtils.reset_lnum lexbuf; MAIN_METH_SEP }
   | int_constant as i
     { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
   | "true"
@@ -93,9 +85,11 @@ rule token = parse
       { LBRACKET (LexingUtils.get_lnum lexbuf) }
   | '}'
       { RBRACKET (LexingUtils.get_lnum lexbuf) }
-  | eof
-      { EOF }
   | _ { raise (Error {
         message = "Illegal character: " ^ Lexing.lexeme lexbuf;
         lnum = LexingUtils.get_lnum lexbuf
       })}
+and token_comment = parse
+  | ml_comment_end { token lexbuf }
+  | newline { LexingUtils.next_n_lines 1 lexbuf; token_comment lexbuf }
+  | _ { token_comment lexbuf }
