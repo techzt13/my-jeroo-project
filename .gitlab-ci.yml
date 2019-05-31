@@ -25,12 +25,13 @@ build-ocaml:
     - dune runtest
 
 build-angular:
-  image: node:8.16-alpine
+  image: node:12-alpine
   stage: build-angular
   artifacts:
     paths:
       - dist/
   script:
+    - node --version
     - yarn --version
     - yarn install
     - yarn lint
@@ -57,7 +58,7 @@ test-angular:
     - yarn e2e --protractor-config=e2e/protractor-ci.conf.js
 
 generate-typescript-documentation:
-  image: node:8.15-alpine
+  image: node:12-alpine
   stage: generate-documentation
   only:
     - master
@@ -65,6 +66,7 @@ generate-typescript-documentation:
     paths:
       - docs
   script:
+    - node --version
     - yarn --version
     - yarn install
     - yarn doc --out docs src/
