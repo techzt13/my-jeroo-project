@@ -21,16 +21,20 @@ let whitespace = [' ' '\t']
 let newline = ('\n' | "\r\n")
 
 rule token = parse
-  | whitespace+ { token lexbuf }
-  | comment newline { LexingUtils.next_n_lines 1 lexbuf; token lexbuf }
-  | newline { LexingUtils.next_n_lines 1 lexbuf; token lexbuf }
-  | ml_comment_start { token_comment lexbuf }
-  | comment? "@@\n" { LexingUtils.reset_lnum lexbuf; MAIN_METH_SEP }
-  | comment? eof { EOF }
+  | whitespace+
+    { token lexbuf }
+  | comment newline
+      { LexingUtils.next_n_lines 1 lexbuf; token lexbuf }
+  | newline
+      { LexingUtils.next_n_lines 1 lexbuf; token lexbuf }
+  | ml_comment_start
+      { token_comment lexbuf }
+  | comment? "@@\n"
+      { LexingUtils.reset_lnum lexbuf; MAIN_METH_SEP }
+  | comment? eof
+      { EOF }
   | "@Java\n"
       { HEADER }
-  | int_constant as i
-    { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
   | "true"
       { TRUE (LexingUtils.get_lnum lexbuf) }
   | "false"
@@ -61,8 +65,6 @@ rule token = parse
       { NEW (LexingUtils.get_lnum lexbuf) }
   | "method"
       { METHOD (LexingUtils.get_lnum lexbuf) }
-  | id as i
-    { ID (i, (LexingUtils.get_lnum lexbuf)) }
   | "&&"
       { AND (LexingUtils.get_lnum lexbuf) }
   | "||"
@@ -85,6 +87,10 @@ rule token = parse
       { LBRACKET (LexingUtils.get_lnum lexbuf) }
   | '}'
       { RBRACKET (LexingUtils.get_lnum lexbuf) }
+  | int_constant as i
+    { INT ((int_of_string i), (LexingUtils.get_lnum lexbuf)) }
+  | id as i
+    { ID (i, (LexingUtils.get_lnum lexbuf)) }
   | _ { raise (Error {
         message = "Illegal character: " ^ Lexing.lexeme lexbuf;
         lnum = LexingUtils.get_lnum lexbuf

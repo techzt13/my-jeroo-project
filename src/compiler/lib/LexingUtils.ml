@@ -1,5 +1,6 @@
 open Lexing
 
+(* TODO add unit tests for these *)
 let get_lnum lexbuf =
   let pos = lexbuf.lex_curr_p in
   pos.pos_lnum

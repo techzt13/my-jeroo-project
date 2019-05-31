@@ -40,7 +40,7 @@ rule token state = parse
 and _token state = parse
   | (whitespace* comment? newline)* whitespace* comment? eof {
       (* If there are stray indentation levels, send corresponding DEDENT tokens to pair them up *)
-      if (state.emitted_eof_nl == false) then begin
+      if (not (state.emitted_eof_nl)) then begin
         state.emitted_eof_nl <- true;
         let indent = Stack.top state.offset_stack in
         state.curr_offset <- indent;
