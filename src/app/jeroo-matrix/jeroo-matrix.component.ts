@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Inject, Input, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
 import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component';
