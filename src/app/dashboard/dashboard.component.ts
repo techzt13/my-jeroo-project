@@ -25,11 +25,11 @@ interface Speed {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements AfterViewInit {
-  @ViewChild('mapFileInput') mapFileInput: ElementRef;
-  @ViewChild('codeFileInput') codeFileInput: ElementRef;
-  @ViewChild('jerooMatrix') jerooMatrix: JerooMatrixComponent;
-  @ViewChild('jerooEditor') jerooEditor: EditorTabAreaComponent;
-  @ViewChild('fileSaver') fileSaver: ElementRef;
+  @ViewChild('mapFileInput', { static: true }) mapFileInput: ElementRef;
+  @ViewChild('codeFileInput', { static: true }) codeFileInput: ElementRef;
+  @ViewChild('jerooMatrix', { static: true }) jerooMatrix: JerooMatrixComponent;
+  @ViewChild('jerooEditor', { static: true }) jerooEditor: EditorTabAreaComponent;
+  @ViewChild('fileSaver', { static: true }) fileSaver: ElementRef;
 
   private speeds = [475, 350, 225, 125, 25, 2];
   runtimeSpeed = this.speeds[2];

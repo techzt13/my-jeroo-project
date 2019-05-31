@@ -14,7 +14,7 @@ import { Storage } from '../storage';
   styleUrls: ['./jeroo-matrix.component.scss']
 })
 export class JerooMatrixComponent implements AfterViewInit {
-  @ViewChild('jerooGameCanvas') jerooGameCanvas: ElementRef;
+  @ViewChild('jerooGameCanvas', { static: true }) jerooGameCanvas: ElementRef;
   @Input() editingEnabled: boolean;
   mouseRow: number = null;
   mouseColumn: number = null;

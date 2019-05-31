@@ -11,7 +11,7 @@ import { Storage } from 'src/app/storage';
   templateUrl: './editor-preferences.component.html'
 })
 export class EditorPreferencesComponent implements OnInit, AfterViewInit {
-  @ViewChild('editor') editorRef: ElementRef;
+  @ViewChild('editor', { static: true }) editorRef: ElementRef;
   editor: CodeMirror.Editor;
   colorThemes = [
     Themes.Default,

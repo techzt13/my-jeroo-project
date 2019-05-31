@@ -11,8 +11,8 @@ import { PrintCodeDialogComponent, PrintCodeDialogResult } from './print-code-di
   styleUrls: ['./print-code.component.scss']
 })
 export class PrintCodeComponent implements AfterViewInit {
-  @ViewChild('mainMethodTextArea') mainMethodTextAreaRef: ElementRef;
-  @ViewChild('extensionMethodTextArea') extensionMethodTextAreaRef: ElementRef;
+  @ViewChild('mainMethodTextArea', { static: false }) mainMethodTextAreaRef: ElementRef;
+  @ViewChild('extensionMethodTextArea', { static: false }) extensionMethodTextAreaRef: ElementRef;
   displayMainMethod = false;
   displayExtensionMethods = false;
 

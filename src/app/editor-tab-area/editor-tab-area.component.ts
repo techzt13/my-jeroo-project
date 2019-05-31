@@ -26,8 +26,8 @@ export interface EditorState {
   styleUrls: ['./editor-tab-area.component.scss']
 })
 export class EditorTabAreaComponent implements AfterViewInit {
-  @ViewChild('mainMethodTextEditor') mainMethodTextEditor: TextEditorComponent;
-  @ViewChild('extensionMethodsTextEditor') extensionMethodsTextEditor: TextEditorComponent;
+  @ViewChild('mainMethodTextEditor', { static: true }) mainMethodTextEditor: TextEditorComponent;
+  @ViewChild('extensionMethodsTextEditor', { static: true }) extensionMethodsTextEditor: TextEditorComponent;
   @Input() speed: number;
 
   languages: Language[] = [
