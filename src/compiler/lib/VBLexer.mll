@@ -8,11 +8,6 @@ exception Error of {
     lnum : int;
   }
 
-(* TODO move this to LexingUtils *)
-let count_lines s =
-  s
-  |> String.to_seq
-  |> Seq.fold_left (fun acc c -> if c = '\n' then succ acc else acc) 0
 }
 
 let whitespace = [' ' '\t']
@@ -78,7 +73,7 @@ rule token state = parse
   | ((whitespace* comment? newline)* whitespace* comment?) newline
       {
         let lnum = LexingUtils.get_lnum lexbuf in
-        let lines = count_lines (lexeme lexbuf) in
+        let lines = LexingUtils.count_lines (lexeme lexbuf) in
         LexingUtils.next_n_lines lines lexbuf;
         NEWLINE lnum
       }

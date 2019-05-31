@@ -8,10 +8,6 @@ exception Error of {
     lnum : int;
   }
 
-let count_lines s =
-  s
-  |> String.to_seq
-  |> Seq.fold_left (fun acc c -> if c = '\n' then succ acc else acc) 0
 }
 
 (* epsilon *)
@@ -84,7 +80,7 @@ and _token state = parse
   | ((whitespace* comment? newline)* whitespace* comment?) newline
     {
       let lnum = (LexingUtils.get_lnum lexbuf) in
-      let lines = count_lines (lexeme lexbuf) in
+      let lines = LexingUtils.count_lines (lexeme lexbuf) in
       LexingUtils.next_n_lines lines lexbuf;
       if state.nl_ignore <= 0 then begin
         state.curr_offset <- 0;

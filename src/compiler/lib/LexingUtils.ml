@@ -1,6 +1,5 @@
 open Lexing
 
-(* TODO add unit tests for these *)
 let get_lnum lexbuf =
   let pos = lexbuf.lex_curr_p in
   pos.pos_lnum
@@ -18,3 +17,8 @@ let reset_lnum lexbuf =
     { pos with pos_bol = lexbuf.lex_curr_pos;
                pos_lnum = 1
     }
+
+let count_lines s =
+  s
+  |> String.to_seq
+  |> Seq.fold_left (fun acc c -> if c = '\n' then succ acc else acc) 0
