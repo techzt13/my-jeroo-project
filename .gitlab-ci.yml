@@ -87,8 +87,8 @@ generate-ocaml-documentation:
     - opam update
     - ocamlc --version
     - opam --version
+    - cd src/compiler
     - opam install --deps-only .
     - opam install odoc
     - odoc --version
-    - cd src/compiler
     - dune build lib @doc-private
