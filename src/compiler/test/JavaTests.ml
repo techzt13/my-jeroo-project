@@ -562,7 +562,7 @@ let parse_extension_method _test_ctxt =
   in
   assert_equal ~printer:[%show: AST.translation_unit] expected ast
 
-let parse_syntax_error _test_ctxt =
+let parse_missing_semicolon _test_ctxt =
   let code = "@Java\n" ^
              "@@\n" ^
              "method main() { Jeroo j = new Jeroo() }"
@@ -573,6 +573,35 @@ let parse_syntax_error _test_ctxt =
       exception_type = "error";
       message = "expected one of `;`, `.`, or an operator\n";
     }) (fun () -> Compiler.compile code)
+
+(* TODO: complete all of these tasks in a future story *)
+let parse_missing_rparen_in_expr _test_ctxt = ()
+
+let parse_missing_rbrace _test_ctxt = ()
+
+let parse_missing_rparen_in_fxn_app _test_ctxt = ()
+
+let parse_missing_comma_in_fxn_app _test_ctxt = ()
+
+let parse_lexing_error _test_ctxt = ()
+
+let parse_empty_main_fxn _test_ctxt = ()
+
+let parse_and_empty_rvalue _test_ctxt = ()
+
+let parse_or_empty_rvalue _test_ctxt = ()
+
+let parse_dot_empty_rvalue _test_ctxt = ()
+
+let parse_not_empty_rvalue _test_ctxt = ()
+
+let parse_new_empty_rvalue _test_ctxt = ()
+
+let parse_malformed_if_stmt _test_ctxt = ()
+
+let parse_malformed_while_stmt _test_ctxt = ()
+
+let parse_wild_else_stmt _test_ctxt = ()
 
 let suite =
   "Java Parsing">::: [
@@ -594,5 +623,18 @@ let suite =
     "Parse Negative Int">:: parse_negative_int;
     "Parse Stmt List">:: parse_stmt_list;
     "Parse Extension Method">:: parse_extension_method;
-    "Parse Syntax Error">:: parse_syntax_error;
+    "Parse Missing Semicolon">:: parse_missing_semicolon;
+    "Parse missing rparen in expr">:: parse_missing_rparen_in_expr;
+    "Parse missing rbrace">:: parse_missing_rbrace;
+    "Parse missing rparen in fxn app">:: parse_missing_rparen_in_fxn_app;
+    "Parse missing comma in fxn app">:: parse_missing_comma_in_fxn_app;
+    "Parse lexing error">:: parse_lexing_error;
+    "Parse empty main fxn">:: parse_empty_main_fxn;
+    "Parse and empty rvalue">:: parse_and_empty_rvalue;
+    "Parse or empty rvalue">:: parse_or_empty_rvalue;
+    "Parse dot empty rvalue">:: parse_dot_empty_rvalue;
+    "Parse new empty rvalue">:: parse_new_empty_rvalue;
+    "Parse malformed if stmt">:: parse_malformed_if_stmt;
+    "Parse malformed while stmt">:: parse_malformed_while_stmt;
+    "Parse wild else stmt">:: parse_while_stmt;
   ]
