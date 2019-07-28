@@ -1,7 +1,6 @@
 open AST
 open Position
 
-(* TODO: make a .mli file for this module *)
 let parse_java extensions_code main_code =
   let rec loop lexbuf checkpoint pane =
     try
