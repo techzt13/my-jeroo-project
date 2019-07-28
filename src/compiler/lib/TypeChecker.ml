@@ -17,9 +17,6 @@ let rec score_args actual_args expected_args =
     in
     (score_args xs ys) + cost
 
-(* let get_expected_message expected_type actual_type =
- *   "Expected " ^ (JerooType.string_of_type expected_type) ^ ", found " ^ (JerooType.string_of_type actual_type) *)
-
 let get_not_found_message id env =
   let ids = SymbolTable.fold env [] (fun id _ l -> id :: l) in
   let ranked_ids = ids
@@ -43,8 +40,8 @@ let rank_fxns env actual_id actual_args_t =
       | _ -> None
     )
   |> List.of_seq
-  |> List.sort (fun (_, _, score1) (_, _, score2) -> compare score2 score1)
-  |> List.fold_left (fun s (_, jeroo_type, _)  -> (JerooType.string_of_type jeroo_type) ^ "\n" ^ s) ""
+  |> List.sort (fun (_, _, score1) (_, _, score2) -> compare score1 score2)
+  |> List.map (fun (_, jeroo_type, _) -> JerooType.string_of_type jeroo_type)
 
 let rank_ctors env actual_args_t =
   env
@@ -55,8 +52,8 @@ let rank_ctors env actual_args_t =
       | _ -> None
     )
   |> List.of_seq
-  |> List.sort (fun (_, _, score1) (_, _, score2) -> compare score2 score1)
-  |> List.fold_left (fun s (_, jeroo_type, _)  -> (JerooType.string_of_type jeroo_type) ^ "\n" ^ s) ""
+  |> List.sort (fun (_, _, score1) (_, _, score2) -> compare score1 score2)
+  |> List.map (fun (_, jeroo_type, _) -> JerooType.string_of_type jeroo_type)
 
 let rec type_of_expr expr env state =
   match expr with
@@ -161,12 +158,15 @@ and typecheck_fxn fxn args env state = match fxn.a with
                       (JerooType.string_of_type actual_fxn) ^ "\n"
         in
         let env = SymbolTable.get_env env in
-        let ctors = rank_fxns env id args_t in
+        let fxns = rank_fxns env id args_t in
         raise (Exceptions.CompileException {
             pos = fxn.pos;
             pane = state.pane;
             exception_type = error;
-            message = message ^ "Candidate functions:\n" ^ ctors
+            message =
+              if ((List.length fxns) > 0)
+              then message ^ "Candidate functions:\n" ^ (String.concat "\n" fxns)
+              else message
           })
     else
       raise (Exceptions.CompileException {
@@ -213,14 +213,16 @@ and typecheck_new_expr ctor_meta env state =
             let message = "No match found for constructor with type: " ^
                           (JerooType.string_of_type actual_ctor) ^ "\n"
             in
-            (* turn this into a method *)
             let env = SymbolTable.get_env obj.env in
             let ctors = rank_ctors env args_t in
             raise (Exceptions.CompileException {
                 pos = ctor_meta.pos;
                 pane = state.pane;
                 exception_type = error;
-                message = message ^ "Candidate constructors:\n" ^ ctors
+                message =
+                  if ((List.length ctors) > 0)
+                  then message ^ "Candidate constructors:\n" ^ (String.concat "\n" ctors)
+                  else message
               })
         end
       | Some(t) -> raise (Exceptions.CompileException {

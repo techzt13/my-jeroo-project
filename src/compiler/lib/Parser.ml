@@ -1,44 +1,54 @@
 open AST
 open Position
 
+(* TODO: make a .mli file for this module *)
 let parse_java extensions_code main_code =
   let rec loop lexbuf checkpoint pane =
-    match checkpoint with
-    | JavaParser.MenhirInterpreter.InputNeeded _ ->
-      let token = JavaLexer.token lexbuf in
-      let startp = lexbuf.lex_start_p in
-      let endp = lexbuf.lex_curr_p in
-      let checkpoint = JavaParser.MenhirInterpreter.offer checkpoint (token, startp, endp) in
-      loop lexbuf checkpoint pane
-    | JavaParser.MenhirInterpreter.Shifting _ | JavaParser.MenhirInterpreter.AboutToReduce _ ->
-      let checkpoint = JavaParser.MenhirInterpreter.resume checkpoint in
-      loop lexbuf checkpoint pane
-    | JavaParser.MenhirInterpreter.HandlingError env ->
-      let error_state = JavaParser.MenhirInterpreter.current_state_number env in
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let cnum = LexingUtils.get_cnum lexbuf in
-      let message = JavaMessages.message error_state in
+    try
+      match checkpoint with
+      | JavaParser.MenhirInterpreter.InputNeeded _ ->
+        let token = JavaLexer.token lexbuf in
+        let startp = lexbuf.lex_start_p in
+        let endp = lexbuf.lex_curr_p in
+        let checkpoint = JavaParser.MenhirInterpreter.offer checkpoint (token, startp, endp) in
+        loop lexbuf checkpoint pane
+      | JavaParser.MenhirInterpreter.Shifting _ | JavaParser.MenhirInterpreter.AboutToReduce _ ->
+        let checkpoint = JavaParser.MenhirInterpreter.resume checkpoint in
+        loop lexbuf checkpoint pane
+      | JavaParser.MenhirInterpreter.HandlingError env ->
+        let error_state = JavaParser.MenhirInterpreter.current_state_number env in
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let cnum = LexingUtils.get_cnum lexbuf in
+        let message = JavaMessages.message error_state in
+        raise (Exceptions.CompileException {
+            pos = {
+              lnum;
+              cnum
+            };
+            pane;
+            exception_type = "error";
+            message
+          })
+      | JavaParser.MenhirInterpreter.Accepted tree -> tree
+      | JavaParser.MenhirInterpreter.Rejected ->
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let cnum = LexingUtils.get_cnum lexbuf in
+        raise (Exceptions.CompileException {
+            pos = {
+              lnum;
+              cnum;
+            };
+            pane;
+            exception_type = "error";
+            message = "Syntax Error"
+          })
+    with
+    | Exceptions.LexingException e ->
       raise (Exceptions.CompileException {
-          pos = {
-            lnum;
-            cnum
-          };
           pane;
-          exception_type = "error";
-          message
-        })
-    | JavaParser.MenhirInterpreter.Accepted tree -> tree
-    | JavaParser.MenhirInterpreter.Rejected ->
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let cnum = LexingUtils.get_cnum lexbuf in
-      raise (Exceptions.CompileException {
-          pos = {
-            lnum;
-            cnum;
-          };
-          pane;
-          exception_type = "error";
-          message = "Syntax Error"
+          pos = e.pos;
+          exception_type = e.exception_type;
+          message = e.message;
         })
   in
   let extensions_code_lexbuf = Lexing.from_string extensions_code in
@@ -53,43 +63,51 @@ let parse_java extensions_code main_code =
 
 let parse_vb extensions_code main_code =
   let rec loop lexbuf state checkpoint pane =
-    match checkpoint with
-    | VBParser.MenhirInterpreter.InputNeeded _ ->
-      let token = VBLexer.token state lexbuf in
-      let startp = lexbuf.lex_start_p in
-      let endp = lexbuf.lex_curr_p in
-      let checkpoint = VBParser.MenhirInterpreter.offer checkpoint (token, startp, endp) in
-      loop lexbuf state checkpoint pane
-    | VBParser.MenhirInterpreter.Shifting _ | VBParser.MenhirInterpreter.AboutToReduce _ ->
-      let checkpoint = VBParser.MenhirInterpreter.resume checkpoint in
-      loop lexbuf state checkpoint pane
-    | VBParser.MenhirInterpreter.HandlingError env ->
-      let error_state = VBParser.MenhirInterpreter.current_state_number env in
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let cnum = LexingUtils.get_cnum lexbuf in
-      let message = VBMessages.message error_state in
-      raise (Exceptions.CompileException {
-          pos = {
-            lnum;
-            cnum;
-          };
-          pane;
-          exception_type = "error";
-          message
-        })
-    | VBParser.MenhirInterpreter.Accepted tree -> tree
-    | VBParser.MenhirInterpreter.Rejected ->
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let cnum = LexingUtils.get_cnum lexbuf in
-      raise (Exceptions.CompileException {
-          pos = {
-            lnum;
-            cnum;
-          };
-          pane;
-          exception_type = "error";
-          message = "Syntax Error"
-        })
+    try
+      match checkpoint with
+      | VBParser.MenhirInterpreter.InputNeeded _ ->
+        let token = VBLexer.token state lexbuf in
+        let startp = lexbuf.lex_start_p in
+        let endp = lexbuf.lex_curr_p in
+        let checkpoint = VBParser.MenhirInterpreter.offer checkpoint (token, startp, endp) in
+        loop lexbuf state checkpoint pane
+      | VBParser.MenhirInterpreter.Shifting _ | VBParser.MenhirInterpreter.AboutToReduce _ ->
+        let checkpoint = VBParser.MenhirInterpreter.resume checkpoint in
+        loop lexbuf state checkpoint pane
+      | VBParser.MenhirInterpreter.HandlingError env ->
+        let error_state = VBParser.MenhirInterpreter.current_state_number env in
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let cnum = LexingUtils.get_cnum lexbuf in
+        let message = VBMessages.message error_state in
+        raise (Exceptions.CompileException {
+            pos = {
+              lnum;
+              cnum;
+            };
+            pane;
+            exception_type = "error";
+            message
+          })
+      | VBParser.MenhirInterpreter.Accepted tree -> tree
+      | VBParser.MenhirInterpreter.Rejected ->
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let cnum = LexingUtils.get_cnum lexbuf in
+        raise (Exceptions.CompileException {
+            pos = {
+              lnum;
+              cnum;
+            };
+            pane;
+            exception_type = "error";
+            message = "Syntax Error"
+          })
+    with
+    | Exceptions.LexingException e -> raise (Exceptions.CompileException {
+        pane;
+        pos = e.pos;
+        exception_type = e.exception_type;
+        message = e.message;
+      })
   in
   let extensions_code_lexbuf = Lexing.from_string extensions_code in
   let extension_fxns = loop extensions_code_lexbuf (VBLexerState.create ()) (VBParser.Incremental.translation_unit extensions_code_lexbuf.lex_curr_p) Pane.Extensions in
@@ -103,43 +121,51 @@ let parse_vb extensions_code main_code =
 
 let parse_python extensions_code main_code =
   let rec loop lexbuf state checkpoint pane =
-    match checkpoint with
-    | PythonParser.MenhirInterpreter.InputNeeded _ ->
-      let token = PythonLexer.token state lexbuf in
-      let startp = lexbuf.lex_start_p in
-      let endp = lexbuf.lex_curr_p in
-      let checkpoint = PythonParser.MenhirInterpreter.offer checkpoint (token, startp, endp) in
-      loop lexbuf state checkpoint pane
-    | PythonParser.MenhirInterpreter.Shifting _ | PythonParser.MenhirInterpreter.AboutToReduce _ ->
-      let checkpoint = PythonParser.MenhirInterpreter.resume checkpoint in
-      loop lexbuf state checkpoint pane
-    | PythonParser.MenhirInterpreter.HandlingError env ->
-      let error_state = PythonParser.MenhirInterpreter.current_state_number env in
-      let message = PythonMessages.message error_state in
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let cnum = LexingUtils.get_cnum lexbuf in
-      raise (Exceptions.CompileException {
-          pos = {
-            lnum;
-            cnum;
-          };
-          pane;
-          exception_type = "error";
-          message
-        })
-    | PythonParser.MenhirInterpreter.Accepted tree -> tree
-    | PythonParser.MenhirInterpreter.Rejected ->
-      let lnum = LexingUtils.get_lnum lexbuf in
-      let cnum = LexingUtils.get_cnum lexbuf in
-      raise (Exceptions.CompileException {
-          pos = {
-            lnum;
-            cnum;
-          };
-          pane;
-          exception_type = "error";
-          message = "Syntax Error"
-        })
+    try
+      match checkpoint with
+      | PythonParser.MenhirInterpreter.InputNeeded _ ->
+        let token = PythonLexer.token state lexbuf in
+        let startp = lexbuf.lex_start_p in
+        let endp = lexbuf.lex_curr_p in
+        let checkpoint = PythonParser.MenhirInterpreter.offer checkpoint (token, startp, endp) in
+        loop lexbuf state checkpoint pane
+      | PythonParser.MenhirInterpreter.Shifting _ | PythonParser.MenhirInterpreter.AboutToReduce _ ->
+        let checkpoint = PythonParser.MenhirInterpreter.resume checkpoint in
+        loop lexbuf state checkpoint pane
+      | PythonParser.MenhirInterpreter.HandlingError env ->
+        let error_state = PythonParser.MenhirInterpreter.current_state_number env in
+        let message = PythonMessages.message error_state in
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let cnum = LexingUtils.get_cnum lexbuf in
+        raise (Exceptions.CompileException {
+            pos = {
+              lnum;
+              cnum;
+            };
+            pane;
+            exception_type = "error";
+            message
+          })
+      | PythonParser.MenhirInterpreter.Accepted tree -> tree
+      | PythonParser.MenhirInterpreter.Rejected ->
+        let lnum = LexingUtils.get_lnum lexbuf in
+        let cnum = LexingUtils.get_cnum lexbuf in
+        raise (Exceptions.CompileException {
+            pos = {
+              lnum;
+              cnum;
+            };
+            pane;
+            exception_type = "error";
+            message = "Syntax Error"
+          })
+    with
+    | Exceptions.LexingException e -> raise (Exceptions.CompileException {
+        pane;
+        pos = e.pos;
+        exception_type = e.exception_type;
+        message = e.message;
+      })
   in
   let extensions_code_lexbuf = Lexing.from_string extensions_code in
   let extension_fxns = loop extensions_code_lexbuf (PythonLexerState.create ()) (PythonParser.Incremental.fxns extensions_code_lexbuf.lex_curr_p) Pane.Extensions in
