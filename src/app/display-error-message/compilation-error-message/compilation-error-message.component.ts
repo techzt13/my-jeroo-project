@@ -12,7 +12,6 @@ export class CompilationErrorMessageComponent {
   constructor(private codeService: CodeService) { }
 
   onPositionLinkClick(e: MouseEvent) {
-    console.log(this.error);
     e.preventDefault();
     this.codeService.setCursorPosition({
       lnum: this.error.lnum,
