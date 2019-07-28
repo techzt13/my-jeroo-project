@@ -71,7 +71,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
       const editor = this.getSelectedEditor();
       editor.refresh();
       editor.focus();
-      editor.setCursor({ line: position.lnum, ch: position.cnum });
+      editor.setCursor({ line: position.lnum - 1, ch: position.cnum });
     });
   }
 
