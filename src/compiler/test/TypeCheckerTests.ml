@@ -55,11 +55,11 @@ let typecheck_decl_bad_args _test_ctxt =
       message = "No match found for constructor with type: Jeroo(Compass Direction, Compass Direction)\n" ^
                 "Candidate constructors:\n" ^
                 "Jeroo(Number, Number)\n" ^
-                "Jeroo(Number, Number, Number)\n" ^
-                "Jeroo(Number, Number, Compass Direction)\n" ^
                 "Jeroo(Number)\n" ^
-                "Jeroo(Number, Number, Compass Direction, Number)\n" ^
-                "Jeroo()";
+                "Jeroo(Number, Number, Compass Direction)\n" ^
+                "Jeroo(Number, Number, Number)\n" ^
+                "Jeroo()\n" ^
+                "Jeroo(Number, Number, Compass Direction, Number)";
     }) (fun () -> TypeChecker.type_check ast)
 
 let typecheck_if_stmt _test_ctxt =
