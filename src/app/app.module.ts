@@ -48,7 +48,6 @@ import { PrintMapComponent } from './print-layout/print-map/print-map.component'
 import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
 import { PrintCodeDialogComponent } from './print-layout/print-code/print-code-dialog/print-code-dialog.component';
 import { EditorPreferencesComponent } from './dashboard/editor-preferences/editor-preferences.component';
-import { ReplaceLineBreaks } from './Pipes';
 import { CompilationErrorMessageComponent } from './display-error-message/compilation-error-message/compilation-error-message.component';
 import { LoggingMessageComponent } from './display-error-message/logging-message/logging-message.component';
 
@@ -93,7 +92,6 @@ library.add(
     PrintCodeComponent,
     PrintCodeDialogComponent,
     EditorPreferencesComponent,
-    ReplaceLineBreaks,
     CompilationErrorMessageComponent,
     LoggingMessageComponent
   ],

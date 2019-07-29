@@ -3,6 +3,7 @@ import { CodeService } from 'src/app/code.service';
 
 @Component({
   selector: 'app-compilation-error-message',
+  styleUrls: ['./compilation-error-message.component.scss'],
   templateUrl: './compilation-error-message.component.html'
 })
 export class CompilationErrorMessageComponent {

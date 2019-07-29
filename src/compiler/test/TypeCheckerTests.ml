@@ -727,7 +727,6 @@ let typecheck_dot_wrong_types _test_ctxt =
       message = ". operator must be used with a Jeroo object, found Number";
     }) (fun () -> TypeChecker.type_check ast)
 
-
 let suite =
   "TypeChecker">::: [
     "Type check decl no args">:: typecheck_decl_no_args;
