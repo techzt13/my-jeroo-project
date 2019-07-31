@@ -20,7 +20,7 @@ export class IslandSaveDialogComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      name: ['island']
+      name: []
     });
   }
 

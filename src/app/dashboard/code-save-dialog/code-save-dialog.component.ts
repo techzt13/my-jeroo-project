@@ -20,7 +20,7 @@ export class CodeSaveDialogComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      name: ['code']
+      name: []
     });
   }
 
