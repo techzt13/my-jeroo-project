@@ -106,7 +106,7 @@ export class DashboardComponent implements AfterViewInit {
       return false;
     }));
     this.hotkeysService.add(new Hotkey('ctrl+o', (_event: KeyboardEvent): boolean => {
-      this.onOpenFileClick();
+      this.openCodeFile();
       return false;
     }));
     this.hotkeysService.add(new Hotkey('ctrl+s', (_event: KeyboardEvent): boolean => {
