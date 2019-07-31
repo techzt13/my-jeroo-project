@@ -23,7 +23,7 @@ let typecheck_decl_no_args _test_ctxt =
     }
   }
   in
-  TypeChecker.type_check ast
+  TypeChecker.typecheck ast
 
 let typecheck_decl_bad_args _test_ctxt =
   let ast = { language = AST.Java;
@@ -58,7 +58,7 @@ let typecheck_decl_bad_args _test_ctxt =
                 "Jeroo(Number, Number, Number)\n" ^
                 "Jeroo()\n" ^
                 "Jeroo(Number, Number, Compass Direction, Number)";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_if_stmt _test_ctxt =
   let ast = { language = AST.Java;
@@ -90,7 +90,7 @@ let typecheck_if_stmt _test_ctxt =
     }
   }
   in
-  TypeChecker.type_check ast
+  TypeChecker.typecheck ast
 
 let typecheck_if_stmt_bad_types _test_ctxt =
   let ast = { language = AST.Java;
@@ -125,7 +125,7 @@ let typecheck_if_stmt_bad_types _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "If statement expected Boolean, found Jeroo";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_while_stmt _test_ctxt =
   let ast = { language = AST.Java;
@@ -157,7 +157,7 @@ let typecheck_while_stmt _test_ctxt =
     }
   }
   in
-  TypeChecker.type_check ast
+  TypeChecker.typecheck ast
 
 let typecheck_while_stmt_wrong_type _test_ctxt =
   let ast = { language = AST.Java;
@@ -185,7 +185,7 @@ let typecheck_while_stmt_wrong_type _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "While statement expected Boolean, found Compass Direction";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_if_else_stmt _test_ctxt =
   let ast = { language = AST.Java;
@@ -222,7 +222,7 @@ let typecheck_if_else_stmt _test_ctxt =
     }
   }
   in
-  TypeChecker.type_check ast
+  TypeChecker.typecheck ast
 
 let typecheck_if_else_stmt_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
@@ -255,7 +255,7 @@ let typecheck_if_else_stmt_wrong_types _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "If statement expected Boolean, found Compass Direction";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_extension_fxn _test_ctxt =
   let ast = { language = AST.Java;
@@ -311,7 +311,7 @@ let typecheck_extension_fxn _test_ctxt =
       end_lnum = 4;
     }
   } in
-  TypeChecker.type_check ast
+  TypeChecker.typecheck ast
 
 let typecheck_not_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
@@ -338,7 +338,7 @@ let typecheck_not_wrong_types _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "! operator expected: `!Boolean`, found: `!Relative Direction`";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_and_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
@@ -369,7 +369,7 @@ let typecheck_and_wrong_types _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "&& operator expected: `Boolean && Boolean`, found: `Relative Direction && Relative Direction`";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_unbound_identifier _test_ctxt =
   let ast = { language = AST.Java;
@@ -403,7 +403,7 @@ let typecheck_unbound_identifier _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "unbound not found in this scope";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_variable_scope _test_ctxt =
   let ast = { language = AST.Java;
@@ -453,7 +453,7 @@ let typecheck_variable_scope _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "j not found in this scope";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_name_shadowing _test_ctxt =
   let ast = { language = AST.Java;
@@ -490,9 +490,9 @@ let typecheck_name_shadowing _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "j already declared";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
-let type_check_function_shadowing_error _test_txt =
+let typecheck_function_shadowing_error _test_txt =
   let ast = { language = AST.Java;
     extension_fxns = [
       {
@@ -518,9 +518,9 @@ let type_check_function_shadowing_error _test_txt =
       pane = Pane.Extensions;
       exception_type = "error";
       message = "hop() already declared";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
-let type_check_function_shadowing _test_txt =
+let typecheck_function_shadowing _test_txt =
   let ast = { language = AST.Java;
     extension_fxns = [
       {
@@ -541,7 +541,7 @@ let type_check_function_shadowing _test_txt =
       end_lnum = 4;
     }
   } in
-  TypeChecker.type_check ast
+  TypeChecker.typecheck ast
 
 let typecheck_fxn_call_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
@@ -590,7 +590,7 @@ let typecheck_fxn_call_wrong_types _test_ctxt =
                 "Candidate functions:\n" ^
                 "hop(Number)\n" ^
                 "hop()";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_fxn_call_undefined_fxn _test_ctxt =
   let ast = { language = AST.Java;
@@ -636,7 +636,7 @@ let typecheck_fxn_call_undefined_fxn _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = "fizzbuzz not found in this scope"
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_type_error_in_extensions _test_ctxt =
   let ast = { language = AST.Java;
@@ -673,7 +673,7 @@ let typecheck_type_error_in_extensions _test_ctxt =
       pane = Pane.Extensions;
       exception_type = "error";
       message = "|| operator expected: `Boolean || Boolean`, found: `Boolean || Compass Direction`";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let typecheck_dot_wrong_types _test_ctxt =
   let ast = {
@@ -705,7 +705,7 @@ let typecheck_dot_wrong_types _test_ctxt =
       pane = Pane.Main;
       exception_type = "error";
       message = ". operator must be used with a Jeroo object, found Number";
-    }) (fun () -> TypeChecker.type_check ast)
+    }) (fun () -> TypeChecker.typecheck ast)
 
 let suite =
   "TypeChecker">::: [
@@ -723,8 +723,8 @@ let suite =
     "Type check unbound identifier">:: typecheck_unbound_identifier;
     "Type check variable scope">:: typecheck_variable_scope;
     "Type check name shadowing">:: typecheck_name_shadowing;
-    "Type check function shadowing error">:: type_check_function_shadowing_error;
-    "Type check function shadowing">:: type_check_function_shadowing;
+    "Type check function shadowing error">:: typecheck_function_shadowing_error;
+    "Type check function shadowing">:: typecheck_function_shadowing;
     "Type check function call with wrong types">:: typecheck_fxn_call_wrong_types;
     "Type check undefined function">:: typecheck_fxn_call_undefined_fxn;
     "Type check error in extensions">:: typecheck_type_error_in_extensions;

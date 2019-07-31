@@ -269,16 +269,16 @@ and gen_code_while codegen_state symbol_table e s pos =
   end_while_lnum
 
 let gen_code_fxn codegen_state symbol_table fxn =
-  if SymbolTable.mem symbol_table fxn.id
-  then raise_type_exception ()
-  else begin
-    SymbolTable.add symbol_table fxn.id FunV;
-    Queue.add (Bytecode.LABEL (fxn.id, codegen_state.pane, fxn.start_lnum)) codegen_state.code_queue;
-    let child_tbl = SymbolTable.add_level symbol_table in
-    fxn.stmts
-    |> List.iter (fun stmt -> ignore (gen_code_stmt codegen_state child_tbl stmt));
-    Queue.add (Bytecode.RETR (codegen_state.pane, fxn.end_lnum)) codegen_state.code_queue;
-  end
+  SymbolTable.add symbol_table fxn.id FunV;
+  Queue.add (Bytecode.LABEL (fxn.id, codegen_state.pane, fxn.start_lnum)) codegen_state.code_queue;
+  let child_tbl = SymbolTable.add_level symbol_table in
+  fxn.stmts
+  |> List.iter (fun stmt -> ignore (gen_code_stmt codegen_state child_tbl stmt));
+  Queue.add (Bytecode.RETR (codegen_state.pane, fxn.end_lnum)) codegen_state.code_queue
+
+let add_extension_fxns_to_env extension_fxns env =
+  extension_fxns
+  |> List.iter (fun fxn -> SymbolTable.add env fxn.id FunV)
 
 let gen_code_extension_fxns extension_fxns env state =
   state.pane <- Pane.Extensions;
@@ -307,6 +307,7 @@ let codegen translation_unit =
   (* create the symbol tables *)
   let main_tbl = SymbolTable.create () in
   let extension_tbl = SymbolTable.create () in
+  add_extension_fxns_to_env translation_unit.extension_fxns extension_tbl;
   SymbolTable.add main_tbl "Jeroo" (ObjV extension_tbl);
 
   (* at the start of execution, jump to main *)

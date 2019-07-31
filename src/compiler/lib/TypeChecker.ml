@@ -332,7 +332,7 @@ let add_ctor_to_symbol_table id args env =
   in
   SymbolTable.add env id ctor
 
-let create_jeroo_type env =
+let create_jeroo_env () =
   let jeroo_env = SymbolTable.create () in
 
   (* Action Methods *)
@@ -363,10 +363,7 @@ let create_jeroo_type env =
   add_ctor_to_symbol_table ctor_id [JerooType.NumT; JerooType.NumT; JerooType.NumT] jeroo_env;
   add_ctor_to_symbol_table ctor_id [JerooType.NumT; JerooType.NumT; JerooType.CompassDirT; JerooType.NumT] jeroo_env;
 
-  SymbolTable.add env ctor_id (JerooType.ObjectT {
-      id = ctor_id;
-      env = jeroo_env
-    })
+  jeroo_env
 
 let check_duplicates fxn_type id env state =
   let duplicate_found = (SymbolTable.find_all env id)
@@ -382,34 +379,14 @@ let check_duplicates fxn_type id env state =
       message = (JerooType.string_of_type fxn_type) ^ " already declared"
     })
 
-let typecheck_fxn fxn env state =
-  let id = fxn.id in
-  let fxn_type = JerooType.FunT {
-      id;
-      args = [];
-      retT = JerooType.VoidT
-    }
-  in
-  check_duplicates fxn_type id env state;
-  SymbolTable.add env id fxn_type;
+let typecheck_fxn (fxn : AST.fxn) env state =
   let new_tbl = SymbolTable.add_level env in
   fxn.stmts
   |> List.iter (fun s -> typecheck_stmt s new_tbl state)
 
 let typecheck_extension_fxns extension_fxns env state =
-  match SymbolTable.find env "Jeroo" with
-  | Some (JerooType.ObjectT jeroo_obj) ->
     extension_fxns
-    |> List.iter (fun f -> typecheck_fxn f jeroo_obj.env state)
-  | _ -> raise (Exceptions.CompileException {
-      pos = {
-        lnum = 0;
-        cnum = 0;
-      };
-      pane = state.pane;
-      exception_type = error;
-      message = get_not_found_message "Jeroo" env
-    })
+    |> List.iter (fun f -> typecheck_fxn f env state)
 
 let typecheck_main_fxn main_fxn env state =
   let id = "main" in
@@ -419,25 +396,43 @@ let typecheck_main_fxn main_fxn env state =
       retT = JerooType.VoidT
     }
   in
-  check_duplicates fxn_type id env state;
   SymbolTable.add env id fxn_type;
   let new_tbl = SymbolTable.add_level env in
   main_fxn.stmts
   |> List.iter (fun s -> typecheck_stmt s new_tbl state)
 
-let type_check (translation_unit : AST.translation_unit) =
-  let env = SymbolTable.create () in
-  create_jeroo_type env;
+let add_extension_fxns_to_env extension_fxns env state =
+  extension_fxns
+  |> List.iter (fun fxn ->
+      let fxn_t = JerooType.FunT {
+          id = fxn.id;
+          args = [];
+          retT = JerooType.VoidT;
+        }
+      in
+      check_duplicates fxn_t fxn.id env state;
+      SymbolTable.add env fxn.id fxn_t
+    )
+
+let typecheck translation_unit =
+  let main_env = SymbolTable.create () in
+  let extensions_env = create_jeroo_env () in
+  SymbolTable.add main_env "Jeroo" (JerooType.ObjectT {
+      id = "Jeroo";
+      env = extensions_env;
+    });
+
   let lang = translation_unit.language in
   let extensions_state = {
     pane = Pane.Extensions;
     lang
   }
   in
-  typecheck_extension_fxns translation_unit.extension_fxns env extensions_state;
+  add_extension_fxns_to_env translation_unit.extension_fxns extensions_env extensions_state;
+  typecheck_extension_fxns translation_unit.extension_fxns extensions_env extensions_state;
   let main_state = {
     pane = Pane.Main;
     lang
   }
   in
-  typecheck_main_fxn translation_unit.main_fxn env main_state
+  typecheck_main_fxn translation_unit.main_fxn main_env main_state
