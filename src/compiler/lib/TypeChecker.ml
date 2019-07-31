@@ -110,7 +110,7 @@ let rec type_of_expr expr env state =
         })
     end
   | { a = AST.UnOpExpr (AST.New, ctor); _ } -> typecheck_new_expr ctor env state
-  | { a = AST.FxnAppExpr (fxn, args); _ } -> typecheck_fxn fxn args env state
+  | { a = AST.FxnAppExpr (fxn, args); _ } -> typecheck_fxn_app fxn args env state
   | { a = AST.BinOpExpr (l, (AST.Dot as op), r); _ } ->
     begin match type_of_expr l env state with
       | JerooType.ObjectT obj -> type_of_expr r obj.env state
@@ -124,7 +124,7 @@ let rec type_of_expr expr env state =
               (JerooType.string_of_type t)
         })
     end
-and typecheck_fxn fxn args env state = match fxn.a with
+and typecheck_fxn_app fxn args env state = match fxn.a with
   | AST.IdExpr id ->
     let args_t = args |> List.map (fun arg -> type_of_expr arg env state) in
     let matches = SymbolTable.find_all env id in
@@ -239,12 +239,12 @@ and typecheck_new_expr ctor_meta env state =
       message = "`new` operator requiers function application"
     })
 
-let rec type_check_stmt stmt env state =
+let rec typecheck_stmt stmt env state =
   match stmt with
   | AST.IfStmt { a = (e, s); pos }  ->
     begin match (type_of_expr e env state) with
       | JerooType.BoolT ->
-        (type_check_stmt s (SymbolTable.add_level env) state);
+        (typecheck_stmt s (SymbolTable.add_level env) state);
       | t -> raise (Exceptions.CompileException {
           pos;
           pane = state.pane;
@@ -259,8 +259,8 @@ let rec type_check_stmt stmt env state =
   | AST.IfElseStmt { a = (e, s1, s2); pos } ->
     begin match (type_of_expr e env state) with
       | JerooType.BoolT ->
-        (type_check_stmt s1 (SymbolTable.add_level env) state);
-        (type_check_stmt s2 (SymbolTable.add_level env) state);
+        (typecheck_stmt s1 (SymbolTable.add_level env) state);
+        (typecheck_stmt s2 (SymbolTable.add_level env) state);
       | t -> raise (Exceptions.CompileException {
           pos;
           pane = state.pane;
@@ -274,12 +274,12 @@ let rec type_check_stmt stmt env state =
     end
   | AST.BlockStmt stmts ->
     stmts
-    |> List.iter (fun s -> (type_check_stmt s env state))
+    |> List.iter (fun s -> (typecheck_stmt s env state))
     ;
   | AST.WhileStmt { a = (e, s); pos } ->
     begin match (type_of_expr e env state) with
       | JerooType.BoolT ->
-        (type_check_stmt s (SymbolTable.add_level env) state);
+        (typecheck_stmt s (SymbolTable.add_level env) state);
       | t -> raise (Exceptions.CompileException {
           pos;
           pane = state.pane;
@@ -314,28 +314,6 @@ let rec type_check_stmt stmt env state =
         message = "Jeroo declarations are the only valid declarations"
       })
 
-let type_check_fxn fxn env state =
-  let fxn_type = JerooType.FunT {
-      id = fxn.id;
-      args = [];
-      retT = JerooType.VoidT
-    }
-  in
-  let match_found = (SymbolTable.find_all env fxn.id)
-                    |> List.exists (function
-                        | (JerooType.FunT _) as t -> fxn_type = t
-                        | _ -> false)
-  in
-  if match_found then raise (Exceptions.CompileException {
-      pos = { lnum = 0; cnum = 0; };
-      pane = state.pane;
-      exception_type = error;
-      message = (JerooType.string_of_type fxn_type) ^ " already declared"
-    });
-  SymbolTable.add env fxn.id fxn_type;
-  let new_tbl = SymbolTable.add_level env in
-  fxn.stmts
-  |> List.iter (fun s -> type_check_stmt s new_tbl state)
 
 let add_fxn_to_symbol_table id args retT env =
   let fxn = JerooType.FunT {
@@ -390,11 +368,39 @@ let create_jeroo_type env =
       env = jeroo_env
     })
 
-let type_check_extension_fxns extension_fxns env state =
+let check_duplicates fxn_type id env state =
+  let duplicate_found = (SymbolTable.find_all env id)
+                        |> List.exists (function
+                            | (JerooType.FunT _) as t -> fxn_type = t
+                            | _ -> false)
+  in
+  if duplicate_found
+  then raise (Exceptions.CompileException {
+      pos = { lnum = 0; cnum = 0; };
+      pane = state.pane;
+      exception_type = error;
+      message = (JerooType.string_of_type fxn_type) ^ " already declared"
+    })
+
+let typecheck_fxn fxn env state =
+  let id = fxn.id in
+  let fxn_type = JerooType.FunT {
+      id;
+      args = [];
+      retT = JerooType.VoidT
+    }
+  in
+  check_duplicates fxn_type id env state;
+  SymbolTable.add env id fxn_type;
+  let new_tbl = SymbolTable.add_level env in
+  fxn.stmts
+  |> List.iter (fun s -> typecheck_stmt s new_tbl state)
+
+let typecheck_extension_fxns extension_fxns env state =
   match SymbolTable.find env "Jeroo" with
   | Some (JerooType.ObjectT jeroo_obj) ->
     extension_fxns
-    |> List.iter (fun f -> type_check_fxn f jeroo_obj.env state)
+    |> List.iter (fun f -> typecheck_fxn f jeroo_obj.env state)
   | _ -> raise (Exceptions.CompileException {
       pos = {
         lnum = 0;
@@ -405,6 +411,20 @@ let type_check_extension_fxns extension_fxns env state =
       message = get_not_found_message "Jeroo" env
     })
 
+let typecheck_main_fxn main_fxn env state =
+  let id = "main" in
+  let fxn_type = JerooType.FunT {
+      id;
+      args = [];
+      retT = JerooType.VoidT
+    }
+  in
+  check_duplicates fxn_type id env state;
+  SymbolTable.add env id fxn_type;
+  let new_tbl = SymbolTable.add_level env in
+  main_fxn.stmts
+  |> List.iter (fun s -> typecheck_stmt s new_tbl state)
+
 let type_check (translation_unit : AST.translation_unit) =
   let env = SymbolTable.create () in
   create_jeroo_type env;
@@ -414,10 +434,10 @@ let type_check (translation_unit : AST.translation_unit) =
     lang
   }
   in
-  type_check_extension_fxns translation_unit.extension_fxns env extensions_state;
+  typecheck_extension_fxns translation_unit.extension_fxns env extensions_state;
   let main_state = {
     pane = Pane.Main;
     lang
   }
   in
-  type_check_fxn translation_unit.main_fxn env main_state
+  typecheck_main_fxn translation_unit.main_fxn env main_state

@@ -6,7 +6,6 @@ let typecheck_decl_no_args _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.DeclStmt("Jeroo", "j", {
             a = AST.UnOpExpr(AST.New, {
@@ -30,7 +29,6 @@ let typecheck_decl_bad_args _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.DeclStmt("Jeroo", "j", {
             a = AST.UnOpExpr(AST.New, {
@@ -66,7 +64,6 @@ let typecheck_if_stmt _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.IfStmt {
           a = ({
@@ -99,7 +96,6 @@ let typecheck_if_stmt_bad_types _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.IfStmt {
           a = ({
@@ -135,7 +131,6 @@ let typecheck_while_stmt _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.WhileStmt {
           a = ({
@@ -168,7 +163,6 @@ let typecheck_while_stmt_wrong_type _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.WhileStmt {
           a = ({
@@ -197,7 +191,6 @@ let typecheck_if_else_stmt _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.IfElseStmt {
           a = ({
@@ -235,7 +228,6 @@ let typecheck_if_else_stmt_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.IfElseStmt {
           a = ({
@@ -287,7 +279,6 @@ let typecheck_extension_fxn _test_ctxt =
       }
     ];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.DeclStmt("Jeroo", "j", {
             a = AST.UnOpExpr(AST.New, {
@@ -326,7 +317,6 @@ let typecheck_not_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.ExprStmt {
           a = Some {
@@ -354,7 +344,6 @@ let typecheck_and_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.ExprStmt {
           a = Some {
@@ -386,7 +375,6 @@ let typecheck_unbound_identifier _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.ExprStmt {
           a = Some {
@@ -421,7 +409,6 @@ let typecheck_variable_scope _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.IfStmt {
           a = ({
@@ -472,7 +459,6 @@ let typecheck_name_shadowing _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.DeclStmt("Jeroo", "j", {
             a = AST.UnOpExpr(AST.New, {
@@ -522,7 +508,6 @@ let type_check_function_shadowing_error _test_txt =
       }
     ];
     main_fxn = {
-      id = "main";
       stmts = [];
       start_lnum = 1;
       end_lnum = 4;
@@ -551,7 +536,6 @@ let type_check_function_shadowing _test_txt =
       }
     ];
     main_fxn = {
-      id = "main";
       stmts = [];
       start_lnum = 1;
       end_lnum = 4;
@@ -563,7 +547,6 @@ let typecheck_fxn_call_wrong_types _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.DeclStmt("Jeroo", "j", {
             a = AST.UnOpExpr(AST.New, {
@@ -613,7 +596,6 @@ let typecheck_fxn_call_undefined_fxn _test_ctxt =
   let ast = { language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.DeclStmt("Jeroo", "j", {
             a = AST.UnOpExpr(AST.New, {
@@ -681,7 +663,6 @@ let typecheck_type_error_in_extensions _test_ctxt =
       }
     ];
     main_fxn = {
-      id = "main";
       stmts = [];
       start_lnum = 1;
       end_lnum = 4;
@@ -699,7 +680,6 @@ let typecheck_dot_wrong_types _test_ctxt =
     language = AST.Java;
     extension_fxns = [];
     main_fxn = {
-      id = "main";
       stmts = [
         AST.ExprStmt({
             a = Some({

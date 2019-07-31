@@ -280,6 +280,22 @@ let gen_code_fxn codegen_state symbol_table fxn =
     Queue.add (Bytecode.RETR (codegen_state.pane, fxn.end_lnum)) codegen_state.code_queue;
   end
 
+let gen_code_extension_fxns extension_fxns env state =
+  state.pane <- Pane.Extensions;
+  extension_fxns
+  |> List.iter (gen_code_fxn state env)
+
+let gen_code_main_fxn main_fxn env state =
+  state.pane <- Pane.Main;
+  let fxn = {
+    id = "main";
+    stmts = main_fxn.stmts;
+    start_lnum = main_fxn.start_lnum;
+    end_lnum = main_fxn.end_lnum;
+  }
+  in
+  gen_code_fxn state env fxn
+
 let codegen translation_unit =
   let codegen_state = {
     code_queue = Queue.create();
@@ -287,23 +303,23 @@ let codegen translation_unit =
     pane = Pane.Extensions
   }
   in
+
+  (* create the symbol tables *)
   let main_tbl = SymbolTable.create () in
   let extension_tbl = SymbolTable.create () in
+  SymbolTable.add main_tbl "Jeroo" (ObjV extension_tbl);
+
   (* at the start of execution, jump to main *)
   Queue.add (Bytecode.JUMP_LBL ("main", Pane.Main, translation_unit.main_fxn.start_lnum)) codegen_state.code_queue;
 
-  (* generate the code for all of the extension methods *)
-  SymbolTable.add main_tbl "Jeroo" (ObjV extension_tbl);
-  translation_unit.extension_fxns
-  |> List.iter (gen_code_fxn codegen_state extension_tbl);
-
-  (* generate the code for the main function *)
-  codegen_state.pane <- Pane.Main;
-  gen_code_fxn codegen_state main_tbl translation_unit.main_fxn;
+  (* generate the code *)
+  gen_code_extension_fxns translation_unit.extension_fxns extension_tbl codegen_state;
+  gen_code_main_fxn translation_unit.main_fxn main_tbl codegen_state;
   let code_with_labels = Queue.to_seq codegen_state.code_queue in
 
   (* remove the labels *)
   let bytecode = remove_labels code_with_labels in
+
   (* create the jeroo mapping *)
   let jeroo_tbl = Hashtbl.create 10 in
   (SymbolTable.inverse_fold main_tbl () (fun a b _ -> match b with
