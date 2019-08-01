@@ -7,7 +7,7 @@ let make_main_fxn = function
       pos = { lnum = start_lnum; cnum = 0 };
       pane = Pane.Main;
       exception_type = "error";
-      message = Printf.sprintf "main method should be named `main`, found %s\n" id
+      message = Printf.sprintf "main method should be named `main`, found `%s`\n" id
     })
   | { start_lnum; _ } :: _ -> raise (Exceptions.CompileException {
       pos = { lnum = start_lnum; cnum = 0 };
