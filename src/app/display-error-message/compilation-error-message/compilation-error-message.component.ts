@@ -1,5 +1,7 @@
+// TODO: make new message type and component for the runtime messages
 import { Component, Input } from '@angular/core';
 import { CodeService, SelectedTab } from 'src/app/code.service';
+import { CompilationErrorMessage } from 'src/app/message.service';
 
 @Component({
   selector: 'app-compilation-error-message',
@@ -8,16 +10,16 @@ import { CodeService, SelectedTab } from 'src/app/code.service';
 })
 export class CompilationErrorMessageComponent {
   @Input()
-  error: CompilationError;
+  compilationErrorMessage: CompilationErrorMessage;
 
   constructor(private codeService: CodeService) { }
 
   onPositionLinkClick(e: MouseEvent) {
     e.preventDefault();
     this.codeService.setCursorPosition({
-      lnum: this.error.lnum,
-      cnum: this.error.cnum,
-      pane: this.error.pane
+      lnum: this.compilationErrorMessage.compilationError.lnum,
+      cnum: this.compilationErrorMessage.compilationError.cnum,
+      pane: this.compilationErrorMessage.compilationError.pane
     });
   }
 
