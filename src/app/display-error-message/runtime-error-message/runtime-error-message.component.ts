@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RuntimeErrorMessage } from 'src/app/message.service';
-import { SelectedTab, CodeService } from 'src/app/code.service';
+import { CodeService, selectedTabToString, SelectedTab } from 'src/app/code.service';
 
 @Component({
   selector: 'app-runtime-error-message',
@@ -22,11 +22,7 @@ export class RuntimeErrorMessageComponent {
     });
   }
 
-  // TODO: code duplication with compilation error message component, fix that
   selectedTabToString(selectedTab: SelectedTab) {
-    switch (selectedTab) {
-      case SelectedTab.Main: return 'Main';
-      case SelectedTab.Extensions: return 'Extensions';
-    }
+    return selectedTabToString(selectedTab);
   }
 }

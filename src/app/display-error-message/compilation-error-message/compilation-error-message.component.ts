@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CodeService, SelectedTab } from 'src/app/code.service';
+import { CodeService, SelectedTab, selectedTabToString } from 'src/app/code.service';
 import { CompilationErrorMessage } from 'src/app/message.service';
 
 @Component({
@@ -23,9 +23,6 @@ export class CompilationErrorMessageComponent {
   }
 
   selectedTabToString(selectedTab: SelectedTab) {
-    switch (selectedTab) {
-      case SelectedTab.Main: return 'Main';
-      case SelectedTab.Extensions: return 'Extensions';
-    }
+    return selectedTabToString(selectedTab);
   }
 }
