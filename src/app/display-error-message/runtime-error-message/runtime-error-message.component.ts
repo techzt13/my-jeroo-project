@@ -1,0 +1,32 @@
+import { Component, Input } from '@angular/core';
+import { RuntimeErrorMessage } from 'src/app/message.service';
+import { SelectedTab, CodeService } from 'src/app/code.service';
+
+@Component({
+  selector: 'app-runtime-error-message',
+  templateUrl: './runtime-error-message.component.html',
+  styleUrls: ['./runtime-error-message.component.scss']
+})
+export class RuntimeErrorMessageComponent {
+  @Input()
+  runtimeErrorMessage: RuntimeErrorMessage;
+
+  constructor(private codeService: CodeService) { }
+
+  onPositionLinkClick(event: MouseEvent) {
+    event.preventDefault();
+    this.codeService.setCursorPosition({
+      lnum: this.runtimeErrorMessage.line_num,
+      cnum: 0,
+      pane: this.runtimeErrorMessage.pane_num
+    });
+  }
+
+  // TODO: code duplication with compilation error message component, fix that
+  selectedTabToString(selectedTab: SelectedTab) {
+    switch (selectedTab) {
+      case SelectedTab.Main: return 'Main';
+      case SelectedTab.Extensions: return 'Extensions';
+    }
+  }
+}

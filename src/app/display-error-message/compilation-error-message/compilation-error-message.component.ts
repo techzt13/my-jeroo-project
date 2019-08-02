@@ -1,4 +1,3 @@
-// TODO: make new message type and component for the runtime messages
 import { Component, Input } from '@angular/core';
 import { CodeService, SelectedTab } from 'src/app/code.service';
 import { CompilationErrorMessage } from 'src/app/message.service';

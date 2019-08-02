@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter.service';
 import { MatrixService } from '../matrix.service';
-import { MessageService, LoggingMessage, CompilationErrorMessage } from '../message.service';
+import { MessageService, LoggingMessage, CompilationErrorMessage, RuntimeErrorMessage } from '../message.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
 import { CodeService, SelectedLanguage, SelectedTab } from '../code.service';
 import { Storage } from '../storage';
@@ -188,11 +188,10 @@ export class EditorTabAreaComponent implements AfterViewInit {
   private handleException(e: any) {
     const runtimeError: RuntimeError = e;
     this.messageService.clear();
-    const message = new LoggingMessage(`Runtime error line ${runtimeError.line_num}: ${runtimeError.message}`);
     this.unhighlightPreviousLine();
     this.selectedTabIndex = runtimeError.pane_num;
     this.getSelectedEditor().highlightErrorLine(runtimeError.line_num);
-    this.messageService.addMessage(message);
+    this.messageService.addMessage(new RuntimeErrorMessage(runtimeError.message, runtimeError.pane_num, runtimeError.line_num));
     this.stopState();
   }
 

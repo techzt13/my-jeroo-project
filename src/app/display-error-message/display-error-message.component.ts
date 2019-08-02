@@ -1,5 +1,5 @@
 import { Component, ViewChildren, QueryList, AfterViewInit, ElementRef } from '@angular/core';
-import { MessageService, Message, LoggingMessage, CompilationErrorMessage } from '../message.service';
+import { MessageService, Message, LoggingMessage, CompilationErrorMessage, RuntimeErrorMessage } from '../message.service';
 
 @Component({
   selector: 'app-display-error-message',
@@ -23,6 +23,10 @@ export class DisplayErrorMessageComponent implements AfterViewInit {
 
   messageIsLoggingMessage(message: Message) {
     return message instanceof LoggingMessage;
+  }
+
+  messageIsRuntimeErrorMessage(message: Message) {
+    return message instanceof RuntimeErrorMessage;
   }
 
   messageIsCompilationErrorMessage(message: Message) {

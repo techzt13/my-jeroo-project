@@ -10,6 +10,10 @@ export class CompilationErrorMessage {
   constructor(public compilationError: CompilationError) {}
 }
 
+export class RuntimeErrorMessage {
+  constructor(public message: string, public pane_num: number, public line_num: number) {}
+}
+
 @Injectable({
   providedIn: 'root'
 })
