@@ -12,7 +12,8 @@
   <mat-sidenav-content>
     <main>
       <!--Toolbar Area-->
-      <mat-toolbar color="primary">
+      <!-- TODO: make two seperate mat-toolbar's for the different views -->
+      <mat-toolbar color="primary" style="padding-top: 10px">
         <mat-toolbar-row>
           <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="3px" fxHide.gt-sm>
             <button mat-icon-button (click)="sidenav.toggle()">
@@ -20,65 +21,99 @@
             </button>
             <img src="assets/JerooLogo.png" alt="Jeroo Logo" />
           </div>
-          <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="3px" fxHide.lt-md>
-            <img src="assets/JerooLogo.png" alt="Jeroo Logo" />
-            <button id="sourceFileMenu" mat-button [matMenuTriggerFor]="file">Source File</button>
-            <button id="sourceEditMenu" mat-button [matMenuTriggerFor]="edit">Source Edit</button>
-            <button id="runMenu" mat-button [matMenuTriggerFor]="run">Run</button>
-            <button id="runSpeedMenu" mat-button [matMenuTriggerFor]="speed">Run Speed</button>
-            <button id="islandFileMenu" mat-button [matMenuTriggerFor]="islandfile">Island File</button>
-            <button id="islandEditMenu" mat-button [matMenuTriggerFor]="islandEdit">Island Edit</button>
-            <button id="helpMenu" mat-button [matMenuTriggerFor]="help">Help</button>
+          <div fxLayout="row" fxHide.lt-md>
+            <div fxLayout="row" fxLayoutAlign="center start">
+              <img src="assets/JerooLogo.png" alt="Jeroo Logo" />
+            </div>
+            <div fxLayout="row" fxLayoutAlign="none start">
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                  <button id="sourceFileMenu" mat-button [matMenuTriggerFor]="file">Source File</button>
+                </div>
+                <div>
+                  <button mat-icon-button matTooltip="New File" [disabled]="!editorEditingEnabled()" (click)="newCodeFile()">
+                    <fa-icon icon="file"></fa-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Open File" [disabled]="!editorEditingEnabled()" (click)="openCodeFile()">
+                    <fa-icon icon="folder"></fa-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Save" (click)="saveCode()">
+                    <fa-icon icon="save"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                  <button id="sourceEditMenu" mat-button [matMenuTriggerFor]="edit">Source Edit</button>
+                </div>
+                <div>
+                  <button id="undoButton" mat-icon-button matTooltip="Undo" [disabled]="!editorEditingEnabled()" (click)="onUndoClick()">
+                    <fa-icon icon="undo"></fa-icon>
+                  </button>
+                  <button id="redoButton" mat-icon-button matTooltip="Redo" [disabled]="!editorEditingEnabled()" (click)="onRedoClick()">
+                    <fa-icon icon="redo"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                  <button id="runMenu" mat-button [matMenuTriggerFor]="run">Run</button>
+                </div>
+                <div>
+                  <button id="resetButton" mat-icon-button matTooltip="Reset the program and the island" [disabled]="resetBtnDisabled()" (click)="onResetClick()">
+                    <fa-icon icon="step-backward"></fa-icon>
+                  </button>
+                  <button id="runButton" mat-icon-button matTooltip="Run the program step-by-step" [disabled]="runBtnDisabled()" (click)="onRunStepwiseClick()">
+                    <fa-icon icon="play"></fa-icon>
+                  </button>
+                  <button id="runContiniousButton" mat-icon-button matTooltip="Run the program continuously" [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
+                    <fa-icon icon="step-forward"></fa-icon>
+                  </button>
+                  <button id="pauseButton" mat-icon-button matTooltip="Pause a currently running program" [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
+                    <fa-icon icon="pause"></fa-icon>
+                  </button>
+                  <button id="stopButton" mat-icon-button matTooltip="Stop a running program" [disabled]="stopBtnDisabled()" (click)="onStopClick()">
+                    <fa-icon icon="stop"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                  <button id="runSpeedMenu" mat-button [matMenuTriggerFor]="speed">Run Speed</button>
+                </div>
+                <div>
+                  <mat-slider id="speedSlider" [(ngModel)]="speedIndex" (change)="onSpeedIndexChange()" min="1" max="6" tickInterval="1" thumbLabel></mat-slider>
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                  <button id="islandFileMenu" mat-button [matMenuTriggerFor]="islandfile">Island File</button>
+                </div>
+                <div>
+                  <button id="newIslandButton" mat-icon-button matTooltip="Create new island layout" [disabled]="!islandEditingEnabled()" (click)="clearMap()">
+                    <fa-icon icon="eraser"></fa-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Open an island file" [disabled]="!islandEditingEnabled()" (click)="openMapFile()">
+                    <fa-icon icon="folder"></fa-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Save the island to a file" (click)="saveIsland()">
+                    <fa-icon icon="save"></fa-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Print the island layout" (click)="printIsland()">
+                    <fa-icon icon="print"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <button id="islandEditMenu" mat-button [matMenuTriggerFor]="islandEdit">Island Edit</button>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                  <button id="helpMenu" mat-button [matMenuTriggerFor]="help">Help</button>
+                </div>
+              </div>
+            </div>
           </div>
-        </mat-toolbar-row>
-        <mat-toolbar-row fxHide.lt-md>
-          <button mat-icon-button matTooltip="New File" [disabled]="!editorEditingEnabled()" (click)="newCodeFile()">
-            <fa-icon icon="file"></fa-icon>
-          </button>
-          <button mat-icon-button matTooltip="Open File" [disabled]="!editorEditingEnabled()" (click)="openCodeFile()">
-            <fa-icon icon="folder"></fa-icon>
-          </button>
-          <button mat-icon-button matTooltip="Save" (click)="saveCode()">
-            <fa-icon icon="save"></fa-icon>
-          </button>
-          <mat-divider [vertical]="true"></mat-divider>
-          <button id="undoButton" mat-icon-button matTooltip="Undo" [disabled]="!editorEditingEnabled()" (click)="onUndoClick()">
-            <fa-icon icon="undo"></fa-icon>
-          </button>
-          <button id="redoButton" mat-icon-button matTooltip="Redo" [disabled]="!editorEditingEnabled()" (click)="onRedoClick()">
-            <fa-icon icon="redo"></fa-icon>
-          </button>
-          <mat-divider [vertical]="true"></mat-divider>
-          <button id="resetButton" mat-icon-button matTooltip="Reset the program and the island" [disabled]="resetBtnDisabled()" (click)="onResetClick()">
-            <fa-icon icon="step-backward"></fa-icon>
-          </button>
-          <button id="runButton" mat-icon-button matTooltip="Run the program step-by-step" [disabled]="runBtnDisabled()" (click)="onRunStepwiseClick()">
-            <fa-icon icon="play"></fa-icon>
-          </button>
-          <button id="runContiniousButton" mat-icon-button matTooltip="Run the program continuously" [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
-            <fa-icon icon="step-forward"></fa-icon>
-          </button>
-          <button id="pauseButton" mat-icon-button matTooltip="Pause a currently running program" [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
-            <fa-icon icon="pause"></fa-icon>
-          </button>
-          <button id="stopButton" mat-icon-button matTooltip="Stop a running program" [disabled]="stopBtnDisabled()" (click)="onStopClick()">
-            <fa-icon icon="stop"></fa-icon>
-          </button>
-          <mat-divider [vertical]="true"></mat-divider>
-          <mat-slider id="speedSlider" class="menu-button" [(ngModel)]="speedIndex" (change)="onSpeedIndexChange()" min="1" max="6" tickInterval="1" thumbLabel></mat-slider>
-          <mat-divider [vertical]="true"></mat-divider>
-          <button id="newIslandButton" mat-icon-button matTooltip="Create new island layout" [disabled]="!islandEditingEnabled()" (click)="clearMap()">
-            <fa-icon icon="eraser"></fa-icon>
-          </button>
-          <button mat-icon-button matTooltip="Open an island file" [disabled]="!islandEditingEnabled()" (click)="openMapFile()">
-            <fa-icon icon="folder"></fa-icon>
-          </button>
-          <button mat-icon-button matTooltip="Save the island to a file" (click)="saveIsland()">
-            <fa-icon icon="save"></fa-icon>
-          </button>
-          <button mat-icon-button matTooltip="Print the island layout" (click)="printIsland()">
-            <fa-icon icon="print"></fa-icon>
-          </button>
         </mat-toolbar-row>
       </mat-toolbar>
       <!-- Menu Properties -->
