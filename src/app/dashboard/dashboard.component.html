@@ -105,7 +105,9 @@
                 </div>
               </div>
               <div fxLayout="column" fxLayoutAlign="center center">
-                <button id="islandEditMenu" mat-button [matMenuTriggerFor]="islandEdit">Island Edit</button>
+                <div>
+                  <button id="islandEditMenu" mat-button [matMenuTriggerFor]="islandEdit">Island Edit</button>
+                </div>
               </div>
               <div fxLayout="column" fxLayoutAlign="center center">
                 <div>
@@ -175,8 +177,8 @@
       <mat-menu #speed="matMenu">
         <ng-template matMenuContent>
           <mat-radio-group id="speedIndex" [(ngModel)]="speedIndex">
-            <div mat-menu-item *ngFor="let speed of speedsRadio; let i = index" id="speed{{i + 1}}Btn" (click)="onSpeedRadioClick(speed.value)">
-              <mat-radio-button class="speed-radio-btn" [value]="speed.value">{{ speed.name }}</mat-radio-button>
+            <div mat-menu-item *ngFor="let speedRadio of speedRadioNames; let i = index" id="speed{{i + 1}}Btn" (click)="onSpeedRadioClick(i)">
+              <mat-radio-button [value]="speedRadio.value">{{ speedRadio.name }}</mat-radio-button>
             </div>
           </mat-radio-group>
         </ng-template>
@@ -201,9 +203,17 @@
       </mat-menu>
       <mat-menu #islandEdit="matMenu">
         <ng-template matMenuContent>
-          <button id="changeMapSize" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="changeMapSize()">
-            <span class="menu-text">Change Map Size</span>
-          </button>
+          <mat-radio-group [(ngModel)]="tileTypeIndex">
+            <div mat-menu-item *ngFor="let name of tileTypeRadioNames; let i = index" (click)="onTileTypeRadioClick(i)">
+              <mat-radio-button class="speed-radio-btn" [value]="i">{{ name }}</mat-radio-button>
+            </div>
+            <mat-divider ></mat-divider>
+            <div>
+              <button id="changeMapSize" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="changeMapSize()">
+                <span class="menu-text">Change Map Size</span>
+              </button>
+            </div>
+          </mat-radio-group>
         </ng-template>
       </mat-menu>
       <mat-menu #help="matMenu">
