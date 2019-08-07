@@ -177,8 +177,10 @@
       <mat-menu #speed="matMenu">
         <ng-template matMenuContent>
           <mat-radio-group id="speedIndex" [(ngModel)]="speedIndex">
-            <div mat-menu-item *ngFor="let speedRadio of speedRadioNames; let i = index" id="speed{{i + 1}}Btn" (click)="onSpeedRadioClick(i)">
-              <mat-radio-button [value]="speedRadio.value">{{ speedRadio.name }}</mat-radio-button>
+            <div mat-menu-item *ngFor="let speedRadio of speedRadios" id="speed{{speedRadio.value}}Btn" (click)="onSpeedRadioClick(speedRadio.value)">
+              <mat-radio-button [value]="speedRadio.value" class="menu-ratio-btn">
+                <span>{{ speedRadio.name }}</span>
+              </mat-radio-button>
             </div>
           </mat-radio-group>
         </ng-template>
@@ -203,11 +205,41 @@
       </mat-menu>
       <mat-menu #islandEdit="matMenu">
         <ng-template matMenuContent>
+          <!-- TODO: set the ngModel and add images -->
           <mat-radio-group [(ngModel)]="tileTypeIndex">
-            <div mat-menu-item *ngFor="let name of tileTypeRadioNames; let i = index" (click)="onTileTypeRadioClick(i)">
-              <mat-radio-button class="speed-radio-btn" [value]="i">{{ name }}</mat-radio-button>
+            <div mat-menu-item (click)="onTileTypeRadioClick(0)">
+              <mat-radio-button class="speed-radio-btn" [value]="0">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
+                  <img src="assets/images/grass.jpg" alt="grass" height="20">
+                  <span>Grass</span>
+                </div>
+              </mat-radio-button>
             </div>
-            <mat-divider ></mat-divider>
+            <div mat-menu-item (click)="onTileTypeRadioClick(1)">
+              <mat-radio-button class="menu-radio-btn" [value]="1">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
+                  <img src="assets/images/water.jpg" alt="water" height="20">
+                  <span>Water</span>
+                </div>
+              </mat-radio-button>
+            </div>
+            <div mat-menu-item (click)="onTileTypeRadioClick(2)">
+              <mat-radio-button class="menu-radio-btn" [value]="2">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
+                  <img src="assets/images/flower.jpg" alt="flower" height="20">
+                  <span>Flower</span>
+                </div>
+              </mat-radio-button>
+            </div>
+            <div mat-menu-item (click)="onTileTypeRadioClick(3)">
+              <mat-radio-button class="menu-radio-btn" [value]="3">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
+                  <img src="assets/images/net.jpg" alt="net" height="20">
+                  <span>Net</span>
+                </div>
+              </mat-radio-button>
+            </div>
+            <mat-divider></mat-divider>
             <div>
               <button id="changeMapSize" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="changeMapSize()">
                 <span class="menu-text">Change Map Size</span>

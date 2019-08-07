@@ -33,7 +33,7 @@ export class DashboardComponent implements AfterViewInit {
   private speeds = [475, 350, 225, 125, 25, 2];
   speedIndex = 3;
   runtimeSpeed = this.speeds[this.speedIndex - 1];
-  speedRadioNames = [
+  speedRadios = [
     { name: '1 - Slow', value: 1 },
     { name: '2', value: 2 },
     { name: '3 - Medium', value: 3 },
@@ -43,13 +43,8 @@ export class DashboardComponent implements AfterViewInit {
   ];
 
   private tileTypes = [TileType.Grass, TileType.Water, TileType.Flower, TileType.Net];
-  tileTypeIndex = 0;
-  tileTypeRadioNames = [
-    'Grass',
-    'Water',
-    'Flower',
-    'Net'
-  ];
+  // set the default selected tile to whatever is in the service
+  tileTypeIndex = this.tileTypes.indexOf(this.selectedTileTypeService.selectedTileType);
 
   jerooEditorState: EditorState = {
     reset: true,
@@ -338,9 +333,7 @@ export class DashboardComponent implements AfterViewInit {
     this.dialog.open(DashboardDialogCopyrightComponent);
   }
 
-  onTileTypeRadioClick(tileRadioIndex: number) {
-    this.tileTypeIndex = tileRadioIndex;
-    const tileType = this.tileTypes[this.tileTypeIndex];
-    this.selectedTileTypeService.selectedTileType = tileType;
+  onTileTypeRadioClick(tileTypeIndex: number) {
+    this.selectedTileTypeService.selectedTileType = this.tileTypes[tileTypeIndex];
   }
 }

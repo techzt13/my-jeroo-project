@@ -5,7 +5,7 @@ import { TileType } from './jerooTileType';
   providedIn: 'root'
 })
 export class SelectedTileTypeService {
-  selectedTileType: TileType = null;
+  selectedTileType: TileType = TileType.Grass;
 
   constructor() { }
 }
