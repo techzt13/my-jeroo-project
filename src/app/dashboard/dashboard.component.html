@@ -178,7 +178,7 @@
         <ng-template matMenuContent>
           <mat-radio-group id="speedIndex" [(ngModel)]="speedIndex">
             <div mat-menu-item *ngFor="let speedRadio of speedRadios" id="speed{{speedRadio.value}}Btn" (click)="onSpeedRadioClick(speedRadio.value)">
-              <mat-radio-button [value]="speedRadio.value" class="menu-ratio-btn">
+              <mat-radio-button [value]="speedRadio.value">
                 <span>{{ speedRadio.name }}</span>
               </mat-radio-button>
             </div>
@@ -208,7 +208,7 @@
           <!-- TODO: set the ngModel and add images -->
           <mat-radio-group [(ngModel)]="tileTypeIndex">
             <div mat-menu-item (click)="onTileTypeRadioClick(0)">
-              <mat-radio-button class="speed-radio-btn" [value]="0">
+              <mat-radio-button [value]="0">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
                   <img src="assets/images/grass.jpg" alt="grass" height="20">
                   <span>Grass</span>
@@ -216,7 +216,7 @@
               </mat-radio-button>
             </div>
             <div mat-menu-item (click)="onTileTypeRadioClick(1)">
-              <mat-radio-button class="menu-radio-btn" [value]="1">
+              <mat-radio-button [value]="1">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
                   <img src="assets/images/water.jpg" alt="water" height="20">
                   <span>Water</span>
@@ -224,7 +224,7 @@
               </mat-radio-button>
             </div>
             <div mat-menu-item (click)="onTileTypeRadioClick(2)">
-              <mat-radio-button class="menu-radio-btn" [value]="2">
+              <mat-radio-button [value]="2">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
                   <img src="assets/images/flower.jpg" alt="flower" height="20">
                   <span>Flower</span>
@@ -232,7 +232,7 @@
               </mat-radio-button>
             </div>
             <div mat-menu-item (click)="onTileTypeRadioClick(3)">
-              <mat-radio-button class="menu-radio-btn" [value]="3">
+              <mat-radio-button [value]="3">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3px">
                   <img src="assets/images/net.jpg" alt="net" height="20">
                   <span>Net</span>
