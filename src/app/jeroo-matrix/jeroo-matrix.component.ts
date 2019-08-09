@@ -62,8 +62,8 @@ export class JerooMatrixComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data: DialogData) => {
       if (data && this.editingEnabled) {
-        this.matrixService.setCols(+data.rowValue + 2);
-        this.matrixService.setRows(+data.colValue + 2);
+        this.matrixService.setCols(+data.colValue + 2);
+        this.matrixService.setRows(+data.rowValue + 2);
         this.matrixService.resetMap();
         this.matrixService.resetDynamicMap();
         this.matrixService.resetJeroos();
