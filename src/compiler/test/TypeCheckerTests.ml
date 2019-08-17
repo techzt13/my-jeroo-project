@@ -25,6 +25,8 @@ let typecheck_decl_no_args _test_ctxt =
   in
   TypeChecker.typecheck ast
 
+(* TODO: write tests for all of the valid construtors *)
+
 let typecheck_decl_bad_args _test_ctxt =
   let ast = { language = AST.Java;
               extension_fxns = [];
@@ -54,8 +56,8 @@ let typecheck_decl_bad_args _test_ctxt =
                 "Candidate constructors:\n" ^
                 "Jeroo(Number, Number)\n" ^
                 "Jeroo(Number)\n" ^
-                "Jeroo(Number, Number, Compass Direction)\n" ^
                 "Jeroo(Number, Number, Number)\n" ^
+                "Jeroo(Number, Number, Compass Direction)\n" ^
                 "Jeroo()\n" ^
                 "Jeroo(Number, Number, Compass Direction, Number)";
     }) (fun () -> TypeChecker.typecheck ast)

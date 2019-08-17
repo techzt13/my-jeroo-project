@@ -145,13 +145,13 @@ let codegen_jeroo_decl_set_x_y_flowers_direction _test_ctxt =
                         pos = { lnum = 2; cnum = 0; };
                       };
                       {
-                        a = AST.IntExpr(5);
+                        a = AST.SouthExpr;
                         pos = { lnum = 2; cnum = 0; };
                       };
                       {
-                        a = AST.SouthExpr;
+                        a = AST.IntExpr(5);
                         pos = { lnum = 2; cnum = 0; };
-                      }
+                      };
                     ]);
                 pos = { lnum = 2; cnum = 0; };
               });
