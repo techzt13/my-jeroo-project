@@ -12,7 +12,7 @@ let typecheck_decl_no_args _test_ctxt =
                           a = AST.FxnAppExpr({
                               a = AST.IdExpr("Jeroo");
                               pos = { lnum = 2; cnum = 0; };
-                            }, [{ a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } }]);
+                            }, []);
                           pos = { lnum = 2; cnum = 0; };
                         });
                       pos = { lnum = 2; cnum = 0; };
@@ -25,7 +25,143 @@ let typecheck_decl_no_args _test_ctxt =
   in
   TypeChecker.typecheck ast
 
-(* TODO: write tests for all of the valid construtors *)
+let typecheck_decl_flowers _test_ctxt =
+  let ast = { language = AST.Java;
+              extension_fxns = [];
+              main_fxn = {
+                stmts = [
+                  AST.DeclStmt("Jeroo", "j", {
+                      a = AST.UnOpExpr(AST.New, {
+                          a = AST.FxnAppExpr({
+                              a = AST.IdExpr("Jeroo");
+                              pos = { lnum = 2; cnum = 0; };
+                            }, [
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } }
+                              ]
+                            );
+                          pos = { lnum = 2; cnum = 0; };
+                        });
+                      pos = { lnum = 2; cnum = 0; };
+                    });
+                ];
+                start_lnum = 1;
+                end_lnum = 3;
+              }
+            }
+  in
+  TypeChecker.typecheck ast
+
+let typecheck_decl_x_y _test_ctxt =
+  let ast = { language = AST.Java;
+              extension_fxns = [];
+              main_fxn = {
+                stmts = [
+                  AST.DeclStmt("Jeroo", "j", {
+                      a = AST.UnOpExpr(AST.New, {
+                          a = AST.FxnAppExpr({
+                              a = AST.IdExpr("Jeroo");
+                              pos = { lnum = 2; cnum = 0; };
+                            }, [
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } }
+                              ]
+                            );
+                          pos = { lnum = 2; cnum = 0; };
+                        });
+                      pos = { lnum = 2; cnum = 0; };
+                    });
+                ];
+                start_lnum = 1;
+                end_lnum = 3;
+              }
+            }
+  in
+  TypeChecker.typecheck ast
+
+let typecheck_decl_x_y_flowers _test_ctxt =
+  let ast = { language = AST.Java;
+              extension_fxns = [];
+              main_fxn = {
+                stmts = [
+                  AST.DeclStmt("Jeroo", "j", {
+                      a = AST.UnOpExpr(AST.New, {
+                          a = AST.FxnAppExpr({
+                              a = AST.IdExpr("Jeroo");
+                              pos = { lnum = 2; cnum = 0; };
+                            }, [
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } }
+                              ]
+                            );
+                          pos = { lnum = 2; cnum = 0; };
+                        });
+                      pos = { lnum = 2; cnum = 0; };
+                    });
+                ];
+                start_lnum = 1;
+                end_lnum = 3;
+              }
+            }
+  in
+  TypeChecker.typecheck ast
+
+let typecheck_decl_x_y_direction _test_ctxt =
+  let ast = { language = AST.Java;
+              extension_fxns = [];
+              main_fxn = {
+                stmts = [
+                  AST.DeclStmt("Jeroo", "j", {
+                      a = AST.UnOpExpr(AST.New, {
+                          a = AST.FxnAppExpr({
+                              a = AST.IdExpr("Jeroo");
+                              pos = { lnum = 2; cnum = 0; };
+                            }, [
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.SouthExpr; pos = { lnum = 2; cnum = 0; } }
+                              ]
+                            );
+                          pos = { lnum = 2; cnum = 0; };
+                        });
+                      pos = { lnum = 2; cnum = 0; };
+                    });
+                ];
+                start_lnum = 1;
+                end_lnum = 3;
+              }
+            }
+  in
+  TypeChecker.typecheck ast
+
+let typecheck_decl_x_y_direction_flowers _test_ctxt =
+  let ast = { language = AST.Java;
+              extension_fxns = [];
+              main_fxn = {
+                stmts = [
+                  AST.DeclStmt("Jeroo", "j", {
+                      a = AST.UnOpExpr(AST.New, {
+                          a = AST.FxnAppExpr({
+                              a = AST.IdExpr("Jeroo");
+                              pos = { lnum = 2; cnum = 0; };
+                            }, [
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.SouthExpr; pos = { lnum = 2; cnum = 0; } };
+                                { a = AST.IntExpr 1; pos = { lnum = 2; cnum = 0; } };
+                              ]
+                            );
+                          pos = { lnum = 2; cnum = 0; };
+                        });
+                      pos = { lnum = 2; cnum = 0; };
+                    });
+                ];
+                start_lnum = 1;
+                end_lnum = 3;
+              }
+            }
+  in
+  TypeChecker.typecheck ast
 
 let typecheck_decl_bad_args _test_ctxt =
   let ast = { language = AST.Java;
@@ -749,6 +885,11 @@ let typecheck_out_of_order_fxn_call _test_ctxt =
 let suite =
   "TypeChecker">::: [
     "Typecheck decl no args">:: typecheck_decl_no_args;
+    "Typecheck decl flowers">:: typecheck_decl_flowers;
+    "Typecheck decl x y">:: typecheck_decl_x_y;
+    "Typecheck decl x y flowers">:: typecheck_decl_x_y_flowers;
+    "Typecheck decl x y direction">:: typecheck_decl_x_y_direction;
+    "Typecheck decl x y direction flowers">:: typecheck_decl_x_y_direction_flowers;
     "Typecheck decl with bad args">:: typecheck_decl_bad_args;
     "Typecheck if stmt">:: typecheck_if_stmt;
     "Typecheck if stmt wrong types">:: typecheck_if_stmt_bad_types;
