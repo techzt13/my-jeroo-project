@@ -618,6 +618,7 @@ let parse_missing_rbrace _test_ctxt =
       pos = { lnum = 1; cnum = 16 };
       pane = Pane.Main;
       exception_type = "error";
+      (* TODO: change to `expected either statement or `}` *)
       message = "expected statement\n" ^
                 "hint: unclosed `{` on line 1: column 15";
     }) (fun () -> Parser.parse code)
@@ -631,6 +632,7 @@ let parse_missing_rparen_in_fxn_app _test_ctxt =
       pos = { lnum = 1; cnum = 37 };
       pane = Pane.Main;
       exception_type = "error";
+      (* TODO: change to expected expression or `,` *)
       message = "expected expression, found `;`\n" ^
                 "hint: unclosed `(` on line 1: column 36";
     }) (fun () -> Parser.parse code)
@@ -644,6 +646,7 @@ let parse_missing_comma_in_fxn_app _test_ctxt =
       pos = { lnum = 1; cnum = 39 };
       pane = Pane.Main;
       exception_type = "error";
+      (* TODO: reword this error message to ask for a comma *)
       message = "expected one of `)`, `.`, or an operator, found `2`\n";
     }) (fun () -> Parser.parse code)
 
@@ -656,6 +659,7 @@ let parse_lexing_error _test_ctxt =
       pos = { lnum = 1; cnum = 17 };
       pane = Pane.Main;
       exception_type = "error";
+      (* TODO: surround the ?/user input in `'s *)
       message = "Illegal character: ?";
     }) (fun () -> Parser.parse code)
 
@@ -760,7 +764,6 @@ let parse_wild_else_stmt _test_ctxt =
              "@@\n" ^
              "method main() { else {} }"
   in
-  (* try ignore (Parser.parse code) with | Exceptions.CompileException e -> print_endline (Position.show e.pos); *)
   assert_raises (Exceptions.CompileException {
       pos = { lnum = 1; cnum = 20 };
       pane = Pane.Main;
