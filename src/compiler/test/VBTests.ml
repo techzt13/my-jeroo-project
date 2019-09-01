@@ -949,7 +949,7 @@ let parse_dot_empty_rvalue _test_ctxt =
   let code = "@VB\n" ^
              "@@\n" ^
              "sub main()\n" ^
-             "true or \n" ^
+             "j.\n" ^
              "end sub"
   in
   assert_raises (Exceptions.CompileException {
@@ -1024,7 +1024,6 @@ let parse_missing_comma_in_fxn_app _test_ctxt =
              "j.hop(1 2)\n" ^
              "end sub"
   in
-  (* try ignore (Parser.parse code) with | Exceptions.CompileException e -> print_endline (Position.show e.pos); *)
   assert_raises (Exceptions.CompileException {
       pos = { lnum = 2; cnum = 9 };
       pane = Pane.Main;
