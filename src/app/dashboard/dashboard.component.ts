@@ -163,7 +163,7 @@ export class DashboardComponent implements AfterViewInit {
       reader.readAsText(file, 'UTF-8');
       reader.onload = (readerEvent: any) => {
         const content: string = readerEvent.target.result;
-        this.codeService.loadCodeFromStr(content);
+        this.codeService.parseCodeFromStr(content);
       };
     }
   }
