@@ -291,7 +291,13 @@ export class EditorTabAreaComponent implements AfterViewInit {
 
   loadCodeFromCache() {
     const code = this.storage.get(Storage.Source);
-    this.codeService.loadCodeFromStr(code);
+    this.loadCode(code);
+  }
+
+  loadCode(codeStr: string) {
+    const editorCode = this.codeService.parseCodeFromStr(codeStr);
+    this.mainMethodTextEditor.setText(editorCode.mainMethodCode);
+    this.extensionMethodsTextEditor.setText(editorCode.extensionsMethodCode);
   }
 
   loadPreferencesFromCache() {
@@ -300,7 +306,10 @@ export class EditorTabAreaComponent implements AfterViewInit {
   }
 
   saveToLocal() {
-    const code = this.codeService.genCodeStr();
+    const code = this.codeService.genCodeStr({
+      extensionsMethodCode: this.extensionMethodsTextEditor.getText(),
+      mainMethodCode: this.mainMethodTextEditor.getText()
+    });
     this.storage.set(Storage.Source, code);
   }
 
