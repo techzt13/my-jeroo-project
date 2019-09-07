@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CodeService } from 'src/app/code.service';
+import { CodeService, EditorCode } from 'src/app/code.service';
 import { CodemirrorService } from 'src/app/codemirror/codemirror.service';
 import { PrintService } from 'src/app/print.service';
 import { PrintCodeDialogComponent, PrintCodeDialogResult } from './print-code-dialog/print-code-dialog.component';
@@ -15,12 +15,15 @@ export class PrintCodeComponent implements AfterViewInit {
   @ViewChild('extensionMethodTextArea', { static: false }) extensionMethodTextAreaRef: ElementRef;
   displayMainMethod = false;
   displayExtensionMethods = false;
+  editorCode: EditorCode = null;
 
+  // TODO: add activated route to the component
   constructor(private printService: PrintService,
-              private codeMirrorService: CodemirrorService,
-              public codeService: CodeService,
-              public dialog: MatDialog) { }
+    private codeMirrorService: CodemirrorService,
+    public codeService: CodeService,
+    public dialog: MatDialog) { }
 
+  // access it in here
   ngAfterViewInit() {
     setTimeout(() => {
       const dialogRef = this.dialog.open(PrintCodeDialogComponent);
@@ -51,18 +54,18 @@ export class PrintCodeComponent implements AfterViewInit {
       viewportMargin: Infinity
     };
 
-    if (this.displayMainMethod) {
+    if (this.displayMainMethod && this.editorCode) {
       const mainMethodEditor = codemirror.fromTextArea(this.mainMethodTextAreaRef.nativeElement, editorOptions);
-      mainMethodEditor.setValue(this.codeService.mainMethodCode);
       mainMethodEditor.setSize(null, 'auto');
       mainMethodEditor.getWrapperElement().style.paddingBottom = '10px';
+      mainMethodEditor.setValue(this.editorCode.mainMethodCode);
     }
 
-    if (this.displayExtensionMethods) {
+    if (this.displayExtensionMethods && this.editorCode) {
       const extensionMethodEditor = codemirror.fromTextArea(this.extensionMethodTextAreaRef.nativeElement, editorOptions);
-      extensionMethodEditor.setValue(this.codeService.extensionMethodCode);
       extensionMethodEditor.setSize(null, 'auto');
       extensionMethodEditor.getWrapperElement().style.paddingBottom = '10px';
+      extensionMethodEditor.setValue(this.editorCode.extensionsMethodCode);
     }
 
     setTimeout(() => this.printService.onDataReady());

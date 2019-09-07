@@ -290,9 +290,12 @@ export class EditorTabAreaComponent implements AfterViewInit {
   }
 
   loadCodeFromCache() {
-    // TODO: rename these variables
     const code = this.storage.get(Storage.Source);
-    const editorCode = this.codeService.loadCodeFromStr(code);
+    this.loadCode(code);
+  }
+
+  loadCode(codeStr: string) {
+    const editorCode = this.codeService.parseCodeFromStr(codeStr);
     this.mainMethodTextEditor.setText(editorCode.mainMethodCode);
     this.extensionMethodsTextEditor.setText(editorCode.extensionsMethodCode);
   }

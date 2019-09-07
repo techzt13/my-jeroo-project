@@ -81,7 +81,7 @@ export class CodeService {
     return jerooCode;
   }
 
-  loadCodeFromStr(code: string): EditorCode {
+  parseCodeFromStr(code: string): EditorCode {
     let mainMethodCodeBuffer = '';
     let extensionMethodCodeBuffer = '';
     let usingExtensionCodeBuffer = false;
@@ -112,7 +112,7 @@ export class CodeService {
     return {
       extensionsMethodCode: extensionMethodCodeBuffer.trim(),
       mainMethodCode: mainMethodCodeBuffer.trim()
-    }
+    };
   }
 
   getCursorPosition(): Observable<Position> {
