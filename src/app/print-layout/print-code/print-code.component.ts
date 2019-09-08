@@ -4,6 +4,7 @@ import { CodeService, EditorCode } from 'src/app/code.service';
 import { CodemirrorService } from 'src/app/codemirror/codemirror.service';
 import { PrintService } from 'src/app/print.service';
 import { PrintCodeDialogComponent, PrintCodeDialogResult } from './print-code-dialog/print-code-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-print-code',
@@ -17,11 +18,11 @@ export class PrintCodeComponent implements AfterViewInit {
   displayExtensionMethods = false;
   editorCode: EditorCode = null;
 
-  // TODO: add activated route to the component
   constructor(private printService: PrintService,
     private codeMirrorService: CodemirrorService,
     public codeService: CodeService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private route: ActivatedRoute) { }
 
   // access it in here
   ngAfterViewInit() {
@@ -29,16 +30,22 @@ export class PrintCodeComponent implements AfterViewInit {
       const dialogRef = this.dialog.open(PrintCodeDialogComponent);
       dialogRef.afterClosed().subscribe((result: PrintCodeDialogResult) => {
         if (result !== null && result !== undefined) {
-          if (result === PrintCodeDialogResult.PrintMainMethod) {
-            this.displayMainMethod = true;
-          } else if (result === PrintCodeDialogResult.PrintExtensionMethods) {
-            this.displayExtensionMethods = true;
-          } else if (result === PrintCodeDialogResult.PrintAll) {
-            this.displayMainMethod = true;
-            this.displayExtensionMethods = true;
-          }
+          this.route.queryParams.subscribe(params => {
+            this.editorCode = {
+              extensionsMethodCode: params.extensionsMethodCode,
+              mainMethodCode: params.mainMethodCode
+            };
+            if (result === PrintCodeDialogResult.PrintMainMethod) {
+              this.displayMainMethod = true;
+            } else if (result === PrintCodeDialogResult.PrintExtensionMethods) {
+              this.displayExtensionMethods = true;
+            } else if (result === PrintCodeDialogResult.PrintAll) {
+              this.displayMainMethod = true;
+              this.displayExtensionMethods = true;
+            }
 
-          setTimeout(() => this.printEditors());
+            setTimeout(() => this.printEditors());
+          })
         } else {
           this.printService.navigateWithoutPrinting();
         }
