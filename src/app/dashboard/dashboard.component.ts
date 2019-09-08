@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { CacheDialogComponent } from '../cache-dialog/cache-dialog.component';
 import { DashboardDialogAboutComponent } from './dashboard-dialog-about/dashboard-dialog-about.component';
@@ -167,11 +167,15 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   saveCode() {
-    this.dialog.open(CodeSaveDialogComponent);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data  = {
+      editorCode: this.jerooEditor.getCode()
+    };
+    this.dialog.open(CodeSaveDialogComponent, dialogConfig);
   }
 
   printCode() {
-    this.printService.printCode();
+    this.printService.printCode(this.jerooEditor.getCode());
   }
 
   onUndoClick() {

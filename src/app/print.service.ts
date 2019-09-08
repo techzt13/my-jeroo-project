@@ -8,20 +8,18 @@ import { EditorCode } from './code.service';
 export class PrintService {
   constructor(private router: Router) { }
 
-  printCode() {
-    // TODO
-    const editorCode: EditorCode = {
-      extensionsMethodCode: '',
-      mainMethodCode: ''
-    };
+  printCode(editorCode: EditorCode) {
     this.router.navigate(['/',
       {
         outlets: {
           'print': ['print', 'code']
         }
-    }], {
-      queryParams: { editorCode: editorCode }
-    });
+      }], {
+        queryParams: {
+          extensionsMethodCode: editorCode.extensionsMethodCode,
+          mainMethodCode: editorCode.mainMethodCode
+        }
+      });
   }
 
   printIsland() {
