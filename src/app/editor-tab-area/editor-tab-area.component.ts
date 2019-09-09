@@ -309,7 +309,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
     return {
       extensionsMethodCode: this.extensionMethodsTextEditor.getText(),
       mainMethodCode: this.mainMethodTextEditor.getText()
-    }
+    };
   }
 
   saveToLocal() {

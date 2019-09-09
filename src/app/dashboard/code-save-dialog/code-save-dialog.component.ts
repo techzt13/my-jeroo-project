@@ -14,7 +14,7 @@ export interface DialogData {
 export class CodeSaveDialogComponent implements OnInit {
   @ViewChild('fileSaver', { static: true }) fileSaver: ElementRef;
   form: FormGroup;
-  editorCode: EditorCode
+  editorCode: EditorCode;
 
   constructor(
     private fb: FormBuilder,

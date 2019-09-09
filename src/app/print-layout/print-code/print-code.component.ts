@@ -45,7 +45,7 @@ export class PrintCodeComponent implements AfterViewInit {
             }
 
             setTimeout(() => this.printEditors());
-          })
+          });
         } else {
           this.printService.navigateWithoutPrinting();
         }

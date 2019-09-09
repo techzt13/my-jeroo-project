@@ -6,7 +6,7 @@ describe('CodeService', () => {
 
   it('assert genCodeStr generates code correctly', () => {
     const service: CodeService = TestBed.get(CodeService);
-    let editorCode: EditorCode = {
+    const editorCode: EditorCode = {
       extensionsMethodCode: '123\n456',
       mainMethodCode: 'abcde\nfg'
     };
