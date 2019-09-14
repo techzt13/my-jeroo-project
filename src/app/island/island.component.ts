@@ -2,18 +2,18 @@ import { AfterViewInit, Component, ElementRef, Inject, Input, ViewChild } from '
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
-import { DialogData, MatrixDialogComponent } from '../matrix-dialog/matrix-dialog.component';
-import { MatrixService } from '../matrix.service';
+import { DialogData, ChnageIslandSizeDialogComponent } from '../change-island-size-dialog/change-island-size-dialog.component';
+import { IslandService } from '../island.service';
 import { Storage } from '../storage';
 import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component';
 import { SelectedTileTypeService } from '../selected-tile-type.service';
 
 @Component({
-  selector: 'app-jeroo-matrix',
-  templateUrl: './jeroo-matrix.component.html',
-  styleUrls: ['./jeroo-matrix.component.scss']
+  selector: 'app-jeroo-island',
+  templateUrl: './island.component.html',
+  styleUrls: ['./island.component.scss']
 })
-export class JerooMatrixComponent implements AfterViewInit {
+export class JerooIslandComponent implements AfterViewInit {
   @ViewChild('jerooGameCanvas', { static: true }) jerooGameCanvas: ElementRef;
   @Input() editingEnabled: boolean;
 
@@ -23,7 +23,7 @@ export class JerooMatrixComponent implements AfterViewInit {
   private context: CanvasRenderingContext2D;
   private mouseDown = false;
 
-  constructor(private matrixService: MatrixService, private dialog: MatDialog,
+  constructor(private islandService: IslandService, private dialog: MatDialog,
     public bytecodeService: BytecodeInterpreterService,
     private selectedTileTypeService: SelectedTileTypeService,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService
@@ -38,10 +38,10 @@ export class JerooMatrixComponent implements AfterViewInit {
     this.redraw();
   }
 
-  loadMatrixFromCache() {
-    const cachedMatrix = this.storage.get(Storage.Board);
-    if (cachedMatrix) {
-      this.matrixService.genMapFromString(cachedMatrix);
+  loadIslandFromCache() {
+    const cachedIsland = this.storage.get(Storage.Board);
+    if (cachedIsland) {
+      this.islandService.genIslandFromString(cachedIsland);
       this.redraw();
     }
   }
@@ -55,20 +55,20 @@ export class JerooMatrixComponent implements AfterViewInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
-      colValue: this.matrixService.getCols() - 2,
-      rowValue: this.matrixService.getRows() - 2
+      colValue: this.islandService.getCols() - 2,
+      rowValue: this.islandService.getRows() - 2
     };
 
-    const dialogRef = this.dialog.open(MatrixDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(ChnageIslandSizeDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data: DialogData) => {
       if (data && this.editingEnabled) {
-        this.matrixService.setCols(+data.colValue + 2);
-        this.matrixService.setRows(+data.rowValue + 2);
-        this.matrixService.resetMap();
-        this.matrixService.resetDynamicMap();
-        this.matrixService.resetJeroos();
+        this.islandService.setCols(+data.colValue + 2);
+        this.islandService.setRows(+data.rowValue + 2);
+        this.islandService.resetIsland();
+        this.islandService.resetDynamicIsland();
+        this.islandService.resetJeroos();
         this.redraw();
-        this.saveInLocal(this.matrixService.toString());
+        this.saveInLocal(this.islandService.toString());
       }
     });
   }
@@ -78,23 +78,23 @@ export class JerooMatrixComponent implements AfterViewInit {
       this.canvas.width,
       this.canvas.height
     );
-    this.canvas.width = this.matrixService.getTsize() * (this.matrixService.getCols());
-    this.canvas.height = this.matrixService.getTsize() * (this.matrixService.getRows());
+    this.canvas.width = this.islandService.getTsize() * (this.islandService.getCols());
+    this.canvas.height = this.islandService.getTsize() * (this.islandService.getRows());
     // if the board has been resized save into cache
-    this.matrixService.render(this.context);
+    this.islandService.render(this.context);
   }
 
-  clearMap() {
+  clearIsland() {
     const dialogRef = this.dialog.open(WarningDialogComponent);
     dialogRef.afterClosed().subscribe((cont) => {
       if (cont) {
-        this.matrixService.resetMap();
-        this.matrixService.resetJeroos();
-        this.matrixService.resetDynamicMap();
+        this.islandService.resetIsland();
+        this.islandService.resetJeroos();
+        this.islandService.resetDynamicIsland();
         // if the board is cleared, also save into service incase the size has been changed
-        this.saveInLocal(this.matrixService.toString());
-        this.saveInLocal(this.matrixService.toString());
-        this.matrixService.render(this.context);
+        this.saveInLocal(this.islandService.toString());
+        this.saveInLocal(this.islandService.toString());
+        this.islandService.render(this.context);
       }
     });
   }
@@ -110,7 +110,7 @@ export class JerooMatrixComponent implements AfterViewInit {
   canvasGestureUp() {
     this.mouseDown = false;
     // save board when user is done editing
-    this.saveInLocal(this.matrixService.toString());
+    this.saveInLocal(this.islandService.toString());
   }
 
   canvasMouseDown(event: MouseEvent) {
@@ -146,8 +146,8 @@ export class JerooMatrixComponent implements AfterViewInit {
   }
 
   private updateScreen(pixelX: number, pixelY: number) {
-    const cols = this.matrixService.getCols();
-    const rows = this.matrixService.getRows();
+    const cols = this.islandService.getCols();
+    const rows = this.islandService.getRows();
     const pixelsInCol = this.canvas.offsetWidth / cols;
     const pixelsInRow = this.canvas.offsetHeight / rows;
     const tileCol = Math.floor(pixelX / pixelsInCol);
@@ -162,13 +162,13 @@ export class JerooMatrixComponent implements AfterViewInit {
       // update the col and row
       if (this.editingEnabled && this.mouseDown && this.selectedTileTypeService) {
         // only re-render if we change the map
-        if (this.matrixService.getStaticTile(tileCol, tileRow) !== this.selectedTileTypeService.selectedTileType) {
-          this.matrixService.setStaticTile(tileCol, tileRow, this.selectedTileTypeService.selectedTileType);
-          this.matrixService.render(this.context);
+        if (this.islandService.getStaticTile(tileCol, tileRow) !== this.selectedTileTypeService.selectedTileType) {
+          this.islandService.setStaticTile(tileCol, tileRow, this.selectedTileTypeService.selectedTileType);
+          this.islandService.render(this.context);
         }
       }
     } else {
-      // off the map
+      // off the island
       this.mouseColumn = null;
       this.mouseRow = null;
       this.mouseDown = false;
@@ -179,24 +179,24 @@ export class JerooMatrixComponent implements AfterViewInit {
     this.storage.set(Storage.Board, val);
   }
 
-  hasCachedMatrix() {
-    const cachedMap = this.storage.get(Storage.Board);
-    if (cachedMap) {
-      return !(cachedMap === this.matrixService.toString());
+  hasCachedIsland() {
+    const cachedIsland = this.storage.get(Storage.Board);
+    if (cachedIsland) {
+      return !(cachedIsland === this.islandService.toString());
     } else {
       return false;
     }
   }
 
-  loadCachedMap() {
-    const map = this.storage.get(Storage.Board);
-    this.matrixService.genMapFromString(map);
+  loadCachedIsland() {
+    const island = this.storage.get(Storage.Board);
+    this.islandService.genIslandFromString(island);
     this.redraw();
   }
 
   resetState() {
-    this.matrixService.resetJeroos();
-    this.matrixService.resetDynamicMap();
+    this.islandService.resetJeroos();
+    this.islandService.resetDynamicIsland();
     this.redraw();
   }
 }

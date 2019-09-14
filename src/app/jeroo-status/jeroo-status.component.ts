@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
-import { MatrixService } from '../matrix.service';
+import { IslandService } from '../island.service';
 import { Jeroo } from '../jeroo';
 
 @Component({
@@ -13,7 +13,7 @@ export class JerooStatusComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('canvas') jerooIcons !: QueryList<any>;
   subscription: Subscription;
 
-  constructor(public bytecodeService: BytecodeInterpreterService, private matrixService: MatrixService) {
+  constructor(public bytecodeService: BytecodeInterpreterService, private islandService: IslandService) {
   }
 
   ngAfterViewInit() {
@@ -37,18 +37,18 @@ export class JerooStatusComponent implements AfterViewInit, OnDestroy {
   }
 
   private renderJeroo(canvas: HTMLCanvasElement, jeroo: Jeroo) {
-    canvas.width = this.matrixService.tsize;
-    canvas.height = this.matrixService.tsize;
-    canvas.style.width = `${this.matrixService.tsize}px`;
-    canvas.style.height = `${this.matrixService.tsize}px`;
+    canvas.width = this.islandService.tsize;
+    canvas.height = this.islandService.tsize;
+    canvas.style.width = `${this.islandService.tsize}px`;
+    canvas.style.height = `${this.islandService.tsize}px`;
     const context = canvas.getContext('2d');
 
-    if (this.matrixService.imageAtlas == null) {
-      this.matrixService.getTileAtlasObs().subscribe(imageAtlas => {
-        this.matrixService.renderJeroo(context, imageAtlas, jeroo, 0, 0);
+    if (this.islandService.imageAtlas == null) {
+      this.islandService.getTileAtlasObs().subscribe(imageAtlas => {
+        this.islandService.renderJeroo(context, imageAtlas, jeroo, 0, 0);
       });
     } else {
-      this.matrixService.renderJeroo(context, this.matrixService.imageAtlas, jeroo, 0, 0);
+      this.islandService.renderJeroo(context, this.islandService.imageAtlas, jeroo, 0, 0);
     }
   }
 

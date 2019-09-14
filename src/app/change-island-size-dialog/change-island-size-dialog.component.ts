@@ -9,17 +9,17 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-matrix-dialog',
-  templateUrl: './matrix-dialog.component.html',
-  styleUrls: ['./matrix-dialog.component.scss']
+  selector: 'app-change-island-dialog-dialog',
+  templateUrl: './change-island-size-dialog.component.html',
+  styleUrls: ['./change-island-size-dialog.component.scss']
 })
-export class MatrixDialogComponent implements OnInit {
+export class ChnageIslandSizeDialogComponent implements OnInit {
   form: FormGroup;
   colValue: number;
   rowValue: number;
 
   constructor(private fb: FormBuilder,
-    public dialogRef: MatDialogRef<MatrixDialogComponent>,
+    public dialogRef: MatDialogRef<ChnageIslandSizeDialogComponent>,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) data: DialogData) {
     this.colValue = data.colValue;

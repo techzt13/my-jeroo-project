@@ -82,7 +82,7 @@
                 <button id="newIslandButton" mat-icon-button matTooltip="Create new island layout" [disabled]="!islandEditingEnabled()" (click)="clearMap()">
                   <fa-icon icon="eraser"></fa-icon>
                 </button>
-                <button mat-icon-button matTooltip="Open an island file" [disabled]="!islandEditingEnabled()" (click)="openMapFile()">
+                <button mat-icon-button matTooltip="Open an island file" [disabled]="!islandEditingEnabled()" (click)="openIslandFile()">
                   <fa-icon icon="folder"></fa-icon>
                 </button>
                 <button mat-icon-button matTooltip="Save the island to a file" (click)="saveIsland()">
@@ -172,7 +172,7 @@
     </mat-menu>
     <mat-menu #islandFile="matMenu">
       <ng-template matMenuContent>
-        <button id="newMapMenuItem" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="clearMap()">
+        <button id="newMapMenuItem" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="clearIsland()">
           <fa-icon icon="eraser"></fa-icon><span class="menu-text">New<span class="shortcut-tip">Ctrl+Shift+N</span></span>
         </button>
         <button mat-menu-item [disabled]="!islandEditingEnabled()" (click)="openMapFile()">
@@ -253,14 +253,14 @@
       <div fxFlex="60">
         <app-editor-tab-area #jerooEditor [(editorState)]="jerooEditorState" [speed]="runtimeSpeed"></app-editor-tab-area>
       </div>
-      <!--Matrix Area-->
-      <div class="jeroo-matrix-container" fxFlex="40">
-        <app-jeroo-matrix id="jerooMatrix" #jerooMatrix [editingEnabled]="islandEditingEnabled()"></app-jeroo-matrix>
+      <!--Island Area-->
+      <div class="jeroo-island-container" fxFlex="40">
+        <app-jeroo-island #jerooIsland [editingEnabled]="islandEditingEnabled()"></app-jeroo-island>
       </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 <!-- map file input -->
-<input #mapFileInput class="invisible" type="file" file-accept="jev" (change)="mapFileSelected($event.target.files[0])" />
+<input #islandFileInput class="invisible" type="file" file-accept="jev" (change)="mapFileSelected($event.target.files[0])" />
 <!-- code file input -->
 <input #codeFileInput class="invisible" type="file" file-accept="jsc" (change)="codeFileSelected($event.target.files[0])" />

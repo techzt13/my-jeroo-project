@@ -1,9 +1,3 @@
-.matrix-button-container {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .default-cursor {
   cursor: default;
 }
@@ -12,8 +6,8 @@
   cursor: not-allowed;
 }
 
-// set jeroo-matrix size to it's parent
-.jeroo-matrix {
+// set jeroo-island size to it's parent
+.jeroo-island {
   height: 100%;
   max-width: 100%;
   display: block;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatrixService } from './matrix.service';
+import { IslandService } from './island.service';
 import { Jeroo } from './jeroo';
 import { TileType } from './jerooTileType';
 import { Subject } from 'rxjs';
@@ -23,7 +23,7 @@ export class BytecodeInterpreterService {
   private jerooChangeSource = new Subject<void>();
   jerooChange$ = this.jerooChangeSource.asObservable();
 
-  executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, matrixService: MatrixService) {
+  executeInstructionsUntilLNumChanges(instructions: Array<Instruction>, islandService: IslandService) {
     if (this.validInstruction(instructions)) {
       const prevInstruction = this.getCurrentInstruction(instructions);
       while (this.validInstruction(instructions)) {
@@ -32,7 +32,7 @@ export class BytecodeInterpreterService {
           break;
         }
         const instruction = this.fetchInstruction(instructions);
-        this.executeBytecode(instruction, matrixService);
+        this.executeBytecode(instruction, islandService);
       }
     }
   }
@@ -71,9 +71,9 @@ export class BytecodeInterpreterService {
   /**
    * Execute a given command.
    * @param command The given command.
-   * @param matService Matrix service.
+   * @param matService Island service.
    */
-  executeBytecode(command: Instruction, matService: MatrixService) {
+  executeBytecode(command: Instruction, matService: IslandService) {
     switch (command.op) {
       case 'CSR': {
         this.jerooReg = command.a;

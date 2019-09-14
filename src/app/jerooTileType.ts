@@ -20,6 +20,6 @@ export function stringToTileType(char: string) {
   } else if (char === TileType.Net) {
     return TileType.Net;
   } else {
-    throw new Error('Invalid TileType in map');
+    throw new Error('Invalid TileType in island');
   }
 }

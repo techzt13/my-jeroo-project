@@ -26,8 +26,8 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { JerooMatrixComponent } from './jeroo-matrix/jeroo-matrix.component';
-import { MatrixDialogComponent } from './matrix-dialog/matrix-dialog.component';
+import { JerooIslandComponent } from './island/island.component';
+import { ChnageIslandSizeDialogComponent } from './change-island-size-dialog/change-island-size-dialog.component';
 import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -44,7 +44,7 @@ import { JerooStatusComponent } from './jeroo-status/jeroo-status.component';
 import { DashboardDialogAboutComponent } from './dashboard/dashboard-dialog-about/dashboard-dialog-about.component';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 import { PrintLayoutComponent } from './print-layout/print-layout.component';
-import { PrintMapComponent } from './print-layout/print-map/print-map.component';
+import { PrintIslandComponent } from './print-layout/print-island/print-island.component';
 import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
 import { PrintCodeDialogComponent } from './print-layout/print-code/print-code-dialog/print-code-dialog.component';
 import { EditorPreferencesComponent } from './dashboard/editor-preferences/editor-preferences.component';
@@ -78,8 +78,8 @@ library.add(
   declarations: [
     AppComponent,
     DashboardComponent,
-    JerooMatrixComponent,
-    MatrixDialogComponent,
+    JerooIslandComponent,
+    ChnageIslandSizeDialogComponent,
     DisplayErrorMessageComponent,
     TextEditorComponent,
     EditorTabAreaComponent,
@@ -91,7 +91,7 @@ library.add(
     DashboardDialogCopyrightComponent,
     WarningDialogComponent,
     PrintLayoutComponent,
-    PrintMapComponent,
+    PrintIslandComponent,
     PrintCodeComponent,
     PrintCodeDialogComponent,
     EditorPreferencesComponent,
@@ -116,7 +116,7 @@ library.add(
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
-    MatrixDialogComponent,
+    ChnageIslandSizeDialogComponent,
     CacheDialogComponent,
     DashboardDialogAboutComponent,
     DashboardDialogAwardsComponent,

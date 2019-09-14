@@ -1,4 +1,4 @@
-<canvas name="jerooCanvas" #jerooGameCanvas [className]="editingEnabled ? 'jeroo-matrix default-cursor' : 'jeroo-matrix not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
+<canvas name="jerooCanvas" #jerooGameCanvas [className]="editingEnabled ? 'jeroo-island default-cursor' : 'jeroo-island not-allowed-cursor'" (mousedown)="canvasMouseDown($event)" (mouseup)="canvasGestureUp()" (mousemove)="canvasMouseMove($event)" (touchstart)="canvasTapDown($event)" (touchend)="canvasGestureUp()" (touchmove)="canvasTapMove($event)" (panstart)="null">
 </canvas>
 <div fxLayout="column" fxLayoutAlign=" center" fxLayoutGap="10px">
   <div>

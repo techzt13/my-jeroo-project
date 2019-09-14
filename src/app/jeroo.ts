@@ -1,4 +1,4 @@
-import { MatrixService } from './matrix.service';
+import { IslandService } from './island.service';
 import { TileType } from './jerooTileType';
 import {
   Point,
@@ -110,16 +110,16 @@ export class Jeroo {
 
   /**
    * Move the jeroo ahead by one space.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    */
-  hop(matrixService: MatrixService) {
+  hop(islandService: IslandService) {
     const nextLocation = this.getLocation(RelativeDirection.Ahead);
-    const nextTile = matrixService.getTile(nextLocation.x, nextLocation.y);
-    matrixService.setJeroo(this.getX(), this.getY(), null);
+    const nextTile = islandService.getTile(nextLocation.x, nextLocation.y);
+    islandService.setJeroo(this.getX(), this.getY(), null);
     this.x = nextLocation.x;
     this.y = nextLocation.y;
 
-    const nextJeroo = matrixService.getJeroo(nextLocation.x, nextLocation.y);
+    const nextJeroo = islandService.getJeroo(nextLocation.x, nextLocation.y);
     if (nextJeroo) {
       nextJeroo.setInJeroo(true);
       this.inJeroo = true;
@@ -128,7 +128,7 @@ export class Jeroo {
       this.inFlower = false;
       throw new Error('LOGIC ERROR: Jeroo has collided with another jeroo');
     }
-    matrixService.setJeroo(this.getX(), this.getY(), this);
+    islandService.setJeroo(this.getX(), this.getY(), this);
     if (nextTile === TileType.Flower) {
       this.inFlower = true;
       this.inWater = false;
@@ -137,7 +137,7 @@ export class Jeroo {
     } else {
       this.inFlower = false;
     }
-    if (!matrixService.isInBounds(nextLocation.x, nextLocation.y)) {
+    if (!islandService.isInBounds(nextLocation.x, nextLocation.y)) {
       this.inWater = true;
       this.inNet = false;
       this.inFlower = false;
@@ -164,15 +164,15 @@ export class Jeroo {
    * Toss a flower ahead of this current jeroo.
    * If the flower hits a net, that net is destroyed.
    * If this jeroo has no flowers, this does nothing.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    */
-  toss(matrixService: MatrixService) {
+  toss(islandService: IslandService) {
     if (this.numFlowers > 0) {
       this.numFlowers--;
       const nextLocation = this.getLocation(RelativeDirection.Ahead);
-      const nextTile = matrixService.getTile(nextLocation.x, nextLocation.y);
+      const nextTile = islandService.getTile(nextLocation.x, nextLocation.y);
       if (nextTile === TileType.Net) {
-        matrixService.setDynamicTile(nextLocation.x, nextLocation.y, TileType.Grass);
+        islandService.setDynamicTile(nextLocation.x, nextLocation.y, TileType.Grass);
       }
     }
   }
@@ -180,12 +180,12 @@ export class Jeroo {
   /**
    * Plant a flower at this jeroo's current location.
    * If this jeroo has no flowers, this does nothing.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    */
-  plant(matrixService: MatrixService) {
+  plant(islandService: IslandService) {
     if (this.numFlowers > 0) {
       this.numFlowers--;
-      matrixService.setDynamicTile(this.x, this.y, TileType.Flower);
+      islandService.setDynamicTile(this.x, this.y, TileType.Flower);
     }
   }
 
@@ -194,12 +194,12 @@ export class Jeroo {
    * Give a flower to a jeroo in a given direction.
    * If there is no jeroo in the direction or this jeroo has no flowers, this command does nothing.
    * @param direction The direction to look for a jeroo.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    */
-  give(direction: RelativeDirection, matrixService: MatrixService) {
+  give(direction: RelativeDirection, islandService: IslandService) {
     if (this.numFlowers > 0) {
       const neighborLocation = this.getLocation(direction);
-      const neighborJeroo = matrixService.getJeroo(neighborLocation.x, neighborLocation.y);
+      const neighborJeroo = islandService.getJeroo(neighborLocation.x, neighborLocation.y);
       if (neighborJeroo !== null) {
         this.numFlowers--;
         neighborJeroo.acceptFlower();
@@ -211,14 +211,14 @@ export class Jeroo {
     this.numFlowers++;
   }
 
-  pick(matrixService: MatrixService) {
-    const tile = matrixService.getTile(this.x, this.y);
+  pick(islandService: IslandService) {
+    const tile = islandService.getTile(this.x, this.y);
     if (tile === TileType.Flower) {
       this.numFlowers++;
       this.inFlower = false;
       this.inWater = false;
       this.inNet = false;
-      matrixService.setDynamicTile(this.x, this.y, TileType.Grass);
+      islandService.setDynamicTile(this.x, this.y, TileType.Grass);
     }
   }
 
@@ -233,39 +233,39 @@ export class Jeroo {
   /**
    * Test if there is a net in a given direction.
    * @param lookDirection The direction to look for a net.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    * @return The result of the test.
    */
-  isNet(lookDirection: RelativeDirection, matrixService: MatrixService) {
+  isNet(lookDirection: RelativeDirection, islandService: IslandService) {
     const location = this.getLocation(lookDirection);
-    return matrixService.getTile(location.x, location.y) === TileType.Net;
+    return islandService.getTile(location.x, location.y) === TileType.Net;
   }
 
   /**
    * Test if there is water in a given direction.
    * @param lookDirection The direction to look for water.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    * @return The result of the test.
    */
-  isWater(lookDirection: RelativeDirection, matrixService: MatrixService) {
+  isWater(lookDirection: RelativeDirection, islandService: IslandService) {
     const location = this.getLocation(lookDirection);
-    return matrixService.getTile(location.x, location.y) === TileType.Water;
+    return islandService.getTile(location.x, location.y) === TileType.Water;
   }
 
   /**
    * Test if there is a jeroo in a given direction.
    * @param lookDirection The direction to look for a jeroo.
-   * @param matrixService Matrix service.
+   * @param islandService Island service.
    * @return The result of the test.
    */
-  isJeroo(lookDirection: RelativeDirection, matrixService: MatrixService) {
+  isJeroo(lookDirection: RelativeDirection, islandService: IslandService) {
     const location = this.getLocation(lookDirection);
-    return matrixService.getJeroo(location.x, location.y) !== null;
+    return islandService.getJeroo(location.x, location.y) !== null;
   }
 
-  isFlower(lookDirection: RelativeDirection, matrixService: MatrixService) {
+  isFlower(lookDirection: RelativeDirection, islandService: IslandService) {
     const location = this.getLocation(lookDirection);
-    return matrixService.getTile(location.x, location.y) === TileType.Flower;
+    return islandService.getTile(location.x, location.y) === TileType.Flower;
   }
 
   isFacing(direction: CardinalDirection) {

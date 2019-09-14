@@ -7,19 +7,19 @@ import { TileType, stringToTileType } from './jerooTileType';
 @Injectable({
   providedIn: 'root'
 })
-export class MatrixService {
+export class IslandService {
   private rows = 26;
   private cols = 26;
   tsize = 28;
-  private dynamicMap: TileType[] = [];
+  private dynamicTileMap: TileType[] = [];
   imageAtlas: HTMLImageElement;
   private jeroos: Jeroo[] = [];
   // used to store the map before any runtime edits
-  private staticMap: TileType[] = [];
+  private staticTileMap: TileType[] = [];
 
   constructor() {
-    this.resetMap();
-    this.resetDynamicMap();
+    this.resetIsland();
+    this.resetDynamicIsland();
     this.resetJeroos();
   }
 
@@ -32,74 +32,74 @@ export class MatrixService {
     }
   }
 
-  resetMap() {
-    this.staticMap = [];
+  resetIsland() {
+    this.staticTileMap = [];
     for (let col = 0; col < this.cols; col++) {
-      this.staticMap.push(TileType.Water);
+      this.staticTileMap.push(TileType.Water);
     }
     for (let row = 0; row < this.rows - 2; row++) {
-      this.staticMap.push(TileType.Water);
+      this.staticTileMap.push(TileType.Water);
       for (let col = 0; col < this.cols - 2; col++) {
-        this.staticMap.push(TileType.Grass);
+        this.staticTileMap.push(TileType.Grass);
       }
-      this.staticMap.push(TileType.Water);
+      this.staticTileMap.push(TileType.Water);
     }
     for (let col = 0; col < this.cols; col++) {
-      this.staticMap.push(TileType.Water);
+      this.staticTileMap.push(TileType.Water);
     }
   }
 
-  resetDynamicMap() {
-    this.dynamicMap = [];
+  resetDynamicIsland() {
+    this.dynamicTileMap = [];
     for (let col = 0; col < this.cols; col++) {
       for (let row = 0; row < this.rows; row++) {
-        this.dynamicMap.push(null);
+        this.dynamicTileMap.push(null);
       }
     }
   }
 
   /**
-   * @returns The number of rows in the matrix.
+   * @returns The number of rows in the island.
    */
   getRows() {
     return this.rows;
   }
 
   /**
-   * @param rows The new number of rows in the matrix.
+   * @param rows The new number of rows in the island.
    */
   setRows(rows: number) {
     this.rows = rows;
   }
 
   /**
-   * @returns The number of columns in the matrix.
+   * @returns The number of columns in the island.
    */
   getCols() {
     return this.cols;
   }
 
   /**
-   * @param cols The number of columns in the matrix.
+   * @param cols The number of columns in the island.
    */
   setCols(cols: number) {
     this.cols = cols;
   }
 
   getDynamicTile(col: number, row: number) {
-    return this.dynamicMap[row * this.cols + col];
+    return this.dynamicTileMap[row * this.cols + col];
   }
 
   setDynamicTile(col: number, row: number, tile: TileType) {
-    this.dynamicMap[row * this.cols + col] = tile;
+    this.dynamicTileMap[row * this.cols + col] = tile;
   }
 
   getStaticTile(col: number, row: number) {
-    return this.staticMap[row * this.cols + col];
+    return this.staticTileMap[row * this.cols + col];
   }
 
   setStaticTile(col: number, row: number, tile: TileType) {
-    this.staticMap[row * this.cols + col] = tile;
+    this.staticTileMap[row * this.cols + col] = tile;
   }
 
   /**
@@ -291,10 +291,10 @@ export class MatrixService {
 
 
   /**
-   * Set the current map to a map string.
+   * Set the current island to a map string.
    * @param s String of the map contents.
    */
-  genMapFromString(s: string) {
+  genIslandFromString(s: string) {
     if (s !== '') {
       const lines = s.trim().split('\n');
       const rows = lines.length;
@@ -305,8 +305,8 @@ export class MatrixService {
       this.setCols(cols + 2);
 
       this.resetJeroos();
-      this.resetMap();
-      this.resetDynamicMap();
+      this.resetIsland();
+      this.resetDynamicIsland();
 
       try {
         for (let col = 0; col < cols + 2; col++) {

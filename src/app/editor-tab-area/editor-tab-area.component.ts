@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Inject, Input, Output, ViewChil
 import { MatDialog } from '@angular/material/dialog';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter.service';
-import { MatrixService } from '../matrix.service';
+import { IslandService } from '../island.service';
 import { MessageService, LoggingMessage, CompilationErrorMessage, RuntimeErrorMessage } from '../message.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
 import { CodeService, SelectedLanguage, SelectedTab, EditorCode } from '../code.service';
@@ -54,7 +54,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
 
   constructor(private messageService: MessageService,
               private bytecodeService: BytecodeInterpreterService,
-              private matrixService: MatrixService,
+              private islandService: IslandService,
               public codeService: CodeService,
               public dialog: MatDialog,
               @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
@@ -95,8 +95,8 @@ export class EditorTabAreaComponent implements AfterViewInit {
     try {
       this.mainMethodTextEditor.setReadOnly(true);
       this.extensionMethodsTextEditor.setReadOnly(true);
-      this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
-      this.matrixService.render(context);
+      this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+      this.islandService.render(context);
       if (this.bytecodeService.validInstruction(this.instructions)) {
         this.pauseState();
         this.highlightCurrentLine();
@@ -104,7 +104,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
         this.cleanupExecution();
       }
     } catch (e) {
-      this.matrixService.render(context);
+      this.islandService.render(context);
       this.handleException(e);
     }
   }
@@ -129,8 +129,8 @@ export class EditorTabAreaComponent implements AfterViewInit {
       try {
         this.mainMethodTextEditor.setReadOnly(true);
         this.extensionMethodsTextEditor.setReadOnly(true);
-        this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.matrixService);
-        this.matrixService.render(context);
+        this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+        this.islandService.render(context);
         this.highlightCurrentLine();
         if (this.bytecodeService.validInstruction(this.instructions)) {
           if (!this.editorState.paused && !this.editorState.stopped) {
@@ -140,7 +140,7 @@ export class EditorTabAreaComponent implements AfterViewInit {
           this.cleanupExecution();
         }
       } catch (e) {
-        this.matrixService.render(context);
+        this.islandService.render(context);
         this.handleException(e);
       }
     };

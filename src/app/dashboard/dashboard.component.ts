@@ -7,8 +7,8 @@ import { DashboardDialogAwardsComponent } from './dashboard-dialog-awards/dashbo
 import { DashboardDialogCopyrightComponent } from './dashboard-dialog-copyright/dashboard-dialog-copyright.component';
 import { DashboardDialogHistoryComponent } from './dashboard-dialog-history/dashboard-dialog-history.component';
 import { EditorState, EditorTabAreaComponent } from '../editor-tab-area/editor-tab-area.component';
-import { JerooMatrixComponent } from '../jeroo-matrix/jeroo-matrix.component';
-import { MatrixService } from '../matrix.service';
+import { JerooIslandComponent } from '../island/island.component';
+import { IslandService } from '../island.service';
 import { MessageService, LoggingMessage } from '../message.service';
 import { PrintService } from '../print.service';
 import { EditorPreferencesComponent } from './editor-preferences/editor-preferences.component';
@@ -23,9 +23,9 @@ import { TileType } from '../jerooTileType';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements AfterViewInit {
-  @ViewChild('mapFileInput', { static: true }) mapFileInput: ElementRef;
+  @ViewChild('IslandFileInput', { static: true }) islandFileInput: ElementRef;
   @ViewChild('codeFileInput', { static: true }) codeFileInput: ElementRef;
-  @ViewChild('jerooMatrix', { static: true }) jerooMatrix: JerooMatrixComponent;
+  @ViewChild('jerooIsland', { static: true }) jerooIsland: JerooIslandComponent;
   @ViewChild('jerooEditor', { static: true }) jerooEditor: EditorTabAreaComponent;
   @ViewChild('fileSaver', { static: true }) fileSaver: ElementRef;
 
@@ -53,7 +53,7 @@ export class DashboardComponent implements AfterViewInit {
   };
 
   constructor(
-    private matrixService: MatrixService,
+    private islandService: IslandService,
     private hotkeysService: HotkeysService,
     private messageService: MessageService,
     private printService: PrintService,
@@ -81,11 +81,11 @@ export class DashboardComponent implements AfterViewInit {
       return false;
     }));
     this.hotkeysService.add(new Hotkey('ctrl+shift+n', (_event: KeyboardEvent): boolean => {
-      this.clearMap();
+      this.clearIsland();
       return false;
     }));
     this.hotkeysService.add(new Hotkey('ctrl+shift+o', (_event: KeyboardEvent): boolean => {
-      this.openMapFile();
+      this.openIslandFile();
       return false;
     }));
     this.hotkeysService.add(new Hotkey('ctrl+shift+s', (_event: KeyboardEvent): boolean => {
@@ -119,7 +119,7 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.jerooEditor.hasCachedCode() || this.jerooEditor.hasCachedConfig() || this.jerooMatrix.hasCachedMatrix()) {
+    if (this.jerooEditor.hasCachedCode() || this.jerooEditor.hasCachedConfig() || this.jerooIsland.hasCachedIsland()) {
       // setTimeout prevents a console error
       // see: https://github.com/angular/material2/issues/5268
       setTimeout(() => {
@@ -134,13 +134,13 @@ export class DashboardComponent implements AfterViewInit {
               this.jerooEditor.loadPreferencesFromCache();
             }
 
-            if (this.jerooMatrix.hasCachedMatrix()) {
-              this.jerooMatrix.loadMatrixFromCache();
+            if (this.jerooIsland.hasCachedIsland()) {
+              this.jerooIsland.loadIslandFromCache();
             }
           } else {
             this.jerooEditor.resetCache();
             this.jerooEditor.resetPreferences();
-            this.jerooMatrix.resetCache();
+            this.jerooIsland.resetCache();
           }
         });
       });
@@ -208,20 +208,20 @@ export class DashboardComponent implements AfterViewInit {
 
   onRunStepwiseClick() {
     if (!this.runBtnDisabled()) {
-      this.jerooEditor.runStepwise(this.jerooMatrix.getContext());
+      this.jerooEditor.runStepwise(this.jerooIsland.getContext());
     }
   }
 
   onRunContiniousClick() {
     if (!this.runBtnDisabled()) {
-      this.jerooEditor.runContinious(this.jerooMatrix.getContext());
+      this.jerooEditor.runContinious(this.jerooIsland.getContext());
     }
   }
 
   onResetClick() {
     if (!this.resetBtnDisabled()) {
       this.jerooEditor.resetState();
-      this.jerooMatrix.resetState();
+      this.jerooIsland.resetState();
     }
   }
 
@@ -251,14 +251,14 @@ export class DashboardComponent implements AfterViewInit {
     this.runtimeSpeed = this.speeds[this.speedIndex - 1];
   }
 
-  clearMap() {
+  clearIsland() {
     if (this.jerooEditorState.reset) {
-      this.jerooMatrix.clearMap();
+      this.jerooIsland.clearIsland();
     }
   }
 
-  openMapFile() {
-    (this.mapFileInput.nativeElement as HTMLInputElement).click();
+  openIslandFile() {
+    (this.islandFileInput.nativeElement as HTMLInputElement).click();
   }
 
   mapFileSelected(file: File) {
@@ -267,8 +267,8 @@ export class DashboardComponent implements AfterViewInit {
       reader.readAsText(file, 'UTF-8');
       reader.onload = (readerEvent: any) => {
         const content: string = readerEvent.target.result;
-        this.matrixService.genMapFromString(content);
-        this.jerooMatrix.redraw();
+        this.islandService.genIslandFromString(content);
+        this.jerooIsland.redraw();
       };
     }
   }
@@ -282,7 +282,7 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   changeMapSize() {
-    this.jerooMatrix.openDialog();
+    this.jerooIsland.openDialog();
   }
 
   getHelpUrl() {
