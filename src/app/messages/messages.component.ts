@@ -2,11 +2,11 @@ import { Component, ViewChildren, QueryList, AfterViewInit, ElementRef } from '@
 import { MessageService, Message, LoggingMessage, CompilationErrorMessage, RuntimeErrorMessage } from '../message.service';
 
 @Component({
-  selector: 'app-display-error-message',
-  templateUrl: './display-error-message.component.html',
-  styleUrls: ['./display-error-message.component.scss']
+  selector: 'app-messages',
+  templateUrl: './messages.component.html',
+  styleUrls: ['./messages.component.scss']
 })
-export class DisplayErrorMessageComponent implements AfterViewInit {
+export class MessagesComponent implements AfterViewInit {
   @ViewChildren('p') errorMessages !: QueryList<any>;
   @ViewChildren('div') divs !: QueryList<any>;
 

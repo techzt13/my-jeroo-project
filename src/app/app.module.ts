@@ -32,7 +32,7 @@ import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { DisplayErrorMessageComponent } from './display-error-message/display-error-message.component';
+import { MessagesComponent } from './messages/messages.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { DashboardDialogAwardsComponent } from './dashboard/dashboard-dialog-awards/dashboard-dialog-awards.component';
@@ -48,11 +48,11 @@ import { PrintIslandComponent } from './print-layout/print-island/print-island.c
 import { PrintCodeComponent } from './print-layout/print-code/print-code.component';
 import { PrintCodeDialogComponent } from './print-layout/print-code/print-code-dialog/print-code-dialog.component';
 import { EditorPreferencesComponent } from './dashboard/editor-preferences/editor-preferences.component';
-import { CompilationErrorMessageComponent } from './display-error-message/compilation-error-message/compilation-error-message.component';
-import { LoggingMessageComponent } from './display-error-message/logging-message/logging-message.component';
+import { CompilationErrorMessageComponent } from './messages/compilation-error-message/compilation-error-message.component';
+import { LoggingMessageComponent } from './messages/logging-message/logging-message.component';
 import { CodeSaveDialogComponent } from './dashboard/code-save-dialog/code-save-dialog.component';
 import { IslandSaveDialogComponent } from './dashboard/island-save-dialog/island-save-dialog.component';
-import { RuntimeErrorMessageComponent } from './display-error-message/runtime-error-message/runtime-error-message.component';
+import { RuntimeErrorMessageComponent } from './messages/runtime-error-message/runtime-error-message.component';
 
 library.add(
   faFile,
@@ -80,7 +80,7 @@ library.add(
     DashboardComponent,
     JerooIslandComponent,
     ChnageIslandSizeDialogComponent,
-    DisplayErrorMessageComponent,
+    MessagesComponent,
     TextEditorComponent,
     EditorTabAreaComponent,
     CacheDialogComponent,
