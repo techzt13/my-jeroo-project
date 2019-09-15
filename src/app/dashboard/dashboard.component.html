@@ -261,6 +261,6 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 <!-- Island file input -->
-<input #islandFileInput class="invisible" type="file" file-accept="jev" (change)="IslandFileSelected($event.target.files[0])" />
+<input #islandFileInput class="invisible" type="file" file-accept="jev" (change)="islandFileSelected($event.target.files[0])" />
 <!-- code file input -->
 <input #codeFileInput class="invisible" type="file" file-accept="jsc" (change)="codeFileSelected($event.target.files[0])" />

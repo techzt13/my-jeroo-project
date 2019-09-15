@@ -261,7 +261,7 @@ export class DashboardComponent implements AfterViewInit {
     (this.islandFileInput.nativeElement as HTMLInputElement).click();
   }
 
-  mapFileSelected(file: File) {
+  islandFileSelected(file: File) {
     if (this.islandEditingEnabled()) {
       const reader = new FileReader();
       reader.readAsText(file, 'UTF-8');
