@@ -134,7 +134,7 @@ describe('IslandService', () => {
     const map =
       '.XYZW\n' +
       '...GG\n';
-    expect(() => service.genIslandFromString(map)).toThrow(new Error('Invalid TileType in map'));
+    expect(() => service.genIslandFromString(map)).toThrow(new Error('Invalid TileType in island'));
     expect(service.getRows()).toBe(oldRows);
     expect(service.getCols()).toBe(oldCols);
   });
