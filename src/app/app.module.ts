@@ -33,12 +33,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MessagesComponent } from './messages/messages.component';
-import { TextEditorComponent } from './text-editor/text-editor.component';
+import { EditorComponent } from './editor/editor.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { DashboardDialogAwardsComponent } from './dashboard/dashboard-dialog-awards/dashboard-dialog-awards.component';
 import { DashboardDialogHistoryComponent } from './dashboard/dashboard-dialog-history/dashboard-dialog-history.component';
 import { DashboardDialogCopyrightComponent } from './dashboard/dashboard-dialog-copyright/dashboard-dialog-copyright.component';
-import { EditorTabAreaComponent } from './editor-tab-area/editor-tab-area.component';
+import { EditorTabsComponent } from './editor-tabs/editor-tabs.component';
 import { CacheDialogComponent } from './cache-dialog/cache-dialog.component';
 import { JerooStatusComponent } from './jeroo-status/jeroo-status.component';
 import { DashboardDialogAboutComponent } from './dashboard/dashboard-dialog-about/dashboard-dialog-about.component';
@@ -81,8 +81,8 @@ library.add(
     JerooIslandComponent,
     ChnageIslandSizeDialogComponent,
     MessagesComponent,
-    TextEditorComponent,
-    EditorTabAreaComponent,
+    EditorComponent,
+    EditorTabsComponent,
     CacheDialogComponent,
     JerooStatusComponent,
     DashboardDialogAboutComponent,

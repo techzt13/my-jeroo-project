@@ -6,7 +6,7 @@ import { DashboardDialogAboutComponent } from './dashboard-dialog-about/dashboar
 import { DashboardDialogAwardsComponent } from './dashboard-dialog-awards/dashboard-dialog-awards.component';
 import { DashboardDialogCopyrightComponent } from './dashboard-dialog-copyright/dashboard-dialog-copyright.component';
 import { DashboardDialogHistoryComponent } from './dashboard-dialog-history/dashboard-dialog-history.component';
-import { EditorState, EditorTabAreaComponent } from '../editor-tab-area/editor-tab-area.component';
+import { EditorState, EditorTabsComponent } from '../editor-tabs/editor-tabs.component';
 import { JerooIslandComponent } from '../island/island.component';
 import { IslandService } from '../island.service';
 import { MessageService, LoggingMessage } from '../message.service';
@@ -26,7 +26,7 @@ export class DashboardComponent implements AfterViewInit {
   @ViewChild('IslandFileInput', { static: true }) islandFileInput: ElementRef;
   @ViewChild('codeFileInput', { static: true }) codeFileInput: ElementRef;
   @ViewChild('jerooIsland', { static: true }) jerooIsland: JerooIslandComponent;
-  @ViewChild('jerooEditor', { static: true }) jerooEditor: EditorTabAreaComponent;
+  @ViewChild('jerooEditor', { static: true }) jerooEditor: EditorTabsComponent;
   @ViewChild('fileSaver', { static: true }) fileSaver: ElementRef;
 
   private speeds = [475, 350, 225, 125, 25, 2];

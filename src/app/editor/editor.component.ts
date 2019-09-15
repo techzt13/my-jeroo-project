@@ -3,10 +3,10 @@ import { CodemirrorService } from '../codemirror/codemirror.service';
 import { SelectedLanguage, EditorPreferences } from '../code.service';
 
 @Component({
-  selector: 'app-text-editor',
-  templateUrl: './text-editor.component.html'
+  selector: 'app-editor',
+  templateUrl: './editor.component.html'
 })
-export class TextEditorComponent implements AfterViewInit {
+export class EditorComponent implements AfterViewInit {
   @ViewChild('editorTextarea', { static: true }) editorTextArea: ElementRef;
   private editor: CodeMirror.Editor = null;
 

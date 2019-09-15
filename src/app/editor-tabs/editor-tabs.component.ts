@@ -4,7 +4,7 @@ import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter.service';
 import { IslandService } from '../island.service';
 import { MessageService, LoggingMessage, CompilationErrorMessage, RuntimeErrorMessage } from '../message.service';
-import { TextEditorComponent } from '../text-editor/text-editor.component';
+import { EditorComponent } from '../editor/editor.component';
 import { CodeService, SelectedLanguage, SelectedTab, EditorCode } from '../code.service';
 import { Storage } from '../storage';
 
@@ -21,13 +21,13 @@ export interface EditorState {
 }
 
 @Component({
-  selector: 'app-editor-tab-area',
-  templateUrl: './editor-tab-area.component.html',
-  styleUrls: ['./editor-tab-area.component.scss']
+  selector: 'app-editor-tabs',
+  templateUrl: './editor-tabs.component.html',
+  styleUrls: ['./editor-tabs.component.scss']
 })
-export class EditorTabAreaComponent implements AfterViewInit {
-  @ViewChild('mainMethodTextEditor', { static: true }) mainMethodTextEditor: TextEditorComponent;
-  @ViewChild('extensionMethodsTextEditor', { static: true }) extensionMethodsTextEditor: TextEditorComponent;
+export class EditorTabsComponent implements AfterViewInit {
+  @ViewChild('mainMethodTextEditor', { static: true }) mainMethodTextEditor: EditorComponent;
+  @ViewChild('extensionMethodsTextEditor', { static: true }) extensionMethodsTextEditor: EditorComponent;
   @Input() speed: number;
 
   languages: Language[] = [
