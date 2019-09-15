@@ -4,7 +4,7 @@ import {
   Point,
   CardinalDirection,
   RelativeDirection
-} from './jerooDirection';
+} from './direction';
 
 const STEP: Point[] = [
   // north
