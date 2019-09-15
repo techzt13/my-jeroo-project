@@ -15,7 +15,7 @@ import { EditorPreferencesComponent } from './editor-preferences/editor-preferen
 import { CodeSaveDialogComponent } from './code-save-dialog/code-save-dialog.component';
 import { IslandSaveDialogComponent } from './island-save-dialog/island-save-dialog.component';
 import { SelectedTileTypeService } from '../selected-tile-type.service';
-import { TileType } from '../jerooTileType';
+import { TileType } from '../tileType';
 
 @Component({
   selector: 'app-dashboard',

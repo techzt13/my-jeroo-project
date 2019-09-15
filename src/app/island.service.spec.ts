@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Jeroo } from './jeroo';
-import { CardinalDirection } from './jerooDirection';
-import { TileType } from './jerooTileType';
+import { CardinalDirection } from './direction';
+import { TileType } from './tileType';
 import { IslandService } from './island.service';
 
 describe('IslandService', () => {

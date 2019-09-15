@@ -1,5 +1,5 @@
 import { IslandService } from './island.service';
-import { TileType } from './jerooTileType';
+import { TileType } from './tileType';
 import {
   Point,
   CardinalDirection,
