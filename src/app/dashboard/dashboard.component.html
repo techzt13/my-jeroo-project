@@ -79,7 +79,7 @@
             <div fxLayout="column" fxLayoutAlign="center center">
               <button id="islandFileMenu" mat-button [matMenuTriggerFor]="islandFile">Island File</button>
               <div>
-                <button id="newIslandButton" mat-icon-button matTooltip="Create new island layout" [disabled]="!islandEditingEnabled()" (click)="clearMap()">
+                <button id="newIslandButton" mat-icon-button matTooltip="Create new island layout" [disabled]="!islandEditingEnabled()" (click)="clearIsland()">
                   <fa-icon icon="eraser"></fa-icon>
                 </button>
                 <button mat-icon-button matTooltip="Open an island file" [disabled]="!islandEditingEnabled()" (click)="openIslandFile()">
@@ -172,10 +172,10 @@
     </mat-menu>
     <mat-menu #islandFile="matMenu">
       <ng-template matMenuContent>
-        <button id="newMapMenuItem" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="clearIsland()">
+        <button id="newIslandMenuItem" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="clearIsland()">
           <fa-icon icon="eraser"></fa-icon><span class="menu-text">New<span class="shortcut-tip">Ctrl+Shift+N</span></span>
         </button>
-        <button mat-menu-item [disabled]="!islandEditingEnabled()" (click)="openMapFile()">
+        <button mat-menu-item [disabled]="!islandEditingEnabled()" (click)="openIslandFile()">
           <fa-icon icon="folder"></fa-icon><span class="menu-text">Open<span class="shortcut-tip">Ctrl+Shift+O</span></span>
         </button>
         <mat-divider></mat-divider>
@@ -225,8 +225,8 @@
           </div>
           <mat-divider></mat-divider>
           <div>
-            <button id="changeMapSize" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="changeMapSize()">
-              <span class="menu-text">Change Map Size</span>
+            <button id="changeIslandSize" mat-menu-item [disabled]="!islandEditingEnabled()" (click)="changeIslandSize()">
+              <span class="menu-text">Change Island Size</span>
             </button>
           </div>
         </mat-radio-group>
@@ -260,7 +260,7 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-<!-- map file input -->
-<input #islandFileInput class="invisible" type="file" file-accept="jev" (change)="mapFileSelected($event.target.files[0])" />
+<!-- Island file input -->
+<input #islandFileInput class="invisible" type="file" file-accept="jev" (change)="IslandFileSelected($event.target.files[0])" />
 <!-- code file input -->
 <input #codeFileInput class="invisible" type="file" file-accept="jsc" (change)="codeFileSelected($event.target.files[0])" />

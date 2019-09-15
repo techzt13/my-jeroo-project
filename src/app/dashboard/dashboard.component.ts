@@ -281,7 +281,7 @@ export class DashboardComponent implements AfterViewInit {
     this.printService.printIsland();
   }
 
-  changeMapSize() {
+  changeIslandSize() {
     this.jerooIsland.openDialog();
   }
 

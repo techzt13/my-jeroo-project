@@ -58,15 +58,15 @@ export class DashboardPage {
   }
 
   getNewIslandMenuItem() {
-    return element(by.id('newMapMenuItem'));
+    return element(by.id('newIslandMenuItem'));
   }
 
   getChangeIslandSize() {
-    return element(by.id('changeMapSize'));
+    return element(by.id('changeIslandSize'));
   }
 
   getCloseIslandDialogButton() {
-    return element(by.id('closeIslandxDialogButton'));
+    return element(by.id('closeIslandDialogButton'));
   }
 
   getSubmitIslandDialogButton() {
