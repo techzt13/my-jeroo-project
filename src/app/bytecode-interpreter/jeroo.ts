@@ -1,5 +1,5 @@
-import { IslandService } from './island.service';
-import { TileType } from './tileType';
+import { IslandService } from '../island.service';
+import { TileType } from '../tileType';
 import {
   Point,
   CardinalDirection,

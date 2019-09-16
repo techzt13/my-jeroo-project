@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
 import { BytecodeInterpreterService, RuntimeError } from './bytecode-interpreter.service';
-import { IslandService } from './island.service';
+import { IslandService } from '../island.service';
 import { Jeroo } from './jeroo';
-import { TileType } from './tileType';
+import { TileType } from '../tileType';
 import { CardinalDirection } from './direction';
 
 describe('BytecodeInterpreterService', () => {

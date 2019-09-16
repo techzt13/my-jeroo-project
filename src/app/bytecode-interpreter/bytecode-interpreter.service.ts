@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IslandService } from './island.service';
+import { IslandService } from '../island.service';
 import { Jeroo } from './jeroo';
-import { TileType } from './tileType';
+import { TileType } from '../tileType';
 import { Subject } from 'rxjs';
 
 export class RuntimeError extends Error {

@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
+import { BytecodeInterpreterService } from '../bytecode-interpreter/bytecode-interpreter.service';
 import { IslandService } from '../island.service';
-import { Jeroo } from '../jeroo';
+import { Jeroo } from '../bytecode-interpreter/jeroo';
 
 @Component({
   selector: 'app-jeroo-status',

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
-import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter.service';
+import { BytecodeInterpreterService, RuntimeError } from '../bytecode-interpreter/bytecode-interpreter.service';
 import { IslandService } from '../island.service';
 import { MessageService, LoggingMessage, CompilationErrorMessage, RuntimeErrorMessage } from '../message.service';
 import { EditorComponent } from '../editor/editor.component';

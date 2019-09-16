@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Inject, Input, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
-import { BytecodeInterpreterService } from '../bytecode-interpreter.service';
+import { BytecodeInterpreterService } from '../bytecode-interpreter/bytecode-interpreter.service';
 import { DialogData, ChnageIslandSizeDialogComponent } from '../change-island-size-dialog/change-island-size-dialog.component';
 import { IslandService } from '../island.service';
 import { Storage } from '../storage';

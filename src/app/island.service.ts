@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Jeroo } from './jeroo';
+import { Jeroo } from './bytecode-interpreter/jeroo';
 import { TileType } from './tileType';
 
 @Injectable({

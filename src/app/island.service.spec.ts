@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { Jeroo } from './jeroo';
-import { CardinalDirection } from './direction';
+import { Jeroo } from './bytecode-interpreter/jeroo';
+import { CardinalDirection } from './bytecode-interpreter/direction';
 import { TileType } from './tileType';
 import { IslandService } from './island.service';
 
