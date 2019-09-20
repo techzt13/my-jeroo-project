@@ -14,13 +14,13 @@ import { SelectedTileTypeService } from '../selected-tile-type.service';
   styleUrls: ['./island.component.scss']
 })
 export class JerooIslandComponent implements AfterViewInit {
-  @ViewChild('jerooGameCanvas', { static: true }) jerooGameCanvas: ElementRef;
-  @Input() editingEnabled: boolean;
+  @ViewChild('jerooGameCanvas', { static: true }) jerooGameCanvas: ElementRef | null = null;
+  @Input() editingEnabled: boolean = true;
 
-  mouseRow: number = null;
-  mouseColumn: number = null;
-  private canvas: HTMLCanvasElement;
-  private context: CanvasRenderingContext2D;
+  mouseRow: number | null = null;
+  mouseColumn: number | null = null;
+  private canvas: HTMLCanvasElement | null = null;
+  private context: CanvasRenderingContext2D | null = null;
   private mouseDown = false;
 
   constructor(private islandService: IslandService, private dialog: MatDialog,
@@ -30,12 +30,14 @@ export class JerooIslandComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    // check if something has been stored in the cache to load if it has
-    this.canvas = this.jerooGameCanvas.nativeElement as HTMLCanvasElement;
-    this.context = this.canvas.getContext('2d');
-    this.canvas.width = this.canvas.offsetWidth;
-    this.canvas.height = this.canvas.offsetHeight;
-    this.redraw();
+    if (this.jerooGameCanvas) {
+      // check if something has been stored in the cache to load if it has
+      this.canvas = this.jerooGameCanvas.nativeElement as HTMLCanvasElement;
+      this.context = this.canvas.getContext('2d');
+      this.canvas.width = this.canvas.offsetWidth;
+      this.canvas.height = this.canvas.offsetHeight;
+      this.redraw();
+    }
   }
 
   loadIslandFromCache() {
@@ -74,20 +76,22 @@ export class JerooIslandComponent implements AfterViewInit {
   }
 
   redraw() {
-    this.context.clearRect(0, 0,
-      this.canvas.width,
-      this.canvas.height
-    );
-    this.canvas.width = this.islandService.getTsize() * (this.islandService.getCols());
-    this.canvas.height = this.islandService.getTsize() * (this.islandService.getRows());
-    // if the board has been resized save into cache
-    this.islandService.render(this.context);
+    if (this.canvas && this.context) {
+      this.context.clearRect(0, 0,
+        this.canvas.width,
+        this.canvas.height
+      );
+      this.canvas.width = this.islandService.getTsize() * (this.islandService.getCols());
+      this.canvas.height = this.islandService.getTsize() * (this.islandService.getRows());
+      // if the board has been resized save into cache
+      this.islandService.render(this.context);
+    }
   }
 
   clearIsland() {
     const dialogRef = this.dialog.open(WarningDialogComponent);
     dialogRef.afterClosed().subscribe((cont) => {
-      if (cont) {
+      if (cont && this.context) {
         this.islandService.resetIsland();
         this.islandService.resetJeroos();
         this.islandService.resetDynamicIsland();
@@ -132,46 +136,52 @@ export class JerooIslandComponent implements AfterViewInit {
   }
 
   private updateScreenFromMouseEvent(event: MouseEvent) {
-    const rect = this.canvas.getBoundingClientRect();
-    const pixelX = event.clientX - rect.left;
-    const pixelY = event.clientY - rect.top;
-    this.updateScreen(pixelX, pixelY);
+    if (this.canvas) {
+      const rect = this.canvas.getBoundingClientRect();
+      const pixelX = event.clientX - rect.left;
+      const pixelY = event.clientY - rect.top;
+      this.updateScreen(pixelX, pixelY);
+    }
   }
 
   private updateScreenFromTapEvent(event: TouchEvent) {
-    const rect = this.canvas.getBoundingClientRect();
-    const pixelX = event.touches[0].clientX - rect.left;
-    const pixelY = event.touches[0].clientY - rect.top;
-    this.updateScreen(pixelX, pixelY);
+    if (this.canvas) {
+      const rect = this.canvas.getBoundingClientRect();
+      const pixelX = event.touches[0].clientX - rect.left;
+      const pixelY = event.touches[0].clientY - rect.top;
+      this.updateScreen(pixelX, pixelY);
+    }
   }
 
   private updateScreen(pixelX: number, pixelY: number) {
-    const cols = this.islandService.getCols();
-    const rows = this.islandService.getRows();
-    const pixelsInCol = this.canvas.offsetWidth / cols;
-    const pixelsInRow = this.canvas.offsetHeight / rows;
-    const tileCol = Math.floor(pixelX / pixelsInCol);
-    const tileRow = Math.floor(pixelY / pixelsInRow);
+    if (this.canvas && this.context) {
+      const cols = this.islandService.getCols();
+      const rows = this.islandService.getRows();
+      const pixelsInCol = this.canvas.offsetWidth / cols;
+      const pixelsInRow = this.canvas.offsetHeight / rows;
+      const tileCol = Math.floor(pixelX / pixelsInCol);
+      const tileRow = Math.floor(pixelY / pixelsInRow);
 
-    // update the mouse locations
-    this.mouseColumn = tileCol - 1;
-    this.mouseRow = tileRow - 1;
+      // update the mouse locations
+      this.mouseColumn = tileCol - 1;
+      this.mouseRow = tileRow - 1;
 
-    if (tileCol > 0 && tileRow > 0
-      && tileCol < cols - 1 && tileRow < rows - 1) {
-      // update the col and row
-      if (this.editingEnabled && this.mouseDown && this.selectedTileTypeService) {
-        // only re-render if we change the map
-        if (this.islandService.getStaticTile(tileCol, tileRow) !== this.selectedTileTypeService.selectedTileType) {
-          this.islandService.setStaticTile(tileCol, tileRow, this.selectedTileTypeService.selectedTileType);
-          this.islandService.render(this.context);
+      if (tileCol > 0 && tileRow > 0
+        && tileCol < cols - 1 && tileRow < rows - 1) {
+        // update the col and row
+        if (this.editingEnabled && this.mouseDown && this.selectedTileTypeService) {
+          // only re-render if we change the map
+          if (this.islandService.getStaticTile(tileCol, tileRow) !== this.selectedTileTypeService.selectedTileType) {
+            this.islandService.setStaticTile(tileCol, tileRow, this.selectedTileTypeService.selectedTileType);
+            this.islandService.render(this.context);
+          }
         }
+      } else {
+        // off the island
+        this.mouseColumn = null;
+        this.mouseRow = null;
+        this.mouseDown = false;
       }
-    } else {
-      // off the island
-      this.mouseColumn = null;
-      this.mouseRow = null;
-      this.mouseDown = false;
     }
   }
 

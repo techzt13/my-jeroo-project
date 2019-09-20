@@ -9,7 +9,7 @@ import { LoggingMessage } from 'src/app/message.service';
 export class LoggingMessageComponent {
 
   @Input()
-  loggingMessage: LoggingMessage;
+  loggingMessage: LoggingMessage | null = null;
 
   constructor() { }
 }

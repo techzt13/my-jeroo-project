@@ -208,17 +208,24 @@ export class BytecodeInterpreterService {
       case 'AND': {
         const x = this.cmpStack.pop();
         const y = this.cmpStack.pop();
-        this.cmpStack.push(x && y);
+        if (x !== undefined && y !== undefined) {
+          this.cmpStack.push(x && y);
+        }
         break;
       }
       case 'OR': {
         const x = this.cmpStack.pop();
         const y = this.cmpStack.pop();
-        this.cmpStack.push(x || y);
+        if (x !== undefined && y !== undefined) {
+          this.cmpStack.push(x || y);
+        }
         break;
       }
       case 'RETR': {
-        this.pc = this.pcStack.pop();
+        const pc = this.pcStack.pop();
+        if (pc !== undefined) {
+          this.pc = pc;
+        }
         break;
       }
       case 'CALLBK': {

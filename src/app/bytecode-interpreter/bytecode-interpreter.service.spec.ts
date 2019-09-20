@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { BytecodeInterpreterService, RuntimeError } from './bytecode-interpreter.service';
 import { IslandService } from '../island.service';
 import { Jeroo } from './jeroo';
@@ -291,6 +290,9 @@ describe('BytecodeInterpreterService', () => {
     const currentJeroo = service.getCurrentJeroo();
     expect(currentJeroo.getNumFlowers()).toBe(0);
     const neighborJeroo = matService.getJeroo(1, 2);
+    if (neighborJeroo === null) {
+      throw new Error('neighbor must not be null');
+    }
     expect(neighborJeroo.getNumFlowers()).toBe(1);
   });
 
@@ -310,6 +312,9 @@ describe('BytecodeInterpreterService', () => {
     const currentJeroo = service.getCurrentJeroo();
     expect(currentJeroo.getNumFlowers()).toBe(1);
     const neighborJeroo = matService.getJeroo(3, 2);
+    if (neighborJeroo === null) {
+      throw new Error('neighbor must not be null');
+    }
     expect(neighborJeroo.getNumFlowers()).toBe(0);
   });
 
@@ -329,6 +334,9 @@ describe('BytecodeInterpreterService', () => {
     const currentJeroo = service.getCurrentJeroo();
     expect(currentJeroo.getNumFlowers()).toBe(0);
     const neighborJeroo = matService.getJeroo(1, 2);
+    if (neighborJeroo === null) {
+      throw new Error('neighbor must not be null');
+    }
     expect(neighborJeroo.getNumFlowers()).toBe(0);
   });
 

@@ -26,9 +26,9 @@ export interface EditorState {
   styleUrls: ['./editor-tabs.component.scss']
 })
 export class EditorTabsComponent implements AfterViewInit {
-  @ViewChild('mainMethodTextEditor', { static: true }) mainMethodTextEditor: EditorComponent;
-  @ViewChild('extensionMethodsTextEditor', { static: true }) extensionMethodsTextEditor: EditorComponent;
-  @Input() speed: number;
+  @ViewChild('mainMethodTextEditor', { static: true }) mainMethodEditor: EditorComponent | null = null;
+  @ViewChild('extensionMethodsTextEditor', { static: true }) extensionMethodsEditor: EditorComponent | null = null;
+  @Input() speed: number = 225;
 
   languages: Language[] = [
     { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },
@@ -37,10 +37,15 @@ export class EditorTabsComponent implements AfterViewInit {
   ];
 
   selectedTabIndex = SelectedTab.Main;
-  private instructions: Array<Instruction> = null;
-  private previousInstruction: Instruction = null;
+  private instructions: Array<Instruction> = [];
+  private previousInstruction: Instruction | null = null;
 
-  editorStateValue: EditorState;
+  editorStateValue: EditorState = {
+    reset: true,
+    executing: false,
+    paused: false,
+    stopped: false
+  };
   @Output()
   editorStateChange = new EventEmitter<EditorState>();
   @Input()
@@ -53,55 +58,67 @@ export class EditorTabsComponent implements AfterViewInit {
   }
 
   constructor(private messageService: MessageService,
-              private bytecodeService: BytecodeInterpreterService,
-              private islandService: IslandService,
-              public codeService: CodeService,
-              public dialog: MatDialog,
-              @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
+    private bytecodeService: BytecodeInterpreterService,
+    private islandService: IslandService,
+    public codeService: CodeService,
+    public dialog: MatDialog,
+    @Inject(LOCAL_STORAGE) private storage: WebStorageService) {
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.getSelectedEditor().refresh();
-      this.getSelectedEditor().focus();
+      const editor = this.getSelectedEditor();
+      if (editor) {
+        editor.refresh();
+        editor.focus();
+      }
     });
 
     this.codeService.getCursorPosition().subscribe((position) => {
       this.selectedTabIndex = position.pane;
       const editor = this.getSelectedEditor();
-      editor.refresh();
-      editor.focus();
-      editor.setCursor({ line: position.lnum - 1, ch: position.cnum });
+      if (editor) {
+        editor.refresh();
+        editor.focus();
+        editor.setCursor({ line: position.lnum - 1, ch: position.cnum });
+      }
     });
   }
 
   runStepwise(context: CanvasRenderingContext2D) {
     if (this.editorState.reset || this.instructions === null) {
-      this.messageService.clear();
-      this.messageService.addMessage(new LoggingMessage('Compiling...'));
-      const jerooCode = this.codeService.genCodeStr(this.getCode());
-      const result = JerooCompiler.compile(jerooCode);
-      if (result.successful) {
-        this.instructions = result.bytecode;
-        this.bytecodeService.reset();
-        this.bytecodeService.jerooMap = result.jerooMap;
-      } else {
-        this.messageService.addMessage(new CompilationErrorMessage(result.error));
-        return;
+      const editorCode = this.getCode();
+      if (editorCode) {
+        this.messageService.clear();
+        this.messageService.addMessage(new LoggingMessage('Compiling...'));
+        const jerooCode = this.codeService.genCodeStr(editorCode);
+        const result = JerooCompiler.compile(jerooCode);
+        if (result.successful && result.bytecode) {
+          this.instructions = result.bytecode;
+          this.bytecodeService.reset();
+          this.bytecodeService.jerooMap = result.jerooMap;
+        } else {
+          if (result.error !== undefined) {
+            this.messageService.addMessage(new CompilationErrorMessage(result.error));
+          }
+          return;
+        }
       }
     }
     this.messageService.addMessage(new LoggingMessage('Stepping...'));
     this.executingState();
     try {
-      this.mainMethodTextEditor.setReadOnly(true);
-      this.extensionMethodsTextEditor.setReadOnly(true);
-      this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
-      this.islandService.render(context);
-      if (this.bytecodeService.validInstruction(this.instructions)) {
-        this.pauseState();
-        this.highlightCurrentLine();
-      } else {
-        this.cleanupExecution();
+      if (this.mainMethodEditor && this.extensionMethodsEditor) {
+        this.mainMethodEditor.setReadOnly(true);
+        this.extensionMethodsEditor.setReadOnly(true);
+        this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+        this.islandService.render(context);
+        if (this.bytecodeService.validInstruction(this.instructions)) {
+          this.pauseState();
+          this.highlightCurrentLine();
+        } else {
+          this.cleanupExecution();
+        }
       }
     } catch (e) {
       this.islandService.render(context);
@@ -111,33 +128,40 @@ export class EditorTabsComponent implements AfterViewInit {
 
   runContinious(context: CanvasRenderingContext2D) {
     if (this.editorState.reset || this.instructions === null) {
-      this.messageService.clear();
-      this.messageService.addMessage(new LoggingMessage('Compiling...'));
-      const jerooCode = this.codeService.genCodeStr(this.getCode());
-      const result = JerooCompiler.compile(jerooCode);
-      if (result.successful) {
-        this.instructions = result.bytecode;
-        this.bytecodeService.reset();
-        this.bytecodeService.jerooMap = result.jerooMap;
-      } else {
-        this.messageService.addMessage(new CompilationErrorMessage(result.error));
-        return;
+      const editorCode = this.getCode();
+      if (editorCode) {
+        this.messageService.clear();
+        this.messageService.addMessage(new LoggingMessage('Compiling...'));
+        const jerooCode = this.codeService.genCodeStr(editorCode);
+        const result = JerooCompiler.compile(jerooCode);
+        if (result.successful && result.bytecode) {
+          this.instructions = result.bytecode;
+          this.bytecodeService.reset();
+          this.bytecodeService.jerooMap = result.jerooMap;
+        } else {
+          if (result.error) {
+            this.messageService.addMessage(new CompilationErrorMessage(result.error));
+          }
+          return;
+        }
       }
     }
     this.messageService.addMessage(new LoggingMessage('Running resumed...'));
     const executeInstructions = () => {
       try {
-        this.mainMethodTextEditor.setReadOnly(true);
-        this.extensionMethodsTextEditor.setReadOnly(true);
-        this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
-        this.islandService.render(context);
-        this.highlightCurrentLine();
-        if (this.bytecodeService.validInstruction(this.instructions)) {
-          if (!this.editorState.paused && !this.editorState.stopped) {
-            setTimeout(executeInstructions, this.speed);
+        if (this.mainMethodEditor && this.extensionMethodsEditor) {
+          this.mainMethodEditor.setReadOnly(true);
+          this.extensionMethodsEditor.setReadOnly(true);
+          this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+          this.islandService.render(context);
+          this.highlightCurrentLine();
+          if (this.bytecodeService.validInstruction(this.instructions)) {
+            if (!this.editorState.paused && !this.editorState.stopped) {
+              setTimeout(executeInstructions, this.speed);
+            }
+          } else {
+            this.cleanupExecution();
           }
-        } else {
-          this.cleanupExecution();
         }
       } catch (e) {
         this.islandService.render(context);
@@ -149,24 +173,26 @@ export class EditorTabsComponent implements AfterViewInit {
   }
 
   private cleanupExecution() {
-    this.mainMethodTextEditor.setReadOnly(false);
-    this.extensionMethodsTextEditor.setReadOnly(false);
-    this.unhighlightPreviousLine();
-    this.previousInstruction = null;
-    this.messageService.clear();
-    this.messageService.addMessage(new LoggingMessage('Program completed'));
-    this.stopState();
+    if (this.mainMethodEditor != null && this.extensionMethodsEditor) {
+      this.mainMethodEditor.setReadOnly(false);
+      this.extensionMethodsEditor.setReadOnly(false);
+      this.unhighlightPreviousLine();
+      this.previousInstruction = null;
+      this.messageService.clear();
+      this.messageService.addMessage(new LoggingMessage('Program completed'));
+      this.stopState();
+    }
   }
 
   private highlightCurrentLine() {
     this.unhighlightPreviousLine();
-    if (this.bytecodeService.validInstruction(this.instructions)) {
+    if (this.mainMethodEditor && this.extensionMethodsEditor && this.bytecodeService.validInstruction(this.instructions)) {
       const instruction = this.bytecodeService.getCurrentInstruction(this.instructions);
       if (instruction.e === SelectedTab.Main || instruction.op === 'NEW') {
-        this.mainMethodTextEditor.highlightLine(instruction.f);
+        this.mainMethodEditor.highlightLine(instruction.f);
         this.selectedTabIndex = SelectedTab.Main;
       } else if (instruction.e === SelectedTab.Extensions) {
-        this.extensionMethodsTextEditor.highlightLine(instruction.f);
+        this.extensionMethodsEditor.highlightLine(instruction.f);
         this.selectedTabIndex = SelectedTab.Extensions;
       }
       this.previousInstruction = instruction;
@@ -176,11 +202,11 @@ export class EditorTabsComponent implements AfterViewInit {
   }
 
   private unhighlightPreviousLine() {
-    if (this.previousInstruction !== null) {
+    if (this.previousInstruction && this.mainMethodEditor && this.extensionMethodsEditor) {
       if (this.previousInstruction.e === SelectedTab.Main || this.previousInstruction.op === 'NEW') {
-        this.mainMethodTextEditor.unhighlightLine(this.previousInstruction.f);
+        this.mainMethodEditor.unhighlightLine(this.previousInstruction.f);
       } else if (this.previousInstruction.e === SelectedTab.Extensions) {
-        this.extensionMethodsTextEditor.unhighlightLine(this.previousInstruction.f);
+        this.extensionMethodsEditor.unhighlightLine(this.previousInstruction.f);
       }
     }
   }
@@ -190,33 +216,54 @@ export class EditorTabsComponent implements AfterViewInit {
     this.messageService.clear();
     this.unhighlightPreviousLine();
     this.selectedTabIndex = runtimeError.pane_num;
-    this.getSelectedEditor().highlightErrorLine(runtimeError.line_num);
-    this.messageService.addMessage(new RuntimeErrorMessage(runtimeError.message, runtimeError.pane_num, runtimeError.line_num));
-    this.stopState();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.highlightErrorLine(runtimeError.line_num);
+      this.messageService.addMessage(new RuntimeErrorMessage(runtimeError.message, runtimeError.pane_num, runtimeError.line_num));
+      this.stopState();
+    }
   }
 
   undo() {
-    this.getSelectedEditor().undo();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.undo();
+    }
   }
 
   redo() {
-    this.getSelectedEditor().redo();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.redo();
+    }
   }
 
   toggleComment() {
-    this.getSelectedEditor().toggleComment();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.toggleComment();
+    }
   }
 
   indentSelection() {
-    this.getSelectedEditor().indentSelection();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.indentSelection();
+    }
   }
 
   unindentSelection() {
-    this.getSelectedEditor().unindentSelection();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.unindentSelection();
+    }
   }
 
   formatSelection() {
-    this.getSelectedEditor().formatSelection();
+    const editor = this.getSelectedEditor();
+    if (editor) {
+      editor.formatSelection();
+    }
   }
 
   executingState() {
@@ -227,15 +274,17 @@ export class EditorTabsComponent implements AfterViewInit {
   }
 
   resetState() {
-    this.editorState.reset = true;
-    this.editorState.executing = false;
-    this.editorState.paused = false;
-    this.editorState.stopped = false;
-    this.messageService.clear();
-    this.bytecodeService.reset();
-    this.unhighlightPreviousLine();
-    this.mainMethodTextEditor.setReadOnly(false);
-    this.extensionMethodsTextEditor.setReadOnly(false);
+    if (this.mainMethodEditor && this.extensionMethodsEditor) {
+      this.editorState.reset = true;
+      this.editorState.executing = false;
+      this.editorState.paused = false;
+      this.editorState.stopped = false;
+      this.messageService.clear();
+      this.bytecodeService.reset();
+      this.unhighlightPreviousLine();
+      this.mainMethodEditor.setReadOnly(false);
+      this.extensionMethodsEditor.setReadOnly(false);
+    }
   }
 
   pauseState() {
@@ -255,10 +304,12 @@ export class EditorTabsComponent implements AfterViewInit {
   onEditorTabIndexChange(index: number) {
     this.selectedTabIndex = index;
     const selectedEditor = this.getSelectedEditor();
-    setTimeout(() => {
-      selectedEditor.refresh();
-      selectedEditor.focus();
-    });
+    if (selectedEditor) {
+      setTimeout(() => {
+        selectedEditor.refresh();
+        selectedEditor.focus();
+      });
+    }
   }
 
   getHelpUrl() {
@@ -277,8 +328,8 @@ export class EditorTabsComponent implements AfterViewInit {
     if (cachedCode) {
       const cachedCodeNoWhitespace = cachedCode.replace(/\s+/, '').trim();
       return !(cachedCodeNoWhitespace === starterJavaCode
-               || cachedCodeNoWhitespace === starterVBCode
-               || cachedCodeNoWhitespace === starterPythonCode);
+        || cachedCodeNoWhitespace === starterVBCode
+        || cachedCodeNoWhitespace === starterPythonCode);
     } else {
       return false;
     }
@@ -296,8 +347,10 @@ export class EditorTabsComponent implements AfterViewInit {
 
   loadCode(codeStr: string) {
     const editorCode = this.codeService.parseCodeFromStr(codeStr);
-    this.mainMethodTextEditor.setText(editorCode.mainMethodCode);
-    this.extensionMethodsTextEditor.setText(editorCode.extensionsMethodCode);
+    if (this.mainMethodEditor && this.extensionMethodsEditor) {
+      this.mainMethodEditor.setText(editorCode.mainMethodCode);
+      this.extensionMethodsEditor.setText(editorCode.extensionsMethodCode);
+    }
   }
 
   loadPreferencesFromCache() {
@@ -305,16 +358,23 @@ export class EditorTabsComponent implements AfterViewInit {
     this.codeService.prefrences = config;
   }
 
-  getCode(): EditorCode {
-    return {
-      extensionsMethodCode: this.extensionMethodsTextEditor.getText(),
-      mainMethodCode: this.mainMethodTextEditor.getText()
-    };
+  getCode(): EditorCode | null {
+    if (this.mainMethodEditor && this.extensionMethodsEditor) {
+      return {
+        extensionsMethodCode: this.extensionMethodsEditor.getText(),
+        mainMethodCode: this.mainMethodEditor.getText()
+      };
+    } else {
+      return null;
+    }
   }
 
   saveToLocal() {
-    const code = this.codeService.genCodeStr(this.getCode());
-    this.storage.set(Storage.Source, code);
+    const editorCode = this.getCode();
+    if (editorCode) {
+      const codeStr = this.codeService.genCodeStr(editorCode);
+      this.storage.set(Storage.Source, codeStr);
+    }
   }
 
   resetCache() {
@@ -327,18 +387,19 @@ export class EditorTabsComponent implements AfterViewInit {
 
   private getSelectedEditor() {
     if (this.selectedTabIndex === SelectedTab.Main) {
-      return this.mainMethodTextEditor;
+      return this.mainMethodEditor;
     } else if (this.selectedTabIndex === SelectedTab.Extensions) {
-      return this.extensionMethodsTextEditor;
+      return this.extensionMethodsEditor;
     } else {
       return null;
     }
   }
 
   clearCode() {
-    if (!this.mainMethodTextEditor.isReadOnly() && !this.extensionMethodsTextEditor.isReadOnly())  {
-      this.mainMethodTextEditor.setText('');
-      this.extensionMethodsTextEditor.setText('');
+    if (this.mainMethodEditor && this.extensionMethodsEditor &&
+      !this.mainMethodEditor.isReadOnly() && !this.extensionMethodsEditor.isReadOnly()) {
+      this.mainMethodEditor.setText('');
+      this.extensionMethodsEditor.setText('');
       this.resetCache();
     }
   }

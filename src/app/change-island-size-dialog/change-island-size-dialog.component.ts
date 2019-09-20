@@ -14,7 +14,7 @@ export interface DialogData {
   styleUrls: ['./change-island-size-dialog.component.scss']
 })
 export class ChnageIslandSizeDialogComponent implements OnInit {
-  form: FormGroup;
+  form: FormGroup | null = null;
   colValue: number;
   rowValue: number;
 
@@ -29,7 +29,7 @@ export class ChnageIslandSizeDialogComponent implements OnInit {
   save() {
     const dialogRef = this.dialog.open(WarningDialogComponent);
     dialogRef.afterClosed().subscribe((cont) => {
-      if (cont) {
+      if (cont && this.form) {
         this.dialogRef.close(this.form.value);
       } else {
         this.dialogRef.close();

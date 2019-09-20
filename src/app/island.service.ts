@@ -11,9 +11,9 @@ export class IslandService {
   private rows = 26;
   private cols = 26;
   tsize = 28;
-  private dynamicTileMap: TileType[] = [];
-  imageAtlas: HTMLImageElement;
-  private jeroos: Jeroo[] = [];
+  private dynamicTileMap: (TileType | null)[] = [];
+  imageAtlas: HTMLImageElement | null = null;
+  private jeroos: (Jeroo | null)[] = [];
   // used to store the map before any runtime edits
   private staticTileMap: TileType[] = [];
 
@@ -123,7 +123,7 @@ export class IslandService {
     return this.jeroos[row * this.cols + col];
   }
 
-  setJeroo(col: number, row: number, jeroo: Jeroo) {
+  setJeroo(col: number, row: number, jeroo: Jeroo | null) {
     this.jeroos[row * this.cols + col] = jeroo;
   }
 

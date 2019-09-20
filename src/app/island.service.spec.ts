@@ -111,6 +111,9 @@ describe('IslandService', () => {
       for (let col = 0; col < lines[0].length; col++) {
         const actual = service.getTile(col + 1, row + 1);
         const expected = lines[row].charAt(col);
+        if (actual === null) {
+          throw new Error('Tile must not be null');
+        }
         expect(actual).toBe(expected);
       }
     }

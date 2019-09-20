@@ -11,7 +11,7 @@ import { Jeroo } from '../bytecode-interpreter/jeroo';
 })
 export class JerooStatusComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('canvas') jerooIcons !: QueryList<any>;
-  subscription: Subscription;
+  subscription: Subscription | null = null;
 
   constructor(public bytecodeService: BytecodeInterpreterService, private islandService: IslandService) {
   }
@@ -43,16 +43,20 @@ export class JerooStatusComponent implements AfterViewInit, OnDestroy {
     canvas.style.height = `${this.islandService.tsize}px`;
     const context = canvas.getContext('2d');
 
-    if (this.islandService.imageAtlas == null) {
-      this.islandService.getTileAtlasObs().subscribe(imageAtlas => {
-        this.islandService.renderJeroo(context, imageAtlas, jeroo, 0, 0);
-      });
-    } else {
-      this.islandService.renderJeroo(context, this.islandService.imageAtlas, jeroo, 0, 0);
+    if (context) {
+      if (this.islandService.imageAtlas == null) {
+        this.islandService.getTileAtlasObs().subscribe(imageAtlas => {
+          this.islandService.renderJeroo(context, imageAtlas, jeroo, 0, 0);
+        });
+      } else {
+        this.islandService.renderJeroo(context, this.islandService.imageAtlas, jeroo, 0, 0);
+      }
     }
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
