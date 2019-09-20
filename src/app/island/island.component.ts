@@ -15,7 +15,7 @@ import { SelectedTileTypeService } from '../selected-tile-type.service';
 })
 export class JerooIslandComponent implements AfterViewInit {
   @ViewChild('jerooGameCanvas', { static: true }) jerooGameCanvas: ElementRef | null = null;
-  @Input() editingEnabled: boolean = true;
+  @Input() editingEnabled = true;
 
   mouseRow: number | null = null;
   mouseColumn: number | null = null;

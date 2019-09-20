@@ -28,7 +28,7 @@ export interface EditorState {
 export class EditorTabsComponent implements AfterViewInit {
   @ViewChild('mainMethodTextEditor', { static: true }) mainMethodEditor: EditorComponent | null = null;
   @ViewChild('extensionMethodsTextEditor', { static: true }) extensionMethodsEditor: EditorComponent | null = null;
-  @Input() speed: number = 225;
+  @Input() speed = 225;
 
   languages: Language[] = [
     { viewValue: 'JAVA/C++/C#', value: SelectedLanguage.Java },

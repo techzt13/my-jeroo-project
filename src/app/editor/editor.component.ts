@@ -92,7 +92,7 @@ export class EditorComponent implements AfterViewInit {
     if (this.editor) {
       return this.editor.getValue();
     } else {
-      return "";
+      return '';
     }
   }
 

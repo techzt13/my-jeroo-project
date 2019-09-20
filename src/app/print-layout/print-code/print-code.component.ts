@@ -17,8 +17,8 @@ export class PrintCodeComponent implements AfterViewInit {
   displayMainMethod = false;
   displayExtensionMethods = false;
   editorCode: EditorCode = {
-    mainMethodCode: "",
-    extensionsMethodCode: ""
+    mainMethodCode: '',
+    extensionsMethodCode: ''
   };
 
   constructor(private printService: PrintService,
