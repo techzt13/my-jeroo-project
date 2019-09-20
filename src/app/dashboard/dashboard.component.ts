@@ -227,9 +227,9 @@ export class DashboardComponent implements AfterViewInit {
     }
   }
 
-  onFormatSelectionClick() {
+  onFormatClick() {
     if (this.jerooEditor) {
-      this.jerooEditor.formatSelection();
+      this.jerooEditor.format();
     }
   }
 

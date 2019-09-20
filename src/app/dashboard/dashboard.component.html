@@ -133,7 +133,7 @@
         <mat-divider></mat-divider>
         <button id="commentMenuItem" mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onToggleCommentLines()">Comment Lines<span class="shortcut-tip">Ctrl+/</span></button>
         <mat-divider></mat-divider>
-        <button id="formatMenuItem" mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onFormatSelectionClick()">Format Selection<span class="shortcut-tip">Ctrl+Shift+F</span></button>
+        <button id="formatMenuItem" mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onFormatClick()">Format<span class="shortcut-tip">Ctrl+Shift+F</span></button>
         <button id="indentMenuItem" mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onIndentSelectionClick()">Indent Selection<span class="shortcut-tip">Tab</span></button>
         <button id="unindentMenuItem" mat-menu-item [disabled]="!editorEditingEnabled()" (click)="onUnindentSelectionClick()">Un-Indent Selection<span class="shortcut-tip">Shift+Tab</span></button>
         <mat-divider></mat-divider>

@@ -259,10 +259,10 @@ export class EditorTabsComponent implements AfterViewInit {
     }
   }
 
-  formatSelection() {
+  format() {
     const editor = this.getSelectedEditor();
     if (editor) {
-      editor.formatSelection();
+      editor.format();
     }
   }
 
