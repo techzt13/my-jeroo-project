@@ -40,6 +40,7 @@ build-angular:
     - node --version
     - yarn --version
     - yarn install
+    - yarn stylelint
     - yarn lint
 # remove the --base-href when the sites moves into the "/" directory
     - yarn build --base-href=/beta/ --prod
