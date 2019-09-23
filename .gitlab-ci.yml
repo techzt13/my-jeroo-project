@@ -91,13 +91,13 @@ generate-ocaml-documentation:
     paths:
       - src/compiler/_build/default/_doc/_html
   script:
+    - cd src/compiler
     - sudo apk update
     - sudo apk add m4
     - opam switch create ./ ocaml-base-compiler.4.08.1 || true
     - opam update
     - ocamlc --version
     - opam --version
-    - cd src/compiler
     - opam install --deps-only .
     - opam install odoc
     - odoc --version
