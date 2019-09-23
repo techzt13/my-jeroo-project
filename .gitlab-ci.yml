@@ -85,14 +85,15 @@ generate-typescript-documentation:
 generate-ocaml-documentation:
   image: ocaml/opam2:alpine-3.10-ocaml-4.08
   stage: generate-documentation
-  only:
-   - master
+  # only:
+  #  - master
   artifacts:
     paths:
       - src/compiler/_build/default/_doc/_html
   script:
     - sudo apk update
     - sudo apk add m4
+    - opam switch create ./ ocaml-base-compiler.4.08.1 || true
     - opam update
     - ocamlc --version
     - opam --version
