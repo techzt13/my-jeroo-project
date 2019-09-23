@@ -100,5 +100,6 @@ generate-ocaml-documentation:
     - opam --version
     - opam install --deps-only .
     - opam install odoc
+    - eval $(opam env)
     - odoc --version
     - dune build lib @doc-private
