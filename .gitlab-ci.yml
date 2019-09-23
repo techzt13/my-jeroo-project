@@ -71,8 +71,8 @@ test-angular:
 generate-typescript-documentation:
   image: node:12-alpine
   stage: generate-documentation
-  only:
-    - master
+  # only:
+  #   - master
   artifacts:
     paths:
       - docs
