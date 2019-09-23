@@ -310,6 +310,7 @@ export class DashboardComponent implements AfterViewInit {
           const content: string = readerEvent.target.result;
           this.islandService.genIslandFromString(content);
           this.jerooIsland.redraw();
+          this.jerooIsland.saveInLocal(content);
         }
       };
     }
