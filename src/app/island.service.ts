@@ -314,7 +314,7 @@ export class IslandService {
    */
   genIslandFromString(s: string) {
     if (s !== '') {
-      const lines = s.trim().replaceAll('\r', '').split('\n');
+      const lines = s.trim().replace(/\r/g, '').split('\n');
       const rows = lines.length;
       const cols = lines[0].length;
       const oldRows = this.getRows();
