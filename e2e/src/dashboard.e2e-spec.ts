@@ -41,7 +41,7 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getExtensionEditorTab().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     const extensionCode =
       'method pleaseSpin() {\\n' +
       'hop(4);\\n' +
@@ -54,7 +54,7 @@ describe('Jeroo Tests', () => {
       '}';
     page.writeToCodeMirror(extensionCode);
     page.getMainEditorTab().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     const mainCode =
       'method main() {\\n' +
       'Jeroo j = new Jeroo(6);\\n' +
@@ -72,7 +72,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Main:Line 8:LOGIC ERROR: Jeroo is on water');
     expect(page.getJerooName('0').getText()).toBe('j');
@@ -121,7 +121,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Program completed');
     expect(page.getJerooName('0').getText()).toBe('l');
@@ -152,7 +152,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Program completed');
     expect(page.getJerooName('0').getText()).toBe('j');
@@ -165,11 +165,11 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getLanguageSelection().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getVbLanguage().click();
 
     page.getExtensionEditorTab().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     const extensionCode =
       'Sub pleaseSpin()\\n' +
       'hop(4)\\n' +
@@ -182,7 +182,7 @@ describe('Jeroo Tests', () => {
       'End sub';
     page.writeToCodeMirror(extensionCode);
     page.getMainEditorTab().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     const mainCode =
       'Sub main()\\n' +
       'Dim j as Jeroo = new Jeroo(6)\\n' +
@@ -200,7 +200,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Main:Line 7:LOGIC ERROR: Jeroo is on water');
     expect(page.getJerooName('0').getText()).toBe('j');
@@ -215,7 +215,7 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getLanguageSelection().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getVbLanguage().click();
 
     const code =
@@ -251,7 +251,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Program completed');
     expect(page.getJerooName('0').getText()).toBe('l');
@@ -264,7 +264,7 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getLanguageSelection().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getVbLanguage().click();
 
     const code =
@@ -285,7 +285,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Program completed');
     expect(page.getJerooName('0').getText()).toBe('j');
@@ -298,11 +298,11 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getLanguageSelection().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getPythonLanguage().click();
 
     page.getExtensionEditorTab().click();
-    browser.sleep(500);
+    browser.sleep(1000);
 
     const extensionCode =
       'def pleaseSpin(self):\\n' +
@@ -315,7 +315,7 @@ describe('Jeroo Tests', () => {
       ' self.hop(4)';
     page.writeToCodeMirror(extensionCode);
     page.getMainEditorTab().click();
-    browser.sleep(500);
+    browser.sleep(1000);
 
     const mainCode =
       '# Heres my comment\\n' +
@@ -332,7 +332,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Main:Line 8:LOGIC ERROR: Jeroo is on water');
     expect(page.getJerooName('0').getText()).toBe('j');
@@ -347,7 +347,7 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getLanguageSelection().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getPythonLanguage().click();
 
     const code =
@@ -379,7 +379,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Program completed');
     expect(page.getJerooName('0').getText()).toBe('l');
@@ -392,7 +392,7 @@ describe('Jeroo Tests', () => {
     page.setIslandSize(14, 14);
 
     page.getLanguageSelection().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getPythonLanguage().click();
 
     const code =
@@ -409,7 +409,7 @@ describe('Jeroo Tests', () => {
     page.getSpeed6().click();
 
     page.getRunContinousButton().click();
-    browser.sleep(1250);
+    browser.sleep(1500);
 
     expect(page.getFinalMessage().getText()).toBe('Program completed');
     expect(page.getJerooName('0').getText()).toBe('j');
@@ -426,7 +426,7 @@ describe('Jeroo Tests', () => {
     page.writeToCodeMirror(code);
     page.getRunButton().click();
 
-    browser.sleep(500);
+    browser.sleep(1000);
     expect(page.getFinalMessage().getText()).toBe('Main:Line 3:Column 1:error:expected one of `;`, `.`, or an operator');
   });
 
@@ -437,9 +437,9 @@ describe('Jeroo Tests', () => {
     page.writeToCodeMirror(expectedCode);
     browser.refresh();
 
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getImportProjectDialogBtn().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     const expectedIslandSize = { cols: 20, rows: 30 };
     const actualIslandSize = page.getIslandSize();
     const actualCode = await page.getCodeMirrorText();
@@ -454,10 +454,10 @@ describe('Jeroo Tests', () => {
     page.writeToCodeMirror(expectedCode);
     browser.refresh();
 
-    browser.sleep(500);
+    browser.sleep(1000);
     page.getDontImportProjectDialogBtn().click();
     page.getEditorWarningDialogYesBtn().click();
-    browser.sleep(500);
+    browser.sleep(1000);
     const expectedIslandSize = { cols: 24, rows: 24 };
     const actualIslandSize = page.getIslandSize();
     const actualCode = await page.getCodeMirrorText();
@@ -467,7 +467,7 @@ describe('Jeroo Tests', () => {
 
   it('Should change island size', async () => {
     page.setIslandSize(30, 20);
-    browser.sleep(500);
+    browser.sleep(1000);
     const expectedIslandSize = { cols: 30, rows: 20 };
     const actualIslandSize = page.getIslandSize();
     expect(expectedIslandSize).toEqual(actualIslandSize);
