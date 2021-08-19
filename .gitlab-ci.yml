@@ -14,7 +14,7 @@ stages:
   - generate-documentation
 
 build-ocaml:
-  image: ocaml/opam2:alpine-3.10-ocaml-4.10
+  image: ocaml/opam:alpine-3.13-ocaml-4.12
   stage: build-ocaml
   artifacts:
     paths:
@@ -23,7 +23,7 @@ build-ocaml:
     - cd src/compiler
     - sudo apk update
     - sudo apk add m4
-    - opam switch create ./ ocaml-base-compiler.4.10.0 || true
+    - opam switch create ./ ocaml-base-compiler.4.12.0 || true
     - opam update && opam upgrade
     - ocamlc --version
     - opam --version
