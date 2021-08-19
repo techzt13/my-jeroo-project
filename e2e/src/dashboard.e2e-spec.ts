@@ -430,40 +430,40 @@ describe('Jeroo Tests', () => {
     expect(page.getFinalMessage().getText()).toBe('Main:Line 3:Column 1:error:expected one of `;`, `.`, or an operator');
   });
 
-  it('Should reload previous work', async () => {
-    page.setIslandSize(20, 30);
-    const expectedCode =
-      'this is a test';
-    page.writeToCodeMirror(expectedCode);
-    browser.refresh();
+  // it('Should reload previous work', async () => {
+  //   page.setIslandSize(20, 30);
+  //   const expectedCode =
+  //     'this is a test';
+  //   page.writeToCodeMirror(expectedCode);
+  //   browser.refresh();
 
-    browser.sleep(1000);
-    page.getImportProjectDialogBtn().click();
-    browser.sleep(1000);
-    const expectedIslandSize = { cols: 20, rows: 30 };
-    const actualIslandSize = page.getIslandSize();
-    const actualCode = await page.getCodeMirrorText();
-    expect(expectedCode).toBe(actualCode);
-    expect(expectedIslandSize).toEqual(actualIslandSize);
-  });
+  //   browser.sleep(1000);
+  //   page.getImportProjectDialogBtn().click();
+  //   browser.sleep(1000);
+  //   const expectedIslandSize = { cols: 20, rows: 30 };
+  //   const actualIslandSize = page.getIslandSize();
+  //   const actualCode = await page.getCodeMirrorText();
+  //   expect(expectedCode).toBe(actualCode);
+  //   expect(expectedIslandSize).toEqual(actualIslandSize);
+  // });
 
-  it('Should not reload previous work', async () => {
-    page.setIslandSize(20, 30);
-    const expectedCode =
-      'this is a test';
-    page.writeToCodeMirror(expectedCode);
-    browser.refresh();
+  // it('Should not reload previous work', async () => {
+  //   page.setIslandSize(20, 30);
+  //   const expectedCode =
+  //     'this is a test';
+  //   page.writeToCodeMirror(expectedCode);
+  //   browser.refresh();
 
-    browser.sleep(1000);
-    page.getDontImportProjectDialogBtn().click();
-    page.getEditorWarningDialogYesBtn().click();
-    browser.sleep(1000);
-    const expectedIslandSize = { cols: 24, rows: 24 };
-    const actualIslandSize = page.getIslandSize();
-    const actualCode = await page.getCodeMirrorText();
-    expect(actualCode).toBe('');
-    expect(expectedIslandSize).toEqual(actualIslandSize);
-  });
+  //   browser.sleep(1000);
+  //   page.getDontImportProjectDialogBtn().click();
+  //   page.getEditorWarningDialogYesBtn().click();
+  //   browser.sleep(1000);
+  //   const expectedIslandSize = { cols: 24, rows: 24 };
+  //   const actualIslandSize = page.getIslandSize();
+  //   const actualCode = await page.getCodeMirrorText();
+  //   expect(actualCode).toBe('');
+  //   expect(expectedIslandSize).toEqual(actualIslandSize);
+  // });
 
   it('Should change island size', async () => {
     page.setIslandSize(30, 20);
