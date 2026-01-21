@@ -39,6 +39,8 @@ import {
   faEraser,
   faPrint
 } from '@fortawesome/free-solid-svg-icons';
+  import { faTimes } from '@fortawesome/free-solid-svg-icons';
+  import { WelcomeOverlayComponent } from './welcome-overlay/welcome-overlay.component';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -98,6 +100,7 @@ import { EditorWarningDialogComponent } from './editor-warning-dialog/editor-war
     IslandSaveDialogComponent,
     RuntimeErrorMessageComponent,
     EditorWarningDialogComponent
+      WelcomeOverlayComponent
   ],
   imports: [
     BrowserModule,
@@ -145,6 +148,7 @@ export class AppModule {
       faStop,
       faBars,
       faEraser,
+        faTimes,
       faPrint
     );
   }

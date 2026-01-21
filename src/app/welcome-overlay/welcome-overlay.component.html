@@ -16,6 +16,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<app-welcome-overlay></app-welcome-overlay>
-<router-outlet></router-outlet>
-<router-outlet name="print"></router-outlet>
+<div class="welcome-overlay" *ngIf="showOverlay" (click)="closeOverlay()">
+  <div class="welcome-card">
+    <div class="welcome-content">
+      <h1 class="welcome-title">Welcome to Jeroo Plus</h1>
+      <p class="welcome-subtitle">Developed by Zack Tudor</p>
+    </div>
+    <button class="close-btn" (click)="closeOverlay()" mat-icon-button>
+      <fa-icon icon="times"></fa-icon>
+    </button>
+  </div>
+</div>
