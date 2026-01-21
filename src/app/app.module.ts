@@ -99,7 +99,7 @@ import { EditorWarningDialogComponent } from './editor-warning-dialog/editor-war
     CodeSaveDialogComponent,
     IslandSaveDialogComponent,
     RuntimeErrorMessageComponent,
-    EditorWarningDialogComponent,
+    EditorWarningDialogComponent
       WelcomeOverlayComponent
   ],
   imports: [
