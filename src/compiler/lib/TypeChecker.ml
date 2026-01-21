@@ -331,11 +331,15 @@ let rec typecheck_stmt stmt env state =
     match type_of_expr e env state with
     | (JerooType.ObjectT obj) as t when ty_id = obj.id ->
       SymbolTable.add env id t
+    | JerooType.NumT as t when (ty_id = "int" || ty_id = "Integer") ->
+      SymbolTable.add env id t
+    | JerooType.BoolT as t when (ty_id = "boolean" || ty_id = "Boolean") ->
+      SymbolTable.add env id t
     | _ -> raise (Exceptions.CompileException {
         pos = e.pos;
         pane = state.pane;
         exception_type = error;
-        message = "Jeroo declarations are the only valid declarations"
+        message = "Invalid declaration: type '" ^ ty_id ^ "' does not match the initialization expression"
       })
 
 

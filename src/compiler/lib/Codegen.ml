@@ -23,10 +23,13 @@ type value =
   | FunV
   | JerooV of int
   | ObjV of (string, value) SymbolTable.t
+  | IntV of int
+  | BoolV of bool
 
 type state = {
   bytecode : Bytecode.bytecode Deque.t;
   mutable num_jeroos : int;
+  mutable num_vars : int;
   mutable pane : Pane.t
 }
 
@@ -86,6 +89,10 @@ let lnum_of_bytecode_instr = function
   | Bytecode.OR (_, lnum)
   | Bytecode.RETR (_, lnum)
   | Bytecode.CALLBK (_, lnum)
+  | Bytecode.PUSH_INT (_, _, lnum)
+  | Bytecode.PUSH_BOOL (_, _, lnum)
+  | Bytecode.LOAD_VAR (_, _, lnum)
+  | Bytecode.STORE_VAR (_, _, lnum)
     -> lnum
 
 (* convert labels to memory locations *)
@@ -121,7 +128,21 @@ let rec gen_code_expr state symbol_table meta_expr =
     Deque.insert_back (Bytecode.TRUE (state.pane, line_num)) state.bytecode
   | AST.FalseExpr ->
     Deque.insert_back (Bytecode.FALSE (state.pane, line_num)) state.bytecode
-  | AST.IntExpr _ | AST.IdExpr _
+  | AST.IntExpr(n) ->
+    Deque.insert_back (Bytecode.PUSH_INT (n, state.pane, line_num)) state.bytecode
+  | AST.IdExpr(id) ->
+    let var_opt = SymbolTable.find symbol_table id in
+    begin match var_opt with
+      | Some(IntV(n)) ->
+        Deque.insert_back (Bytecode.PUSH_INT (n, state.pane, line_num)) state.bytecode
+      | Some(BoolV(b)) ->
+        let instr = if b then Bytecode.TRUE (state.pane, line_num) else Bytecode.FALSE (state.pane, line_num) in
+        Deque.insert_back instr state.bytecode
+      | Some(v) ->
+        (* Variable location stored in a different way, would need LOAD_VAR here *)
+        raise_type_exception ()
+      | None -> raise_type_exception ()
+    end
   | AST.NorthExpr | AST.SouthExpr | AST.EastExpr | AST.WestExpr
   | AST.AheadExpr | AST.LeftExpr | AST.RightExpr | AST.HereExpr -> ()
   | AST.BinOpExpr (e1, (AST.And, _), e2) ->
@@ -155,6 +176,15 @@ and gen_code_fxn_app state symbol_table id args pos =
   | ("hop", { a = AST.IntExpr(n); _ } :: []) ->
     let instr = Bytecode.HOP (n, state.pane, pos.lnum) in
     Deque.insert_back instr state.bytecode
+  | ("hop", { a = AST.IdExpr(vid); _ } :: []) ->
+    (* Handle variable as argument - look up the variable value *)
+    let var_opt = SymbolTable.find symbol_table vid in
+    begin match var_opt with
+      | Some(IntV(n)) ->
+        let instr = Bytecode.HOP (n, state.pane, pos.lnum) in
+        Deque.insert_back instr state.bytecode
+      | _ -> raise_type_exception ()
+    end
   | ("pick", []) ->
     let instr = Bytecode.PICK (state.pane, pos.lnum) in
     Deque.insert_back instr state.bytecode
@@ -236,9 +266,10 @@ let rec gen_code_stmt state symbol_table stmt =
   | AST.WhileStmt { a = (e, s); pos } -> gen_code_while state symbol_table e s pos
 
 and gen_code_decl_stmt state symbol_table ty id meta_expr =
-  if (not (String.equal ty "Jeroo")) || (SymbolTable.mem symbol_table id)
+  if (SymbolTable.mem symbol_table id)
   then raise_type_exception ()
-  else
+  else if (String.equal ty "Jeroo")
+  then
     let id_loc = state.num_jeroos in
     state.num_jeroos <- succ state.num_jeroos;
     SymbolTable.add symbol_table id (JerooV id_loc);
@@ -249,6 +280,26 @@ and gen_code_decl_stmt state symbol_table ty id meta_expr =
       then raise_type_exception ()
       else Deque.insert_back (gen_code_decl id_loc args meta_expr.pos) state.bytecode;
     | _ -> raise_type_exception ()
+  else if (String.equal ty "int" || String.equal ty "Integer")
+  then
+    (* For integer variables, evaluate the initialization expression and store the value *)
+    begin match meta_expr.a with
+    | AST.IntExpr(n) ->
+      SymbolTable.add symbol_table id (IntV n)
+    | _ -> raise_type_exception ()
+    end
+  else if (String.equal ty "boolean" || String.equal ty "Boolean")
+  then
+    (* For boolean variables, store the boolean value *)
+    begin match meta_expr.a with
+    | AST.TrueExpr ->
+      SymbolTable.add symbol_table id (BoolV true)
+    | AST.FalseExpr ->
+      SymbolTable.add symbol_table id (BoolV false)
+    | _ -> raise_type_exception ()
+    end
+  else
+    raise_type_exception ()
 
 and gen_code_block_stmt state symbol_table stmts =
   stmts
@@ -371,6 +422,7 @@ let codegen translation_unit =
   let state = {
     bytecode = Deque.create ();
     num_jeroos = 0;
+    num_vars = 0;
     pane = Pane.Extensions
   }
   in

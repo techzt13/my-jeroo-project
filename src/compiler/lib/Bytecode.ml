@@ -58,6 +58,10 @@ type bytecode =
   | OR of Pane.t * int
   | RETR of Pane.t * int
   | CALLBK of Pane.t * int
+  | PUSH_INT of int * Pane.t * int
+  | PUSH_BOOL of bool * Pane.t * int
+  | LOAD_VAR of int * Pane.t * int
+  | STORE_VAR of int * Pane.t * int
 [@@deriving show]
 
 let int_of_relative_direction direction = match direction with
