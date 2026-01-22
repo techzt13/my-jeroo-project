@@ -4,8 +4,12 @@ export class VariableEngine {
     const lines = source.split('\n');
     const output: string[] = [];
 
-    // This looks for: int name = 5;
-    const varPattern = /int\s+(\w+)\s*=\s*(\d+)\s*;/;
+    // --- UPDATED REGEX ---
+    // 1. (?:int|dim) -> Checks for 'int' OR 'dim'
+    // 2. ;?          -> Makes the semicolon OPTIONAL
+    // 3. /i          -> Makes it Case-Insensitive (matches Int, INT, Dim, dim)
+    const varPattern = /(?:int|dim)\s+(\w+)\s*=\s*(\d+)\s*;?/i;
+    // ---------------------
 
     for (let line of lines) {
       const match = line.match(varPattern);
@@ -13,7 +17,7 @@ export class VariableEngine {
         // We found a variable! Save it.
         vars[match[1]] = match[2]; 
         // We don't add this line to 'output', effectively deleting it 
-        // so the real Jeroo compiler doesn't get confused by the 'int' keyword.
+        // so the real Jeroo compiler doesn't get confused.
       } else {
         let cleanLine = line;
         // Search the line for any variable names we saved and replace them with the number.
