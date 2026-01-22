@@ -1,31 +1,33 @@
 export class VariableEngine {
   static process(source: string): string {
     const vars: { [key: string]: string } = {};
-    const lines = source.split('\n');
+    const lines = source.split(/\r?\n/);
     const output: string[] = [];
 
-    // --- UPDATED REGEX ---
-    // 1. (?:int|dim) -> Checks for 'int' OR 'dim'
-    // 2. ;?          -> Makes the semicolon OPTIONAL
-    // 3. /i          -> Makes it Case-Insensitive (matches Int, INT, Dim, dim)
-    const varPattern = /(?:int|dim)\s+(\w+)\s*=\s*(\d+)\s*;?/i;
-    // ---------------------
+    const varPattern = /^\s*(?:dim|int|var)\s+(\w+)(?:\s+as\s+\w+)?\s*=\s*(\d+).*/i;
 
     for (let line of lines) {
       const match = line.match(varPattern);
+      
       if (match) {
-        // We found a variable! Save it.
         vars[match[1]] = match[2]; 
-        // We don't add this line to 'output', effectively deleting it 
-        // so the real Jeroo compiler doesn't get confused.
+        // --- CHANGE HERE ---
+        // We push NOTHING. No empty string, no space. 
+        // This deletes the line from existence.
       } else {
         let cleanLine = line;
-        // Search the line for any variable names we saved and replace them with the number.
-        for (let name in vars) {
-          const regex = new RegExp(`\\b${name}\\b`, 'g');
+        const sortedNames = Object.keys(vars).sort((a, b) => b.length - a.length);
+        
+        for (let name of sortedNames) {
+          const regex = new RegExp(`\\b${name}\\b`, 'gi');
           cleanLine = cleanLine.replace(regex, vars[name]);
         }
-        output.push(cleanLine);
+        
+        // Only push the line if it's not just whitespace 
+        // (This cleans up any other weird empty lines)
+        if (cleanLine.trim() !== "") {
+            output.push(cleanLine);
+        }
       }
     }
     return output.join('\n');
