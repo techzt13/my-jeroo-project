@@ -168,7 +168,10 @@ export class EditorTabsComponent implements AfterViewInit {
         if (this.mainMethodEditor && this.extensionMethodsEditor) {
           this.mainMethodEditor.setReadOnly(true);
           this.extensionMethodsEditor.setReadOnly(true);
-          this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+          const stepsPerTick = this.getStepsPerTick();
+          for (let i = 0; i < stepsPerTick && this.bytecodeService.validInstruction(this.instructions); i++) {
+            this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+          }
           this.islandService.render(context);
           this.highlightCurrentLine();
           if (this.bytecodeService.validInstruction(this.instructions)) {
@@ -186,6 +189,75 @@ export class EditorTabsComponent implements AfterViewInit {
     };
     setTimeout(executeInstructions, this.speed);
     this.executingState();
+  }
+
+  runToEnd(context: CanvasRenderingContext2D) {
+    if (this.editorState.reset || this.instructions === null) {
+      const editorCode = this.getCode();
+      if (editorCode) {
+        this.messageService.clear();
+        this.messageService.addMessage(new LoggingMessage('Compiling...'));
+        const jerooCode = this.codeService.genCodeStr(editorCode);
+        const result = JerooCompiler.compile(jerooCode);
+        if (result.successful && result.bytecode) {
+          this.instructions = result.bytecode;
+          this.bytecodeService.reset();
+          this.bytecodeService.jerooMap = result.jerooMap;
+        } else {
+          if (result.error) {
+            this.messageService.addMessage(new CompilationErrorMessage(result.error));
+          }
+          return;
+        }
+      }
+    }
+
+    this.messageService.addMessage(new LoggingMessage('Running to end...'));
+    const executeChunk = () => {
+      try {
+        if (this.mainMethodEditor && this.extensionMethodsEditor) {
+          this.mainMethodEditor.setReadOnly(true);
+          this.extensionMethodsEditor.setReadOnly(true);
+          const maxStepsPerChunk = 500;
+          for (let i = 0; i < maxStepsPerChunk && this.bytecodeService.validInstruction(this.instructions); i++) {
+            this.bytecodeService.executeInstructionsUntilLNumChanges(this.instructions, this.islandService);
+          }
+          if (this.bytecodeService.validInstruction(this.instructions)) {
+            if (!this.editorState.paused && !this.editorState.stopped) {
+              setTimeout(executeChunk, 0);
+            }
+          } else {
+            this.islandService.render(context);
+            this.cleanupExecution();
+          }
+        }
+      } catch (e) {
+        this.islandService.render(context);
+        this.handleException(e);
+      }
+    };
+
+    setTimeout(executeChunk, 0);
+    this.executingState();
+  }
+
+  private getStepsPerTick() {
+    if (this.speed <= 30) {
+      return 8;
+    }
+    if (this.speed <= 50) {
+      return 5;
+    }
+    if (this.speed <= 70) {
+      return 4;
+    }
+    if (this.speed <= 100) {
+      return 3;
+    }
+    if (this.speed <= 150) {
+      return 2;
+    }
+    return 1;
   }
 
   private cleanupExecution() {

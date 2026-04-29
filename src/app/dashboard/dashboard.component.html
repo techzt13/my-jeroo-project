@@ -80,6 +80,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <button id="runContiniousButton" mat-icon-button matTooltip="Run the program continuously" [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
                   <fa-icon icon="step-forward"></fa-icon>
                 </button>
+                <button id="runToEndButton" mat-icon-button matTooltip="Run the program all the way to the end" [disabled]="runBtnDisabled()" (click)="onRunToEndClick()">
+                  <fa-icon icon="play"></fa-icon>
+                </button>
                 <button id="pauseButton" mat-icon-button matTooltip="Pause a currently running program" [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
                   <fa-icon icon="pause"></fa-icon>
                 </button>
@@ -91,8 +94,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div fxLayout="column" fxLayoutAlign="center center">
               <button id="runSpeedMenu" mat-button [matMenuTriggerFor]="speed">Run Speed</button>
               <div>
-                <mat-slider id="speedSlider" [(ngModel)]="speedIndex" (change)="onSpeedIndexChange()" min="1" max="6" tickInterval="1" thumbLabel></mat-slider>
+                <mat-slider id="speedSlider" [(ngModel)]="speedIndex" (change)="onSpeedIndexChange()" min="1" [max]="speedRadios.length" tickInterval="1" thumbLabel></mat-slider>
               </div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center">
+              <button id="skipToEndMenu" mat-button (click)="onRunToEndClick()" [disabled]="runBtnDisabled()">Skip To End</button>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center">
               <button id="islandFileMenu" mat-button [matMenuTriggerFor]="islandFile">Island File</button>
@@ -168,6 +174,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </button>
         <button id="runContiniousMenuItem" mat-menu-item [disabled]="runBtnDisabled()" (click)="onRunContiniousClick()">
           <fa-icon icon="step-forward"></fa-icon><span class="menu-text">Run Continuously<span class="shortcut-tip">F4</span></span>
+        </button>
+        <button id="runToEndMenuItem" mat-menu-item [disabled]="runBtnDisabled()" (click)="onRunToEndClick()">
+          <fa-icon icon="play"></fa-icon><span class="menu-text">Run To End</span>
         </button>
         <button id="pauseMenuItem" mat-menu-item [disabled]="pauseBtnDisabled()" (click)="onPauseClick()">
           <fa-icon icon="pause"></fa-icon><span class="menu-text">Pause<span class="shortcut-tip">F5</span></span>

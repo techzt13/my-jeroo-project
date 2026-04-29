@@ -48,16 +48,20 @@ export class DashboardComponent implements AfterViewInit {
   @ViewChild('jerooEditor', { static: true }) jerooEditor: EditorTabsComponent | null = null;
   @ViewChild('fileSaver', { static: true }) fileSaver: ElementRef | null = null;
 
-  private speeds = [475, 350, 225, 125, 25, 2];
-  speedIndex = 3;
+  private speeds = [600, 500, 400, 300, 225, 150, 100, 70, 50, 30];
+  speedIndex = 5;
   runtimeSpeed = this.speeds[this.speedIndex - 1];
   speedRadios = [
-    { name: '1 - Slow', value: 1 },
-    { name: '2', value: 2 },
-    { name: '3 - Medium', value: 3 },
-    { name: '4', value: 4 },
-    { name: '5 - Fast', value: 5 },
-    { name: '6 - Max', value: 6 }
+    { name: '1 - Slow (600ms)', value: 1 },
+    { name: '2 (500ms)', value: 2 },
+    { name: '3 (400ms)', value: 3 },
+    { name: '4 (300ms)', value: 4 },
+    { name: '5 - Medium (225ms)', value: 5 },
+    { name: '6 (150ms)', value: 6 },
+    { name: '7 (100ms)', value: 7 },
+    { name: '8 (70ms)', value: 8 },
+    { name: '9 - Fast (50ms)', value: 9 },
+    { name: '10 - Max (30ms)', value: 10 }
   ];
 
   private tileTypes = [TileType.Grass, TileType.Water, TileType.Flower, TileType.Net];
@@ -269,6 +273,15 @@ export class DashboardComponent implements AfterViewInit {
     }
   }
 
+  onRunToEndClick() {
+    if (!this.runBtnDisabled()) {
+      const context = this.jerooIsland?.getContext();
+      if (context) {
+        this.jerooEditor?.runToEnd(context);
+      }
+    }
+  }
+
   onResetClick() {
     if (!this.resetBtnDisabled()) {
       this.jerooEditor?.resetState();
@@ -299,6 +312,10 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   onSpeedIndexChange() {
+    const minSpeed = 1;
+    const maxSpeed = this.speeds.length;
+    const boundedSpeedIndex = Math.max(minSpeed, Math.min(maxSpeed, this.speedIndex));
+    this.speedIndex = boundedSpeedIndex;
     this.runtimeSpeed = this.speeds[this.speedIndex - 1];
   }
 
